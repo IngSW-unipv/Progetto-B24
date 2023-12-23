@@ -32,7 +32,7 @@ package model{
     }
 
     interface IJBAudio extends IJBItem{
-      - isFavorite: boolean
+      + isFavourite: boolean
       + playFX(): void
       + pause(): void
     }
@@ -64,7 +64,7 @@ package model{
     }
 
     class Album implements IJBCollection{
-      - trackArray: Songs[]
+      - trackArray: Song[]
     }
 
     class Playlist implements IJBCollection{
