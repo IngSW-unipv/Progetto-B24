@@ -1,0 +1,111 @@
+@startuml
+!theme carbon-gray
+
+title JavaBeats 1.4, Domain Diagram
+
+!true = 1
+!false = 0
+!nesteds = true
+!compositions = false
+
+package dataModel{
+  interface IJBResearchable{
+    + boolean: isVisible
+  }
+
+
+  enum EJBMODE{
+    + SEQUENTIAL
+    + RANDOM
+    + LOOP
+  }
+
+  package playableModel{
+    interface IJBPlayable implements dataModel.IJBResearchable{
+      + PlayableID: int
+      + playableName: String
+      + creator: IJBProfile
+    }
+
+    interface IJBItem extends IJBPlayable{
+      - id: String
+    }
+
+    interface IJBAudio extends IJBItem{
+      - isFavorite: boolean
+      + playFX(): void
+      + pause(): void
+    }
+
+    class Song implements IJBAudio{
+
+    }
+
+
+    class Episode implements IJBAudio{
+
+    }
+
+    class MetaData << (N, #DDEBE0) Nested >> {
+      - artist: Artist
+      - title: String
+      - duration: Time
+      - releaseDate: Date
+      - genres: String[]
+    }
+
+    interface IJBCollection extends IJBPlayable{
+      + itemAmount: int
+      + picture: SerialBlob
+      + addItem(activeJBProfile: IJBProfile, item: IJBItem): void
+      + removeItem(activeJBProfile: IJBProfile, item: IJBItem): void
+      + play(mode: EJBMODE): void
+      + pause(): void
+    }
+
+    class Album implements IJBCollection{
+      - trackArray: Songs[]
+    }
+
+    class Playlist implements IJBCollection{
+      - trackList: List<IJBAudio>
+    }
+
+    class Podcast implements IJBCollection{
+      - trackList: List<Episode>
+    }
+  }
+
+  package userModel{
+    interface IJBProfile implements dataModel.IJBResearchable{
+      + username: String
+      + mail: String
+      + password: String
+      + name: String
+      + surname: String
+      + biography: String
+      + profilePicture: SerialBlob
+    }
+    class User implements IJBProfile{
+      - minuteListened: Time
+    }
+    class Artist implements IJBProfile{
+      - totalListeners: int
+    }
+  }
+}
+
+!if (compositions)
+  Album *-- Song
+  Playlist *-- IJBAudio
+  Podcast *-- Episode
+!endif
+
+!if (nesteds)
+  IJBAudio +-- MetaData
+!endif
+
+hide empty fields
+hide empty methods
+
+@enduml
