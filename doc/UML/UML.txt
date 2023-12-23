@@ -1,14 +1,14 @@
 @startuml
 !theme carbon-gray
 
-title JavaBeats 1.4, Domain Diagram
+title JavaBeats 1.5, Domain Diagram
 
 !true = 1
 !false = 0
 !nesteds = true
 !compositions = false
 
-package dataModel{
+package model{
   interface IJBResearchable{
     + boolean: isVisible
   }
@@ -18,10 +18,10 @@ package dataModel{
     + SEQUENTIAL
     + RANDOM
     + LOOP
-  }
+  }  
 
-  package playableModel{
-    interface IJBPlayable implements dataModel.IJBResearchable{
+  package playable{
+    interface IJBPlayable implements model.IJBResearchable{
       + PlayableID: int
       + playableName: String
       + creator: IJBProfile
@@ -36,14 +36,14 @@ package dataModel{
       + playFX(): void
       + pause(): void
     }
-
+    
     class Song implements IJBAudio{
-
+      
     }
 
 
     class Episode implements IJBAudio{
-
+          
     }
 
     class MetaData << (N, #DDEBE0) Nested >> {
@@ -73,16 +73,16 @@ package dataModel{
 
     class Podcast implements IJBCollection{
       - trackList: List<Episode>
-    }
+    } 
   }
 
-  package userModel{
-    interface IJBProfile implements dataModel.IJBResearchable{
-      + username: String
-      + mail: String
-      + password: String
-      + name: String
-      + surname: String
+  package user{
+    interface IJBProfile implements model.IJBResearchable{
+      + username: String 
+      + mail: String 
+      + password: String 
+      + name: String 
+      + surname: String 
       + biography: String
       + profilePicture: SerialBlob
     }
