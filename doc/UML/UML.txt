@@ -1,3 +1,4 @@
+
 @startuml
 !theme carbon-gray
 
@@ -12,8 +13,6 @@ package model{
   interface IJBResearchable{
     + boolean: isVisible
   }
-
-
   enum EJBMODE{
     + SEQUENTIAL
     + RANDOM
@@ -22,17 +21,16 @@ package model{
 
   package playable{
     interface IJBPlayable implements model.IJBResearchable{
-      + PlayableID: int
+      + id: String
       + playableName: String
       + creator: IJBProfile
     }
 
     interface IJBItem extends IJBPlayable{
-      - id: String
     }
 
     interface IJBAudio extends IJBItem{
-      + isFavourite: boolean
+      + isFavorite: boolean
       + playFX(): void
       + pause(): void
     }
@@ -40,8 +38,6 @@ package model{
     class Song implements IJBAudio{
       
     }
-
-
     class Episode implements IJBAudio{
           
     }
@@ -109,3 +105,6 @@ hide empty fields
 hide empty methods
 
 @enduml
+
+
+
