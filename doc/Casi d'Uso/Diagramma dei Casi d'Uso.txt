@@ -1,0 +1,113 @@
+@startuml
+
+skinparam actorStyle awesome
+
+title JavaBeats - Use Case Diagram 
+
+!true = 1
+!false = 0
+!usecase_minori = false
+!frecce_implica = true
+!frecce_implica_accesso = false
+!frecce_database = true
+
+:Utente:
+:Artista:
+
+database "DATABASE" as DB
+
+rectangle JavaBeats {
+    rectangle "Registrazione e Accesso" as UC1 {
+        !if (usecase_minori)
+            (Registrazione) as UC1.1
+            (Accesso) as UC1.2
+        !endif
+    }
+    
+    rectangle "Modifica Profilo" as UC2 {
+        !if (usecase_minori)
+            (Modifica Nome Profilo) as UC2.1
+            (Modifica Password) as UC2.2
+        !endif
+    }
+    
+    rectangle "Modifica di Privilegi utente/artista" as UC3 {
+        !if (usecase_minori)
+            (Upgrade a Profilo Artista) as UC3.1
+            (Downgrade a Profilo Utente) as UC3.2
+        !endif
+    }
+    
+    rectangle "Caricamento/Eliminazione di Tracce Audio" as UC4 {
+        !if (usecase_minori)
+            (Caricamento di Tracce Audio) as UC4.1
+            (Eliminazione di Tracce Audio) as UC4.2
+        !endif
+    }
+    
+    rectangle "Riproduzione di Tracce Audio" as UC5 {
+        !if (usecase_minori)
+            (Riproduzione) as UC5.1
+            (Pausa) as UC5.2
+        !endif
+    }
+    
+    rectangle "Gestione di Playlist" as UC6 {
+        !if (usecase_minori)
+            (Creazione di Playlist) as UC6.1
+            (Modifica di Playlist) as UC6.2
+            (Eliminazione di Playlist) as UC6.3
+        !endif
+    }
+    
+    rectangle "Ricerca" as UC7 {
+        !if (usecase_minori)
+            (Ricerca) as UC7.1
+        !endif
+    }
+}
+
+Utente---UC1
+Utente---UC2
+Utente---UC5
+Utente---UC6
+Utente---UC7
+
+Artista--|>Utente
+
+Artista--UC4
+
+!if (frecce_database)
+    UC1<..[#b5b5b5]..>DB
+    UC2<..[#b5b5b5]..>DB
+    UC3<..[#b5b5b5]..>DB
+    UC4<..[#b5b5b5]..>DB
+    UC5<..[#b5b5b5]..>DB
+    UC6<..[#b5b5b5]..>DB
+    UC7<..[#b5b5b5]..>DB
+!endif
+
+!if (usecase_minori && frecce_implica)
+    Utente---UC3.1
+    Artista--UC3.2
+    UC1.1<..UC1.2 : implica
+    UC4.1<..UC4.2 : implica
+    UC5.1<.>UC5.2 : implica
+    UC6.1<..UC6.2 : implica
+    UC6.1<..UC6.3 : implica
+!else
+    Utente---UC3
+!endif
+
+!if (usecase_minori && frecce_implica_accesso)
+    UC1.2<..UC2 : implica
+    UC1.2<..UC3 : implica
+    UC1.2<..UC4 : implica
+    UC1.2<..UC5 : implica
+    UC1.2<..UC6 : implica
+    UC1.2<..UC7 : implica
+    UC1.2<..UC6 : implica
+    UC1.2<..UC7 : implica
+!endif
+
+@enduml
