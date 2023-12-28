@@ -1,5 +1,5 @@
-package it.unipv.ingsfw.javabeats.model.playable;
+package it.unipv.ingsfw.JavaBeats.model.playable;
 
 public interface IJBItem extends IJBPlayable {
-	private String id;
+	public String id = null;
 }

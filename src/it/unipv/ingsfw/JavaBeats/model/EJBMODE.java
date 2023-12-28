@@ -1,4 +1,4 @@
-package it.unipv.ingsfw.javabeats.model;
+package it.unipv.ingsfw.JavaBeats.model;
 
 public enum EJBMODE {
 	SEQUENTIAL, RANDOM, LOOP;

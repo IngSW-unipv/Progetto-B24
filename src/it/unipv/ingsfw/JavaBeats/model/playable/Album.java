@@ -1,7 +1,7 @@
-package it.unipv.ingsfw.javabeats.model.playable;
+package it.unipv.ingsfw.JavaBeats.model.playable;
 
-import it.unipv.ingsfw.javabeats.model.EJBMODE;
-import it.unipv.ingsfw.javabeats.model.user.IJBProfile;
+import it.unipv.ingsfw.JavaBeats.model.EJBMODE;
+import it.unipv.ingsfw.JavaBeats.model.user.IJBProfile;
 
 public class Album implements IJBCollection {
 	private Song[] trackArray;

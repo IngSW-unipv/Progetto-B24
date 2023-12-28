@@ -1,9 +1,9 @@
-package it.unipv.ingsfw.javabeats.model.playable;
+package it.unipv.ingsfw.JavaBeats.model.playable;
 
-import it.unipv.ingsfw.javabeats.model.user.IJBProfile;
+import it.unipv.ingsfw.JavaBeats.model.user.IJBProfile;
 
 public interface IJBPlayable {
-	public int PlayableID;
-	public String playableName;
-	public IJBProfile creator;
+	public int PlayableID = 0;
+	public String playableName = null;
+	public IJBProfile creator = null;
 }

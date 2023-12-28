@@ -1,4 +1,4 @@
-package it.unipv.ingsfw.javabeats.model.playable;
+package it.unipv.ingsfw.JavaBeats.model.playable;
 
 public class Episode implements IJBAudio {
 

@@ -1,11 +1,11 @@
-package it.unipv.ingsfw.javabeats.model.playable;
+package it.unipv.ingsfw.JavaBeats.model.playable;
 
-import it.unipv.ingsfw.javabeats.model.user.Artist;
+import it.unipv.ingsfw.JavaBeats.model.user.Artist;
 import java.sql.Date;
 import java.sql.Time;
 
 public interface IJBAudio extends IJBItem {
-	public boolean isFavourite;
+	public boolean isFavourite = false;
 	public class Metadata {
 		private Artist artist;
 		private String title;

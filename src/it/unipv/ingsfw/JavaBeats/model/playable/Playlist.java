@@ -1,8 +1,8 @@
-package it.unipv.ingsfw.javabeats.model.playable;
+package it.unipv.ingsfw.JavaBeats.model.playable;
 
 import java.util.List;
-import it.unipv.ingsfw.javabeats.model.EJBMODE;
-import it.unipv.ingsfw.javabeats.model.user.IJBProfile;
+import it.unipv.ingsfw.JavaBeats.model.EJBMODE;
+import it.unipv.ingsfw.JavaBeats.model.user.IJBProfile;
 
 public class Playlist implements IJBCollection {
 	private List<IJBAudio> trackList;

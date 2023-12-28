@@ -1,4 +1,4 @@
-package it.unipv.ingsfw.javabeats.model.user;
+package it.unipv.ingsfw.JavaBeats.model.user;
 
 import java.sql.Time;
 

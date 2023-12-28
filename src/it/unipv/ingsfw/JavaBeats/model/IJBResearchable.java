@@ -1,5 +1,5 @@
-package it.unipv.ingsfw.javabeats.model;
+package it.unipv.ingsfw.JavaBeats.model;
 
 public interface IJBResearchable {
-	public boolean isVisible;
+	public boolean isVisible = true;
 }
