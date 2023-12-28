@@ -15,92 +15,68 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
-public class RegistrationGUI{
+import javafx.stage.Stage;
+
+public class LoginGUI{
   /*---------------------------------------*/
   //Attributi
   /*---------------------------------------*/
   private static final int clientWidth=1920;
   private static final int clientHeight=1080;
-  private static final int vboxWidth=800;
-  private static final int vboxHeight=800;
+  private static final int vboxWidth=500;
+  private static final int vboxHeight=500;
   private static final Background bgVBox=new Background(new BackgroundFill(Color.rgb(25, 25, 25), new CornerRadii(25), Insets.EMPTY));
   private static final Background bgTextField=new Background(new BackgroundFill(Color.WHITE, new CornerRadii(25), Insets.EMPTY));
   private static final Border borderTextField=new Border(new BorderStroke(Color.BLUEVIOLET, BorderStrokeStyle.SOLID, new CornerRadii(25), new BorderWidths(3)));
   private static final Font fontTextField=Font.font("Verdana", FontWeight.EXTRA_LIGHT, FontPosture.REGULAR, 17);
   private Scene scene;
-  private TextField username, nameSurname, mail;
-  private PasswordField password1, password2;
-  private Label confirmPassword, errorMessage;
+  private TextField username;
+  private PasswordField password;
+  private Label errorMessage;
   private Button login;
   private Button register;
   /*---------------------------------------*/
   //Costruttore
   /*---------------------------------------*/
-  public RegistrationGUI(){
+  public LoginGUI(){
+
     initComponents();
   }
   /*---------------------------------------*/
   //Getter/Setter
   /*---------------------------------------*/
-  public Scene getScene() {
+  public Scene getScene(){
     return scene;
   }
-  public void setScene(Scene scene) {
-    this.scene = scene;
-  }
-  public TextField getUsername() {
+  public TextField getUsername(){
     return username;
   }
-  public void setUsername(TextField username) {
-    this.username = username;
+  public void setUsername(TextField username){
+    this.username=username;
   }
-  public TextField getNameSurname() {
-    return nameSurname;
+  public PasswordField getPassword(){
+    return password;
   }
-  public void setNameSurname(TextField nameSurname) {
-    this.nameSurname = nameSurname;
+  public void setPassword(PasswordField password){
+    this.password=password;
   }
-  public TextField getMail() {
-    return mail;
-  }
-  public void setMail(TextField mail) {
-    this.mail = mail;
-  }
-  public PasswordField getPassword1() {
-    return password1;
-  }
-  public void setPassword1(PasswordField password1) {
-    this.password1 = password1;
-  }
-  public PasswordField getPassword2() {
-    return password2;
-  }
-  public void setPassword2(PasswordField password2) {
-    this.password2 = password2;
-  }
-  public Label getConfirmPassword() {
-    return confirmPassword;
-  }
-  public void setConfirmPassword(Label confirmPassword) {
-    this.confirmPassword = confirmPassword;
-  }
-  public Label getErrorMessage() {
+  public Label getErrorMessage(){
     return errorMessage;
   }
-  public void setErrorMessage(Label errorMessage) {
-    this.errorMessage = errorMessage;
+  public void setErrorMessage(Label errorMessage){
+    this.errorMessage=errorMessage;
   }
-  public Button getLogin() {
+  public Button getLogin(){
     return login;
   }
-  public void setLogin(Button login) {
-    this.login = login;
+  public void setLogin(Button login){
+    this.login=login;
   }
-  public Button getRegister() {
+  public Button getRegister(){
     return register;
   }
-  public void setRegister(Button register) {
-    this.register = register;
+  public void setRegister(Button register){
+    this.register=register;
   }
   /*---------------------------------------*/
   //Metodi
@@ -117,72 +93,49 @@ public class RegistrationGUI{
     HBox logoTitleHBox=new HBox(20, imageView, title);
 
     /* Setup of Username and Password TextFields as well as erroreMessage Label */
-    nameSurname= new TextField();
-    mail=new TextField(); 
     username=new TextField();
-    password1=new PasswordField();
-    password2=new PasswordField();
-    
-    TextField[] tf={nameSurname, mail, username, password1, password2};
+    password=new PasswordField();
+    TextField[] tf={username, password};
     for(TextField t : tf){
       t.setPrefSize(300, 50);
       t.setBorder(borderTextField);
       t.setBackground(bgTextField);
       t.setFont(fontTextField);
       t.setStyle("-fx-text-fill: #7a7a7a;");
+      t.styleProperty().bind(Bindings.when(username.focusedProperty()).then("-fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);").otherwise("-fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);"));
     }//end-for
-    
-    
-    for(int i=0; i<tf.length; i+=1){
-      for(int j=0; j<tf.length; j+=1){
-        if(i!=j){
-          tf[i].styleProperty().bind(Bindings.when(tf[j].focusedProperty()).then("-fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);").otherwise("-fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);"));
-        }//end-if
-      }//end-for
-    }//end-for
-    
-    nameSurname.setPromptText("Name and surname");
-    mail.setPromptText("Mail");
     username.setPromptText("Username");
-    password1.setPromptText("Password");
-    password2.setPromptText("Confirm password");
-     
-    confirmPassword=new Label("Confirm password");
-    confirmPassword.setTextFill(Color.WHITE);
+    password.setPromptText("Password");
 
     errorMessage=new Label("Esempio errore!");
     errorMessage.setTextFill(Color.RED);
 
     /* Setup of Login or Register Buttons, two different styles: rounded violet for login and clickable link for register */
-    register=new Button("Register");
-    register.setCursor(Cursor.HAND);
-    register.setPrefSize(300, 50);
-    register.setBackground(new Background(new BackgroundFill(Color.BLUEVIOLET, new CornerRadii(25), Insets.EMPTY)));
-    register.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
-    register.setTextFill(Color.WHITE);
-
-    login=new Button("You already have an account? Login");
-    login.setBackground(bgVBox);
-    login.setFont(Font.font("Verdana", FontWeight.NORMAL, FontPosture.ITALIC, 15));
-    login.setTextFill(Color.WHITE);
-    login.setUnderline(true);
+    login=new Button("Login");
     login.setCursor(Cursor.HAND);
+    login.setPrefSize(300, 50);
+    login.setBackground(new Background(new BackgroundFill(Color.BLUEVIOLET, new CornerRadii(25), Insets.EMPTY)));
+    login.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
+    login.setTextFill(Color.WHITE);
+
+    register=new Button("You don't have an account? Register");
+    register.setBackground(bgVBox);
+    register.setFont(Font.font("Verdana", FontWeight.NORMAL, FontPosture.ITALIC, 15));
+    register.setTextFill(Color.WHITE);
+    register.setUnderline(true);
+    register.setCursor(Cursor.HAND);
 
     /* Set up of the main VBox containing all the elements for the login page */
-    VBox v=new VBox(logoTitleHBox, nameSurname, mail, username, password1, confirmPassword, password2, errorMessage, register, login);
+    VBox v=new VBox(logoTitleHBox, username, password, errorMessage, login, register);
     v.setPrefSize(vboxWidth, vboxHeight);
     v.setFillWidth(false);
     v.setAlignment(Pos.CENTER);
     v.setBackground(bgVBox);
     VBox.setMargin(logoTitleHBox, new Insets(0, 0, 50, 0));
-    VBox.setMargin(nameSurname, new Insets(0, 0, 15, 0));
-    VBox.setMargin(mail, new Insets(0, 0, 15, 0));
     VBox.setMargin(username, new Insets(0, 0, 15, 0));
-    VBox.setMargin(password1, new Insets(0, 0, 20, 0));
-    VBox.setMargin(confirmPassword, new Insets(0, 0, 15, 0));
-    VBox.setMargin(password2, new Insets(0, 0, 15, 0));
+    VBox.setMargin(password, new Insets(0, 0, 15, 0));
     VBox.setMargin(errorMessage, new Insets(0, 0, 15, 0));
-    VBox.setMargin(register, new Insets(0, 0, 30, 0));
+    VBox.setMargin(login, new Insets(0, 0, 30, 0));
 
     /* SetUp of the background GridPane that "holds" the VBox in the middle of the screen */
     GridPane gp=new GridPane();
