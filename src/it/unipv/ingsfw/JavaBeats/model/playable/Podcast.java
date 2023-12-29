@@ -1,34 +1,29 @@
 package it.unipv.ingsfw.JavaBeats.model.playable;
 
 import java.util.List;
-import it.unipv.ingsfw.JavaBeats.model.EJBMODE;
-import it.unipv.ingsfw.JavaBeats.model.user.IJBProfile;
+import it.unipv.ingsfw.JavaBeats.model.user.JBProfile;
 
-public class Podcast implements IJBCollection {
+public class Podcast extends JBCollection {
+
+	//ATTRIBUTE:
 	private List<Episode> trackList;
 
-	@Override
-	public void addItem(IJBProfile activeJBProfile, IJBItem item) {
-		// TODO Auto-generated method stub
 
+	//CONSTRUCTOR:
+	public Podcast(String id, String name, JBProfile creator) {
+		super(id, name, creator);
 	}
 
-	@Override
-	public void removeItem(IJBProfile activeJBProfile, IJBItem item) {
-		// TODO Auto-generated method stub
 
+	//GETTER:
+	public List<Episode> getTrackList() {
+		return trackList;
 	}
 
-	@Override
-	public void play(EJBMODE mode) {
-		// TODO Auto-generated method stub
 
-	}
-
-	@Override
-	public void play() {
-		// TODO Auto-generated method stub
-
+	//SETTER:
+	public void setTrackList(List<Episode> trackList) {
+		this.trackList = trackList;
 	}
 
 }

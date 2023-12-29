@@ -1,17 +1,10 @@
 package it.unipv.ingsfw.JavaBeats.model.playable;
 
-public class Episode implements IJBAudio {
+public class Episode extends JBAudio {
 
-	@Override
-	public void playFX() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-
+	//CONSTRUCTOR:
+	public Episode(String id) {
+		super(id);
 	}
 
 }

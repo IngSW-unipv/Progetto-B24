@@ -1,34 +1,28 @@
 package it.unipv.ingsfw.JavaBeats.model.playable;
 
-import it.unipv.ingsfw.JavaBeats.model.EJBMODE;
-import it.unipv.ingsfw.JavaBeats.model.user.IJBProfile;
+import it.unipv.ingsfw.JavaBeats.model.user.JBProfile;
 
-public class Album implements IJBCollection {
+public class Album extends JBCollection {
+
+	//ATTRIBUTE:
 	private Song[] trackArray;
-	
-	
-	@Override
-	public void addItem(IJBProfile activeJBProfile, IJBItem item) {
-		// TODO Auto-generated method stub
 
+
+	//CONSTRUCTOR:
+	public Album(String id, String name, JBProfile creator) {
+		super(id, name, creator);
 	}
 
-	@Override
-	public void removeItem(IJBProfile activeJBProfile, IJBItem item) {
-		// TODO Auto-generated method stub
 
+	//GETTER:
+	public Song[] getTrackArray() {
+		return trackArray;
 	}
 
-	@Override
-	public void play(EJBMODE mode) {
-		// TODO Auto-generated method stub
 
-	}
-
-	@Override
-	public void play() {
-		// TODO Auto-generated method stub
-
+	//SETTER:
+	public void setTrackArray(Song[] trackArray) {
+		this.trackArray = trackArray;
 	}
 
 }

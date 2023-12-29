@@ -1,35 +1,36 @@
 package it.unipv.ingsfw.JavaBeats.model.playable;
 
+import it.unipv.ingsfw.JavaBeats.model.user.JBProfile;
 import java.util.List;
-import it.unipv.ingsfw.JavaBeats.model.EJBMODE;
-import it.unipv.ingsfw.JavaBeats.model.user.IJBProfile;
 
-public class Playlist implements IJBCollection {
-	private List<IJBAudio> trackList;
-	
-	
-	@Override
-	public void addItem(IJBProfile activeJBProfile, IJBItem item) {
-		// TODO Auto-generated method stub
+public class Playlist extends JBCollection {
 
+	//ATTRIBUTES:
+	private List<JBAudio> trackList;
+	private boolean isVisible = false;
+
+
+	//CONSTRUCTOR:
+	public Playlist(String id, String name, JBProfile creator) {
+		super(id, name, creator);
 	}
 
-	@Override
-	public void removeItem(IJBProfile activeJBProfile, IJBItem item) {
-		// TODO Auto-generated method stub
 
+	//GETTERS:
+	public List<JBAudio> getTrackList() {
+		return trackList;
+	}
+	public boolean isVisible() {
+		return isVisible;
 	}
 
-	@Override
-	public void play(EJBMODE mode) {
-		// TODO Auto-generated method stub
 
+	//SETTERS:
+	public void setTrackList(List<JBAudio> trackList) {
+		this.trackList = trackList;
 	}
-
-	@Override
-	public void play() {
-		// TODO Auto-generated method stub
-
+	public void setVisible(boolean Visible) {
+		isVisible = Visible;
 	}
 
 }
