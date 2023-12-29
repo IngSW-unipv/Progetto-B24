@@ -3,8 +3,8 @@ import it.unipv.ingsfw.JavaBeats.view.LoginGUI;
 import it.unipv.ingsfw.JavaBeats.view.RegistrationGUI;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Dimension2D;
 import javafx.scene.Node;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 public class RegistrationController{
   /*---------------------------------------*/
@@ -28,10 +28,12 @@ public class RegistrationController{
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
         LoginGUI loginGUI=new LoginGUI();
         LoginController loginController=new LoginController(loginGUI);
+
+        Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
         stage.setScene(loginGUI.getScene());
         stage.setTitle("Login");
-        stage.setWidth(Screen.getPrimary().getBounds().getWidth());
-        stage.setHeight(Screen.getPrimary().getBounds().getHeight());
+        stage.setWidth(previousDimension.getWidth());
+        stage.setHeight(previousDimension.getHeight());
       }
     };
     EventHandler<ActionEvent> registerButtonHandler=new EventHandler <ActionEvent>(){

@@ -156,7 +156,7 @@ public class LoginGUI{
     gp.getRowConstraints().add(rowVBox);
     gp.getRowConstraints().add(rowEmpty);
 
-    scene=new Scene(gp, clientWidth, clientWidth);
+    scene=new Scene(gp, clientWidth, clientHeight);
   }
   /*---------------------------------------*/
 }
