@@ -15,13 +15,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Screen;
 public class RegistrationGUI{
   /*---------------------------------------*/
   //Attributi
   /*---------------------------------------*/
-  private static final int clientWidth=1920;
-  private static final int clientHeight=1080;
-  private static final int vboxWidth=800;
+  private static final int clientWidth=(int)Screen.getPrimary().getBounds().getWidth();
+  private static final int clientHeight=(int)Screen.getPrimary().getBounds().getHeight();
+  private static final int vboxWidth=640;
   private static final int vboxHeight=800;
   private static final Background bgVBox=new Background(new BackgroundFill(Color.rgb(25, 25, 25), new CornerRadii(25), Insets.EMPTY));
   private static final Background bgTextField=new Background(new BackgroundFill(Color.WHITE, new CornerRadii(25), Insets.EMPTY));
@@ -132,7 +133,6 @@ public class RegistrationGUI{
       t.setStyle("-fx-text-fill: #7a7a7a;");
     }//end-for
     
-    
     for(int i=0; i<tf.length; i+=1){
       for(int j=0; j<tf.length; j+=1){
         if(i!=j){
@@ -189,21 +189,23 @@ public class RegistrationGUI{
     gp.add(v, 1, 1);
     gp.setBackground(new Background(new BackgroundFill(Color.rgb(15, 15, 15), CornerRadii.EMPTY, Insets.EMPTY)));
 
-    ColumnConstraints column = new ColumnConstraints();
-    column.setPercentWidth(33.3);
-    gp.getColumnConstraints().add(column);
-    gp.getColumnConstraints().add(column);
-    gp.getColumnConstraints().add(column);
+    ColumnConstraints columnVBox = new ColumnConstraints();
+    ColumnConstraints columnEmpty = new ColumnConstraints();
+    columnVBox.setPercentWidth((double)(100*vboxWidth)/clientWidth);
+    columnEmpty.setPercentWidth((100-(double)(100*vboxWidth)/clientWidth)/2);
+    gp.getColumnConstraints().add(columnEmpty);
+    gp.getColumnConstraints().add(columnVBox);
+    gp.getColumnConstraints().add(columnEmpty);
 
     RowConstraints rowEmpty = new RowConstraints();
     RowConstraints rowVBox = new RowConstraints();
-    rowEmpty.setPercentHeight(16.65);
-    rowVBox.setPercentHeight(66.6);
+    rowVBox.setPercentHeight((double)(100*vboxHeight)/clientHeight);
+    rowEmpty.setPercentHeight((100-(double)(100*vboxHeight)/clientHeight)/2);
     gp.getRowConstraints().add(rowEmpty);
     gp.getRowConstraints().add(rowVBox);
     gp.getRowConstraints().add(rowEmpty);
 
-    scene=new Scene(gp, 1920, 1080);
+    scene=new Scene(gp, clientWidth, clientHeight);
   }
   /*---------------------------------------*/
 }

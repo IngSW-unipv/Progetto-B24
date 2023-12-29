@@ -1,11 +1,10 @@
 package it.unipv.ingsfw.JavaBeats.main;
-
 import it.unipv.ingsfw.JavaBeats.controller.handler.LoginController;
 import it.unipv.ingsfw.JavaBeats.view.LoginGUI;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
-
 public class Main extends Application{
   /*---------------------------------------*/
   //Attributi
@@ -27,6 +26,7 @@ public class Main extends Application{
     stage.setScene(loginScene);
     stage.sizeToScene();
     stage.setMaximized(true);
+    stage.getIcons().add(new Image("it/unipv/ingsfw/JavaBeats/view/Logo.png"));
     stage.show();
   }
   /*---------------------------------------*/

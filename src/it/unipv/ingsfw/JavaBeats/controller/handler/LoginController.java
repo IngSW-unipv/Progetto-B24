@@ -1,12 +1,11 @@
 package it.unipv.ingsfw.JavaBeats.controller.handler;
-
 import it.unipv.ingsfw.JavaBeats.view.LoginGUI;
 import it.unipv.ingsfw.JavaBeats.view.RegistrationGUI;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
-
 public class LoginController{
   /*---------------------------------------*/
   //Attributi
@@ -39,8 +38,8 @@ public class LoginController{
         RegistrationController registrationController=new RegistrationController(registrationGUI);
         stage.setScene(registrationGUI.getScene());
         stage.setTitle("Registration");
-        stage.setHeight(1080);
-        stage.setWidth(1920);
+        stage.setWidth(Screen.getPrimary().getBounds().getWidth());
+        stage.setHeight(Screen.getPrimary().getBounds().getHeight());
       }
     };
     gui.getLogin().setOnAction(loginButtonHandler);
