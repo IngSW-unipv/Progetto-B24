@@ -81,7 +81,7 @@ public class LoginGUI{
   /*---------------------------------------*/
   private void initComponents(){
     /* Setup of Logo, App title in a HBox Layout */
-    Image image = new Image("it/unipv/ingsfw/JavaBeats/view/Logo.png", true);
+    Image image = new Image("it/unipv/ingsfw/JavaBeats/view/icons/Logo.png", true);
     ImageView imageView=new ImageView(image);
     imageView.setPreserveRatio(true);
     Label title=new Label("JavaBeats");

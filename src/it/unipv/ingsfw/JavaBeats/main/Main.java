@@ -1,6 +1,5 @@
 package it.unipv.ingsfw.JavaBeats.main;
-import it.unipv.ingsfw.JavaBeats.controller.handler.LoginController;
-import it.unipv.ingsfw.JavaBeats.view.LoginGUI;
+import it.unipv.ingsfw.JavaBeats.view.primary.home.HomePageGUI;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -14,8 +13,11 @@ public class Main extends Application{
   //Metodi
   /*---------------------------------------*/
   public static void main(String[] args){
-    LoginGUI gui=new LoginGUI();
+    /*LoginGUI gui=new LoginGUI();
     LoginController loginController=new LoginController(gui);
+    loginScene=gui.getScene();*/
+
+    HomePageGUI gui=new HomePageGUI();
     loginScene=gui.getScene();
 
     launch(args);
@@ -26,7 +28,7 @@ public class Main extends Application{
     stage.setScene(loginScene);
     stage.sizeToScene();
     stage.setMaximized(true);
-    stage.getIcons().add(new Image("it/unipv/ingsfw/JavaBeats/view/Logo.png"));
+    stage.getIcons().add(new Image("it/unipv/ingsfw/JavaBeats/view/icons/Logo.png"));
     stage.show();
   }
   /*---------------------------------------*/
