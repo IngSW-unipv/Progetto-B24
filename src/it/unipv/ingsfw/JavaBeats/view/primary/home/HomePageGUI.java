@@ -39,7 +39,7 @@ public class HomePageGUI{
   //Metodi
   /*---------------------------------------*/
   private void initComponents(){
-    /* Setup of LEFT VBox -> Menu */
+    /* Setup of LEFT Sidebar */
     Sidebar sb=new Sidebar();
 
     BorderPane bp=new BorderPane();
