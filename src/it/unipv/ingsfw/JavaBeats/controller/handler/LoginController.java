@@ -1,6 +1,6 @@
 package it.unipv.ingsfw.JavaBeats.controller.handler;
-import it.unipv.ingsfw.JavaBeats.view.LoginGUI;
-import it.unipv.ingsfw.JavaBeats.view.RegistrationGUI;
+import it.unipv.ingsfw.JavaBeats.view.access.LoginGUI;
+import it.unipv.ingsfw.JavaBeats.view.access.RegistrationGUI;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Dimension2D;

@@ -1,4 +1,4 @@
-package it.unipv.ingsfw.JavaBeats.view;
+package it.unipv.ingsfw.JavaBeats.view.access;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
