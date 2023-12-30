@@ -1,5 +1,6 @@
 package it.unipv.ingsfw.JavaBeats.view.primary.home;
 import it.unipv.ingsfw.JavaBeats.view.primary.Sidebar;
+import it.unipv.ingsfw.JavaBeats.view.primary.Songbar;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -41,9 +42,11 @@ public class HomePageGUI{
   private void initComponents(){
     /* Setup of LEFT VBox -> Menu */
     Sidebar sb=new Sidebar();
+    Songbar sob= new Songbar();
 
     BorderPane bp=new BorderPane();
     bp.setLeft(sb);
+    bp.setBottom(sob);
     bp.setBackground(new Background(new BackgroundFill(Color.rgb(15, 15, 15), CornerRadii.EMPTY, Insets.EMPTY)));
 
     scene=new Scene(bp, clientWidth, clientHeight);
