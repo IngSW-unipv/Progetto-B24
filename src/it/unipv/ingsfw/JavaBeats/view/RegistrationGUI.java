@@ -114,7 +114,7 @@ public class RegistrationGUI{
     Label title=new Label("JavaBeats");
     title.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD, FontPosture.REGULAR, 40));
     title.setTextFill(Color.WHITE);
-    title.setPadding(new Insets(10, 0, 0, 0));
+    title.setPadding(new Insets(5, 0, 0, 0));
     HBox logoTitleHBox=new HBox(20, imageView, title);
 
     /* Setup of Username and Password TextFields as well as erroreMessage Label */
@@ -145,7 +145,7 @@ public class RegistrationGUI{
     mail.setPromptText("Mail");
     username.setPromptText("Username");
     password1.setPromptText("Password");
-    password2.setPromptText("Confirm password");
+    password2.setPromptText("Password");
      
     confirmPassword=new Label("Confirm password");
     confirmPassword.setTextFill(Color.WHITE);
