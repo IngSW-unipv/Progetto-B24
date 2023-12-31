@@ -17,7 +17,7 @@ public class AudioCard extends VBox {
 
     //Attributi
 
-    private static final Background bgSidebar=new Background(new BackgroundFill(Color.rgb(14, 14, 14), CornerRadii.EMPTY, Insets.EMPTY));
+    private static final Background bgCard=new Background(new BackgroundFill(Color.rgb(25, 25, 25), CornerRadii.EMPTY, Insets.EMPTY));
 
     public AudioCard(){
         super();
@@ -41,7 +41,8 @@ public class AudioCard extends VBox {
         songArtist.setFont(Font.font("Verdana", FontWeight.NORMAL, FontPosture.REGULAR, 14));
         songArtist.setTextFill(Color.LIGHTGRAY);
 
-        getChildren().addAll(audioImageView);
+        getChildren().addAll(audioImageView, songTitle, songArtist);
+        setBackground(bgCard);
         setPadding(new Insets(15));
 
     }

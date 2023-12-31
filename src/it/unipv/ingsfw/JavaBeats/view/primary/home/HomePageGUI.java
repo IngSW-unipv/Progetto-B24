@@ -34,19 +34,14 @@ public class HomePageGUI{
   //Metodi
   /*---------------------------------------*/
   private void initComponents(){
-    /* Setup of LEFT Sidebar */
-    Sidebar sb=new Sidebar();
-    Songbar sob= new Songbar();
+    /* Setup of left Sidebar, bottom songbar and center home */
+    Sidebar sidebar=new Sidebar();
+    Songbar songbar= new Songbar();
     Home home=new Home();
 
-    /*BorderPane bp=new BorderPane();
-    bp.setLeft(sb);
-    bp.setBottom(sob);
-    bp.setCenter(home);*/
-
     GridPane gp=new GridPane();
-    gp.addRow(0, sb, home);
-    gp.add(sob, 0, 1, 2, 1);
+    gp.addRow(0, sidebar, home);
+    gp.add(songbar, 0, 1, 2, 1);
 
     ColumnConstraints ccSidebar=new ColumnConstraints();
     ColumnConstraints ccHome=new ColumnConstraints();
