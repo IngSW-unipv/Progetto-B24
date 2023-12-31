@@ -24,7 +24,7 @@ public class Main extends Application{
   }
   @Override
   public void start(Stage stage){
-    stage.setTitle("Login");
+    stage.setTitle("Home");
     stage.setScene(loginScene);
     stage.sizeToScene();
     stage.setMaximized(true);
