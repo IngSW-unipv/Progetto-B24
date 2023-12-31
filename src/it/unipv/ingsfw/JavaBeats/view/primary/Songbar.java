@@ -55,7 +55,7 @@ public class Songbar extends GridPane {
         songTitle.setTextFill(Color.LIGHTGRAY);
 
         Label songArtist= new Label("Unknown Artist");
-        songArtist.setFont(Font.font("Verdana", FontWeight.NORMAL, FontPosture.REGULAR, 16));
+        songArtist.setFont(Font.font("Verdana", FontWeight.NORMAL, FontPosture.REGULAR, 14));
         songArtist.setTextFill(Color.LIGHTGRAY);
 
         VBox songLabelVbox= new VBox(5, songTitle, songArtist);
