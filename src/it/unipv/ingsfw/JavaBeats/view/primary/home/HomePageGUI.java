@@ -2,12 +2,7 @@ package it.unipv.ingsfw.JavaBeats.view.primary.home;
 import it.unipv.ingsfw.JavaBeats.view.primary.Sidebar;
 import it.unipv.ingsfw.JavaBeats.view.primary.Songbar;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Cursor;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -22,7 +17,6 @@ public class HomePageGUI{
   private static final int clientHeight=(int)Screen.getPrimary().getBounds().getHeight();
   private static final Background bgSidebar=new Background(new BackgroundFill(Color.rgb(10, 10, 10), CornerRadii.EMPTY, Insets.EMPTY));
   private static final Font fontMenu=Font.font("Verdana", FontWeight.NORMAL, FontPosture.REGULAR, 16);
-  private VBox menuVBox;
   private Scene scene;
   /*---------------------------------------*/
   //Costruttori
@@ -43,13 +37,30 @@ public class HomePageGUI{
     /* Setup of LEFT Sidebar */
     Sidebar sb=new Sidebar();
     Songbar sob= new Songbar();
+    Home home=new Home();
 
-    BorderPane bp=new BorderPane();
+    /*BorderPane bp=new BorderPane();
     bp.setLeft(sb);
     bp.setBottom(sob);
-    bp.setBackground(new Background(new BackgroundFill(Color.rgb(15, 15, 15), CornerRadii.EMPTY, Insets.EMPTY)));
+    bp.setCenter(home);*/
 
-    scene=new Scene(bp, clientWidth, clientHeight);
+    GridPane gp=new GridPane();
+    gp.addRow(0, sb, home);
+    gp.add(sob, 0, 1, 2, 1);
+
+    ColumnConstraints ccSidebar=new ColumnConstraints();
+    ColumnConstraints ccHome=new ColumnConstraints();
+    ccSidebar.setPercentWidth(20);
+    ccHome.setPercentWidth(80);
+    gp.getColumnConstraints().addAll(ccSidebar, ccHome);
+
+    RowConstraints rcSongbar=new RowConstraints();
+    RowConstraints rcSideHome=new RowConstraints();
+    rcSongbar.setPercentHeight(12);
+    rcSideHome.setPercentHeight(88);
+    gp.getRowConstraints().addAll(rcSideHome, rcSongbar);
+
+    scene=new Scene(gp, clientWidth, clientHeight);
   }
   /*---------------------------------------*/
 }

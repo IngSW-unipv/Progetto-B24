@@ -23,8 +23,12 @@ public class Sidebar extends VBox{
   private static final Background bgSidebar=new Background(new BackgroundFill(Color.rgb(10, 10, 10), CornerRadii.EMPTY, Insets.EMPTY));
   private static final Font fontMenu=Font.font("Verdana", FontWeight.NORMAL, FontPosture.REGULAR, 17);
   private static final Font fontLibrary=Font.font("Verdana", FontWeight.NORMAL, FontPosture.REGULAR, 20);
-
-  private VBox menuVBox;
+  private Button homeButton;
+  private Button searchButton;
+  private Button favoritesButton;
+  private Button playlistsButton;
+  private Button albumButton;
+  private Button podcastButton;
   /*---------------------------------------*/
   //Costruttori
   /*---------------------------------------*/
@@ -35,8 +39,23 @@ public class Sidebar extends VBox{
   /*---------------------------------------*/
   //Getter/Setter
   /*---------------------------------------*/
-  public VBox getMenuVBox(){
-    return menuVBox;
+  public Button getHomeButton(){
+    return homeButton;
+  }
+  public Button getSearchButton(){
+    return searchButton;
+  }
+  public Button getFavoritesButton(){
+    return favoritesButton;
+  }
+  public Button getPlaylistsButton(){
+    return playlistsButton;
+  }
+  public Button getAlbumButton(){
+    return albumButton;
+  }
+  public Button getPodcastButton(){
+    return podcastButton;
   }
   /*---------------------------------------*/
   //Metodi
@@ -46,7 +65,7 @@ public class Sidebar extends VBox{
     Image homeImage = new Image("it/unipv/ingsfw/JavaBeats/view/icons/Home.png", true);
     ImageView homeImageView=new ImageView(homeImage);
     homeImageView.setPreserveRatio(true);
-    Button homeButton=new Button("  Home");
+    homeButton=new Button("  Home");
     homeButton.setGraphic(homeImageView);
     homeButton.setContentDisplay(ContentDisplay.LEFT);
     homeButton.setFont(fontMenu);
@@ -59,7 +78,7 @@ public class Sidebar extends VBox{
     Image searchImage = new Image("it/unipv/ingsfw/JavaBeats/view/icons/Search.png", true);
     ImageView searchImageView=new ImageView(searchImage);
     searchImageView.setPreserveRatio(true);
-    Button searchButton=new Button("  Search");
+    searchButton=new Button("  Search");
     searchButton.setGraphic(searchImageView);
     searchButton.setContentDisplay(ContentDisplay.LEFT);
     searchButton.setFont(fontMenu);
@@ -67,7 +86,7 @@ public class Sidebar extends VBox{
     searchButton.setPadding(new Insets(0, 0, 0, 37));
     searchButton.setBackground(bgSidebar);
     searchButton.setCursor(Cursor.HAND);
-    menuVBox=new VBox(homeButton, searchButton);
+    VBox menuVBox=new VBox(homeButton, searchButton);
 
     /* Pane used just for padding */
     Pane whitePane1=new Pane();
@@ -84,10 +103,10 @@ public class Sidebar extends VBox{
     libraryHBox.setAlignment(Pos.CENTER_LEFT);
     libraryHBox.setBorder(new Border(new BorderStroke(Color.BLUEVIOLET, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(0, 0, 2, 0))));
 
-    Button favoritesButton=new Button("Favorites");
-    Button playlistsButton=new Button("Playlists");
-    Button albumButton=new Button("Albums");
-    Button podcastButton=new Button("Podcasts");
+    favoritesButton=new Button("Favorites");
+    playlistsButton=new Button("Playlists");
+    albumButton=new Button("Albums");
+    podcastButton=new Button("Podcasts");
     Button[] allButtons={favoritesButton, playlistsButton, albumButton, podcastButton};
     for(Button b : allButtons){
       b.setBackground(bgSidebar);
@@ -103,7 +122,6 @@ public class Sidebar extends VBox{
 
     getChildren().addAll(menuVBox, whitePane1, libraryVBox, whitePane2);
     setBackground(bgSidebar);
-    setPrefWidth((double)clientWidth/5);
 
     setMargin(homeButton, new Insets(25, 0, 20, 0));
     setMargin(libraryHBox, new Insets(0, 45, 0, 35));
