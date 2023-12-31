@@ -1,6 +1,7 @@
 package it.unipv.ingsfw.JavaBeats.view.primary;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -17,7 +18,7 @@ public class AudioCard extends VBox {
 
     //Attributi
 
-    private static final Background bgCard=new Background(new BackgroundFill(Color.rgb(25, 25, 25), CornerRadii.EMPTY, Insets.EMPTY));
+    private static final Background bgCard=new Background(new BackgroundFill(Color.rgb(25, 25, 25), new CornerRadii(20), Insets.EMPTY));
 
     public AudioCard(){
         super();
@@ -27,23 +28,33 @@ public class AudioCard extends VBox {
     private void initComponents(){
 
         //Image
-        Image audioImage=new Image("it/unipv/ingsfw/JavaBeats/view/icons/Record.png", true);
-        ImageView audioImageView=new ImageView(audioImage);
-        audioImageView.setPreserveRatio(true);
+        Image cardImage=new Image("it/unipv/ingsfw/JavaBeats/view/icons/Record.png", true);
+        ImageView cardImageView=new ImageView(cardImage);
+        cardImageView.setPreserveRatio(true);
+
+
+        //LabelVbox
 
         //Title
-        Label songTitle= new Label("Unknown Title");
-        songTitle.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 16));
-        songTitle.setTextFill(Color.LIGHTGRAY);
+        Label title= new Label("Unknown Title");
+        title.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 16));
+        title.setTextFill(Color.LIGHTGRAY);
+        title.setPadding(new Insets(15, 0, 5, 0));
 
         //Artist
-        Label songArtist= new Label("Unknown Artist");
-        songArtist.setFont(Font.font("Verdana", FontWeight.NORMAL, FontPosture.REGULAR, 14));
-        songArtist.setTextFill(Color.LIGHTGRAY);
+        Label creator= new Label("Unknown Artist");
+        creator.setFont(Font.font("Verdana", FontWeight.NORMAL, FontPosture.REGULAR, 14));
+        creator.setTextFill(Color.LIGHTGRAY);
 
-        getChildren().addAll(audioImageView, songTitle, songArtist);
-        setBackground(bgCard);
+
+        VBox labelVBox= new VBox(title, creator);
+        labelVBox.setAlignment(Pos.CENTER_LEFT);
+
+        getChildren().addAll(cardImageView, labelVBox);
         setPadding(new Insets(15));
+        setAlignment(Pos.CENTER);
+        setBackground(bgCard);
+
 
     }
 
