@@ -1,5 +1,5 @@
 package it.unipv.ingsfw.JavaBeats.view.primary.home;
-import it.unipv.ingsfw.JavaBeats.view.primary.AudioCard;
+import it.unipv.ingsfw.JavaBeats.view.presets.AudioCard;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;

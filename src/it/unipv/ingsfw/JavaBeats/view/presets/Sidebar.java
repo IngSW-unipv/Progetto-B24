@@ -1,4 +1,4 @@
-package it.unipv.ingsfw.JavaBeats.view.primary;
+package it.unipv.ingsfw.JavaBeats.view.presets;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
