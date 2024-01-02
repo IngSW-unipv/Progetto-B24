@@ -1,6 +1,6 @@
 package it.unipv.ingsfw.JavaBeats.view.primary.home;
-import it.unipv.ingsfw.JavaBeats.view.primary.Sidebar;
-import it.unipv.ingsfw.JavaBeats.view.primary.Songbar;
+import it.unipv.ingsfw.JavaBeats.view.presets.Sidebar;
+import it.unipv.ingsfw.JavaBeats.view.presets.Songbar;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;

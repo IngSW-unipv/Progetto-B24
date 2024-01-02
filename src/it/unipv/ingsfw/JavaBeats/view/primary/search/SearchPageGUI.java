@@ -1,9 +1,7 @@
 package it.unipv.ingsfw.JavaBeats.view.primary.search;
 
-import it.unipv.ingsfw.JavaBeats.view.primary.Sidebar;
-import it.unipv.ingsfw.JavaBeats.view.primary.Songbar;
-import it.unipv.ingsfw.JavaBeats.view.primary.home.Home;
-import javafx.beans.binding.Bindings;
+import it.unipv.ingsfw.JavaBeats.view.presets.Sidebar;
+import it.unipv.ingsfw.JavaBeats.view.presets.Songbar;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -20,8 +18,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
-
-import static javafx.scene.layout.GridPane.setVgrow;
 
 public class SearchPageGUI {
 
