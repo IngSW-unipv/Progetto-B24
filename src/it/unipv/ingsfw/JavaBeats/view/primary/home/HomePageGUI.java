@@ -1,6 +1,7 @@
 package it.unipv.ingsfw.JavaBeats.view.primary.home;
 import it.unipv.ingsfw.JavaBeats.view.primary.Sidebar;
 import it.unipv.ingsfw.JavaBeats.view.primary.Songbar;
+import it.unipv.ingsfw.JavaBeats.view.primary.search.SearchResults;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
@@ -15,8 +16,6 @@ public class HomePageGUI{
   /*---------------------------------------*/
   private static final int clientWidth=(int)Screen.getPrimary().getBounds().getWidth();
   private static final int clientHeight=(int)Screen.getPrimary().getBounds().getHeight();
-  private static final Background bgSidebar=new Background(new BackgroundFill(Color.rgb(10, 10, 10), CornerRadii.EMPTY, Insets.EMPTY));
-  private static final Font fontMenu=Font.font("Verdana", FontWeight.NORMAL, FontPosture.REGULAR, 16);
   private Scene scene;
   /*---------------------------------------*/
   //Costruttori
@@ -37,7 +36,7 @@ public class HomePageGUI{
     /* Setup of left Sidebar, bottom songbar and center home */
     Sidebar sidebar=new Sidebar();
     Songbar songbar= new Songbar();
-    Home home=new Home();
+    SearchResults home=new SearchResults();
 
     GridPane gp=new GridPane();
     gp.addRow(0, sidebar, home);
