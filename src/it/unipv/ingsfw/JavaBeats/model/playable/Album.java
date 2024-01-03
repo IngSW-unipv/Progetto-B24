@@ -2,15 +2,20 @@ package it.unipv.ingsfw.JavaBeats.model.playable;
 
 import it.unipv.ingsfw.JavaBeats.model.user.JBProfile;
 
+import java.sql.Blob;
+
 public class Album extends JBCollection {
 
 	//ATTRIBUTE:
 	private Song[] trackArray;
 
 
-	//CONSTRUCTOR:
+	//CONSTRUCTORS:
+	public Album(String id, String name, JBProfile creator, Blob picture) {
+		super(id, name, creator, picture);
+	}
 	public Album(String id, String name, JBProfile creator) {
-		super(id, name, creator);
+		this(id, name, creator, null);
 	}
 
 

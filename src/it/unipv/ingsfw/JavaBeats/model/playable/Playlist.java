@@ -1,6 +1,8 @@
 package it.unipv.ingsfw.JavaBeats.model.playable;
 
 import it.unipv.ingsfw.JavaBeats.model.user.JBProfile;
+
+import java.sql.Blob;
 import java.util.List;
 
 public class Playlist extends JBCollection {
@@ -11,8 +13,11 @@ public class Playlist extends JBCollection {
 
 
 	//CONSTRUCTOR:
+	public Playlist(String id, String name, JBProfile creator, Blob picture) {
+		super(id, name, creator, picture);
+	}
 	public Playlist(String id, String name, JBProfile creator) {
-		super(id, name, creator);
+		this(id, name, creator, null);
 	}
 
 

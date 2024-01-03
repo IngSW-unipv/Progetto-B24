@@ -2,7 +2,7 @@ package it.unipv.ingsfw.JavaBeats.model.playable;
 
 import it.unipv.ingsfw.JavaBeats.model.EJBMODE;
 import it.unipv.ingsfw.JavaBeats.model.user.JBProfile;
-import javax.sql.rowset.serial.SerialBlob;
+import java.sql.Blob;
 
 public abstract class JBCollection implements IJBPlayable{
 
@@ -11,14 +11,18 @@ public abstract class JBCollection implements IJBPlayable{
     private String name;
     private JBProfile creator;
     private int itemAmount;
-    private SerialBlob picture;
+    private Blob picture;
 
 
-    //CONSTRUCTOR:
-    protected JBCollection(String id, String name, JBProfile creator) {
+    //CONSTRUCTORS:
+    protected JBCollection(String id, String name, JBProfile creator, Blob picture) {
         this.id = id;
         this.name = name;
         this.creator = creator;
+        this.picture = picture;
+    }
+    protected JBCollection(String id, String name, JBProfile creator) {
+        this(id, name, creator, null);
     }
 
 
@@ -36,7 +40,7 @@ public abstract class JBCollection implements IJBPlayable{
     public int getItemAmount() {
         return itemAmount;
     }
-    public SerialBlob getPicture() {
+    public Blob getPicture() {
         return picture;
     }
 
@@ -54,7 +58,7 @@ public abstract class JBCollection implements IJBPlayable{
     public void setItemAmount(int itemAmount) {
         this.itemAmount = itemAmount;
     }
-    public void setPicture(SerialBlob picture) {
+    public void setPicture(Blob picture) {
         this.picture = picture;
     }
 

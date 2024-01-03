@@ -1,5 +1,6 @@
 package it.unipv.ingsfw.JavaBeats.model.playable;
 
+import java.sql.Blob;
 import java.util.List;
 import it.unipv.ingsfw.JavaBeats.model.user.JBProfile;
 
@@ -10,8 +11,11 @@ public class Podcast extends JBCollection {
 
 
 	//CONSTRUCTOR:
+	public Podcast(String id, String name, JBProfile creator, Blob picture) {
+		super(id, name, creator, picture);
+	}
 	public Podcast(String id, String name, JBProfile creator) {
-		super(id, name, creator);
+		this(id, name, creator, null);
 	}
 
 

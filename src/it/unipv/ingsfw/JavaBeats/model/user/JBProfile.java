@@ -1,19 +1,26 @@
 package it.unipv.ingsfw.JavaBeats.model.user;
 
-import javax.sql.rowset.serial.SerialBlob;
+import java.sql.Blob;
 
 public abstract class JBProfile {
 
     //ATTRIBUTES:
     private String   username, mail, password, name, surname, biography;
-    private SerialBlob profilePicture;
+    private Blob profilePicture;
 
 
-    //CONSTRUCTOR:
-    protected JBProfile(String username, String mail, String password) {
+    //CONSTRUCTORS:
+    public JBProfile(String username, String mail, String password, String name, String surname, String biography, Blob profilePicture) {
         this.username = username;
         this.mail = mail;
         this.password = password;
+        this.name = name;
+        this.surname = surname;
+        this.biography = biography;
+        this.profilePicture = profilePicture;
+    }
+    protected JBProfile(String username, String mail, String password) {
+        this(username, mail, password, null, null, null, null);
     }
 
 
@@ -36,7 +43,7 @@ public abstract class JBProfile {
     public String getBiography() {
         return biography;
     }
-    public SerialBlob getProfilePicture() {
+    public Blob getProfilePicture() {
         return profilePicture;
     }
 
@@ -60,7 +67,7 @@ public abstract class JBProfile {
     public void setBiography(String biography) {
         this.biography = biography;
     }
-    public void setProfilePicture(SerialBlob profilePicture) {
+    public void setProfilePicture(Blob profilePicture) {
         this.profilePicture = profilePicture;
     }
 }
