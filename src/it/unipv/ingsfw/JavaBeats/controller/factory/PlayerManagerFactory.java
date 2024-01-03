@@ -36,7 +36,7 @@ public class PlayerManagerFactory {
 
 
 	//Metodo per avere playermanager
-	public static PlayerManager getPlayerManager() {
+	public PlayerManager getPlayerManager() {
 		if(playerManager==null) {
 			String playerManagerClassName;
 

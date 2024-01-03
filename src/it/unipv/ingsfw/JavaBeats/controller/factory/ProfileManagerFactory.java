@@ -36,7 +36,7 @@ public class ProfileManagerFactory {
 
 
 	//Metodo per avere profilemanager
-	public static ProfileManager getProfileManager() {
+	public ProfileManager getProfileManager() {
 		if(profileManager==null) {
 			String profileManagerClassName;
 
