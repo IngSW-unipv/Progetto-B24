@@ -35,7 +35,7 @@ public class FXAdapterFactory {
 	}
 
 	//Metodo per avere fxadapter
-	public static FXAdapter getFXAdapter() {
+	public FXAdapter getFXAdapter() {
 		if(fxAdapter==null) {
 			String fxAdapterClassName;
 

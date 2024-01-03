@@ -35,7 +35,7 @@ public class CollectionManagerFactory {
 
 
 	//Metodo per avere collectionmanager
-	public static CollectionManager getCollectionManager() {
+	public CollectionManager getCollectionManager() {
 		if(collectionManager==null) {
 			String collectionManagerClassName;
 
