@@ -15,11 +15,12 @@ public abstract class JBCollection implements IJBPlayable{
 
 
     //CONSTRUCTOR:
-    public JBCollection(String id, String name, JBProfile creator) {
+    protected JBCollection(String id, String name, JBProfile creator) {
         this.id = id;
         this.name = name;
         this.creator = creator;
     }
+
 
 
     //GETTERS:

@@ -31,4 +31,11 @@ public class User extends JBProfile {
 	public void setMinuteListened(Time minuteListened) {
 		this.minuteListened = minuteListened;
 	}
+
+
+	//METHODS:
+	@Override
+	public String toString() {
+		return "Mail: " + this.getMail() + "; Username: " + this.getUsername() ;
+	}
 }
