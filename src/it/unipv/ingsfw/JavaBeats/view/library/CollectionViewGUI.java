@@ -6,11 +6,16 @@ import it.unipv.ingsfw.JavaBeats.view.presets.Sidebar;
 import it.unipv.ingsfw.JavaBeats.view.presets.Songbar;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
@@ -26,6 +31,7 @@ public class CollectionViewGUI {
     private static final Background bg=new Background(new BackgroundFill(Color.rgb(15, 15, 15), CornerRadii.EMPTY, Insets.EMPTY));
     private static final Font fontCollection=Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 25);
     private Scene scene;
+
 
     /*---------------------------------------*/
     //Getter/Setter
@@ -85,8 +91,25 @@ public class CollectionViewGUI {
         collectionScrollPane.setStyle("-fx-background: #0F0F0FFF; -fx-border-color: #0F0F0FFF");
 
 
+        //Add button
+        Image plusImage= new Image("it/unipv/ingsfw/JavaBeats/view/icons/Plus.png", true);
+        ImageView plusImageView=new ImageView(plusImage);
+        plusImageView.setPreserveRatio(true);
+        plusImageView.setFitHeight(40);
+        Button buttonPlus= new Button();
+        buttonPlus.setGraphic(plusImageView);
+        buttonPlus.setCursor(Cursor.HAND);
+        buttonPlus.setStyle("-fx-background-radius: 30; -fx-pref-width: 60; -fx-pref-height: 60; -fx-background-color: #8A2BE2");
+
+
+        //Hbox button
+        HBox buttonHBox= new HBox(buttonPlus);
+        buttonHBox.setAlignment(Pos.CENTER_RIGHT);
+        buttonHBox.setPadding(new Insets(0, 20, 10, 0));
+
+
         //Vbox collection
-        VBox collectionVBox= new VBox(25, titleHBox, collectionScrollPane);
+        VBox collectionVBox= new VBox(25, titleHBox, collectionScrollPane, buttonHBox);
         collectionVBox.setBackground(bg);
         VBox.setVgrow(collectionScrollPane, Priority.ALWAYS);
 
