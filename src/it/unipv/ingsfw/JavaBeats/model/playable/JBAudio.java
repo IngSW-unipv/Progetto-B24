@@ -19,7 +19,7 @@ public abstract class JBAudio {
 
 
     //CONSTRUCTOR:
-    public JBAudio(String id) {
+    protected JBAudio(String id) {
         this.id = id;
     }
 

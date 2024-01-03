@@ -10,7 +10,7 @@ public abstract class JBProfile {
 
 
     //CONSTRUCTOR:
-    public JBProfile(String username, String mail, String password) {
+    protected JBProfile(String username, String mail, String password) {
         this.username = username;
         this.mail = mail;
         this.password = password;
