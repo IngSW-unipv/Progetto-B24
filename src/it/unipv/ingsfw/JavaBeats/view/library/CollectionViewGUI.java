@@ -60,7 +60,6 @@ public class CollectionViewGUI {
             case PODCAST:
                 collectionLabel= new Label("Your podcasts");
                 break;
-
         }
 
         collectionLabel.setFont(fontCollection);
@@ -77,14 +76,13 @@ public class CollectionViewGUI {
         FlowPane collectionFlowPane= new FlowPane();
         for(int i=0; i<100; i+=1){
             collectionFlowPane.getChildren().add(new AudioCard());
-        }
+        }//end-for
         collectionFlowPane.setPrefWrapLength(Double.MAX_VALUE);
         collectionFlowPane.setHgap(50);
         collectionFlowPane.setVgap(70);
 
 
         //Scrollpane
-
         ScrollPane collectionScrollPane= new ScrollPane(collectionFlowPane);
         collectionScrollPane.setFitToWidth(true);
         collectionScrollPane.setFitToHeight(true);
@@ -107,17 +105,14 @@ public class CollectionViewGUI {
         buttonHBox.setAlignment(Pos.CENTER_RIGHT);
         buttonHBox.setPadding(new Insets(0, 20, 10, 0));
 
-
         //Vbox collection
         VBox collectionVBox= new VBox(25, titleHBox, collectionScrollPane, buttonHBox);
         collectionVBox.setBackground(bg);
         VBox.setVgrow(collectionScrollPane, Priority.ALWAYS);
 
-
-
         /* Setup of left Sidebar, bottom songbar and center collection */
-        Sidebar sidebar = new Sidebar();
-        Songbar songbar = new Songbar();
+        Sidebar sidebar =Sidebar.getInstance();
+        Songbar songbar =Songbar.getInstance();
         GridPane gp=new GridPane();
         gp.addRow(0, sidebar, collectionVBox);
         gp.add(songbar, 0, 1, 2, 1);

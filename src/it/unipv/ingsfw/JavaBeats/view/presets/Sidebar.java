@@ -1,6 +1,7 @@
 package it.unipv.ingsfw.JavaBeats.view.presets;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Side;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
@@ -18,6 +19,7 @@ public class Sidebar extends VBox{
   /*---------------------------------------*/
   //Attributi
   /*---------------------------------------*/
+  public static Sidebar instance;
   private static final int clientWidth=(int)Screen.getPrimary().getBounds().getWidth();
   private static final int clientHeight=(int)Screen.getPrimary().getBounds().getHeight();
   private static final Background bgSidebar=new Background(new BackgroundFill(Color.rgb(10, 10, 10), CornerRadii.EMPTY, Insets.EMPTY));
@@ -30,15 +32,21 @@ public class Sidebar extends VBox{
   private Button albumButton;
   private Button podcastButton;
   /*---------------------------------------*/
-  //Costruttori
+  //Costruttore
   /*---------------------------------------*/
-  public Sidebar(){
+  private Sidebar(){
     super();
     initComponents();
   }
   /*---------------------------------------*/
   //Getter/Setter
   /*---------------------------------------*/
+  public static Sidebar getInstance(){
+    if(instance == null){
+      instance = new Sidebar();
+    }//end-if
+    return instance;
+  }
   public Button getHomeButton(){
     return homeButton;
   }

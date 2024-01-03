@@ -1,20 +1,23 @@
-package it.unipv.ingsfw.JavaBeats.view.primary.home;
+package it.unipv.ingsfw.JavaBeats.view.library;
 import it.unipv.ingsfw.JavaBeats.view.presets.Sidebar;
 import it.unipv.ingsfw.JavaBeats.view.presets.Songbar;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Screen;
-public class HomePageGUI{
+public class PlaylistViewGUI{
   /*---------------------------------------*/
   //Attributi
   /*---------------------------------------*/
-  private static final int clientWidth=(int)Screen.getPrimary().getBounds().getWidth();
+  private static final int clientWidth=(int) Screen.getPrimary().getBounds().getWidth();
   private static final int clientHeight=(int)Screen.getPrimary().getBounds().getHeight();
   private Scene scene;
   /*---------------------------------------*/
   //Costruttori
   /*---------------------------------------*/
-  public HomePageGUI(){
+  public PlaylistViewGUI(){
     initComponents();
   }
   /*---------------------------------------*/
@@ -27,13 +30,31 @@ public class HomePageGUI{
   //Metodi
   /*---------------------------------------*/
   private void initComponents(){
-    /* Setup of left Sidebar, bottom songbar and center home */
+    Image playlistImage= new Image("it/unipv/ingsfw/JavaBeats/view/icons/Plus.png", true);
+    ImageView playlistImageView=new ImageView(playlistImage);
+    playlistImageView.setPreserveRatio(true);
+    playlistImageView.setFitHeight(150);
+
+    Label playlistTitle=new Label("Really long title");
+
+    HBox userHBox=new HBox();
+    HBox playlistInformation=new HBox();
+
+    VBox playlistTitleInfo=new VBox(playlistTitle, playlistInformation);
+
+    HBox topViewHBox=new HBox(playlistImageView, playlistTitleInfo);
+
+    HBox buttonsHBbox=new HBox();
+
+
+
+    VBox mainVbox=new VBox(topViewHBox, buttonsHBbox);
+
+    /* Setup of left Sidebar, bottom songbar and center collection */
     Sidebar sidebar=Sidebar.getInstance();
     Songbar songbar=Songbar.getInstance();
-    Home home=new Home();
-
     GridPane gp=new GridPane();
-    gp.addRow(0, sidebar, home);
+    gp.addRow(0, sidebar, mainVbox);
     gp.add(songbar, 0, 1, 2, 1);
 
     ColumnConstraints ccSidebar=new ColumnConstraints();
