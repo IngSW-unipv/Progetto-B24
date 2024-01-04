@@ -1,13 +1,13 @@
 package it.unipv.ingsfw.JavaBeats.model.playable;
 
 import it.unipv.ingsfw.JavaBeats.model.user.JBProfile;
-
 import java.sql.Blob;
+import java.util.ArrayList;
 
 public class Album extends JBCollection {
 
 	//ATTRIBUTE:
-	private Song[] trackArray;
+	private ArrayList<Song> trackList;
 
 
 	//CONSTRUCTORS:
@@ -20,14 +20,14 @@ public class Album extends JBCollection {
 
 
 	//GETTER:
-	public Song[] getTrackArray() {
-		return trackArray;
+	public ArrayList<Song> getTrackList() {
+		return trackList;
 	}
 
 
 	//SETTER:
-	public void setTrackArray(Song[] trackArray) {
-		this.trackArray = trackArray;
+	public void setTrackArray(ArrayList<Song> trackList) {
+		this.trackList = trackList;
 	}
 
 }
