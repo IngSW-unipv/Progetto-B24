@@ -1,12 +1,13 @@
 package it.unipv.ingsfw.JavaBeats.dao;
 
 import it.unipv.ingsfw.JavaBeats.controller.factory.DBManagerFactory;
-import it.unipv.ingsfw.JavaBeats.model.playable.JBAudio;
-import it.unipv.ingsfw.JavaBeats.model.playable.Playlist;
+import it.unipv.ingsfw.JavaBeats.model.playable.*;
+import it.unipv.ingsfw.JavaBeats.model.user.Artist;
 import it.unipv.ingsfw.JavaBeats.model.user.JBProfile;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class AudioDAO implements IAudioDAO {
@@ -76,7 +77,76 @@ public class AudioDAO implements IAudioDAO {
 
     @Override
     public ArrayList<JBAudio> selectByPlalist(Playlist playlist) {
+        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+        PreparedStatement st;
+        ResultSet rs;
+        ArrayList<JBAudio> result = new ArrayList<>();
 
-        return null;
+        try {
+            String query = "SELECT idAudio FROM PlaylistAudios WHERE idPlaylist=?;";
+
+            st = connection.prepareStatement(query);
+            st.setString(1, playlist.getId());
+
+            rs = st.executeQuery();
+
+            while(rs.next()) {
+                result.add(getAudioByID(rs.getString("idAudio")));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+
+        return result;
     }
+
+
+    protected JBAudio getAudioByID(String id) {
+
+        SongDAO sDAO = new SongDAO();
+        JBAudio audioOut = sDAO.getSongByID(id);
+
+        if(audioOut==null) {
+            EpisodeDAO eDAO = new EpisodeDAO();
+            audioOut=eDAO.getEpisodeByID(id);
+        }
+
+        return audioOut;
+    }
+
+
+    protected String[] getGenresByAudioID(String field) {
+        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+        PreparedStatement st;
+        ResultSet rs;
+        ArrayList<String> result = new ArrayList<>();
+
+        try {
+            String query = "SELECT genre FROM Profile NATURAL JOIN Artist WHERE idAudio=?;";
+
+            st = connection.prepareStatement(query);
+            st.setString(1, field);
+
+            rs = st.executeQuery();
+
+            while(rs.next()) {
+                String str = rs.getString("genre");
+                result.add(str);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+
+        String[] arrayOut = new String[result.size()];      //converting arrayList to Array
+        arrayOut = result.toArray(arrayOut);
+
+        return arrayOut;
+    }
+
 }

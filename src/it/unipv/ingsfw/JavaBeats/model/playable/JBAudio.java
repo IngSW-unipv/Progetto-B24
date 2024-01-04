@@ -82,9 +82,6 @@ public abstract class JBAudio {
         this.audioFile=audioFile;
         this.isFavorite=isFavorite;
     }
-    public JBAudio(String id, Metadata metadata, Blob audioFile, boolean isFavorite) {
-        this(id, metadata.getTitle(), metadata.getArtist(), metadata.getCollection(), audioFile, metadata.getDuration(), metadata.getReleaseDate(), metadata.getGenres(), isFavorite);
-    }
     public JBAudio(String id, String title, Artist artist, Blob audioFile) {
         this(id, title, artist, null, audioFile, null, null, null, false);
     }
