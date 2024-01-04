@@ -12,12 +12,13 @@ public class User extends JBProfile {
 
 
 	//CONSTRUCTOR:
-	public User(String username, String mail, String password, String name, String surname, String biography, Blob profilePicture, boolean isVisible) {
+	public User(String username, String mail, String password, String name, String surname, String biography, Blob profilePicture, boolean isVisible, Time minuteListened) {
 		super(username, mail, password, name, surname, biography, profilePicture);
-		this.isVisible=isVisible;
+		this.isVisible = isVisible;
+		this.minuteListened = minuteListened;
 	}
 	public User(String username, String mail, String password) {
-		this(username, mail, password, null, null, null, null, true);
+		this(username, mail, password, null, null, null, null, true, null);
 	}
 
 
