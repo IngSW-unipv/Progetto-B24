@@ -78,12 +78,7 @@ public abstract class JBAudio {
     //CONSTRUCTORS:
     public JBAudio(String id, String title, Artist artist, JBCollection collection, Blob audioFile, Time duration, Date releaseDate, String[] genres, boolean isFavorite) {
         this.id = id;
-        metadata.setTitle(title);
-        metadata.setArtist(artist);
-        metadata.setCollection(collection);
-        metadata.setDuration(duration);
-        metadata.setReleaseDate(releaseDate);
-        metadata.setGenres(genres);
+        metadata = new Metadata(artist, title, collection, duration, releaseDate, genres);
         this.audioFile=audioFile;
         this.isFavorite=isFavorite;
     }
