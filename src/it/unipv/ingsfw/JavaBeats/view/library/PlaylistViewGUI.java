@@ -30,7 +30,7 @@ public class PlaylistViewGUI{
   //Metodi
   /*---------------------------------------*/
   private void initComponents(){
-    Image playlistImage= new Image("it/unipv/ingsfw/JavaBeats/view/icons/Plus.png", true);
+    Image playlistImage= new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Plus.png", true);
     ImageView playlistImageView=new ImageView(playlistImage);
     playlistImageView.setPreserveRatio(true);
     playlistImageView.setFitHeight(150);

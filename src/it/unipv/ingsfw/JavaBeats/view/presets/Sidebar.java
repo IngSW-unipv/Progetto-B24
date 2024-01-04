@@ -1,7 +1,6 @@
 package it.unipv.ingsfw.JavaBeats.view.presets;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.Side;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
@@ -70,7 +69,7 @@ public class Sidebar extends VBox{
   /*---------------------------------------*/
   private void initComponents(){
     /* Setup of LEFT VBox -> MenuVbox */
-    Image homeImage = new Image("it/unipv/ingsfw/JavaBeats/view/icons/Home.png", true);
+    Image homeImage = new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Home.png", true);
     ImageView homeImageView=new ImageView(homeImage);
     homeImageView.setPreserveRatio(true);
     homeButton=new Button("  Home");
@@ -83,7 +82,7 @@ public class Sidebar extends VBox{
     homeButton.setBackground(bgSidebar);
     homeButton.setCursor(Cursor.HAND);
 
-    Image searchImage = new Image("it/unipv/ingsfw/JavaBeats/view/icons/Search.png", true);
+    Image searchImage = new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Search.png", true);
     ImageView searchImageView=new ImageView(searchImage);
     searchImageView.setPreserveRatio(true);
     searchButton=new Button("  Search");
@@ -101,7 +100,7 @@ public class Sidebar extends VBox{
     setVgrow(whitePane1, Priority.ALWAYS);
 
     /* Setup of LEFT VBox -> LibraryMenu */
-    Image libraryImage = new Image("it/unipv/ingsfw/JavaBeats/view/icons/Library.png", true);
+    Image libraryImage = new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Library.png", true);
     ImageView libraryImageView=new ImageView(libraryImage);
     searchImageView.setPreserveRatio(true);
     Label libraryTitle=new Label("Your library");

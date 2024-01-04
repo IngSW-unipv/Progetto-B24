@@ -15,7 +15,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
@@ -90,7 +89,7 @@ public class CollectionViewGUI {
 
 
         //Add button
-        Image plusImage= new Image("it/unipv/ingsfw/JavaBeats/view/icons/Plus.png", true);
+        Image plusImage= new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Plus.png", true);
         ImageView plusImageView=new ImageView(plusImage);
         plusImageView.setPreserveRatio(true);
         plusImageView.setFitHeight(40);

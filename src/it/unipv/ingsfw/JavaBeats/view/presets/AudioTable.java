@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.VBox;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -20,6 +21,7 @@ public class AudioTable extends TableView<JBAudio> {
     public AudioTable(ObservableList<JBAudio> jbAudios){
         super();
         initComponents(jbAudios);
+
     }
 
     private void initComponents(ObservableList<JBAudio> jbAudios) {
@@ -33,7 +35,7 @@ public class AudioTable extends TableView<JBAudio> {
         //Collection column
         TableColumn<JBAudio, String> collectionColumn=new TableColumn<>("Collection");
         collectionColumn.setMinWidth(450);
-        collectionColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMetadata().getCollection().getCreator().getUsername()));
+        collectionColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMetadata().getCollection().getName()));
 
         //Date column
         TableColumn<JBAudio, String> dateColumn=new TableColumn<>("Release date");
@@ -52,6 +54,10 @@ public class AudioTable extends TableView<JBAudio> {
 
         setItems(jbAudios);
         getColumns().addAll(titleColumn, collectionColumn, dateColumn, durationColumn);
+
+        setFixedCellSize(40);
+        //css file
+        getStylesheets().add("it/unipv/ingsfw/JavaBeats/view/resources/css/tableview.css");
     }
 
 

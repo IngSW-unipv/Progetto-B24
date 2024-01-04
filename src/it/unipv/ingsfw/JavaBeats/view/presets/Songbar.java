@@ -51,7 +51,7 @@ public class Songbar extends GridPane {
     //SongHbox
 
     //RecordImage
-    Image recordImage= new Image("it/unipv/ingsfw/JavaBeats/view/icons/Record.png", true);
+    Image recordImage= new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Record.png", true);
     ImageView recordImageView=new ImageView(recordImage);
     recordImageView.setPreserveRatio(true);
 
@@ -69,7 +69,7 @@ public class Songbar extends GridPane {
     songLabelVbox.setAlignment(Pos.CENTER_LEFT);
 
     //Heart
-    Image heartImage= new Image("it/unipv/ingsfw/JavaBeats/view/icons/EmptyHeart.png", true);
+    Image heartImage= new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/EmptyHeart.png", true);
     ImageView heartImageView=new ImageView(heartImage);
     heartImageView.setPreserveRatio(true);
     Button buttonHeart= new Button();
@@ -86,7 +86,7 @@ public class Songbar extends GridPane {
     //Hbox 1
 
     //Random
-    Image randomImage= new Image("it/unipv/ingsfw/JavaBeats/view/icons/EmptyRandom.png", true);
+    Image randomImage= new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/EmptyRandom.png", true);
     ImageView randomImageView=new ImageView(randomImage);
     randomImageView.setPreserveRatio(true);
     Button buttonRandom= new Button();
@@ -95,7 +95,7 @@ public class Songbar extends GridPane {
     buttonRandom.setCursor(Cursor.HAND);
 
     //SkipBack
-    Image skipBackImage= new Image("it/unipv/ingsfw/JavaBeats/view/icons/SkipBack.png", true);
+    Image skipBackImage= new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/SkipBack.png", true);
     ImageView skipBackImageView=new ImageView(skipBackImage);
     skipBackImageView.setPreserveRatio(true);
     Button buttonSkipBack= new Button();
@@ -104,7 +104,7 @@ public class Songbar extends GridPane {
     buttonSkipBack.setCursor(Cursor.HAND);
 
     //PlayPause
-    Image playpauseImage= new Image("it/unipv/ingsfw/JavaBeats/view/icons/Play.png", true);
+    Image playpauseImage= new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Play.png", true);
     ImageView playPauseImageView=new ImageView(playpauseImage);
     playPauseImageView.setPreserveRatio(true);
     Button buttonPlayPause= new Button();
@@ -113,7 +113,7 @@ public class Songbar extends GridPane {
     buttonPlayPause.setCursor(Cursor.HAND);
 
     //SkipForward
-    Image skipForwardImage= new Image("it/unipv/ingsfw/JavaBeats/view/icons/SkipForward.png", true);
+    Image skipForwardImage= new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/SkipForward.png", true);
     ImageView skipForawradImageView=new ImageView(skipForwardImage);
     skipForawradImageView.setPreserveRatio(true);
     Button buttonSkipForward= new Button();
@@ -122,7 +122,7 @@ public class Songbar extends GridPane {
     buttonSkipForward.setCursor(Cursor.HAND);
 
     //Loop
-    Image loopImage= new Image("it/unipv/ingsfw/JavaBeats/view/icons/EmptyLoop.png", true);
+    Image loopImage= new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/EmptyLoop.png", true);
     ImageView loopImageView=new ImageView(loopImage);
     loopImageView.setPreserveRatio(true);
     Button buttonLoop= new Button();
@@ -166,7 +166,7 @@ public class Songbar extends GridPane {
 
 
     //Volume
-    Image volumeImage= new Image("it/unipv/ingsfw/JavaBeats/view/icons/Volume.png", true);
+    Image volumeImage= new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Volume.png", true);
     ImageView volumeImageView=new ImageView(volumeImage);
     volumeImageView.setPreserveRatio(true);
 

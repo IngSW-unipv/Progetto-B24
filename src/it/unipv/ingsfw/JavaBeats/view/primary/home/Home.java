@@ -42,7 +42,7 @@ public class Home extends VBox{
     *  Setup of top HBox component containing Logo, a warm welcome for the user and the profile image with its username
     */
     /* Logo */
-    Image logo = new Image("it/unipv/ingsfw/JavaBeats/view/icons/Logo.png", true);
+    Image logo = new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Logo.png", true);
     ImageView logoImageView=new ImageView(logo);
     logoImageView.setPreserveRatio(true);
 
@@ -58,7 +58,7 @@ public class Home extends VBox{
     HBox.setHgrow(whitePane, Priority.ALWAYS);
 
     /* Button with user's profile picture and username */
-    Image userPic = new Image("it/unipv/ingsfw/JavaBeats/view/icons/DefaultUser.png", true);
+    Image userPic = new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/DefaultUser.png", true);
     ImageView userPicImageView=new ImageView(userPic);
     userPicImageView.setPreserveRatio(true);
     Button userProfileButton=new Button("Username");

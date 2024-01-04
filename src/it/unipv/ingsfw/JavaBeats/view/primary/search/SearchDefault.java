@@ -33,7 +33,7 @@ public class SearchDefault extends ScrollPane{
   /*---------------------------------------*/
   private void initComponents(){
     //Image
-    Image searchImage = new Image("it/unipv/ingsfw/JavaBeats/view/icons/Search.png", true);
+    Image searchImage = new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Search.png", true);
     ImageView searchImageView=new ImageView(searchImage);
     searchImageView.setPreserveRatio(true);
     //Label searchScrollPane

@@ -28,7 +28,7 @@ public class AudioCard extends VBox {
     private void initComponents(){
 
         //Image
-        Image cardImage=new Image("it/unipv/ingsfw/JavaBeats/view/icons/Record.png", true);
+        Image cardImage=new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Record.png", true);
         ImageView cardImageView=new ImageView(cardImage);
         cardImageView.setPreserveRatio(true);
 

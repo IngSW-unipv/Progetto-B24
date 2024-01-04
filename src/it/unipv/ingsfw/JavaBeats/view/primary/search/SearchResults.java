@@ -44,7 +44,7 @@ public class SearchResults extends ScrollPane{
     topResultLabel.setFont(fontTopResult);
     topResultLabel.setTextFill(Color.LIGHTGRAY);
 
-    Image audioPic = new Image("it/unipv/ingsfw/JavaBeats/view/icons/Record.png", true);
+    Image audioPic = new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Record.png", true);
     ImageView audioPicImageView=new ImageView(audioPic);
     audioPicImageView.setPreserveRatio(true);
     audioPicImageView.setFitWidth(150);
@@ -70,7 +70,7 @@ public class SearchResults extends ScrollPane{
 
     HBox[] topSongs={new HBox(), new HBox(), new HBox(), new HBox()};
     for(HBox h : topSongs){
-      Image songPic = new Image("it/unipv/ingsfw/JavaBeats/view/icons/Record.png", true);
+      Image songPic = new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Record.png", true);
       ImageView songPicImageView=new ImageView(songPic);
       songPicImageView.setPreserveRatio(true);
       songPicImageView.setFitHeight(55);
@@ -90,7 +90,7 @@ public class SearchResults extends ScrollPane{
 
       HBox.setHgrow(whitePane, Priority.ALWAYS);
 
-      Image heartImage= new Image("it/unipv/ingsfw/JavaBeats/view/icons/EmptyHeart.png", true);
+      Image heartImage= new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/EmptyHeart.png", true);
       ImageView heartImageView=new ImageView(heartImage);
       heartImageView.setPreserveRatio(true);
 
