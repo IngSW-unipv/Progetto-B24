@@ -3,12 +3,12 @@ package it.unipv.ingsfw.JavaBeats.model.playable;
 import it.unipv.ingsfw.JavaBeats.model.user.JBProfile;
 
 import java.sql.Blob;
-import java.util.List;
+import java.util.ArrayList;
 
 public class Playlist extends JBCollection {
 
 	//ATTRIBUTES:
-	private List<JBAudio> trackList;
+	private ArrayList<JBAudio> trackList;
 	private boolean isVisible = true;
 
 
@@ -23,7 +23,7 @@ public class Playlist extends JBCollection {
 
 
 	//GETTERS:
-	public List<JBAudio> getTrackList() {
+	public ArrayList<JBAudio> getTrackList() {
 		return trackList;
 	}
 	public boolean isVisible() {
@@ -32,7 +32,7 @@ public class Playlist extends JBCollection {
 
 
 	//SETTERS:
-	public void setTrackList(List<JBAudio> trackList) {
+	public void setTrackList(ArrayList<JBAudio> trackList) {
 		this.trackList = trackList;
 	}
 	public void setVisible(boolean Visible) {

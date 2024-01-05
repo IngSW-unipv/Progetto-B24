@@ -74,12 +74,12 @@ public class ProfileDAO implements IProfileDAO {
         PreparedStatement st;
 
         try {
-            String query = "DELETE FROM Profile WHERE mail=?;";      //query template
+            String query = "DELETE FROM Profile WHERE mail=?;";
 
-            st = connection.prepareStatement(query);                //configure query
+            st = connection.prepareStatement(query);
             st.setString(1, profile.getMail());
 
-            st.executeUpdate();                                     //execute query
+            st.executeUpdate();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -92,57 +92,48 @@ public class ProfileDAO implements IProfileDAO {
     public void update(JBProfile profile) {         //push edited profile to database
         JBProfile oldProfile = get(profile);        //get profile as it is in DB to check for changes
 
-        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+        if (profile.getUsername() != null)          //check for null before using .equals to avoid exceptions
+            if (!(profile.getUsername().equals(oldProfile.getUsername())))
+                updateUsername(profile);
 
-        try {
+        if (profile.getPassword() != null)
+            if (!(profile.getPassword().equals(oldProfile.getPassword())))
+                updatePassword(profile);
 
-            if (profile.getUsername()!=null)        //check for null before using .equals to avoid exceptions
-                if(!(profile.getUsername().equals(oldProfile.getUsername())))
-                    updateUsername(profile);
+        if (profile.getName() != null)
+            if (!(profile.getName().equals(oldProfile.getName())))
+                updateName(profile);
 
-            if (profile.getPassword()!=null)
-                if(!(profile.getPassword().equals(oldProfile.getPassword())))
-                    updatePassword(profile);
+        if (profile.getSurname() != null)
+            if (!(profile.getSurname().equals(oldProfile.getSurname())))
+                updateSurname(profile);
 
-            if (profile.getName()!=null)
-                if(!(profile.getName().equals(oldProfile.getName())))
-                    updateName(profile);
+        if (profile.getBiography() != null)
+            if (!(profile.getBiography().equals(oldProfile.getBiography())))
+                updateBiography(profile);
 
-            if (profile.getSurname()!=null)
-                if(!(profile.getSurname().equals(oldProfile.getSurname())))
-                    updateSurname(profile);
+        if (profile.getProfilePicture() != null)
+            if (!(profile.getProfilePicture().equals(oldProfile.getProfilePicture())))
+                updateProfilePicture(profile);
 
-            if (profile.getBiography()!=null)
-                if(!(profile.getBiography().equals(oldProfile.getBiography())))
-                    updateBiography(profile);
+        if ((profile instanceof User) && oldProfile instanceof User) {       //check if profile is a USER
+            User userProfile = (User) profile;
+            User oldUserProfile = (User) oldProfile;
 
-            if (profile.getProfilePicture()!=null)
-                if(!(profile.getProfilePicture().equals(oldProfile.getProfilePicture())))
-                    updateProfilePicture(profile);
+            if (userProfile.isVisible() != oldUserProfile.isVisible())
+                updateVisibility(userProfile);
 
-            if((profile instanceof User) && oldProfile instanceof User) {       //check if profile is a USER
-                User userProfile = (User)profile;
-                User oldUserProfile = (User)oldProfile;
+        } else if (profile instanceof Artist) {                             //check if profile is an ARTIST
+            Artist artistProfile = (Artist) profile;
+            Artist oldArtistProfile = (Artist) oldProfile;
 
-                if(userProfile.isVisible()!=oldUserProfile.isVisible())
-                    updateVisibility(userProfile);
+            if (artistProfile.getTotalListeners() != oldArtistProfile.getTotalListeners())
+                updateTotalListeners(artistProfile);
 
-            } else if (profile instanceof Artist) {                             //check if profile is an ARTIST
-                Artist artistProfile = (Artist)profile;
-                Artist oldArtistProfile = (Artist)oldProfile;
-
-                if(artistProfile.getTotalListeners()!=oldArtistProfile.getTotalListeners())
-                    updateTotalListeners(artistProfile);
-
-            } else {
-                //THROW EXCEPION
-            }
-
-        } catch (Exception e){
-             e.printStackTrace();
+        } else {
+            //THROW EXCEPION
         }
 
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
     }
 
     @Override
@@ -168,12 +159,12 @@ public class ProfileDAO implements IProfileDAO {
         Artist result = null;
 
         try {
-            String query = "SELECT * FROM Profile NATURAL JOIN Artist WHERE mail=?;";   //query template
+            String query = "SELECT * FROM Profile NATURAL JOIN Artist WHERE mail=?;";
 
-            st = connection.prepareStatement(query);                //configure query
+            st = connection.prepareStatement(query);
             st.setString(1, mail);
 
-            rs = st.executeQuery();                                 //execute query
+            rs = st.executeQuery();
 
             while(rs.next()) {                                      //while results are available
                 result = new Artist(rs.getString("username"),           //only take the last one (shouldn't be a problem because mail is primary key)

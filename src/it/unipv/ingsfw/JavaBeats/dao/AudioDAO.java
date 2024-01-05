@@ -29,11 +29,11 @@ public class AudioDAO implements IAudioDAO {
 
         insertAudio(audio);             //insert audio to Audio table
 
-        linkAudioToArtist(audio);       //link audio (already present in db) to artist in (audio metadata)
+        linkAudioToArtist(audio);       //link audio (already present in db) to artist (from audio metadata)
 
-        linkAudioToCollection(audio);   //link audio to Album or Podcast
+        linkAudioToCollection(audio);   //link audio to Album or Podcast (from audio metadata)
 
-        linkAudioToGenres(audio);       //link audio to Genres
+        linkAudioToGenres(audio);       //link audio to Genres (from audio metadata)
 
     }
 
