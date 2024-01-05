@@ -26,48 +26,15 @@ public class AudioDAO implements IAudioDAO {
     //PUBLIC METHODS:
     @Override
     public void insert(JBAudio audio) {
-        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
-        PreparedStatement st1, st2, st3;
 
-        try {
-            String q1 =  "INSERT INTO Audio(id, title, duration, releaseDate, audioFile, isFavorite)" +
-                    "VALUES(?, ?, ?, ?, ?, ?, ?);";
+        insertAudio(audio);             //insert audio to Audio table
 
-            st1 = connection.prepareStatement(q1);
-            st1.setString(1, audio.getId());
-            st1.setString(2, audio.getMetadata().getTitle());
-            st1.setTime(3, audio.getMetadata().getDuration());
-            st1.setDate(4, audio.getMetadata().getReleaseDate());
-            st1.setBlob(5, audio.getAudioFileBlob());
-            st1.setBoolean(6, audio.isFavorite());
+        linkAudioToArtist(audio);       //link audio (already present in db) to artist in (audio metadata)
 
-            st1.executeUpdate();
+        linkAudioToCollection(audio);   //link audio to Album or Podcast
 
-            if(audio instanceof Song) {                 //if audio is a song insert it into the Song table
-                String q2 = "INSERT INTO Song(id) VALUES(?);";
+        linkAudioToGenres(audio);       //link audio to Genres
 
-                st2 = connection.prepareStatement(q2);
-                st2.setString(1, audio.getId());
-
-                st2.executeUpdate();
-
-            } else if (audio instanceof Episode) {      //if audio is an episode insert it into the Episode table
-                String q3 =  "INSERT INTO Episode(id) VALUES(?);";
-
-                st3 = connection.prepareStatement(q3);
-                st3.setString(1, audio.getId());
-
-                st3.executeUpdate();
-
-            } else {
-                //THROW EXCEPTION
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
     }
 
     @Override
@@ -88,6 +55,11 @@ public class AudioDAO implements IAudioDAO {
         }
 
         DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+    }
+
+    @Override
+    public JBAudio get(JBAudio audio) {
+        return getAudioByID(audio.getId());
     }
 
     @Override
@@ -192,7 +164,7 @@ public class AudioDAO implements IAudioDAO {
         ResultSet rs;
         Song result = null;
         ProfileDAO pDAO = new ProfileDAO();
-        AlbumDAO aDAO = new AlbumDAO();
+        CollectionDAO cDAO = new CollectionDAO();
 
         try {
             String query =  "SELECT * FROM (SELECT id as 'idSong', isFavorite, duration, title, releaseDate, audioFile FROM Audio) A" +
@@ -208,7 +180,7 @@ public class AudioDAO implements IAudioDAO {
                 result = new Song(  rs.getString("idSong"),
                                     rs.getString("title"),
                                     pDAO.getArtistByMail(rs.getString("artistMail")),
-                                    aDAO.getAlbumByID(rs.getString("idAlbum")),
+                                    cDAO.getAlbumByID(rs.getString("idAlbum")),
                                     rs.getBlob("audioFile"),
                                     rs.getTime("duration"),
                                     rs.getDate("releaseDate"),
@@ -231,7 +203,7 @@ public class AudioDAO implements IAudioDAO {
         ResultSet rs;
         Episode result = null;
         ProfileDAO pDAO = new ProfileDAO();
-        PodcastDAO podDAO = new PodcastDAO();
+        CollectionDAO cDAO = new CollectionDAO();
 
         try {
             String query =  "SELECT * FROM (SELECT id as 'idEpisode', isFavorite, duration, title, releaseDate, audioFile FROM Audio) A" +
@@ -247,7 +219,7 @@ public class AudioDAO implements IAudioDAO {
                 result = new Episode(   rs.getString("idEpisode"),
                                         rs.getString("title"),
                                         pDAO.getArtistByMail(rs.getString("artistMail")),
-                                        podDAO.getPodcastByID(rs.getString("idPodcast")),
+                                        cDAO.getPodcastByID(rs.getString("idPodcast")),
                                         rs.getBlob("audioFile"),
                                         rs.getTime("duration"),
                                         rs.getDate("releaseDate"),
@@ -294,5 +266,140 @@ public class AudioDAO implements IAudioDAO {
 
         return arrayOut;
     }
+
+
+
+    //PRIVATE METHODS:
+    private void insertAudio(JBAudio audio) {
+        //insert audio to Audio table
+        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+        PreparedStatement st1, st2, st3;
+
+        try {
+            String q1 = "INSERT INTO Audio(id, title, duration, releaseDate, audioFile, isFavorite)" +
+                    "VALUES(?, ?, ?, ?, ?, ?);";
+
+            st1 = connection.prepareStatement(q1);
+            st1.setString(1, audio.getId());
+            st1.setString(2, audio.getMetadata().getTitle());
+            st1.setTime(3, audio.getMetadata().getDuration());
+            st1.setDate(4, audio.getMetadata().getReleaseDate());
+            st1.setBlob(5, audio.getAudioFileBlob());
+            st1.setBoolean(6, audio.isFavorite());
+
+            st1.executeUpdate();
+
+            if(audio instanceof Song) {                 //if audio is a song insert it into the Song table
+                String q2 = "INSERT INTO Song(id) VALUES(?);";
+
+                st2 = connection.prepareStatement(q2);
+                st2.setString(1, audio.getId());
+
+                st2.executeUpdate();
+
+            } else if (audio instanceof Episode) {      //if audio is an episode insert it into the Episode table
+                String q3 =  "INSERT INTO Episode(id) VALUES(?);";
+
+                st3 = connection.prepareStatement(q3);
+                st3.setString(1, audio.getId());
+
+                st3.executeUpdate();
+
+            } else {
+                //THROW EXCEPTION
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+    }
+
+    private void linkAudioToArtist(JBAudio audio) {
+        //link inserted audio to artist:
+        ProfileDAO pDAO = new ProfileDAO();
+
+        if(pDAO.getArtistByMail(audio.getMetadata().getArtist().getMail()) == null)         //if artist not present in DB
+            pDAO.insert(audio.getMetadata().getArtist());                                   //insert new artist
+
+        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+        PreparedStatement st;
+
+        try {
+            String query =  "INSERT INTO ArtistAudios(idAudio, artistMail) VALUES(?, ?);";
+
+            st = connection.prepareStatement(query);
+            st.setString(1, audio.getId());
+            st.setString(2, audio.getMetadata().getArtist().getMail());
+
+            st.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+    }
+
+    private void linkAudioToCollection(JBAudio audio) {
+
+        CollectionDAO cDAO = new CollectionDAO();
+
+        if(cDAO.get(audio.getMetadata().getCollection()) == null)   //if the collection is not present in the DB
+            cDAO.insert(audio.getMetadata().getCollection());       //insert new collection in DB
+
+        if(audio instanceof Song) {                 //audio is a song --> link song to an Album
+
+            connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+            PreparedStatement st;
+
+            try {
+                String query =  "INSERT INTO AlbumSongs(idSong, idAlbum) VALUES(?, ?);";
+
+                st = connection.prepareStatement(query);
+                st.setString(1, audio.getId());
+                st.setString(2, audio.getMetadata().getCollection().getId());
+
+                st.executeUpdate();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+
+        }
+        else if (audio instanceof Episode) {      //audio is an Episode --> link episode to a Podcast
+
+            connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+            PreparedStatement st;
+
+            try {
+                String query =  "INSERT INTO PodcastEpisodes(idEpisode, idPodcast) VALUES(?, ?);";
+
+                st = connection.prepareStatement(query);
+                st.setString(1, audio.getId());
+                st.setString(2, audio.getMetadata().getCollection().getId());
+
+                st.executeUpdate();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+
+        }
+        else {
+            //THROW EXCEPTION
+        }
+    }
+
+    private void linkAudioToGenres(JBAudio audio) {
+
+    }
+
+
 
 }

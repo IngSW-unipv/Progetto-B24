@@ -5,7 +5,6 @@ import it.unipv.ingsfw.JavaBeats.model.playable.Album;
 import it.unipv.ingsfw.JavaBeats.model.playable.JBCollection;
 import it.unipv.ingsfw.JavaBeats.model.playable.Playlist;
 import it.unipv.ingsfw.JavaBeats.model.playable.Podcast;
-import it.unipv.ingsfw.JavaBeats.model.user.Artist;
 import it.unipv.ingsfw.JavaBeats.model.user.JBProfile;
 
 import java.sql.Connection;

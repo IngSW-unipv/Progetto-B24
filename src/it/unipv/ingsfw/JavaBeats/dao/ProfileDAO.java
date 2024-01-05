@@ -234,7 +234,8 @@ public class ProfileDAO implements IProfileDAO {
 
     //PRIVATE METHODS:
     private Time getMinuteListenedByUserMail(String userMail) {
-        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+        //TO CALL ONLY WHEN ALREADY CONNECTED   -   This method does not open or close the connection to the DB
+
         PreparedStatement st;
         ResultSet rs;
         Time result = null;
@@ -255,10 +256,7 @@ public class ProfileDAO implements IProfileDAO {
             e.printStackTrace();
         }
 
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
-
         return result;
-
     }
 
     private void updateUsername(JBProfile profile) {

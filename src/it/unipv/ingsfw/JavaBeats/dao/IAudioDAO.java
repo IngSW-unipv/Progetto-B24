@@ -11,6 +11,8 @@ public interface IAudioDAO {
 
     public void remove(JBAudio audio);
 
+    public JBAudio get(JBAudio audio);
+
     public ArrayList<JBAudio> selectByPlalist(Playlist playlist);
 
     public ArrayList<Song> selectByAlbum(Album album);

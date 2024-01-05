@@ -14,10 +14,11 @@ public class DBManagerFactory {
 	public static DBManagerFactory getInstance() {
 		if(instance == null) {
 			instance = new DBManagerFactory();
-			System.out.println("Create new instance");
+			//System.out.println("Create new instance");
 		}
-		else
-			System.out.println("Instance already available");
+		else {
+			//System.out.println("Instance already available");
+			}
 		return instance;
 	}
 
