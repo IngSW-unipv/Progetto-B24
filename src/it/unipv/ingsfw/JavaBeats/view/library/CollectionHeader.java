@@ -68,7 +68,7 @@ public class CollectionHeader extends VBox{
     userPicImageView.setFitHeight(20);
     Button userProfileButton=new Button("Creator");
     userProfileButton.setGraphic(userPicImageView);
-    userProfileButton.setBackground(bgPills);
+    userProfileButton.setStyle("-fx-background-color: #121212FF; -fx-background-radius: 10");
     userProfileButton.setFont(fontUser);
     userProfileButton.setTextFill(Color.LIGHTGRAY);
 
