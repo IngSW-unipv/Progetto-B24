@@ -16,49 +16,53 @@ import java.sql.Time;
 import java.text.SimpleDateFormat;
 
 
-public class AudioTable extends TableView<JBAudio> {
+public class AudioTable extends TableView<JBAudio>{
 
-    public AudioTable(ObservableList<JBAudio> jbAudios){
-        super();
-        initComponents(jbAudios);
+  public AudioTable(ObservableList<JBAudio> jbAudios){
+    super();
+    initComponents(jbAudios);
 
-    }
+  }
 
-    private void initComponents(ObservableList<JBAudio> jbAudios) {
-        //Columns
+  private void initComponents(ObservableList<JBAudio> jbAudios){
+    //Columns
 
-        //Title column
-        TableColumn<JBAudio, String> titleColumn=new TableColumn<>("Title");
-        titleColumn.setMinWidth(500);
-        titleColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMetadata().getTitle()));
+    //Title column
+    TableColumn<JBAudio, String> titleColumn=new TableColumn<>("Title");
+    titleColumn.setMinWidth(500);
+    titleColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMetadata().getTitle()));
 
-        //Collection column
-        TableColumn<JBAudio, String> collectionColumn=new TableColumn<>("Collection");
-        collectionColumn.setMinWidth(450);
-        collectionColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMetadata().getCollection().getName()));
+    //Collection column
+    TableColumn<JBAudio, String> collectionColumn=new TableColumn<>("Collection");
+    collectionColumn.setMinWidth(450);
+    collectionColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMetadata().getCollection().getName()));
 
-        //Date column
-        TableColumn<JBAudio, String> dateColumn=new TableColumn<>("Release date");
-        dateColumn.setMinWidth(300);
-        dateColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMetadata().getReleaseDate().toString()));
+    //Date column
+    TableColumn<JBAudio, String> dateColumn=new TableColumn<>("Release date");
+    dateColumn.setMinWidth(300);
+    dateColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMetadata().getReleaseDate().toString()));
 
 //        //Title column
 //        TableColumn<JBAudio, Button> isFavoriteColumn=new TableColumn<>("");
 //        titleColumn.setMinWidth(100);
 //        titleColumn.setCellValueFactory(new PropertyValueFactory<>("isFavorite"));
 
-        //Title column
-        TableColumn<JBAudio, String> durationColumn=new TableColumn<>("Duration");
-        durationColumn.setMinWidth(150);
-        durationColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMetadata().getDuration().toString()));
+    //Title column
+    TableColumn<JBAudio, String> durationColumn=new TableColumn<>("Duration");
+    durationColumn.setMinWidth(150);
+    durationColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMetadata().getDuration().toString()));
 
-        setItems(jbAudios);
-        getColumns().addAll(titleColumn, collectionColumn, dateColumn, durationColumn);
+    setItems(jbAudios);
+    getColumns().addAll(titleColumn, collectionColumn, dateColumn, durationColumn);
 
-        setFixedCellSize(40);
-        //css file
-        getStylesheets().add("it/unipv/ingsfw/JavaBeats/view/resources/css/tableview.css");
-    }
+    /* Block of code to lock the table height given the number of rows, maxHeight=N.of rows * RowsSize */
+    setFixedCellSize(55);
+    setMaxHeight(getItems().size()*getFixedCellSize()+29);
+    setPrefHeight(getMaxHeight());
+    setMinHeight(getMaxHeight());
+    //css file
+    getStylesheets().add("it/unipv/ingsfw/JavaBeats/view/resources/css/tableview.css");
+  }
 
 
 }
