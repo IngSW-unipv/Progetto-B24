@@ -1,0 +1,19 @@
+.slider .fill {
+    -fx-background-color: blueviolet;
+    -fx-background-insets: 0, 0, 0, 0;
+    -fx-padding: 0, 0, 0, 0;
+    -fx-background-radius: 1em;
+}
+
+.slider {
+    -show-value-on-interaction: true!important;
+}
+
+.slider .track{
+    -fx-background-color: rgb(15, 15, 15);
+
+}
+
+.slider .thumb{
+    -fx-background-color: darkviolet;
+}

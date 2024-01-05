@@ -8,7 +8,7 @@
     -fx-background-color: transparent;
 }
 
-.table-view .column-header-background{
+.table-view .column-header-background {
     -fx-background-color: rgb(15, 15, 15);
 
 }
@@ -16,37 +16,41 @@
 .table-view .column-header {
     -fx-background-color: transparent;
     -fx-text-background-color: lightgray;
+    -fx-max-height: 30px !important;
+    -fx-min-height: 30px !important;
 }
 
-.table-view .column-header .label{
+.table-view .column-header .label {
     -fx-alignment: CENTER_LEFT;
 }
 
-.table-view .table-column{
+.table-view .table-column {
     -fx-border-color: transparent;
     -fx-padding: 2 0 2 10px;
-    -fx-alignment: CENTER-LEFT!important;
+    -fx-alignment: CENTER-LEFT !important;
 }
 
 
-.table-view .table-cell{
+.table-view .table-cell {
     -fx-border-color: transparent;
     -fx-padding: 2 0 2 10px;
-    -fx-alignment: CENTER-LEFT!important;
+    -fx-alignment: CENTER-LEFT !important;
 
 }
 
 .table-row-cell:hover {
-    -fx-background-color: #8a2be2!important;
-    -fx-text-background-color: white!important;
+    -fx-background-color: #8a2be2 !important;
+    -fx-text-background-color: white !important;
 }
-.table-row-cell:odd{
+
+.table-row-cell:odd {
     -fx-background-color: rgb(18, 18, 18);
     -fx-background-insets: 0, 0 0 1 0;
     -fx-padding: 0.0em;
     -fx-text-background-color: lightgray;
 }
-.table-row-cell:even{
+
+.table-row-cell:even {
     -fx-background-color: rgb(15, 15, 15);
     -fx-background-insets: 0, 0 0 1 0;
     -fx-padding: 0.0em;

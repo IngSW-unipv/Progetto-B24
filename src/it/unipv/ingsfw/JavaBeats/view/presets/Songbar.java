@@ -1,4 +1,5 @@
 package it.unipv.ingsfw.JavaBeats.view.presets;
+import com.pixelduke.control.skin.FXSkins;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -140,6 +141,8 @@ public class Songbar extends GridPane {
     //Slider
     Slider playSlider= new Slider(min, max, value);
     playSlider.setCursor(Cursor.HAND);
+    playSlider.getStylesheets().add(FXSkins.getStylesheetURL());
+    playSlider.getStylesheets().add("it/unipv/ingsfw/JavaBeats/view/resources/css/playslider.css");
 
     //Label
     Label minutePassedLabel=new Label(minutePassed);
@@ -163,6 +166,9 @@ public class Songbar extends GridPane {
 
     //Slider
     Slider volumeSlider= new Slider();
+    volumeSlider.getStylesheets().add(FXSkins.getStylesheetURL());
+    volumeSlider.setCursor(Cursor.HAND);
+    volumeSlider.getStylesheets().add("it/unipv/ingsfw/JavaBeats/view/resources/css/volumeslider.css");
 
 
     //Volume
@@ -173,8 +179,7 @@ public class Songbar extends GridPane {
 
     HBox volumeHbox= new HBox(5, volumeImageView, volumeSlider);
     volumeHbox.setAlignment(Pos.CENTER_RIGHT);
-    volumeSlider.setPadding(new Insets(20));
-
+    volumeHbox.setPadding(new Insets(0, 20, 0, 0));
 
     //Alignemnt del grid pane
 
