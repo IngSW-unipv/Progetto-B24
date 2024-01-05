@@ -28,4 +28,5 @@ public class Artist extends JBProfile {
 	public void setTotalListeners(int totalListeners) {
 		this.totalListeners = totalListeners;
 	}
+
 }

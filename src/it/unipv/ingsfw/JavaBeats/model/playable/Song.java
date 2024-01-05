@@ -13,7 +13,7 @@ public class Song extends JBAudio {
 		super(id, title, artist, collection, audioFile, duration, releaseDate, genres, isFavourite);
 	}
 	public Song(String id, String title, Artist artist, Blob audioFile) {
-		this(id, title, artist, null, audioFile, null, null, null, false);
+		this(id, title, artist, null, audioFile, Time.valueOf("00:00:00"), new Date(System.currentTimeMillis()), null, false);
 	}
 
 }

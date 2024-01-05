@@ -9,15 +9,16 @@ public class Playlist extends JBCollection {
 
 	//ATTRIBUTES:
 	private List<JBAudio> trackList;
-	private boolean isVisible = false;
+	private boolean isVisible = true;
 
 
 	//CONSTRUCTOR:
-	public Playlist(String id, String name, JBProfile creator, Blob picture) {
+	public Playlist(String id, String name, JBProfile creator, Blob picture, boolean isVisible) {
 		super(id, name, creator, picture);
+		this.isVisible=isVisible;
 	}
 	public Playlist(String id, String name, JBProfile creator) {
-		this(id, name, creator, null);
+		this(id, name, creator, null, true);
 	}
 
 

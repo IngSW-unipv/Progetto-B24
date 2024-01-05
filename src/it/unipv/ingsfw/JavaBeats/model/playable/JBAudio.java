@@ -1,7 +1,6 @@
 package it.unipv.ingsfw.JavaBeats.model.playable;
 
 import it.unipv.ingsfw.JavaBeats.model.user.Artist;
-
 import java.sql.Blob;
 import java.sql.Date;
 import java.sql.Time;
@@ -83,7 +82,7 @@ public abstract class JBAudio {
         this.isFavorite=isFavorite;
     }
     public JBAudio(String id, String title, Artist artist, Blob audioFile) {
-        this(id, title, artist, null, audioFile, null, null, null, false);
+        this(id, title, artist, null, audioFile, Time.valueOf("00:00:00"), new Date(System.currentTimeMillis()), null, false);
     }
 
 
@@ -127,5 +126,15 @@ public abstract class JBAudio {
 
     public void pause(){
 
+    }
+
+    @Override
+    public String toString() {
+        if(this instanceof Song)
+            return "SONG    -  Title: " + this.getMetadata().getTitle() + ";  Artist: " + this.getMetadata().getArtist().getUsername();
+        if(this instanceof Episode)
+            return "EPISODE -  Title: " + this.getMetadata().getTitle() + ";  Artist: " + this.getMetadata().getArtist().getUsername();
+        else
+            return "AUDIO   -  Title: " + this.getMetadata().getTitle() + ";  Artist: " + this.getMetadata().getArtist().getUsername();
     }
 }
