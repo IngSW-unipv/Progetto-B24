@@ -21,13 +21,15 @@ public class Podcast extends JBCollection {
 
 
 	//GETTER:
+	@Override
 	public ArrayList<Episode> getTrackList() {
 		return trackList;
 	}
 
 
 	//SETTER:
-	public void setTrackList(ArrayList<Episode> trackList) {
+	@Override
+	public void setTrackList(ArrayList trackList) {
 		this.trackList = trackList;
 	}
 

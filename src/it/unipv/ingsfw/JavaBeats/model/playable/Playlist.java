@@ -27,6 +27,7 @@ public class Playlist extends JBCollection {
 
 
 	//GETTERS:
+	@Override
 	public ArrayList<JBAudio> getTrackList() {
 		return trackList;
 	}
@@ -36,7 +37,8 @@ public class Playlist extends JBCollection {
 
 
 	//SETTERS:
-	public void setTrackList(ArrayList<JBAudio> trackList) {
+	@Override
+	public void setTrackList(ArrayList trackList) {
 		this.trackList = trackList;
 	}
 	public void setVisible(boolean Visible) {

@@ -32,8 +32,8 @@ public class ProfileDAO implements IProfileDAO {
         PreparedStatement st1, st2, st3;
 
         try {       //insert JBProfile to Profile table
-            String q1 =  "INSERT INTO Profile(username, mail, password, name, surname, biography, profilePicture)" +
-                            "VALUES(?, ?, ?, ?, ?, ?, ?);";
+            String q1 = "INSERT INTO Profile(username, mail, password, name, surname, biography, profilePicture)" +
+                        "VALUES(?, ?, ?, ?, ?, ?, ?);";
 
             st1 = connection.prepareStatement(q1);
             st1.setString(1, profile.getUsername());
@@ -52,13 +52,15 @@ public class ProfileDAO implements IProfileDAO {
                 st2.setString(1, profile.getMail());
                 st2.executeUpdate();
 
-            } else if (profile instanceof Artist) {     //if JBProfile is an Artist insert it to Artist table
+            }
+            else if (profile instanceof Artist) {     //if JBProfile is an Artist insert it to Artist table
                 String q3=  "INSERT INTO Artist(mail, totalListeners) VALUES(?, 0);";
                 st3= connection.prepareStatement(q3);
                 st3.setString(1, profile.getMail());
                 st3.executeUpdate();
-            } else {
-                //THROW EXCEPTION
+            }
+            else {
+                throw new Exception("Unable to recognize if JBProfile IS-A User or Artist.");
             }
 
         } catch (Exception e) {
@@ -89,7 +91,7 @@ public class ProfileDAO implements IProfileDAO {
     }
 
     @Override
-    public void update(JBProfile profile) {         //push edited profile to database
+    public void update(JBProfile profile) {
         JBProfile oldProfile = get(profile);        //get profile as it is in DB to check for changes
 
         if (profile.getUsername() != null)          //check for null before using .equals to avoid exceptions
@@ -123,15 +125,20 @@ public class ProfileDAO implements IProfileDAO {
             if (userProfile.isVisible() != oldUserProfile.isVisible())
                 updateVisibility(userProfile);
 
-        } else if (profile instanceof Artist) {                             //check if profile is an ARTIST
+        }
+        else if (profile instanceof Artist) {                             //check if profile is an ARTIST
             Artist artistProfile = (Artist) profile;
             Artist oldArtistProfile = (Artist) oldProfile;
 
             if (artistProfile.getTotalListeners() != oldArtistProfile.getTotalListeners())
                 updateTotalListeners(artistProfile);
-
-        } else {
-            //THROW EXCEPION
+        }
+        else {
+            try {
+                throw new Exception("Unable to recognize if JBProfile IS-A User or Artist.");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
     }
@@ -166,16 +173,15 @@ public class ProfileDAO implements IProfileDAO {
 
             rs = st.executeQuery();
 
-            while(rs.next()) {                                      //while results are available
-                result = new Artist(rs.getString("username"),           //only take the last one (shouldn't be a problem because mail is primary key)
-                                    rs.getString("mail"),
-                                    rs.getString("password"),
-                                    rs.getString("name"),
-                                    rs.getString("surname"),
-                                    rs.getString("biography"),
-                                    rs.getBlob("profilePicture"),
-                                    rs.getInt("totalListeners"));
-            }
+            rs.next();
+            result = new Artist(rs.getString("username"),
+                                rs.getString("mail"),
+                                rs.getString("password"),
+                                rs.getString("name"),
+                                rs.getString("surname"),
+                                rs.getString("biography"),
+                                rs.getBlob("profilePicture"),
+                                rs.getInt("totalListeners"));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -193,24 +199,23 @@ public class ProfileDAO implements IProfileDAO {
         User result = null;
 
         try {
-            String query = "SELECT * FROM Profile NATURAL JOIN User WHERE mail=?;";   //query template
+            String query = "SELECT * FROM Profile NATURAL JOIN User WHERE mail=?;";
 
-            st = connection.prepareStatement(query);                //configure query
+            st = connection.prepareStatement(query);
             st.setString(1, mail);
 
-            rs = st.executeQuery();                                 //execute query
+            rs = st.executeQuery();
 
-            while(rs.next()) {                                      //while results are available
-                result = new User(rs.getString("username"),           //only take the last one (shouldn't be a problem because mail is primary key)
-                                    rs.getString("mail"),
-                                    rs.getString("password"),
-                                    rs.getString("name"),
-                                    rs.getString("surname"),
-                                    rs.getString("biography"),
-                                    rs.getBlob("profilePicture"),
-                                    rs.getBoolean("isVisible"),
-                                    getMinuteListenedByUserMail(rs.getString("mail")));
-            }
+            rs.next();
+            result = new User(  rs.getString("username"),
+                                rs.getString("mail"),
+                                rs.getString("password"),
+                                rs.getString("name"),
+                                rs.getString("surname"),
+                                rs.getString("biography"),
+                                rs.getBlob("profilePicture"),
+                                rs.getBoolean("isVisible"),
+                                getMinuteListenedByUserMail(rs.getString("mail")));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -234,14 +239,13 @@ public class ProfileDAO implements IProfileDAO {
         try {
             String query = "SELECT (SUM(TIMEDIFF(minuteListened, '00:00:00'))) as 'minuteListened' FROM UserListenedAudios WHERE user_Mail=?;";   //query template
 
-            st = connection.prepareStatement(query);                //configure query
+            st = connection.prepareStatement(query);
             st.setString(1, userMail);
 
-            rs = st.executeQuery();                                 //execute query
+            rs = st.executeQuery();
 
-            while(rs.next()) {                                      //while results are available (only 1 result expected)
-                result = rs.getTime("minuteListened");
-            }
+            rs.next();
+            result = rs.getTime("minuteListened");
 
         } catch (Exception e) {
             e.printStackTrace();

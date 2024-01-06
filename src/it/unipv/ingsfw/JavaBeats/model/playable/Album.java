@@ -21,13 +21,16 @@ public class Album extends JBCollection {
 
 
 	//GETTER:
+	@Override
 	public ArrayList<Song> getTrackList() {
 		return trackList;
 	}
 
 
+
 	//SETTER:
-	public void setTrackArray(ArrayList<Song> trackList) {
+	@Override
+	public void setTrackList(ArrayList trackList) {
 		this.trackList = trackList;
 	}
 

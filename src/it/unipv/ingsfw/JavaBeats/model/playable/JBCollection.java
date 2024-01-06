@@ -3,6 +3,7 @@ package it.unipv.ingsfw.JavaBeats.model.playable;
 import it.unipv.ingsfw.JavaBeats.model.EJBMODE;
 import it.unipv.ingsfw.JavaBeats.model.user.JBProfile;
 import java.sql.Blob;
+import java.util.ArrayList;
 
 public abstract class JBCollection implements IJBPlayable{
 
@@ -43,6 +44,7 @@ public abstract class JBCollection implements IJBPlayable{
     public Blob getPicture() {
         return picture;
     }
+    public abstract ArrayList getTrackList();
 
 
     //SETTERS:
@@ -61,6 +63,7 @@ public abstract class JBCollection implements IJBPlayable{
     public void setPicture(Blob picture) {
         this.picture = picture;
     }
+    public abstract void setTrackList(ArrayList trackList);
 
 
     //METHODS:
