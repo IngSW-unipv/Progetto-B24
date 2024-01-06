@@ -1,20 +1,10 @@
 package it.unipv.ingsfw.JavaBeats.view.presets;
-
 import it.unipv.ingsfw.JavaBeats.model.playable.JBAudio;
-import it.unipv.ingsfw.JavaBeats.model.playable.JBCollection;
-import javafx.beans.property.SimpleObjectProperty;
+import it.unipv.ingsfw.JavaBeats.view.presets.tableColumns.PlayButtonTableColumn;
+import it.unipv.ingsfw.JavaBeats.view.presets.tableColumns.TitleTableColumn;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.VBox;
-
-import java.sql.Date;
-import java.sql.Time;
-import java.text.SimpleDateFormat;
-
+import javafx.scene.control.*;
 
 public class AudioTable extends TableView<JBAudio>{
 
@@ -27,10 +17,14 @@ public class AudioTable extends TableView<JBAudio>{
   private void initComponents(ObservableList<JBAudio> jbAudios){
     //Columns
 
-    //Title column
-    TableColumn<JBAudio, String> titleColumn=new TableColumn<>("Title");
-    titleColumn.setMinWidth(500);
-    titleColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMetadata().getTitle()));
+    /* PlayButton column, contains the button to play the audio */
+    PlayButtonTableColumn playColumn=new PlayButtonTableColumn("#");
+    playColumn.setMinWidth(20);
+
+    /* Title column, with audio picture, title and artist */
+    TitleTableColumn titleColumn=new TitleTableColumn("Title");
+    titleColumn.setMinWidth(100);
+
 
     //Collection column
     TableColumn<JBAudio, String> collectionColumn=new TableColumn<>("Collection");
@@ -42,18 +36,13 @@ public class AudioTable extends TableView<JBAudio>{
     dateColumn.setMinWidth(300);
     dateColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMetadata().getReleaseDate().toString()));
 
-//        //Title column
-//        TableColumn<JBAudio, Button> isFavoriteColumn=new TableColumn<>("");
-//        titleColumn.setMinWidth(100);
-//        titleColumn.setCellValueFactory(new PropertyValueFactory<>("isFavorite"));
-
     //Title column
     TableColumn<JBAudio, String> durationColumn=new TableColumn<>("Duration");
     durationColumn.setMinWidth(150);
     durationColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMetadata().getDuration().toString()));
 
     setItems(jbAudios);
-    getColumns().addAll(titleColumn, collectionColumn, dateColumn, durationColumn);
+    getColumns().addAll(playColumn, titleColumn, collectionColumn, dateColumn, durationColumn);
 
     /* Block of code to lock the table height given the number of rows, maxHeight=N.of rows * RowsSize */
     setFixedCellSize(55);

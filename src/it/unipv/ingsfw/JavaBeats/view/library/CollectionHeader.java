@@ -1,9 +1,7 @@
 package it.unipv.ingsfw.JavaBeats.view.library;
-
 import it.unipv.ingsfw.JavaBeats.model.playable.EJBPLAYABLE;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -13,7 +11,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
-
 public class CollectionHeader extends VBox{
   /*---------------------------------------*/
   //Attributi
@@ -59,7 +56,6 @@ public class CollectionHeader extends VBox{
     Label collectionTitle=new Label("Really long title");
     collectionTitle.setFont(fontTitle);
     collectionTitle.setTextFill(Color.LIGHTGRAY);
-    collectionTitle.setPadding(new Insets(0, 0, 30, 0));
 
     /* Button with user's profile picture and username */
     Image userPic=new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/DefaultUser.png", true);
@@ -93,7 +89,7 @@ public class CollectionHeader extends VBox{
     HBox buttonsHBbox=new HBox();
 
     getChildren().addAll(topViewHBox, buttonsHBbox);
-    setPadding(new Insets(50, 0, 50, 50));
+    setPadding(new Insets(50, 0, 50, 0));
     setBackground(bgHome);
   }
   /*---------------------------------------*/

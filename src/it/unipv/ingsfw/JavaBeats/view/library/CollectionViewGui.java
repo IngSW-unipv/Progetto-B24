@@ -1,18 +1,12 @@
 package it.unipv.ingsfw.JavaBeats.view.library;
-
-import com.pixelduke.control.skin.FXSkins;
-import it.unipv.ingsfw.JavaBeats.model.playable.EJBPLAYABLE;
-import it.unipv.ingsfw.JavaBeats.model.playable.JBAudio;
-import it.unipv.ingsfw.JavaBeats.model.playable.Playlist;
-import it.unipv.ingsfw.JavaBeats.model.playable.Song;
+import it.unipv.ingsfw.JavaBeats.model.playable.*;
 import it.unipv.ingsfw.JavaBeats.model.user.Artist;
 import it.unipv.ingsfw.JavaBeats.view.presets.AudioTable;
 import it.unipv.ingsfw.JavaBeats.view.presets.Sidebar;
 import it.unipv.ingsfw.JavaBeats.view.presets.Songbar;
-import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableView;
@@ -23,7 +17,6 @@ import javax.sql.rowset.serial.SerialBlob;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Time;
-
 public class CollectionViewGui{
   /*---------------------------------------*/
   //Attributi
@@ -35,9 +28,9 @@ public class CollectionViewGui{
   /*---------------------------------------*/
   //Costruttori
   /*---------------------------------------*/
-  public CollectionViewGui(){
+  public CollectionViewGui(EJBPLAYABLE collectionType){
     super();
-    initComponents();
+    initComponents(collectionType);
   }
 
   /*---------------------------------------*/
@@ -50,19 +43,19 @@ public class CollectionViewGui{
   /*---------------------------------------*/
   //Metodi
   /*---------------------------------------*/
-  private void initComponents(){
-    CollectionHeader collectionHeader=new CollectionHeader(EJBPLAYABLE.PLAYLIST);
+  private void initComponents(EJBPLAYABLE collectionType){
+    CollectionHeader collectionHeader=new CollectionHeader(collectionType);
     ObservableList<JBAudio> songList=FXCollections.observableArrayList();
     try{
-      songList.add(new Song("id", "titolo", new Artist("rob", "rob", "rob"), new Playlist("id", "nomePlaylist", new Artist("rob", "rob", "rob")), new SerialBlob(new byte[] {0, 1}), new Time(100), new Date(100), new String[] {"rock", "pop"}, true));
-      songList.add(new Song("id", "titolo", new Artist("rob", "rob", "rob"), new Playlist("id", "nomePlaylist", new Artist("rob", "rob", "rob")), new SerialBlob(new byte[] {0, 1}), new Time(100), new Date(100), new String[] {"rock", "pop"}, true));
-      songList.add(new Song("id", "titolo", new Artist("rob", "rob", "rob"), new Playlist("id", "nomePlaylist", new Artist("rob", "rob", "rob")), new SerialBlob(new byte[] {0, 1}), new Time(100), new Date(100), new String[] {"rock", "pop"}, true));
-      songList.add(new Song("id", "titolo", new Artist("rob", "rob", "rob"), new Playlist("id", "nomePlaylist", new Artist("rob", "rob", "rob")), new SerialBlob(new byte[] {0, 1}), new Time(100), new Date(100), new String[] {"rock", "pop"}, true));
+      for(int i=0; i<20; i++){
+        songList.add(new Song("id", "titolo", new Artist("rob", "rob", "rob"), new Album("id", "nomeAlbum", new Artist("rob", "rob", "rob")), new SerialBlob(new byte[]{0, 1}), new Time(100), new Date(100), new String[]{"rock", "pop"}, true));
+      }//end-for
     }catch(SQLException e){
       throw new RuntimeException(e);
     }
     TableView<JBAudio> audioTable=new AudioTable(songList);
     VBox mainVBox=new VBox(collectionHeader, audioTable);
+    mainVBox.setPadding(new Insets(0, 50, 0, 50));
 
     ScrollPane scrollPane=new ScrollPane(mainVBox);
     scrollPane.setFitToWidth(true);
