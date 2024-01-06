@@ -11,11 +11,12 @@ public class Album extends JBCollection {
 
 
 	//CONSTRUCTORS:
-	public Album(String id, String name, JBProfile creator, Blob picture) {
+	public Album(String id, String name, JBProfile creator, ArrayList<Song> trackList, Blob picture) {
 		super(id, name, creator, picture);
+		this.trackList=trackList;
 	}
-	public Album(String id, String name, JBProfile creator) {
-		this(id, name, creator, null);
+	public Album(String id, String name, JBProfile creator, ArrayList<Song> trackList) {
+		this(id, name, creator, trackList, null);
 	}
 
 

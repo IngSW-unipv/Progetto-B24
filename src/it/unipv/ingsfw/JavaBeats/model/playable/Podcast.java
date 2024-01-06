@@ -11,11 +11,12 @@ public class Podcast extends JBCollection {
 
 
 	//CONSTRUCTOR:
-	public Podcast(String id, String name, JBProfile creator, Blob picture) {
+	public Podcast(String id, String name, JBProfile creator, ArrayList<Episode> trackList, Blob picture) {
 		super(id, name, creator, picture);
+		this.trackList=trackList;
 	}
-	public Podcast(String id, String name, JBProfile creator) {
-		this(id, name, creator, null);
+	public Podcast(String id, String name, JBProfile creator, ArrayList<Episode> trackList) {
+		this(id, name, creator, trackList, null);
 	}
 
 

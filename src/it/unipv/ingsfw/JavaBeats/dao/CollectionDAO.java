@@ -4,13 +4,11 @@ import it.unipv.ingsfw.JavaBeats.controller.factory.DBManagerFactory;
 import it.unipv.ingsfw.JavaBeats.model.playable.*;
 import it.unipv.ingsfw.JavaBeats.model.user.Artist;
 import it.unipv.ingsfw.JavaBeats.model.user.JBProfile;
-import it.unipv.ingsfw.JavaBeats.model.user.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 
 public class CollectionDAO implements ICollectionDAO {
@@ -162,6 +160,7 @@ public class CollectionDAO implements ICollectionDAO {
         ResultSet rs;
         Playlist result = null;
         ProfileDAO pDAO = new ProfileDAO();
+        AudioDAO aDAO = new AudioDAO();
 
         try {
             String query =  "SELECT * FROM Collection A NATURAL JOIN Playlist B NATURAL JOIN" +
@@ -176,6 +175,7 @@ public class CollectionDAO implements ICollectionDAO {
                 result = new Playlist(  rs.getString("id"),           //only take the last one (shouldn't be a problem because mail is primary key)
                                         rs.getString("name"),
                                         pDAO.getProfileByMail(rs.getString("profileMail")),
+                                        aDAO.selectByPlalist(new Playlist(id, null, null)),
                                         rs.getBlob("picture"),
                                         rs.getBoolean("isVisible"));
             }
@@ -195,6 +195,7 @@ public class CollectionDAO implements ICollectionDAO {
         ResultSet rs;
         Album result = null;
         ProfileDAO pDAO = new ProfileDAO();
+        AudioDAO aDAO = new AudioDAO();
 
         try {
             String query =  "SELECT * FROM Collection A NATURAL JOIN Album B NATURAL JOIN" +
@@ -208,7 +209,8 @@ public class CollectionDAO implements ICollectionDAO {
             while(rs.next()) {                                      //while results are available
                 result = new Album (    rs.getString("id"),           //only take the last one (shouldn't be a problem because mail is primary key)
                                         rs.getString("name"),
-                                        pDAO.getArtistByMail(rs.getString("artistMail")),
+                                        pDAO.get(new Artist(null, rs.getString("artistMail"), null)),
+                                        aDAO.selectByAlbum(new Album(id, null, null, null)),
                                         rs.getBlob("picture"));
             }
 
@@ -227,6 +229,7 @@ public class CollectionDAO implements ICollectionDAO {
         ResultSet rs;
         Podcast result = null;
         ProfileDAO pDAO = new ProfileDAO();
+        AudioDAO aDAO = new AudioDAO();
 
         try {
             String query =  "SELECT * FROM Collection A NATURAL JOIN Podcast B NATURAL JOIN" +
@@ -241,6 +244,7 @@ public class CollectionDAO implements ICollectionDAO {
                 result = new Podcast (  rs.getString("id"),           //only take the last one (shouldn't be a problem because mail is primary key)
                                         rs.getString("name"),
                                         pDAO.getProfileByMail(rs.getString("artistMail")),
+                                        aDAO.selectByPodcast(new Podcast(id, null, null, null)),
                                         rs.getBlob("picture"));
             }
 
@@ -361,7 +365,7 @@ public class CollectionDAO implements ICollectionDAO {
         connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
         PreparedStatement st1, st2, st3, st4;
 
-        try {       //insert JBProfile to Profile table
+        try {       //insert JBCollection to Collection table
             String q1 =  "INSERT INTO Collection(id, name, picture) VALUES(?, ?, ?);";
 
             st1 = connection.prepareStatement(q1);
@@ -485,6 +489,22 @@ public class CollectionDAO implements ICollectionDAO {
         }
 
         DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+    }
+
+    private void linkCollectionToAudios(JBCollection collection) {
+
+    }
+
+    private void linkPlaylistToAudios(JBCollection collection) {
+
+    }
+
+    private void linkAlbumToSongs(JBCollection collection) {
+
+    }
+
+    private void linkPodcastToEpisodes(JBCollection collection) {
+
     }
 
 }

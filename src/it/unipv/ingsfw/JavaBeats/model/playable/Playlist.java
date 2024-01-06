@@ -13,12 +13,16 @@ public class Playlist extends JBCollection {
 
 
 	//CONSTRUCTOR:
-	public Playlist(String id, String name, JBProfile creator, Blob picture, boolean isVisible) {
+	public Playlist(String id, String name, JBProfile creator, ArrayList<JBAudio> trackList, Blob picture, boolean isVisible) {
 		super(id, name, creator, picture);
+		this.trackList=trackList;
 		this.isVisible=isVisible;
 	}
+	public Playlist(String id, String name, JBProfile creator, ArrayList<JBAudio> trackList) {
+		this(id, name, creator, trackList, null, true);
+	}
 	public Playlist(String id, String name, JBProfile creator) {
-		this(id, name, creator, null, true);
+		this(id, name, creator, null, null, true);
 	}
 
 
