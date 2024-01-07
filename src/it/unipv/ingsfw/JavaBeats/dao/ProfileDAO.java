@@ -150,7 +150,33 @@ public class ProfileDAO implements IProfileDAO {
 
 
 
+
     //PROTECTED METHODS:
+    protected boolean profileExists(JBProfile profile) {
+        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+        PreparedStatement st;
+        ResultSet rs;
+        boolean result = false;
+
+        try {
+            String query =  "SELECT mail FROM Profile WHERE mail=?;";
+
+            st = connection.prepareStatement(query);
+            st.setString(1, profile.getMail());
+
+            rs = st.executeQuery();
+
+            result = rs.next();     //result=true if exists at least one instance
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+
+        return result;
+    }
+
     protected JBProfile getProfileByMail(String mail) {
 
         JBProfile profileOut = getUserByMail(mail);                 //check if profile is in User table
@@ -173,15 +199,16 @@ public class ProfileDAO implements IProfileDAO {
 
             rs = st.executeQuery();
 
-            rs.next();
-            result = new Artist(rs.getString("username"),
-                                rs.getString("mail"),
-                                rs.getString("password"),
-                                rs.getString("name"),
-                                rs.getString("surname"),
-                                rs.getString("biography"),
-                                rs.getBlob("profilePicture"),
-                                rs.getInt("totalListeners"));
+            if(rs.next()) {
+                result = new Artist(rs.getString("username"),
+                        rs.getString("mail"),
+                        rs.getString("password"),
+                        rs.getString("name"),
+                        rs.getString("surname"),
+                        rs.getString("biography"),
+                        rs.getBlob("profilePicture"),
+                        rs.getInt("totalListeners"));
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -206,16 +233,17 @@ public class ProfileDAO implements IProfileDAO {
 
             rs = st.executeQuery();
 
-            rs.next();
-            result = new User(  rs.getString("username"),
-                                rs.getString("mail"),
-                                rs.getString("password"),
-                                rs.getString("name"),
-                                rs.getString("surname"),
-                                rs.getString("biography"),
-                                rs.getBlob("profilePicture"),
-                                rs.getBoolean("isVisible"),
-                                getMinuteListenedByUserMail(rs.getString("mail")));
+            if(rs.next()) {
+                result = new User(rs.getString("username"),
+                        rs.getString("mail"),
+                        rs.getString("password"),
+                        rs.getString("name"),
+                        rs.getString("surname"),
+                        rs.getString("biography"),
+                        rs.getBlob("profilePicture"),
+                        rs.getBoolean("isVisible"),
+                        getMinuteListenedByUserMail(rs.getString("mail")));
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
