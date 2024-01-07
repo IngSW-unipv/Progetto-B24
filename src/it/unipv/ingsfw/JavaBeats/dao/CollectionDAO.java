@@ -4,13 +4,11 @@ import it.unipv.ingsfw.JavaBeats.controller.factory.DBManagerFactory;
 import it.unipv.ingsfw.JavaBeats.model.playable.*;
 import it.unipv.ingsfw.JavaBeats.model.user.Artist;
 import it.unipv.ingsfw.JavaBeats.model.user.JBProfile;
-import it.unipv.ingsfw.JavaBeats.model.user.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 
 public class CollectionDAO implements ICollectionDAO {
@@ -36,6 +34,8 @@ public class CollectionDAO implements ICollectionDAO {
         insertCollection(collection);
 
         linkCollectionToProfile(collection);
+
+        linkCollectionToAudios(collection);
 
     }
 
@@ -71,7 +71,9 @@ public class CollectionDAO implements ICollectionDAO {
             if(!(collection.getPicture().equals(oldCollection.getPicture())))
                 updatePicture(collection);
 
-        updateTrackList(collection);
+        if (collection.getTrackList() != null)
+            if(!(collection.getTrackList().equals(oldCollection.getTrackList())))
+                updateTrackList(collection);
     }
 
     @Override
@@ -162,6 +164,7 @@ public class CollectionDAO implements ICollectionDAO {
         ResultSet rs;
         Playlist result = null;
         ProfileDAO pDAO = new ProfileDAO();
+        AudioDAO aDAO = new AudioDAO();
 
         try {
             String query =  "SELECT * FROM Collection A NATURAL JOIN Playlist B NATURAL JOIN" +
@@ -172,13 +175,13 @@ public class CollectionDAO implements ICollectionDAO {
 
             rs = st.executeQuery();
 
-            while(rs.next()) {                                      //while results are available
-                result = new Playlist(  rs.getString("id"),           //only take the last one (shouldn't be a problem because mail is primary key)
-                                        rs.getString("name"),
-                                        pDAO.getProfileByMail(rs.getString("profileMail")),
-                                        rs.getBlob("picture"),
-                                        rs.getBoolean("isVisible"));
-            }
+            rs.next();
+            result = new Playlist(  rs.getString("id"),
+                                    rs.getString("name"),
+                                    pDAO.getProfileByMail(rs.getString("profileMail")),
+                                    aDAO.selectByPlalist(new Playlist(id, null, null)),
+                                    rs.getBlob("picture"),
+                                    rs.getBoolean("isVisible"));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -195,6 +198,7 @@ public class CollectionDAO implements ICollectionDAO {
         ResultSet rs;
         Album result = null;
         ProfileDAO pDAO = new ProfileDAO();
+        AudioDAO aDAO = new AudioDAO();
 
         try {
             String query =  "SELECT * FROM Collection A NATURAL JOIN Album B NATURAL JOIN" +
@@ -205,12 +209,12 @@ public class CollectionDAO implements ICollectionDAO {
 
             rs = st.executeQuery();
 
-            while(rs.next()) {                                      //while results are available
-                result = new Album (    rs.getString("id"),           //only take the last one (shouldn't be a problem because mail is primary key)
-                                        rs.getString("name"),
-                                        pDAO.getArtistByMail(rs.getString("artistMail")),
-                                        rs.getBlob("picture"));
-            }
+            rs.next();
+            result = new Album(rs.getString("id"),
+                    rs.getString("name"),
+                    pDAO.get(new Artist(null, rs.getString("artistMail"), null)),
+                    aDAO.selectByAlbum(new Album(id, null, null, null)),
+                    rs.getBlob("picture"));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -227,6 +231,7 @@ public class CollectionDAO implements ICollectionDAO {
         ResultSet rs;
         Podcast result = null;
         ProfileDAO pDAO = new ProfileDAO();
+        AudioDAO aDAO = new AudioDAO();
 
         try {
             String query =  "SELECT * FROM Collection A NATURAL JOIN Podcast B NATURAL JOIN" +
@@ -237,12 +242,12 @@ public class CollectionDAO implements ICollectionDAO {
 
             rs = st.executeQuery();
 
-            while(rs.next()) {                                      //while results are available
-                result = new Podcast (  rs.getString("id"),           //only take the last one (shouldn't be a problem because mail is primary key)
-                                        rs.getString("name"),
-                                        pDAO.getProfileByMail(rs.getString("artistMail")),
-                                        rs.getBlob("picture"));
-            }
+            rs.next();
+            result = new Podcast(rs.getString("id"),
+                    rs.getString("name"),
+                    pDAO.getProfileByMail(rs.getString("artistMail")),
+                    aDAO.selectByPodcast(new Podcast(id, null, null, null)),
+                    rs.getBlob("picture"));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -361,7 +366,7 @@ public class CollectionDAO implements ICollectionDAO {
         connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
         PreparedStatement st1, st2, st3, st4;
 
-        try {       //insert JBProfile to Profile table
+        try {       //insert JBCollection to Collection table
             String q1 =  "INSERT INTO Collection(id, name, picture) VALUES(?, ?, ?);";
 
             st1 = connection.prepareStatement(q1);
@@ -413,7 +418,11 @@ public class CollectionDAO implements ICollectionDAO {
             linkPodcastToArtist((Podcast)collection);
 
         else {
-            //THROW EXCEPTION
+            try {
+                throw new Exception("Unable to recognize if JBCollection IS-A Playlist, Album or Podcast.");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
     }
@@ -479,6 +488,128 @@ public class CollectionDAO implements ICollectionDAO {
             st.setString(1, podcast.getId());
             st.setString(2, podcast.getCreator().getMail());
             st.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+    }
+
+    private void linkCollectionToAudios(JBCollection collection) {
+
+        if (collection instanceof Playlist)
+            linkPlaylistToAudios((Playlist)collection);
+
+        else if (collection instanceof Album)
+            linkAlbumToSongs((Album)collection);
+
+        else if (collection instanceof Podcast)
+            linkPodcastToEpisodes((Podcast)collection);
+
+        else {
+            try {
+                throw new Exception("Unable to recognize if JBCollection IS-A Playlist, Album or Podcast.");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void linkPlaylistToAudios(Playlist playlist) {
+        AudioDAO aDAO = new AudioDAO();
+        ArrayList<JBAudio> trackList = playlist.getTrackList();
+        Iterator<JBAudio> trackListIT = trackList.iterator();
+
+        while(trackListIT.hasNext()) {
+            JBAudio track = trackListIT.next();
+            if (aDAO.getAudioByID(track.getId()) == null)       //if audio not present in DB
+                aDAO.insert(track);                             //insert new audio
+        }
+
+        trackListIT = trackList.iterator();     //get a new iterator
+
+        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+        PreparedStatement st;
+
+        try {
+            String query = "INSERT INTO PlaylistAudios(idPlaylist, idAudio) VALUES(?, ?);";
+            st = connection.prepareStatement(query);
+            st.setString(1, playlist.getId());
+
+            while(trackListIT.hasNext()) {
+                JBAudio track = trackListIT.next();
+                st.setString(2, track.getId());
+                st.executeUpdate();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+    }
+
+    private void linkAlbumToSongs(Album album) {
+        AudioDAO aDAO = new AudioDAO();
+        ArrayList<Song> trackList = album.getTrackList();
+        Iterator<Song> trackListIT = trackList.iterator();
+
+        while(trackListIT.hasNext()) {
+            Song track = trackListIT.next();
+            if (aDAO.getSongByID(track.getId()) == null)        //if song not present in DB
+                aDAO.insert(track);                             //insert new song
+        }
+
+        trackListIT = trackList.iterator();     //get a new iterator
+
+        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+        PreparedStatement st;
+
+        try {
+            String query = "INSERT INTO AlbumSongs(idAlbum, idSong) VALUES(?, ?);";
+            st = connection.prepareStatement(query);
+            st.setString(1, album.getId());
+
+            while(trackListIT.hasNext()) {
+                Song track = trackListIT.next();
+                st.setString(2, track.getId());
+                st.executeUpdate();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+    }
+
+    private void linkPodcastToEpisodes(Podcast podcast) {
+        AudioDAO aDAO = new AudioDAO();
+        ArrayList<Episode> trackList = podcast.getTrackList();
+        Iterator<Episode> trackListIT = trackList.iterator();
+
+        while(trackListIT.hasNext()) {
+            Episode track = trackListIT.next();
+            if (aDAO.getEpisodeByID(track.getId()) == null)     //if episode not present in DB
+                aDAO.insert(track);                             //insert new episode
+        }
+
+        trackListIT = trackList.iterator();     //get a new iterator
+
+        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+        PreparedStatement st;
+
+        try {
+            String query = "INSERT INTO PodcastEpisodes(idPodcast, idEpisode) VALUES(?, ?);";
+            st = connection.prepareStatement(query);
+            st.setString(1, podcast.getId());
+
+            while(trackListIT.hasNext()) {
+                Episode track = trackListIT.next();
+                st.setString(2, track.getId());
+                st.executeUpdate();
+            }
 
         } catch (Exception e) {
             e.printStackTrace();

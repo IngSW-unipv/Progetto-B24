@@ -2,6 +2,7 @@ package it.unipv.ingsfw.JavaBeats.dao;
 
 import it.unipv.ingsfw.JavaBeats.controller.factory.DBManagerFactory;
 import it.unipv.ingsfw.JavaBeats.model.playable.*;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -168,25 +169,25 @@ public class AudioDAO implements IAudioDAO {
 
         try {
             String query =  "SELECT * FROM (SELECT id as 'idSong', isFavorite, duration, title, releaseDate, audioFile FROM Audio) A" +
-                    "NATURAL JOIN (SELECT idAudio as 'idSong', artistMail FROM ArtistAudios) B" +
-                    "NATURAL JOIN AlbumSongs WHERE idSong=?;";
+                            "NATURAL JOIN (SELECT idAudio as 'idSong', artistMail FROM ArtistAudios) B" +
+                            "NATURAL JOIN AlbumSongs WHERE idSong=?;";
 
             st = connection.prepareStatement(query);
             st.setString(1, id);
 
             rs = st.executeQuery();
 
-            while(rs.next()) {  //while results are available (only 1 result expected, if not only the last one is taken)
-                result = new Song(  rs.getString("idSong"),
-                                    rs.getString("title"),
-                                    pDAO.getArtistByMail(rs.getString("artistMail")),
-                                    cDAO.getAlbumByID(rs.getString("idAlbum")),
-                                    rs.getBlob("audioFile"),
-                                    rs.getTime("duration"),
-                                    rs.getDate("releaseDate"),
-                                    getGenresByAudioID(rs.getString("idSong")),
-                                    rs.getBoolean("isFavorite"));
-            }
+            rs.next();
+            result = new Song(  rs.getString("idSong"),
+                                rs.getString("title"),
+                                pDAO.getArtistByMail(rs.getString("artistMail")),
+                                cDAO.getAlbumByID(rs.getString("idAlbum")),
+                                rs.getBlob("audioFile"),
+                                rs.getTime("duration"),
+                                rs.getDate("releaseDate"),
+                                getGenresByAudioID(rs.getString("idSong")),
+                                rs.getBoolean("isFavorite"));
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -215,17 +216,16 @@ public class AudioDAO implements IAudioDAO {
 
             rs = st.executeQuery();
 
-            while(rs.next()) {      //while results are available (only 1 result expected, if not: take the last one)
-                result = new Episode(   rs.getString("idEpisode"),
-                                        rs.getString("title"),
-                                        pDAO.getArtistByMail(rs.getString("artistMail")),
-                                        cDAO.getPodcastByID(rs.getString("idPodcast")),
-                                        rs.getBlob("audioFile"),
-                                        rs.getTime("duration"),
-                                        rs.getDate("releaseDate"),
-                                        getGenresByAudioID(rs.getString("idEpisode")),
-                                        rs.getBoolean("isFavorite"));
-            }
+            rs.next();
+            result = new Episode(   rs.getString("idEpisode"),
+                                    rs.getString("title"),
+                                    pDAO.getArtistByMail(rs.getString("artistMail")),
+                                    cDAO.getPodcastByID(rs.getString("idPodcast")),
+                                    rs.getBlob("audioFile"),
+                                    rs.getTime("duration"),
+                                    rs.getDate("releaseDate"),
+                                    getGenresByAudioID(rs.getString("idEpisode")),
+                                    rs.getBoolean("isFavorite"));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -243,7 +243,7 @@ public class AudioDAO implements IAudioDAO {
         ArrayList<String> result = new ArrayList<>();
 
         try {
-            String query = "SELECT genre FROM Profile NATURAL JOIN Artist WHERE idAudio=?;";
+            String query = "SELECT genre FROM AudioGenres WHERE idAudio=?;";
 
             st = connection.prepareStatement(query);
             st.setString(1, idAudio);
@@ -397,9 +397,41 @@ public class AudioDAO implements IAudioDAO {
     }
 
     private void linkAudioToGenres(JBAudio audio) {
+        String[] genreArray = audio.getMetadata().getGenres();
+
+        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+        PreparedStatement st1, st2, st3;
+        ResultSet rs1;
+
+        try {
+            String q1 = "SELECT genre FROM Genre WHERE genre=?;";
+            st1 = connection.prepareStatement(q1);
+            String q2 = "INSERT INTO Genre(genre) VALUE(?);";
+            st2 = connection.prepareStatement(q2);
+            String q3 = "INSERT INTO AudioGenres(idAudio, genre) VALUE(?, ?);";
+            st3 = connection.prepareStatement(q3);
+
+            for(int i=0; i<genreArray.length; i++) {                //for every genre
+
+                st1.setString(1, genreArray[i]);       //check if genre is already in DB
+                rs1 = st1.executeQuery();
+
+                if(rs1.getString("genre") == null) {        //if genre not in DB
+                    st2.setString(1, genreArray[i]);      //insert new genre
+                    st2.executeUpdate();
+                }
+
+                st3.setString(1, audio.getId());         //link audio to genre
+                st3.setString(2, genreArray[i]);
+                st3.executeUpdate();
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
 
     }
-
-
 
 }
