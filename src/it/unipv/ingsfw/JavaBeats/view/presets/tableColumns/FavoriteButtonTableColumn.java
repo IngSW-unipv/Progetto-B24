@@ -2,10 +2,7 @@ package it.unipv.ingsfw.JavaBeats.view.presets.tableColumns;
 import it.unipv.ingsfw.JavaBeats.model.playable.JBAudio;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.scene.Cursor;
-import javafx.scene.control.Button;
-import javafx.scene.control.ContentDisplay;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 public class FavoriteButtonTableColumn extends TableColumn<JBAudio, JBAudio>{
@@ -34,6 +31,7 @@ public class FavoriteButtonTableColumn extends TableColumn<JBAudio, JBAudio>{
           hearthImage.setPreserveRatio(true);
           hearthImage.setFitHeight(20);
           favoriteButton.setGraphic(hearthImage);
+          favoriteButton.setTooltip(new Tooltip("Favorite"));
           setGraphic(favoriteButton);
         }//end-if
       }

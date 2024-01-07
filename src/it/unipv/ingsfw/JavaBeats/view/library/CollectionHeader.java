@@ -2,8 +2,10 @@ package it.unipv.ingsfw.JavaBeats.view.library;
 import it.unipv.ingsfw.JavaBeats.model.playable.EJBPLAYABLE;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -86,10 +88,66 @@ public class CollectionHeader extends VBox{
 
     HBox topViewHBox=new HBox(15, collectionImageView, collectionTitleInfo);
 
-    HBox buttonsHBbox=new HBox();
+
+    //Hbox buttons
+
+    //PlayPause
+    Image playpauseImage= new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Play.png", true);
+    ImageView playPauseImageView=new ImageView(playpauseImage);
+    playPauseImageView.setPreserveRatio(true);
+    Button buttonPlayPause= new Button();
+    buttonPlayPause.setGraphic(playPauseImageView);
+    buttonPlayPause.setStyle("-fx-background-color: #0F0F0FFF;");
+    buttonPlayPause.setCursor(Cursor.HAND);
+    buttonPlayPause.setTooltip(new Tooltip("Play/Pause"));
+
+
+    //Random
+    Image randomImage= new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/EmptyRandom.png", true);
+    ImageView randomImageView=new ImageView(randomImage);
+    randomImageView.setPreserveRatio(true);
+    Button buttonRandom= new Button();
+    buttonRandom.setGraphic(randomImageView);
+    buttonRandom.setStyle("-fx-background-color: #0F0F0FFF;");
+    buttonRandom.setCursor(Cursor.HAND);
+    buttonRandom.setTooltip(new Tooltip("Random"));
+
+    //Loop
+    Image loopImage= new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/EmptyLoop.png", true);
+    ImageView loopImageView=new ImageView(loopImage);
+    loopImageView.setPreserveRatio(true);
+    Button buttonLoop= new Button();
+    buttonLoop.setGraphic(loopImageView);
+    buttonLoop.setStyle("-fx-background-color: #0F0F0FFF;");
+    buttonLoop.setCursor(Cursor.HAND);
+    buttonLoop.setTooltip(new Tooltip("Loop"));
+
+    //Edit
+    Image editImage= new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Edit.png", true);
+    ImageView editImageView=new ImageView(editImage);
+    editImageView.setPreserveRatio(true);
+    Button buttonEdit= new Button();
+    buttonEdit.setGraphic(editImageView);
+    buttonEdit.setStyle("-fx-background-color: #0F0F0FFF;");
+    buttonEdit.setCursor(Cursor.HAND);
+    buttonEdit.setTooltip(new Tooltip("Edit"));
+
+    //Bin
+    Image binImage= new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Bin.png", true);
+    ImageView binImageView=new ImageView(binImage);
+    binImageView.setPreserveRatio(true);
+    Button buttonBin= new Button();
+    buttonBin.setGraphic(binImageView);
+    buttonBin.setStyle("-fx-background-color: #0F0F0FFF;");
+    buttonBin.setCursor(Cursor.HAND);
+    buttonBin.setTooltip(new Tooltip("Delete"));
+
+
+    HBox buttonsHBbox=new HBox(buttonPlayPause, buttonRandom, buttonLoop, buttonEdit, buttonBin);
+    buttonsHBbox.setPadding(new Insets(40, 0, 0, 0));
 
     getChildren().addAll(topViewHBox, buttonsHBbox);
-    setPadding(new Insets(50, 0, 50, 0));
+    setPadding(new Insets(50, 0, 30, 0));
     setBackground(bgHome);
   }
   /*---------------------------------------*/
