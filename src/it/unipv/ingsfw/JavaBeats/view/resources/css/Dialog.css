@@ -1,0 +1,47 @@
+.myDialog{
+  -fx-background-color: rgb(18, 18, 18);
+  -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.8), 10, 0, 0, 0);
+}
+.myDialog > *.button-bar > *.container{
+  -fx-background-color: #121212;
+}
+#buttonTypes{
+  -fx-border-color: transparent !important;
+  -fx-text-fill: white;
+  -fx-font-size: 14;
+  -fx-font-family: Verdana;
+  -fx-font-style: bold;
+  -fx-padding: 5 10 5 10;
+  -fx-background-color: blueviolet;
+  -fx-background-radius: 25;
+}
+#TextField{
+  -fx-background-color: rgb(15, 15, 15);
+  -fx-background-radius: 10;
+  -fx-text-fill: lightgray;
+  -fx-border-color: blueviolet;
+  -fx-border-radius: 25;
+}
+#checkBox .box{
+  -fx-background-color: rgb(15, 15, 15);
+  -fx-border-color: blueviolet;
+  -fx-border-radius: 3px;
+}
+#checkBox:selected .mark{
+  -fx-background-color: white;
+}
+#checkBox:selected .box{
+  -fx-background-color: blueviolet;
+}
+/* .myDialog > *.label.content{ */
+/*   -fx-font-size: 14px; */
+/*   -fx-font-weight: bold; */
+/* } */
+/* .myDialog *.header-panel{ */
+/*   -fx-background-color: #121212; */
+/* } */
+/* .myDialog *.header-panel *.label{ */
+/*   -fx-font-size: 18px; */
+/*   -fx-font-style: italic; */
+/*   -fx-fill: #292929; */
+/* } */
