@@ -10,8 +10,9 @@
   -fx-text-fill: white;
   -fx-font-size: 14;
   -fx-font-family: Verdana;
-  -fx-font-style: bold;
-  -fx-padding: 5 10 5 10;
+  -fx-font-style: normal;
+  -fx-font-weight: bold;
+  -fx-padding: 10 20 10 20;
   -fx-background-color: blueviolet;
   -fx-background-radius: 25;
 }
