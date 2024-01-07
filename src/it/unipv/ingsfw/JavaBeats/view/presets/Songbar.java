@@ -6,6 +6,7 @@ import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -77,6 +78,7 @@ public class Songbar extends GridPane {
     buttonHeart.setGraphic(heartImageView);
     buttonHeart.setBackground(bgSongbar);
     buttonHeart.setCursor(Cursor.HAND);
+    buttonHeart.setTooltip(new Tooltip("Favorite"));
 
     HBox songHbox= new HBox(20, recordImageView, songLabelVbox, buttonHeart);
     songHbox.setAlignment(Pos.CENTER_LEFT);
@@ -94,6 +96,7 @@ public class Songbar extends GridPane {
     buttonRandom.setGraphic(randomImageView);
     buttonRandom.setBackground(bgSongbar);
     buttonRandom.setCursor(Cursor.HAND);
+    buttonRandom.setTooltip(new Tooltip("Random"));
 
     //SkipBack
     Image skipBackImage= new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/SkipBack.png", true);
@@ -103,6 +106,7 @@ public class Songbar extends GridPane {
     buttonSkipBack.setGraphic(skipBackImageView);
     buttonSkipBack.setBackground(bgSongbar);
     buttonSkipBack.setCursor(Cursor.HAND);
+    buttonSkipBack.setTooltip(new Tooltip("Previous"));
 
     //PlayPause
     Image playpauseImage= new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Play.png", true);
@@ -112,6 +116,7 @@ public class Songbar extends GridPane {
     buttonPlayPause.setGraphic(playPauseImageView);
     buttonPlayPause.setBackground(bgSongbar);
     buttonPlayPause.setCursor(Cursor.HAND);
+    buttonPlayPause.setTooltip(new Tooltip("Play/Pause"));
 
     //SkipForward
     Image skipForwardImage= new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/SkipForward.png", true);
@@ -121,6 +126,7 @@ public class Songbar extends GridPane {
     buttonSkipForward.setGraphic(skipForawradImageView);
     buttonSkipForward.setBackground(bgSongbar);
     buttonSkipForward.setCursor(Cursor.HAND);
+    buttonSkipForward.setTooltip(new Tooltip("Next"));
 
     //Loop
     Image loopImage= new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/EmptyLoop.png", true);
@@ -130,6 +136,7 @@ public class Songbar extends GridPane {
     buttonLoop.setGraphic(loopImageView);
     buttonLoop.setBackground(bgSongbar);
     buttonLoop.setCursor(Cursor.HAND);
+    buttonLoop.setTooltip(new Tooltip("Loop"));
 
 
     HBox playHbox= new HBox(10, buttonRandom, buttonSkipBack, buttonPlayPause, buttonSkipForward, buttonLoop);
