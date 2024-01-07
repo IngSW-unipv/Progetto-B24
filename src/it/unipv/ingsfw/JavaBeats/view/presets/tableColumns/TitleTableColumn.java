@@ -10,7 +10,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 public class TitleTableColumn extends TableColumn<JBAudio, JBAudio>{
+  /*-----------------------------------------------*/
+  //Constructor
+  /*-----------------------------------------------*/
   public TitleTableColumn(String s){
     super(s);
     super.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(cellData.getValue()));
@@ -23,9 +30,14 @@ public class TitleTableColumn extends TableColumn<JBAudio, JBAudio>{
 
       /* Anonymous constructor: */{
         titleLabel=new Label();
-        artistLabel=new Label();
+        titleLabel.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 14));
+        titleLabel.setTextFill(Color.LIGHTGRAY);
 
-        titleArtistVBox=new VBox(titleLabel, artistLabel);
+        artistLabel=new Label();
+        artistLabel.setFont(Font.font("Verdana", FontWeight.NORMAL, FontPosture.REGULAR, 12));
+        artistLabel.setTextFill(Color.LIGHTGRAY);
+
+        titleArtistVBox=new VBox(5, titleLabel, artistLabel);
         titleArtistVBox.setAlignment(Pos.CENTER_LEFT);
 
         collectionImageView=new ImageView();
@@ -55,4 +67,5 @@ public class TitleTableColumn extends TableColumn<JBAudio, JBAudio>{
       }
     });
   }
+  /*-----------------------------------------------*/
 }

@@ -1,60 +1,119 @@
-/* TableView */
-
-.table-view {
+/*----------------------------------------*/
+/*---------------TABLEVIEW----------------*/
+/*----------------------------------------*/
+.table-view{
   -fx-background-color: rgb(15, 15, 15);
 }
-
-.table-view .column-header-background .filler {
+/*----------------------------------------*/
+/*---------COLUMN HEADER SECTION----------*/
+/*----------------------------------------*/
+/* background of column headers' filler */
+.table-view .column-header-background .filler{
   -fx-background-color: transparent;
 }
-
-.table-view .column-header-background {
+/* background of column headers */
+.table-view .column-header-background{
   -fx-background-color: rgb(15, 15, 15);
 }
-
-.table-view .column-header {
+/* characteristics of column headers */
+.table-view .column-header{
+  -fx-font-size: 14;
+  -fx-font-family: Verdana;
+  -fx-font-weight: normal;
+  -fx-font-style: oblique;
+  -fx-border-insets: 0 0 10 0;
+  -fx-border-color: transparent transparent dimgray transparent !important;
   -fx-background-color: transparent;
   -fx-text-background-color: lightgray;
-  -fx-max-height: 30px !important;
-  -fx-min-height: 30px !important;
+  -fx-max-height: 35px !important;
+  -fx-min-height: 35px !important;
 }
-
-.table-view .column-header .label {
+/* column headers' labels */
+.table-view .column-header .label{
+  -fx-padding: 0 0 15 0;
   -fx-alignment: CENTER_LEFT;
 }
-
-.table-view .table-column {
+/*----------------------------------------*/
+/*------------COLUMNS SECTION-------------*/
+/*----------------------------------------*/
+/* characteristics of column */
+.table-view .table-column{
+  -fx-font-size: 14;
+  -fx-font-family: Verdana;
   -fx-border-color: transparent;
   -fx-padding: 2 0 2 10px;
   -fx-alignment: CENTER-LEFT !important;
 }
-
-
-.table-view .table-cell {
+/*----------------------------------------*/
+/*-------------CELLS SECTION--------------*/
+/*----------------------------------------*/
+/* characteristics of cells */
+.table-view .table-cell{
   -fx-border-color: transparent;
   -fx-padding: 2 0 2 10px;
   -fx-alignment: CENTER-LEFT !important;
 }
-
-.table-row-cell:hover {
-  -fx-background-color: #8a2be2 !important;
+/*----------------------------------------*/
+/*-----------ROW CELL SECTION-------------*/
+/*----------------------------------------*/
+/* on hover changing the background and text color */
+.table-row-cell:hover{
+  -fx-background-color: midnightblue !important; /* Or, in my honest opinion, darkslateblue. These two are the best, just pick one of them. :) */
+  -fx-background-radius: 10;
   -fx-text-background-color: white !important;
 }
-
-.table-row-cell:odd {
-  -fx-background-color: rgb(18, 18, 18);
-  -fx-background-insets: 0, 0 0 1 0;
-  -fx-padding: 0.0em;
-  -fx-text-background-color: lightgray;
+/* on hover underlining text */
+.table-row-cell:hover .table-cell, .table-row-cell:hover .label{
+  -fx-underline: true;
 }
-
-.table-row-cell:even {
+/* even rows have these characteristics */
+.table-row-cell:even{
   -fx-background-color: rgb(15, 15, 15);
   -fx-background-insets: 0, 0 0 1 0;
   -fx-padding: 0.0em;
   -fx-text-background-color: lightgray;
 }
-
-#playColumn .label {
-  -fx-alignment: CENTER;
+/* odd rows have these characteristics */
+.table-row-cell:odd{
+  -fx-background-color: radial-gradient(center 50% 50%, radius 100%, #131313, #0E0E0E);
+  /* -fx-background-color: rgb(18, 18, 18); */
+  -fx-background-insets: 0, 0 0 1 0;
+  -fx-padding: 0.0em;
+  -fx-text-background-color: lightgray;
 }
+/*----------------------------------------*/
+/*------PLAY/FAVORITE BUTTON SECTION------*/
+/*----------------------------------------*/
+.table-view .table-column.playColumn{
+  -fx-alignment: CENTER !important;
+}
+.table-view .column-header.playColumn .label{
+  -fx-alignment: CENTER !important;
+}
+.table-view .table-column.favoriteColumn{
+  -fx-alignment: CENTER !important;
+}
+.table-view .column-header.favoriteColumn .label{
+  -fx-alignment: CENTER !important;
+}
+/*----------------------------------------*/
+/* -------DURATION COLUMN SECTION-------- */
+/*----------------------------------------*/
+.table-view .table-column.durationColumn{
+  -fx-alignment: CENTER !important;
+}
+.table-view .column-header.durationColumn .label{
+  -fx-alignment: CENTER !important;
+}
+/*----------------------------------------*/
+/* ---------REMOVING SCROLLBAR----------- */
+/*----------------------------------------*/
+.table-view .scroll-bar *{
+  -fx-min-width: 0;
+  -fx-pref-width: 0;
+  -fx-max-width: 0;
+  -fx-min-height: 0;
+  -fx-pref-height: 0;
+  -fx-max-height: 0;
+}
+/*----------------------------------------*/

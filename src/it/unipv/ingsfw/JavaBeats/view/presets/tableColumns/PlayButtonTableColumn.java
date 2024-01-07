@@ -1,15 +1,14 @@
 package it.unipv.ingsfw.JavaBeats.view.presets.tableColumns;
 import it.unipv.ingsfw.JavaBeats.model.playable.JBAudio;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 public class PlayButtonTableColumn extends TableColumn<JBAudio, JBAudio>{
+  /*-----------------------------------------------*/
+  //Constructor
+  /*-----------------------------------------------*/
   public PlayButtonTableColumn(String s){
     super(s);
     super.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(cellData.getValue()));
@@ -23,6 +22,7 @@ public class PlayButtonTableColumn extends TableColumn<JBAudio, JBAudio>{
         playImage.setFitHeight(15);
         playButton.setGraphic(playImage);
         playButton.setStyle("-fx-background-color: transparent");
+        playButton.setCursor(Cursor.HAND);
         setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
       }
 
@@ -31,11 +31,11 @@ public class PlayButtonTableColumn extends TableColumn<JBAudio, JBAudio>{
         if(audio==null){
           setGraphic(null);
         }else{
-
           setGraphic(playButton);
         }//end-if
       }
     });
-    setId("playColumn");
+    getStyleClass().add("playColumn");
   }
+  /*-----------------------------------------------*/
 }

@@ -47,8 +47,8 @@ public class CollectionViewGui{
     CollectionHeader collectionHeader=new CollectionHeader(collectionType);
     ObservableList<JBAudio> songList=FXCollections.observableArrayList();
     try{
-      for(int i=0; i<20; i++){
-        songList.add(new Song("id", "titolo", new Artist("rob", "rob", "rob"), new Album("id", "nomeAlbum", new Artist("rob", "rob", "rob")), new SerialBlob(new byte[]{0, 1}), new Time(100), new Date(100), new String[]{"rock", "pop"}, true));
+      for(int i=0; i<4; i++){
+        songList.add(new Song("id", "Unknown title", new Artist("rob", "rob", "rob"), new Album("id", "nomeAlbum", new Artist("rob", "rob", "rob")), new SerialBlob(new byte[]{0, 1}), new Time(100), new Date(100), new String[]{"rock", "pop"}, true));
       }//end-for
     }catch(SQLException e){
       throw new RuntimeException(e);
