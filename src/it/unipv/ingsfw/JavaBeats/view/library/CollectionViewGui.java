@@ -8,6 +8,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.*;
@@ -25,6 +26,7 @@ public class CollectionViewGui{
   /*---------------------------------------*/
   private static final int clientWidth=(int)Screen.getPrimary().getBounds().getWidth();
   private static final int clientHeight=(int)Screen.getPrimary().getBounds().getHeight();
+  private CollectionHeader collectionHeader;
   private Scene scene;
 
   /*---------------------------------------*/
@@ -42,11 +44,15 @@ public class CollectionViewGui{
     return scene;
   }
 
+  public CollectionHeader getCollectionHeader(){
+    return collectionHeader;
+  }
+
   /*---------------------------------------*/
   //Metodi
   /*---------------------------------------*/
   private void initComponents(EJBPLAYABLE collectionType){
-    CollectionHeader collectionHeader=new CollectionHeader(collectionType);
+    collectionHeader=new CollectionHeader(collectionType);
     ObservableList<JBAudio> songList=FXCollections.observableArrayList();
     try{
       for(int i=0; i<4; i++){
