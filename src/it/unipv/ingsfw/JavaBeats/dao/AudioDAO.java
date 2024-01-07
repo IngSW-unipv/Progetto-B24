@@ -195,8 +195,7 @@ public class AudioDAO implements IAudioDAO {
         try {
             String query =  "SELECT * FROM (SELECT id as 'idSong', isFavorite, duration, title, releaseDate, audioFile FROM Audio) A " +
                             "NATURAL JOIN (SELECT idAudio as 'idSong', artistMail FROM ArtistAudios) B " +
-                            "NATURAL JOIN AlbumSongs " +
-                            "WHERE idSong=?;";
+                            "NATURAL JOIN AlbumSongs WHERE idSong=?;";
 
             st = connection.prepareStatement(query);
             st.setString(1, id);
@@ -233,8 +232,8 @@ public class AudioDAO implements IAudioDAO {
         CollectionDAO cDAO = new CollectionDAO();
 
         try {
-            String query =  "SELECT * FROM (SELECT id as 'idEpisode', isFavorite, duration, title, releaseDate, audioFile FROM Audio) A" +
-                    "NATURAL JOIN (SELECT idAudio as 'idEpisode', artistMail FROM ArtistAudios) B" +
+            String query =  "SELECT * FROM (SELECT id as 'idEpisode', isFavorite, duration, title, releaseDate, audioFile FROM Audio) A " +
+                    "NATURAL JOIN (SELECT idAudio as 'idEpisode', artistMail FROM ArtistAudios) B " +
                     "NATURAL JOIN PodcastEpisodes WHERE idEpisode=?;";
 
             st = connection.prepareStatement(query);
@@ -264,7 +263,8 @@ public class AudioDAO implements IAudioDAO {
     }
 
     protected String[] getGenresByAudioID(String idAudio) {
-        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+        //TO CALL ONLY WHEN ALREADY CONNECTED   -   This method does not open or close the connection to the DB
+
         PreparedStatement st;
         ResultSet rs;
         ArrayList<String> result = new ArrayList<>();
@@ -285,8 +285,6 @@ public class AudioDAO implements IAudioDAO {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
 
         String[] arrayOut = new String[result.size()];      //converting arrayList to Array
         arrayOut = result.toArray(arrayOut);
