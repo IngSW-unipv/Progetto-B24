@@ -31,6 +31,12 @@ public class Playlist extends JBCollection {
 	public ArrayList<JBAudio> getTrackList() {
 		return trackList;
 	}
+
+	public JBCollection getCopy(JBCollection collection) {
+
+		return new Playlist(collection.getId(), collection.getName(), collection.getCreator(), ((Playlist)collection).getTrackList(), collection.getPicture(), ((Playlist)collection).isVisible);
+	}
+
 	public boolean isVisible() {
 		return isVisible;
 	}

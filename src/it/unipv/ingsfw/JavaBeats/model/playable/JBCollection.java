@@ -45,6 +45,7 @@ public abstract class JBCollection implements IJBPlayable{
         return picture;
     }
     public abstract ArrayList getTrackList();
+    public abstract JBCollection getCopy(JBCollection collection);
 
 
     //SETTERS:

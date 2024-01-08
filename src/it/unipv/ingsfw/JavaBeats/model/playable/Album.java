@@ -26,6 +26,11 @@ public class Album extends JBCollection {
 		return trackList;
 	}
 
+	@Override
+	public JBCollection getCopy(JBCollection collection) {
+
+		return new Album(collection.getId(), collection.getName(), collection.getCreator(), ((Album)collection).getTrackList(), collection.getPicture());
+	}
 
 
 	//SETTER:

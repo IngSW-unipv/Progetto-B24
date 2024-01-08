@@ -26,6 +26,11 @@ public class Podcast extends JBCollection {
 		return trackList;
 	}
 
+	public JBCollection getCopy(JBCollection collection) {
+
+		return new Podcast(collection.getId(), collection.getName(), collection.getCreator(), ((Podcast)collection).getTrackList(), collection.getPicture());
+	}
+
 
 	//SETTER:
 	@Override
