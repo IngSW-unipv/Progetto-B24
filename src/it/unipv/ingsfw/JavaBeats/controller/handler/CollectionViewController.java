@@ -1,4 +1,5 @@
 package it.unipv.ingsfw.JavaBeats.controller.handler;
+import com.sun.scenario.effect.BoxShadow;
 import it.unipv.ingsfw.JavaBeats.model.playable.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.playable.Playlist;
 import it.unipv.ingsfw.JavaBeats.model.user.Artist;
@@ -12,6 +13,7 @@ import javafx.geometry.Dimension2D;
 import javafx.scene.Node;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.effect.BoxBlur;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -40,8 +42,10 @@ public class CollectionViewController{
       @Override
       public void handle(ActionEvent actionEvent){
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+        gui.getGp().setEffect(new BoxBlur(10, 10, 10));
 
         CollectionDialog dialog=new CollectionDialog(stage, new Playlist("id", "name", new Artist("mail", "name", "username")));
+        DialogController dialogController=new DialogController(dialog);
         dialog.show();
       }
     };

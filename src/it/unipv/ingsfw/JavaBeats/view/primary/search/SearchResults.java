@@ -1,9 +1,12 @@
 package it.unipv.ingsfw.JavaBeats.view.primary.search;
+import it.unipv.ingsfw.JavaBeats.model.playable.Playlist;
+import it.unipv.ingsfw.JavaBeats.model.user.User;
 import it.unipv.ingsfw.JavaBeats.view.presets.AudioCard;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
@@ -21,7 +24,9 @@ public class SearchResults extends ScrollPane{
   private static final Font fontTopAudio=Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 24);
   private static final Font fontTitles=Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 15);
   private static final Font fontArtists=Font.font("Verdana", FontWeight.NORMAL, FontPosture.REGULAR, 13);
+  private static final Font fontAddTo=Font.font("Verdana", FontWeight.LIGHT, FontPosture.ITALIC, 12);
   private static final Font fontFindings=Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 20);
+
   /*---------------------------------------*/
   //Costruttori
   /*---------------------------------------*/
@@ -60,13 +65,36 @@ public class SearchResults extends ScrollPane{
     imageTitleArtistVBox.setAlignment(Pos.CENTER_LEFT);
     imageTitleArtistVBox.setPadding(new Insets(40, 100, 0, 15));
 
+    //Choicebox
+    Label cblabel=new Label("Add to");
+    cblabel.setFont(fontAddTo);
+    cblabel.setTextFill(Color.LIGHTGRAY);
+    cblabel.setPadding(new Insets(10, 0, 0, 0));
+
+    ChoiceBox<String> cb= new ChoiceBox<String>();
+    cb.getItems().add("Favorites");
+    cb.getItems().add("Playlist 1");
+    cb.getItems().add("Playlist 2");
+    cb.getItems().add("Playlist 3");
+    cb.getStylesheets().add("it/unipv/ingsfw/JavaBeats/view/resources/css/choicebox.css");
+
+    Button cbButton= new Button();
+    cbButton.setGraphic(cb);
+    cbButton.setStyle("-fx-background-color: transparent");
+    cbButton.setAlignment(Pos.CENTER);
+
+    HBox cbHBox= new HBox(cblabel, cbButton);
+    cbHBox.setPadding(new Insets(15, 0, 0, 15));
+
     /* VBox with the Top result */
-    VBox topResultVbox=new VBox(topResultLabel, imageTitleArtistVBox);
+    VBox topResultVbox=new VBox(topResultLabel, imageTitleArtistVBox, cbHBox);
     topResultVbox.setPadding(new Insets(20, 20, 20, 0));
 
-    Label topSongsLabel=new Label("Songs");
+
+    Label topSongsLabel=new Label("Songs and Episodes");
     topSongsLabel.setFont(fontTopResult);
     topSongsLabel.setTextFill(Color.LIGHTGRAY);
+
 
     HBox[] topSongs={new HBox(), new HBox(), new HBox(), new HBox()};
     for(HBox h : topSongs){
@@ -85,31 +113,46 @@ public class SearchResults extends ScrollPane{
 
       VBox songTitleArtistVBox=new VBox(songTitle, songArtist);
       songTitleArtistVBox.setAlignment(Pos.CENTER_LEFT);
+      songTitleArtistVBox.setPadding(new Insets(0, 0, 0, 10));
 
       Pane whitePane=new Pane();
 
       HBox.setHgrow(whitePane, Priority.ALWAYS);
 
-      Image heartImage= new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/EmptyHeart.png", true);
-      ImageView heartImageView=new ImageView(heartImage);
-      heartImageView.setPreserveRatio(true);
 
-      Button buttonHeart=new Button("");
-      buttonHeart.setGraphic(heartImageView);
-      buttonHeart.setStyle("-fx-background-color: #0F0F0FFF");
-      buttonHeart.setCursor(Cursor.HAND);
-      buttonHeart.setPadding(new Insets(0, 10, 0, 0));
+
+      //Choicebox
+      Label addToLabel=new Label("Add to");
+      addToLabel.setFont(fontAddTo);
+      addToLabel.setTextFill(Color.LIGHTGRAY);
+
+      ChoiceBox<String> c= new ChoiceBox<String>();
+      c.getItems().add("Favorites");
+      c.getItems().add("Playlist 1");
+      c.getItems().add("Playlist 2");
+      c.getItems().add("Playlist 3");
+      c.getStylesheets().add("it/unipv/ingsfw/JavaBeats/view/resources/css/choicebox.css");
+
+      Button choiceButton= new Button();
+      choiceButton.setGraphic(c);
+      choiceButton.setStyle("-fx-background-color: transparent");
+      HBox.setMargin(choiceButton, new Insets(0, 20, 0, 0));
+
 
       Label songDuration=new Label("03:55");
       songDuration.setTextFill(Color.LIGHTGRAY);
 
-      h.getChildren().addAll(songPicImageView, songTitleArtistVBox, whitePane, buttonHeart, songDuration);
+      h.getChildren().addAll(songPicImageView, songTitleArtistVBox, whitePane, addToLabel, choiceButton, songDuration);
       h.setAlignment(Pos.CENTER_LEFT);
+      h.getStyleClass().add("HBox");
+      h.getStylesheets().add("it/unipv/ingsfw/JavaBeats/view/resources/css/topSongsHbox.css");
     }//end-for
 
     /* VBox with the best 4 songs */
-    VBox topSongsResultVbox=new VBox(15, topSongsLabel, topSongs[0], topSongs[1], topSongs[2], topSongs[3]);
+    VBox topSongsResultVbox=new VBox(20, topSongsLabel, topSongs[0], topSongs[1], topSongs[2], topSongs[3]);
     topSongsResultVbox.setPadding(new Insets(20, 20, 20, 0));
+
+
 
     /* final HBox with the VBoxes above */
     HBox bestResultsHBox=new HBox(topResultVbox, topSongsResultVbox);
@@ -167,18 +210,6 @@ public class SearchResults extends ScrollPane{
     VBox.setVgrow(playlistScroll, Priority.ALWAYS);
 
     /* Episodes found block, we have a label and a HBox of AudioCards inside a ScrollPane */
-    Label foundEpisodesLabel=new Label("Episodes");
-    foundEpisodesLabel.setFont(fontFindings);
-    foundEpisodesLabel.setTextFill(Color.LIGHTGRAY);
-    foundEpisodesLabel.setPadding(new Insets(40,0, 40, 0));
-    HBox episodesHBox=new HBox(50, new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard());
-    ScrollPane episodesScroll=new ScrollPane(episodesHBox);
-    episodesScroll.setStyle("-fx-background: #0F0F0FFF; -fx-border-color: #0F0F0FFF");
-    episodesScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-    episodesScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-    VBox.setVgrow(episodesScroll, Priority.ALWAYS);
-
-    /* Episodes found block, we have a label and a HBox of AudioCards inside a ScrollPane */
     Label foundProfilesLabel=new Label("Profiles");
     foundProfilesLabel.setFont(fontFindings);
     foundProfilesLabel.setTextFill(Color.LIGHTGRAY);
@@ -190,7 +221,7 @@ public class SearchResults extends ScrollPane{
     profilesScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
     VBox.setVgrow(profilesScroll, Priority.ALWAYS);
 
-    VBox mainVBox=new VBox(bestResultsHBox, foundArtistsLabel, artistScroll, foundAlbumsLabel, albumsScroll, foundPodcastsLabel, podcastScroll, foundPlaylistsLabel, playlistScroll, foundEpisodesLabel, episodesScroll, foundProfilesLabel, profilesScroll);
+    VBox mainVBox=new VBox(bestResultsHBox, foundArtistsLabel, artistScroll, foundAlbumsLabel, albumsScroll, foundPodcastsLabel, podcastScroll, foundPlaylistsLabel, playlistScroll, foundProfilesLabel, profilesScroll);
     mainVBox.setPadding(new Insets(0, 0, 0, 20));
 
     setContent(mainVBox);

@@ -1,0 +1,9 @@
+.HBox:hover {
+    -fx-background-color: darkslateblue !important;
+    -fx-background-radius: 10;
+    -fx-text-background-color: white !important;
+}
+
+.HBox:hover  .label {
+    -fx-underline: true;
+}
