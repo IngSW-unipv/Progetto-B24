@@ -38,14 +38,12 @@ public abstract class JBCollection implements IJBPlayable{
     public JBProfile getCreator() {
         return creator;
     }
-    public int getItemAmount() {
-        return itemAmount;
-    }
     public Blob getPicture() {
         return picture;
     }
     public abstract ArrayList getTrackList();
     public abstract JBCollection getCopy(JBCollection collection);
+
 
 
     //SETTERS:
@@ -57,9 +55,6 @@ public abstract class JBCollection implements IJBPlayable{
     }
     public void setCreator(JBProfile creator) {
         this.creator = creator;
-    }
-    public void setItemAmount(int itemAmount) {
-        this.itemAmount = itemAmount;
     }
     public void setPicture(Blob picture) {
         this.picture = picture;
@@ -80,11 +75,11 @@ public abstract class JBCollection implements IJBPlayable{
     @Override
     public String toString() {
         if(this instanceof Playlist)
-            return "PLAYLIST  -  Name: " + this.getName() + ";  Creator: " + this.getCreator() + ".";
+            return "PLAYLIST  -  Name: " + this.getName() + ";  Creator Mail: " + this.getCreator().getMail() + ".";
         else if(this instanceof Album)
-            return "ALBUM     -  Name: " + this.getName() + ";  Creator: " + this.getCreator() + ".";
+            return "ALBUM     -  Name: " + this.getName() + ";  Creator Mail: " + this.getCreator().getMail() + ".";
         else if(this instanceof Podcast)
-            return "PODCAST   -  Name: " + this.getName() + ";  Creator: " + this.getCreator() + ".";
+            return "PODCAST   -  Name: " + this.getName() + ";  Creator Mail: " + this.getCreator().getMail() + ".";
         else return super.toString();
     }
 

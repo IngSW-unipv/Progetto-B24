@@ -1,24 +1,27 @@
 package it.unipv.ingsfw.JavaBeats.model.user;
 
 
+import it.unipv.ingsfw.JavaBeats.model.playable.JBAudio;
+
 import java.sql.Blob;
 import java.sql.Time;
+import java.util.ArrayList;
 
 public class User extends JBProfile {
 
 	//ATTRIBUTES:
 	private boolean isVisible = true;
-	private Time minuteListened;
+	private Time totalListeningTime;
 
 
 	//CONSTRUCTOR:
-	public User(String username, String mail, String password, String name, String surname, String biography, Blob profilePicture, boolean isVisible, Time minuteListened) {
-		super(username, mail, password, name, surname, biography, profilePicture);
+	public User(String username, String mail, String password, String name, String surname, String biography, Blob profilePicture, boolean isVisible, Time totalListeningTime, ArrayList<JBAudio> listeningHistory) {
+		super(username, mail, password, name, surname, biography, profilePicture, listeningHistory);
 		this.isVisible = isVisible;
-		this.minuteListened = minuteListened;
+		this.totalListeningTime = totalListeningTime;
 	}
 	public User(String username, String mail, String password) {
-		this(username, mail, password, null, null, null, null, true, null);
+		this(username, mail, password, null, null, null, null, true, null, null);
 	}
 
 
@@ -27,7 +30,7 @@ public class User extends JBProfile {
 		return isVisible;
 	}
 	public Time getMinuteListened() {
-		return minuteListened;
+		return totalListeningTime;
 	}
 
 
@@ -36,7 +39,7 @@ public class User extends JBProfile {
 		isVisible = visible;
 	}
 	public void setMinuteListened(Time minuteListened) {
-		this.minuteListened = minuteListened;
+		this.totalListeningTime = minuteListened;
 	}
 
 }

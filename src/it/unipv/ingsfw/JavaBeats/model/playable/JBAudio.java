@@ -9,9 +9,10 @@ public abstract class JBAudio {
 
     //ATTRIBUTES:
     private String id;
-    private boolean isFavorite = false;
+    private boolean isFavorite;
     private Metadata metadata;
     private Blob audioFile;
+    private int numberOfStreams;
 
     public class Metadata {
 
@@ -75,14 +76,15 @@ public abstract class JBAudio {
 
 
     //CONSTRUCTORS:
-    public JBAudio(String id, String title, Artist artist, JBCollection collection, Blob audioFile, Time duration, Date releaseDate, String[] genres, boolean isFavorite) {
+    public JBAudio(String id, String title, Artist artist, JBCollection collection, Blob audioFile, Time duration, Date releaseDate, String[] genres, boolean isFavorite, int numberOfStreams) {
         this.id = id;
         metadata = new Metadata(artist, title, collection, duration, releaseDate, genres);
         this.audioFile=audioFile;
         this.isFavorite=isFavorite;
+        this.numberOfStreams=numberOfStreams;
     }
     public JBAudio(String id, String title, Artist artist, Blob audioFile) {
-        this(id, title, artist, null, audioFile, Time.valueOf("00:00:00"), new Date(System.currentTimeMillis()), null, false);
+        this(id, title, artist, null, audioFile, Time.valueOf("00:00:00"), new Date(System.currentTimeMillis()), null, false, 0);
     }
 
 
@@ -94,6 +96,9 @@ public abstract class JBAudio {
     public boolean isFavorite() {
         return isFavorite;
     }
+    public int getNumberOfStreams() {
+        return numberOfStreams;
+    }
     public Metadata getMetadata() {
         return metadata;
     }
@@ -102,13 +107,15 @@ public abstract class JBAudio {
     }
 
 
-
     //SETTER:
     public void setId(String id) {
         this.id = id;
     }
-    public void setFavorite(boolean favorite) {
-        isFavorite = favorite;
+    public void setFavorite(boolean isFavorite) {
+        this.isFavorite = this.isFavorite;
+    }
+    public void setNumberOfStreams(int numberOfStreams) {
+        this.numberOfStreams=numberOfStreams;
     }
     public void setMetadata(Metadata metadata) {
         this.metadata = metadata;
@@ -131,9 +138,9 @@ public abstract class JBAudio {
     @Override
     public String toString() {
         if(this instanceof Song)
-            return "SONG      -  Title: " + this.getMetadata().getTitle() + ";  Artist: " + this.getMetadata().getArtist().getUsername() + ".";
+            return "SONG      -  Title: " + this.getMetadata().getTitle() + ";  Artist Mail: " + this.getMetadata().getArtist().getMail() + ".";
         else if(this instanceof Episode)
-            return "EPISODE   -  Title: " + this.getMetadata().getTitle() + ";  Artist: " + this.getMetadata().getArtist().getUsername() + ".";
+            return "EPISODE   -  Title: " + this.getMetadata().getTitle() + ";  Artist Mail: " + this.getMetadata().getArtist().getMail() + ".";
         else return super.toString();
     }
 }

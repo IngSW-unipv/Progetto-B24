@@ -1,6 +1,9 @@
 package it.unipv.ingsfw.JavaBeats.model.user;
 
+import it.unipv.ingsfw.JavaBeats.model.playable.JBAudio;
+
 import java.sql.Blob;
+import java.util.ArrayList;
 
 public class Artist extends JBProfile {
 
@@ -9,12 +12,12 @@ public class Artist extends JBProfile {
 
 
 	//CONSTRUCTORS:
-	public Artist(String username, String mail, String password, String name, String surname, String biography, Blob profilePicture, int totalListeners) {
-		super(username, mail, password, name, surname, biography, profilePicture);
+	public Artist(String username, String mail, String password, String name, String surname, String biography, Blob profilePicture, int totalListeners, ArrayList<JBAudio> listeningHistory) {
+		super(username, mail, password, name, surname, biography, profilePicture, listeningHistory);
 		this.totalListeners=totalListeners;
 	}
 	public Artist(String username, String mail, String password) {
-		this(username, mail, password, null, null, null, null, 0);
+		this(username, mail, password, null, null, null, null, 0, null);
 	}
 
 

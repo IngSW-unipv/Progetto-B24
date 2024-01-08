@@ -1,16 +1,20 @@
 package it.unipv.ingsfw.JavaBeats.model.user;
 
+import it.unipv.ingsfw.JavaBeats.model.playable.JBAudio;
+
 import java.sql.Blob;
+import java.util.ArrayList;
 
 public abstract class JBProfile {
 
     //ATTRIBUTES:
     private String   username, mail, password, name, surname, biography;
     private Blob profilePicture;
+    private ArrayList<JBAudio> listeningHistory;
 
 
     //CONSTRUCTORS:
-    public JBProfile(String username, String mail, String password, String name, String surname, String biography, Blob profilePicture) {
+    public JBProfile(String username, String mail, String password, String name, String surname, String biography, Blob profilePicture, ArrayList<JBAudio> listeningHistory) {
         this.username = username;
         this.mail = mail;
         this.password = password;
@@ -18,9 +22,10 @@ public abstract class JBProfile {
         this.surname = surname;
         this.biography = biography;
         this.profilePicture = profilePicture;
+        this.listeningHistory = listeningHistory;
     }
     protected JBProfile(String username, String mail, String password) {
-        this(username, mail, password, null, null, null, null);
+        this(username, mail, password, null, null, null, null, null);
     }
 
 
@@ -46,6 +51,9 @@ public abstract class JBProfile {
     public Blob getProfilePicture() {
         return profilePicture;
     }
+    public ArrayList<JBAudio> getListeningHistory() {
+        return listeningHistory;
+    }
 
 
     //SETTERS:
@@ -70,15 +78,17 @@ public abstract class JBProfile {
     public void setProfilePicture(Blob profilePicture) {
         this.profilePicture = profilePicture;
     }
-
+    public void setListeningHistory(ArrayList<JBAudio> listeningHistory) {
+        this.listeningHistory = listeningHistory;
+    }
 
     //METHODS:
     @Override
     public String toString() {
         if(this instanceof User)
-            return "USER      -  Mail: " + this.getMail() + ";  Username: " + this.getUsername() + ".";
+            return "USER      -  Username: " + this.getUsername() + ";  Mail: " + this.getMail() + ".";
         else if(this instanceof Artist)
-            return "ARTIST    -  Mail: " + this.getMail() + ";  Username: " + this.getUsername() + ".";
+            return "ARTIST    -  Username: " + this.getUsername() + ";  Mail: " + this.getMail() + ".";
         else return super.toString();
     }
 }
