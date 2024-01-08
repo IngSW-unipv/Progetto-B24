@@ -153,34 +153,8 @@ public class CollectionDAO implements ICollectionDAO {
 
 
 
-
-    //PROTECTED METHODS:
-    protected boolean collectionExists(JBCollection collection) {
-        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
-        PreparedStatement st;
-        ResultSet rs;
-        boolean result = false;
-
-        try {
-            String query =  "SELECT id FROM Collection WHERE id=?;";
-
-            st = connection.prepareStatement(query);
-            st.setString(1, collection.getId());
-
-            rs = st.executeQuery();
-
-            result = rs.next();     //result=true if exists at least one instance
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
-
-        return result;
-    }
-
-    protected Playlist getPlaylist(JBCollection collection) {
+    //PRIVATE METHODS:
+    private Playlist getPlaylist(JBCollection collection) {
         connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
         PreparedStatement st;
         ResultSet rs;
@@ -188,7 +162,7 @@ public class CollectionDAO implements ICollectionDAO {
 
         try {
             String query =  "SELECT * FROM Collection A NATURAL JOIN Playlist B NATURAL JOIN" +
-                            "(SELECT idPlaylist AS 'id', profileMail FROM ProfilePlaylists) C WHERE id=?;";
+                    "(SELECT idPlaylist AS 'id', profileMail FROM ProfilePlaylists) C WHERE id=?;";
 
             st = connection.prepareStatement(query);
             st.setString(1, collection.getId());
@@ -197,11 +171,11 @@ public class CollectionDAO implements ICollectionDAO {
 
             if(rs.next()) {
                 result = new Playlist(  rs.getString("id"),
-                                        rs.getString("name"),
-                                        new User(null, rs.getString("profileMail"), null),
-                                        null,
-                                        rs.getBlob("picture"),
-                                        rs.getBoolean("isVisible"));
+                        rs.getString("name"),
+                        new User(null, rs.getString("profileMail"), null),
+                        null,
+                        rs.getBlob("picture"),
+                        rs.getBoolean("isVisible"));
             }
 
         } catch (Exception e) {
@@ -213,7 +187,7 @@ public class CollectionDAO implements ICollectionDAO {
         return result;
     }
 
-    protected Album getAlbum(JBCollection collection) {
+    private Album getAlbum(JBCollection collection) {
         connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
         PreparedStatement st;
         ResultSet rs;
@@ -221,7 +195,7 @@ public class CollectionDAO implements ICollectionDAO {
 
         try {
             String query =  "SELECT * FROM Collection A NATURAL JOIN Album B NATURAL JOIN" +
-                            "(SELECT idAlbum AS 'id', artistMail FROM ArtistAlbums) C WHERE id=?;";
+                    "(SELECT idAlbum AS 'id', artistMail FROM ArtistAlbums) C WHERE id=?;";
 
             st = connection.prepareStatement(query);
             st.setString(1, collection.getId());
@@ -230,10 +204,10 @@ public class CollectionDAO implements ICollectionDAO {
 
             if(rs.next()) {
                 result = new Album( rs.getString("id"),
-                                    rs.getString("name"),
-                                    new Artist(null, rs.getString("artistMail"), null),
-                                    null,
-                                    rs.getBlob("picture"));
+                        rs.getString("name"),
+                        new Artist(null, rs.getString("artistMail"), null),
+                        null,
+                        rs.getBlob("picture"));
             }
 
         } catch (Exception e) {
@@ -245,7 +219,7 @@ public class CollectionDAO implements ICollectionDAO {
         return result;
     }
 
-    protected Podcast getPodcast(JBCollection collection) {
+    private Podcast getPodcast(JBCollection collection) {
         connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
         PreparedStatement st;
         ResultSet rs;
@@ -253,7 +227,7 @@ public class CollectionDAO implements ICollectionDAO {
 
         try {
             String query =  "SELECT * FROM Collection A NATURAL JOIN Podcast B NATURAL JOIN" +
-                            "(SELECT idPodcast AS 'id', artistMail FROM ArtistPodcasts) C WHERE id=?;";
+                    "(SELECT idPodcast AS 'id', artistMail FROM ArtistPodcasts) C WHERE id=?;";
 
             st = connection.prepareStatement(query);
             st.setString(1, collection.getId());
@@ -277,9 +251,6 @@ public class CollectionDAO implements ICollectionDAO {
         return result;
     }
 
-
-
-    //PRIVATE METHODS:
     private void updateName(JBCollection collection) {
         connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
 
@@ -452,7 +423,7 @@ public class CollectionDAO implements ICollectionDAO {
     private void linkPlaylistToProfile(Playlist playlist) {
         ProfileDAO pDAO = new ProfileDAO();
 
-        if (!pDAO.profileExists(playlist.getCreator()))      //if artist not present in DB
+        if (pDAO.get(playlist.getCreator()) == null)        //if artist not present in DB
             pDAO.insert(playlist.getCreator());             //insert new artist
 
         connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
@@ -475,7 +446,7 @@ public class CollectionDAO implements ICollectionDAO {
     private void linkAlbumToArtist(Album album) {
         ProfileDAO pDAO = new ProfileDAO();
 
-        if(!pDAO.profileExists(album.getCreator()))     //if artist not present in DB
+        if(pDAO.get(album.getCreator()) == null)        //if artist not present in DB
             pDAO.insert(album.getCreator());            //insert new artist
 
         connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
@@ -498,7 +469,7 @@ public class CollectionDAO implements ICollectionDAO {
     private void linkPodcastToArtist(Podcast podcast) {
         ProfileDAO pDAO = new ProfileDAO();
 
-        if (!pDAO.profileExists(podcast.getCreator()))       //if artist not present in DB
+        if (pDAO.get(podcast.getCreator()) == null)         //if artist not present in DB
             pDAO.insert(podcast.getCreator());              //insert new artist
 
         connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
@@ -549,7 +520,7 @@ public class CollectionDAO implements ICollectionDAO {
 
         while(trackListIT.hasNext()) {
             JBAudio track = trackListIT.next();
-            if (!aDAO.audioExists(track))       //if audio not present in DB
+            if (aDAO.get(track) == null)        //if audio not present in DB
                 aDAO.insert(track);             //insert new audio
         }
 
@@ -583,7 +554,7 @@ public class CollectionDAO implements ICollectionDAO {
 
         while(trackListIT.hasNext()) {
             Song track = trackListIT.next();
-            if (!(aDAO.audioExists(track)))     //if song not present in DB
+            if (aDAO.get(track) == null)        //if song not present in DB
                 aDAO.insert(track);             //insert new song
         }
 
@@ -617,7 +588,7 @@ public class CollectionDAO implements ICollectionDAO {
 
         while(trackListIT.hasNext()) {
             Episode track = trackListIT.next();
-            if (!aDAO.audioExists(track))       //if episode not present in DB
+            if (aDAO.get(track) == null)        //if episode not present in DB
                 aDAO.insert(track);             //insert new episode
         }
 

@@ -3,6 +3,7 @@ package it.unipv.ingsfw.JavaBeats.dao;
 import it.unipv.ingsfw.JavaBeats.controller.factory.DBManagerFactory;
 import it.unipv.ingsfw.JavaBeats.model.playable.*;
 import it.unipv.ingsfw.JavaBeats.model.user.Artist;
+import it.unipv.ingsfw.JavaBeats.model.user.JBProfile;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -60,12 +61,65 @@ public class AudioDAO implements IAudioDAO {
     }
 
     @Override
-    public JBAudio get(JBAudio audio) {
-        JBAudio audioOut = getSong(audio);
+    public void updateIsFavorite(JBAudio audio, JBProfile activeProfile) {
+        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+        PreparedStatement st;
+
+        try {
+            if(audio.isFavorite()) {
+                String query = "INSERT INTO Favorites(profileMail, idAudio) VALUES(?, ?);";
+                st = connection.prepareStatement(query);
+                st.setString(1, activeProfile.getMail());
+                st.setString(2, audio.getId());
+                st.executeUpdate();
+            }
+            else {
+                String query = "REMOVE FROM Favorites WHERE (profileMail=? AND idAudio=?);";
+                st = connection.prepareStatement(query);
+                st.setString(1, activeProfile.getMail());
+                st.setString(2, audio.getId());
+                st.executeUpdate();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+    }
+
+    @Override
+    public JBAudio get(JBAudio audio, JBProfile activeProfile) {
+        JBAudio audioOut = getSong(audio, activeProfile);
         if(audioOut==null)
-            audioOut=getEpisode(audio);
+            audioOut=getEpisode(audio, activeProfile);
 
         return audioOut;
+    }
+
+    @Override
+    public JBAudio get(JBAudio audio) {
+        return get(audio, null);
+    }
+
+    @Override
+    public void addToListeningHistory(JBAudio audio, JBProfile profile) {
+        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+        PreparedStatement st;
+        ResultSet rs;
+
+        try {
+            String query = "INSERT INTO ListeningHistory(profileMail, idAudio) VALUE(?, ?);";
+            st = connection.prepareStatement(query);
+            st.setString(1, profile.getMail());
+            st.setString(2, audio.getId());
+            st.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
     }
 
     @Override
@@ -84,11 +138,11 @@ public class AudioDAO implements IAudioDAO {
             rs = st.executeQuery();
 
             while(rs.next()) {
-                if(getSong(new Song(rs.getString("idAudio"), null, null, null)) != null) {                  //if audio is in Song table
+                if(get(new Song(rs.getString("idAudio"), null, null, null)) != null) {              //if audio is in Song table
                     result.add(new Song(rs.getString("idAudio"), null, null, null));
                 }
-                else if((getEpisode(new Episode(rs.getString("idAudio"), null, null, null)) != null)) {     //if audio is in Episode table
-                    result.add(new Song(rs.getString("idAudio"), null, null, null));
+                else if((get(new Episode(rs.getString("idAudio"), null, null, null)) != null)) {    //if audio is in Episode table
+                    result.add(new Episode(rs.getString("idAudio"), null, null, null));
                 }
             }
 
@@ -117,7 +171,7 @@ public class AudioDAO implements IAudioDAO {
             rs = st.executeQuery();
 
             while (rs.next()) {
-                result.add(getSong(new Song(rs.getString("idSong"), null, null, null)));
+                result.add( (Song) get(new Song(rs.getString("idSong"), null, null, null) ) );
             }
 
         } catch (Exception e) {
@@ -145,7 +199,7 @@ public class AudioDAO implements IAudioDAO {
             rs = st.executeQuery();
 
             while (rs.next()) {
-                result.add(getEpisode(new Episode(rs.getString("idEpisode"), null, null, null)));
+                result.add( (Episode) get(new Episode(rs.getString("idEpisode"), null, null, null) ) );
             }
 
         } catch (Exception e) {
@@ -159,42 +213,17 @@ public class AudioDAO implements IAudioDAO {
 
 
 
-    //PROTECTED METHODS:
-    protected boolean audioExists(JBAudio audio) {
-        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
-        PreparedStatement st;
-        ResultSet rs;
-        boolean result = false;
-
-        try {
-            String query = "SELECT id FROM Audio WHERE id=?;";
-
-            st = connection.prepareStatement(query);
-            st.setString(1, audio.getId());
-
-            rs = st.executeQuery();
-
-            result = rs.next();     //result=true if exists at least one instance
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
-
-        return result;
-    }
-
-    protected Song getSong(JBAudio audio) {
+    //PRIVATE METHODS:
+    private Song getSong(JBAudio audio, JBProfile activeProfile) {
         connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
         PreparedStatement st;
         ResultSet rs;
         Song result = null;
 
         try {
-            String query =  "SELECT * FROM (SELECT id as 'idSong', isFavorite, duration, title, releaseDate, audioFile FROM Audio) A " +
-                            "NATURAL JOIN (SELECT idAudio as 'idSong', artistMail FROM ArtistAudios) B " +
-                            "NATURAL JOIN AlbumSongs WHERE idSong=?;";
+            String query =  "SELECT * FROM (SELECT id as 'idSong', duration, title, releaseDate, audioFile FROM Audio) A " +
+                    "NATURAL JOIN (SELECT idAudio as 'idSong', artistMail FROM ArtistAudios) B " +
+                    "NATURAL JOIN AlbumSongs WHERE idSong=?;";
 
             st = connection.prepareStatement(query);
             st.setString(1, audio.getId());
@@ -203,14 +232,14 @@ public class AudioDAO implements IAudioDAO {
 
             if(rs.next()) {
                 result = new Song(  rs.getString("idSong"),
-                                    rs.getString("title"),
-                                    new Artist(null, rs.getString("artistMail"), null),
-                                    new Album(rs.getString("idAlbum"), null, null, null),
-                                    rs.getBlob("audioFile"),
-                                    rs.getTime("duration"),
-                                    rs.getDate("releaseDate"),
-                                    null,
-                                    rs.getBoolean("isFavorite"));
+                        rs.getString("title"),
+                        new Artist(null, rs.getString("artistMail"), null),
+                        new Album(rs.getString("idAlbum"), null, null, null),
+                        rs.getBlob("audioFile"),
+                        rs.getTime("duration"),
+                        rs.getDate("releaseDate"),
+                        null,
+                        false);
             }
 
         } catch (Exception e) {
@@ -219,19 +248,23 @@ public class AudioDAO implements IAudioDAO {
 
         DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
 
-        if(result != null) result.getMetadata().setGenres(getGenres(result));      //set Genres in metadata
+        if(result != null) {
+            result.getMetadata().setGenres(getGenres(result));      //set Genres in metadata
+            result.setNumberOfStreams(getNumberOfStreams(result));  //set total number of streams
+            if(activeProfile!=null) result.setFavorite(isFavorite(result, activeProfile));
+        }
 
         return result;
     }
 
-    protected Episode getEpisode(JBAudio audio) {
+    private Episode getEpisode(JBAudio audio, JBProfile activeProfile) {
         connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
         PreparedStatement st;
         ResultSet rs;
         Episode result = null;
 
         try {
-            String query =  "SELECT * FROM (SELECT id as 'idEpisode', isFavorite, duration, title, releaseDate, audioFile FROM Audio) A " +
+            String query =  "SELECT * FROM (SELECT id as 'idEpisode', duration, title, releaseDate, audioFile FROM Audio) A " +
                     "NATURAL JOIN (SELECT idAudio as 'idEpisode', artistMail FROM ArtistAudios) B " +
                     "NATURAL JOIN PodcastEpisodes WHERE idEpisode=?;";
 
@@ -242,14 +275,14 @@ public class AudioDAO implements IAudioDAO {
 
             if(rs.next()) {
                 result = new Episode(   rs.getString("idEpisode"),
-                                        rs.getString("title"),
-                                        new Artist(null, rs.getString("artistMail"), null),
-                                        new Podcast(rs.getString("idPodcast"), null, null, null),
-                                        rs.getBlob("audioFile"),
-                                        rs.getTime("duration"),
-                                        rs.getDate("releaseDate"),
-                                        null,
-                                        rs.getBoolean("isFavorite"));
+                        rs.getString("title"),
+                        new Artist(null, rs.getString("artistMail"), null),
+                        new Podcast(rs.getString("idPodcast"), null, null, null),
+                        rs.getBlob("audioFile"),
+                        rs.getTime("duration"),
+                        rs.getDate("releaseDate"),
+                        null,
+                        rs.getBoolean("isFavorite"));
             }
 
         } catch (Exception e) {
@@ -258,14 +291,16 @@ public class AudioDAO implements IAudioDAO {
 
         DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
 
-        if(result != null) result.getMetadata().setGenres(getGenres(result));      //set Genres in metadata
+        if(result != null) {
+            result.getMetadata().setGenres(getGenres(result));      //set Genres in metadata
+            if(activeProfile!=null) result.setFavorite(isFavorite(result, activeProfile));
+        }
 
         return result;
     }
 
-    protected String[] getGenres(JBAudio audio) {
+    private String[] getGenres(JBAudio audio) {
         connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
-
         PreparedStatement st;
         ResultSet rs;
         ArrayList<String> result = new ArrayList<>();
@@ -298,18 +333,65 @@ public class AudioDAO implements IAudioDAO {
         return arrayOut;
     }
 
+    private int getNumberOfStreams(JBAudio audio) {
+        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+        PreparedStatement st;
+        ResultSet rs;
+        int result = 0;
 
+        try {
+            String query = "SELECT count(idAudio) as 'total' FROM ListeningHistory WHERE idAudio=?;";
 
+            st = connection.prepareStatement(query);
+            st.setString(1, audio.getId());
 
-    //PRIVATE METHODS:
+            rs = st.executeQuery();
+
+            if(rs.next())
+                result = rs.getInt("total");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+
+        return result;
+    }
+
+    private boolean isFavorite(JBAudio audio, JBProfile activeProfile) {
+        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+        PreparedStatement st;
+        ResultSet rs;
+        boolean result = false;
+
+        try {
+            String query = "SELECT idAudio FROM Favorites WHERE profileMail=?;";
+
+            st = connection.prepareStatement(query);
+            st.setString(1, activeProfile.getMail());
+
+            rs = st.executeQuery();
+
+            result = rs.next();     //result=true if exists at least one instance
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+
+        return result;
+    }
+
     private void insertAudio(JBAudio audio) {
         //insert audio to Audio table
         connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
         PreparedStatement st1, st2, st3;
 
         try {
-            String q1 = "INSERT INTO Audio(id, title, duration, releaseDate, audioFile, isFavorite)" +
-                    "VALUES(?, ?, ?, ?, ?, ?);";
+            String q1 = "INSERT INTO Audio(id, title, duration, releaseDate, audioFile)" +
+                    "VALUES(?, ?, ?, ?, ?);";
 
             st1 = connection.prepareStatement(q1);
             st1.setString(1, audio.getId());
@@ -317,7 +399,6 @@ public class AudioDAO implements IAudioDAO {
             st1.setTime(3, audio.getMetadata().getDuration());
             st1.setDate(4, audio.getMetadata().getReleaseDate());
             st1.setBlob(5, audio.getAudioFileBlob());
-            st1.setBoolean(6, audio.isFavorite());
 
             st1.executeUpdate();
 
@@ -349,10 +430,10 @@ public class AudioDAO implements IAudioDAO {
     }
 
     private void linkAudioToArtist(JBAudio audio) {
-        //link inserted audio to artist:
+
         ProfileDAO pDAO = new ProfileDAO();
 
-        if(!pDAO.profileExists(audio.getMetadata().getArtist()))    //if artist not present in DB
+        if(pDAO.get(audio.getMetadata().getArtist()) == null)    //if artist not present in DB
             pDAO.insert(audio.getMetadata().getArtist());           //insert new artist
 
         connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
@@ -380,8 +461,8 @@ public class AudioDAO implements IAudioDAO {
 
             CollectionDAO cDAO = new CollectionDAO();
 
-            if (!cDAO.collectionExists(audio.getMetadata().getCollection()))    //if the collection is not present in the DB
-                cDAO.insert(audio.getMetadata().getCollection());               //insert new collection in DB
+            if (cDAO.get(audio.getMetadata().getCollection()) == null)      //if the collection is not present in the DB
+                cDAO.insert(audio.getMetadata().getCollection());           //insert new collection in DB
 
             if (audio instanceof Song) {                 //audio is a song --> link song to an Album
 
@@ -467,8 +548,6 @@ public class AudioDAO implements IAudioDAO {
 
             DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
         }
-
     }
-
 
 }

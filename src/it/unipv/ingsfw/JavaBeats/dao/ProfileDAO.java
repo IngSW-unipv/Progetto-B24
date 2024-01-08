@@ -1,6 +1,9 @@
 package it.unipv.ingsfw.JavaBeats.dao;
 
 import it.unipv.ingsfw.JavaBeats.controller.factory.DBManagerFactory;
+import it.unipv.ingsfw.JavaBeats.model.playable.Episode;
+import it.unipv.ingsfw.JavaBeats.model.playable.JBAudio;
+import it.unipv.ingsfw.JavaBeats.model.playable.Song;
 import it.unipv.ingsfw.JavaBeats.model.user.Artist;
 import it.unipv.ingsfw.JavaBeats.model.user.JBProfile;
 import it.unipv.ingsfw.JavaBeats.model.user.User;
@@ -8,6 +11,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Time;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class ProfileDAO implements IProfileDAO {
 
@@ -118,7 +123,7 @@ public class ProfileDAO implements IProfileDAO {
             if (!(profile.getProfilePicture().equals(oldProfile.getProfilePicture())))
                 updateProfilePicture(profile);
 
-        if ((profile instanceof User) && oldProfile instanceof User) {       //check if profile is a USER
+        if ((profile instanceof User)) {                                    //if profile is a USER
             User userProfile = (User) profile;
             User oldUserProfile = (User) oldProfile;
 
@@ -126,12 +131,8 @@ public class ProfileDAO implements IProfileDAO {
                 updateVisibility(userProfile);
 
         }
-        else if (profile instanceof Artist) {                             //check if profile is an ARTIST
-            Artist artistProfile = (Artist) profile;
-            Artist oldArtistProfile = (Artist) oldProfile;
-
-            if (artistProfile.getTotalListeners() != oldArtistProfile.getTotalListeners())
-                updateTotalListeners(artistProfile);
+        else if (profile instanceof Artist) {                               //if profile is an ARTIST
+            //do nothing
         }
         else {
             try {
@@ -154,34 +155,8 @@ public class ProfileDAO implements IProfileDAO {
 
 
 
-
-    //PROTECTED METHODS:
-    protected boolean profileExists(JBProfile profile) {
-        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
-        PreparedStatement st;
-        ResultSet rs;
-        boolean result = false;
-
-        try {
-            String query =  "SELECT mail FROM Profile WHERE mail=?;";
-
-            st = connection.prepareStatement(query);
-            st.setString(1, profile.getMail());
-
-            rs = st.executeQuery();
-
-            result = rs.next();     //result=true if exists at least one instance
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
-
-        return result;
-    }
-
-    protected Artist getArtist(JBProfile profile) {
+    //PRIVATE METHODS:
+    private Artist getArtist(JBProfile profile) {
         connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
         PreparedStatement st;
         ResultSet rs;
@@ -203,19 +178,25 @@ public class ProfileDAO implements IProfileDAO {
                         rs.getString("surname"),
                         rs.getString("biography"),
                         rs.getBlob("profilePicture"),
-                        rs.getInt("totalListeners"));
+                        0,
+                        null);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        if(result != null) DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+
+        if(result!=null) {
+            result.setTotalListeners(getTotalListeners(result));        //set total listeners
+            result.setListeningHistory(getListeningHistory(result));    //set listening history
+        }
 
         return result;
     }
 
-    protected User getUser(JBProfile profile) {
+    private User getUser(JBProfile profile) {
         connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
         PreparedStatement st;
         ResultSet rs;
@@ -238,6 +219,7 @@ public class ProfileDAO implements IProfileDAO {
                         rs.getString("biography"),
                         rs.getBlob("profilePicture"),
                         rs.getBoolean("isVisible"),
+                        null,
                         null);
             }
 
@@ -247,22 +229,23 @@ public class ProfileDAO implements IProfileDAO {
 
         DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
 
-        if(result != null) result.setMinuteListened(getMinuteListened(result));        //set minute listened
+        if(result != null) {
+            result.setMinuteListened(getTotalListeningTime(result));        //set minute listened
+            result.setListeningHistory(getListeningHistory(result));    //set listening history
+        }
 
         return result;
     }
 
-
-
-    //PRIVATE METHODS:
-    private Time getMinuteListened(User user) {
+    private Time getTotalListeningTime(User user) {
         connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
         PreparedStatement st;
         ResultSet rs;
         Time result = null;
 
         try {
-            String query = "SELECT (SUM(TIMEDIFF(minuteListened, '00:00:00'))) as 'minuteListened' FROM UserListenedAudios WHERE user_Mail=?;";   //query template
+            String query =  "SELECT (SUM(TIMEDIFF(duration, '00:00:00'))) as 'total' FROM ListeningHistory A " +
+                            "NATURAL JOIN (SELECT id as 'idAudio', duration FROM Audio) B WHERE profileMail=?;";
 
             st = connection.prepareStatement(query);
             st.setString(1, user.getMail());
@@ -270,13 +253,79 @@ public class ProfileDAO implements IProfileDAO {
             rs = st.executeQuery();
 
             rs.next();
-            result = rs.getTime("minuteListened");
+            result = rs.getTime("total");
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+
+        return result;
+    }
+
+    private int getTotalListeners(Artist artist) {
+        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+        PreparedStatement st;
+        ResultSet rs;
+        int result = 0;
+
+        try {
+            String query = "SELECT count(idAudio) as 'total' FROM ListeningHistory NATURAL JOIN ArtistAudios WHERE artistMail=?;";
+
+            st = connection.prepareStatement(query);
+            st.setString(1, artist.getMail());
+
+            rs = st.executeQuery();
+
+            if(rs.next())
+                result = rs.getInt("total");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+
+        return result;
+    }
+
+    private ArrayList<JBAudio> getListeningHistory (JBProfile profile) {
+        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+        PreparedStatement st;
+        ResultSet rs;
+        ArrayList<String> audioIDs = null;
+        ArrayList<JBAudio> result = new ArrayList<>();
+
+        try {
+            String query = "SELECT idAudio FROM ListeningHistory WHERE profileMail=? ORDER BY listeningDate DESC LIMIT 25;";
+
+            st = connection.prepareStatement(query);
+            st.setString(1, profile.getMail());
+
+            rs = st.executeQuery();
+
+            while(rs.next())
+                audioIDs.add(rs.getString("idAudio"));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+
+        if(audioIDs != null) {
+            AudioDAO aDAO = new AudioDAO();
+            Iterator<String> audioIDsIT = audioIDs.iterator();
+            while (audioIDsIT.hasNext()) {
+                String track = audioIDsIT.next();
+                if (aDAO.get(new Song(track, null, null, null)) != null) {                  //if audio is in Song table
+                    result.add(aDAO.get(new Song(track, null, null, null)));
+                } else if ((aDAO.get(new Episode(track, null, null, null)) != null)) {      //if audio is in Episode table
+                    result.add(aDAO.get(new Episode(track, null, null, null)));
+                }
+            }
+        }
 
         return result;
     }
@@ -406,25 +455,6 @@ public class ProfileDAO implements IProfileDAO {
             st7.setString(2, user.getMail());
 
             st7.executeUpdate();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
-    }
-
-    private void updateTotalListeners(Artist artist) {
-        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
-
-        try {
-            String q8 = "UPDATE Artist SET totalListeners=? WHERE mail=?;";
-
-            PreparedStatement st8 = connection.prepareStatement(q8);
-            st8.setInt(1, artist.getTotalListeners());
-            st8.setString(2, artist.getMail());
-
-            st8.executeUpdate();
 
         } catch (Exception e) {
             e.printStackTrace();
