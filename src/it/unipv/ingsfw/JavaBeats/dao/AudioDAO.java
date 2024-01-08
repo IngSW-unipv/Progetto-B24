@@ -2,6 +2,7 @@ package it.unipv.ingsfw.JavaBeats.dao;
 
 import it.unipv.ingsfw.JavaBeats.controller.factory.DBManagerFactory;
 import it.unipv.ingsfw.JavaBeats.model.playable.*;
+import it.unipv.ingsfw.JavaBeats.model.user.Artist;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -60,7 +61,11 @@ public class AudioDAO implements IAudioDAO {
 
     @Override
     public JBAudio get(JBAudio audio) {
-        return getAudioByID(audio.getId());
+        JBAudio audioOut = getSong(audio);
+        if(audioOut==null)
+            audioOut=getEpisode(audio);
+
+        return audioOut;
     }
 
     @Override
@@ -79,7 +84,12 @@ public class AudioDAO implements IAudioDAO {
             rs = st.executeQuery();
 
             while(rs.next()) {
-                result.add(getAudioByID(rs.getString("idAudio")));
+                if(getSong(new Song(rs.getString("idAudio"), null, null, null)) != null) {                  //if audio is in Song table
+                    result.add(new Song(rs.getString("idAudio"), null, null, null));
+                }
+                else if((getEpisode(new Episode(rs.getString("idAudio"), null, null, null)) != null)) {     //if audio is in Episode table
+                    result.add(new Song(rs.getString("idAudio"), null, null, null));
+                }
             }
 
         } catch (Exception e) {
@@ -107,7 +117,7 @@ public class AudioDAO implements IAudioDAO {
             rs = st.executeQuery();
 
             while (rs.next()) {
-                result.add(getSongByID(rs.getString("idSong")));
+                result.add(getSong(new Song(rs.getString("idSong"), null, null, null)));
             }
 
         } catch (Exception e) {
@@ -135,7 +145,7 @@ public class AudioDAO implements IAudioDAO {
             rs = st.executeQuery();
 
             while (rs.next()) {
-                result.add(getEpisodeByID(rs.getString("idEpisode")));
+                result.add(getEpisode(new Episode(rs.getString("idEpisode"), null, null, null)));
             }
 
         } catch (Exception e) {
@@ -175,22 +185,11 @@ public class AudioDAO implements IAudioDAO {
         return result;
     }
 
-    protected JBAudio getAudioByID(String id) {
-
-        JBAudio audioOut = getSongByID(id);
-        if(audioOut==null)
-            audioOut=getEpisodeByID(id);
-
-        return audioOut;
-    }
-
-    protected Song getSongByID(String id) {
+    protected Song getSong(JBAudio audio) {
         connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
         PreparedStatement st;
         ResultSet rs;
         Song result = null;
-        ProfileDAO pDAO = new ProfileDAO();
-        CollectionDAO cDAO = new CollectionDAO();
 
         try {
             String query =  "SELECT * FROM (SELECT id as 'idSong', isFavorite, duration, title, releaseDate, audioFile FROM Audio) A " +
@@ -198,20 +197,20 @@ public class AudioDAO implements IAudioDAO {
                             "NATURAL JOIN AlbumSongs WHERE idSong=?;";
 
             st = connection.prepareStatement(query);
-            st.setString(1, id);
+            st.setString(1, audio.getId());
 
             rs = st.executeQuery();
 
             if(rs.next()) {
-                result = new Song(rs.getString("idSong"),
-                        rs.getString("title"),
-                        pDAO.getArtistByMail(rs.getString("artistMail")),
-                        cDAO.getAlbumByID(rs.getString("idAlbum")),
-                        rs.getBlob("audioFile"),
-                        rs.getTime("duration"),
-                        rs.getDate("releaseDate"),
-                        getGenresByAudioID(rs.getString("idSong")),
-                        rs.getBoolean("isFavorite"));
+                result = new Song(  rs.getString("idSong"),
+                                    rs.getString("title"),
+                                    new Artist(null, rs.getString("artistMail"), null),
+                                    new Album(rs.getString("idAlbum"), null, null, null),
+                                    rs.getBlob("audioFile"),
+                                    rs.getTime("duration"),
+                                    rs.getDate("releaseDate"),
+                                    null,
+                                    rs.getBoolean("isFavorite"));
             }
 
         } catch (Exception e) {
@@ -220,16 +219,16 @@ public class AudioDAO implements IAudioDAO {
 
         DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
 
+        if(result != null) result.getMetadata().setGenres(getGenres(result));      //set Genres in metadata
+
         return result;
     }
 
-    protected Episode getEpisodeByID(String id) {
+    protected Episode getEpisode(JBAudio audio) {
         connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
         PreparedStatement st;
         ResultSet rs;
         Episode result = null;
-        ProfileDAO pDAO = new ProfileDAO();
-        CollectionDAO cDAO = new CollectionDAO();
 
         try {
             String query =  "SELECT * FROM (SELECT id as 'idEpisode', isFavorite, duration, title, releaseDate, audioFile FROM Audio) A " +
@@ -237,20 +236,20 @@ public class AudioDAO implements IAudioDAO {
                     "NATURAL JOIN PodcastEpisodes WHERE idEpisode=?;";
 
             st = connection.prepareStatement(query);
-            st.setString(1, id);
+            st.setString(1, audio.getId());
 
             rs = st.executeQuery();
 
             if(rs.next()) {
-                result = new Episode(rs.getString("idEpisode"),
-                        rs.getString("title"),
-                        pDAO.getArtistByMail(rs.getString("artistMail")),
-                        cDAO.getPodcastByID(rs.getString("idPodcast")),
-                        rs.getBlob("audioFile"),
-                        rs.getTime("duration"),
-                        rs.getDate("releaseDate"),
-                        getGenresByAudioID(rs.getString("idEpisode")),
-                        rs.getBoolean("isFavorite"));
+                result = new Episode(   rs.getString("idEpisode"),
+                                        rs.getString("title"),
+                                        new Artist(null, rs.getString("artistMail"), null),
+                                        new Podcast(rs.getString("idPodcast"), null, null, null),
+                                        rs.getBlob("audioFile"),
+                                        rs.getTime("duration"),
+                                        rs.getDate("releaseDate"),
+                                        null,
+                                        rs.getBoolean("isFavorite"));
             }
 
         } catch (Exception e) {
@@ -259,11 +258,13 @@ public class AudioDAO implements IAudioDAO {
 
         DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
 
+        if(result != null) result.getMetadata().setGenres(getGenres(result));      //set Genres in metadata
+
         return result;
     }
 
-    protected String[] getGenresByAudioID(String idAudio) {
-        //TO CALL ONLY WHEN ALREADY CONNECTED   -   This method does not open or close the connection to the DB
+    protected String[] getGenres(JBAudio audio) {
+        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
 
         PreparedStatement st;
         ResultSet rs;
@@ -273,7 +274,7 @@ public class AudioDAO implements IAudioDAO {
             String query = "SELECT genre FROM AudioGenres WHERE idAudio=?;";
 
             st = connection.prepareStatement(query);
-            st.setString(1, idAudio);
+            st.setString(1, audio.getId());
 
             rs = st.executeQuery();
 
@@ -286,8 +287,13 @@ public class AudioDAO implements IAudioDAO {
             e.printStackTrace();
         }
 
-        String[] arrayOut = new String[result.size()];      //converting arrayList to Array
-        arrayOut = result.toArray(arrayOut);
+        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+
+        String[] arrayOut = null;
+        if(result != null) {
+            arrayOut = new String[result.size()];      //converting arrayList to Array
+            arrayOut = result.toArray(arrayOut);
+        }
 
         return arrayOut;
     }

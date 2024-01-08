@@ -145,7 +145,11 @@ public class ProfileDAO implements IProfileDAO {
 
     @Override
     public JBProfile get(JBProfile profile) {            //retrieve profile from database
-        return getProfileByMail(profile.getMail());
+
+        JBProfile profileOut = getUser(profile);                 //check if profile is in User table
+        if(profileOut==null) profileOut = getArtist(profile);    //check if profile is in Artist table
+
+        return profileOut;
     }
 
 
@@ -177,15 +181,7 @@ public class ProfileDAO implements IProfileDAO {
         return result;
     }
 
-    protected JBProfile getProfileByMail(String mail) {
-
-        JBProfile profileOut = getUserByMail(mail);                 //check if profile is in User table
-        if(profileOut==null) profileOut = getArtistByMail(mail);    //check if profile is in Artist table
-
-        return profileOut;
-    }
-
-    protected Artist getArtistByMail(String mail) {
+    protected Artist getArtist(JBProfile profile) {
         connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
         PreparedStatement st;
         ResultSet rs;
@@ -195,7 +191,7 @@ public class ProfileDAO implements IProfileDAO {
             String query = "SELECT * FROM Profile NATURAL JOIN Artist WHERE mail=?;";
 
             st = connection.prepareStatement(query);
-            st.setString(1, mail);
+            st.setString(1, profile.getMail());
 
             rs = st.executeQuery();
 
@@ -214,12 +210,12 @@ public class ProfileDAO implements IProfileDAO {
             e.printStackTrace();
         }
 
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+        if(result != null) DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
 
         return result;
     }
 
-    protected User getUserByMail(String mail) {
+    protected User getUser(JBProfile profile) {
         connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
         PreparedStatement st;
         ResultSet rs;
@@ -229,7 +225,7 @@ public class ProfileDAO implements IProfileDAO {
             String query = "SELECT * FROM Profile NATURAL JOIN User WHERE mail=?;";
 
             st = connection.prepareStatement(query);
-            st.setString(1, mail);
+            st.setString(1, profile.getMail());
 
             rs = st.executeQuery();
 
@@ -242,7 +238,7 @@ public class ProfileDAO implements IProfileDAO {
                         rs.getString("biography"),
                         rs.getBlob("profilePicture"),
                         rs.getBoolean("isVisible"),
-                        getMinuteListenedByUserMail(rs.getString("mail")));
+                        null);
             }
 
         } catch (Exception e) {
@@ -251,15 +247,16 @@ public class ProfileDAO implements IProfileDAO {
 
         DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
 
+        if(result != null) result.setMinuteListened(getMinuteListened(result));        //set minute listened
+
         return result;
     }
 
 
 
     //PRIVATE METHODS:
-    private Time getMinuteListenedByUserMail(String userMail) {
-        //TO CALL ONLY WHEN ALREADY CONNECTED   -   This method does not open or close the connection to the DB
-
+    private Time getMinuteListened(User user) {
+        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
         PreparedStatement st;
         ResultSet rs;
         Time result = null;
@@ -268,7 +265,7 @@ public class ProfileDAO implements IProfileDAO {
             String query = "SELECT (SUM(TIMEDIFF(minuteListened, '00:00:00'))) as 'minuteListened' FROM UserListenedAudios WHERE user_Mail=?;";   //query template
 
             st = connection.prepareStatement(query);
-            st.setString(1, userMail);
+            st.setString(1, user.getMail());
 
             rs = st.executeQuery();
 
@@ -278,6 +275,8 @@ public class ProfileDAO implements IProfileDAO {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
 
         return result;
     }
