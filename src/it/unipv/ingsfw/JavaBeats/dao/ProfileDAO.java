@@ -59,7 +59,7 @@ public class ProfileDAO implements IProfileDAO {
 
             }
             else if (profile instanceof Artist) {     //if JBProfile is an Artist insert it to Artist table
-                String q3=  "INSERT INTO Artist(mail, totalListeners) VALUES(?, 0);";
+                String q3=  "INSERT INTO Artist(mail) VALUES(?);";
                 st3= connection.prepareStatement(q3);
                 st3.setString(1, profile.getMail());
                 st3.executeUpdate();

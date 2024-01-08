@@ -239,7 +239,8 @@ public class AudioDAO implements IAudioDAO {
                         rs.getTime("duration"),
                         rs.getDate("releaseDate"),
                         null,
-                        false);
+                        false,
+                        0);
             }
 
         } catch (Exception e) {
@@ -250,6 +251,7 @@ public class AudioDAO implements IAudioDAO {
 
         if(result != null) {
             result.getMetadata().setGenres(getGenres(result));      //set Genres in metadata
+            result.setFavorite(isFavorite(result, activeProfile));  //set isFavorite
             result.setNumberOfStreams(getNumberOfStreams(result));  //set total number of streams
             if(activeProfile!=null) result.setFavorite(isFavorite(result, activeProfile));
         }
@@ -282,7 +284,8 @@ public class AudioDAO implements IAudioDAO {
                         rs.getTime("duration"),
                         rs.getDate("releaseDate"),
                         null,
-                        rs.getBoolean("isFavorite"));
+                        false,
+                        0);
             }
 
         } catch (Exception e) {
@@ -292,8 +295,10 @@ public class AudioDAO implements IAudioDAO {
         DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
 
         if(result != null) {
-            result.getMetadata().setGenres(getGenres(result));      //set Genres in metadata
-            if(activeProfile!=null) result.setFavorite(isFavorite(result, activeProfile));
+            result.getMetadata().setGenres(getGenres(result));
+            result.setFavorite(isFavorite(result, activeProfile));
+            result.setNumberOfStreams(getNumberOfStreams(result));
+            if(activeProfile!=null) result.setFavorite(isFavorite(result, activeProfile));  //THROWS EXCEPTIONS IF ACTIVE PROFILE IS NULL
         }
 
         return result;
