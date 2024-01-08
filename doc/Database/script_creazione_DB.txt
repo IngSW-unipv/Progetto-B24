@@ -1,0 +1,162 @@
+create table Audio (
+    id         		varchar(20)                          	not null 		primary key,
+    duration    	time                                 	not null,
+    title       	varchar(50)                          	not null,
+    releaseDate 	datetime   default CURRENT_TIMESTAMP 	not null,
+    audioFile		blob							 		not null
+);
+
+create table Collection (
+	id        		varchar(20)          					not null		primary key,
+	name 	  		varchar(100)		   					not null,
+	picture   		blob                 					null
+);
+
+create table Album (
+    id 				varchar(20) 							not null,
+    constraint idAlbum___fk
+        foreign key (id) references Collection(id) on update cascade on delete cascade
+);
+
+create table Episode (
+    id 				varchar(20) 							not null,
+    constraint idEpisode___fk
+        foreign key (id) references Audio(id) on update cascade on delete cascade
+);
+
+create table Genre (
+    genre 			varchar(50) 							not null 		primary key
+);
+
+create table AudioGenres (
+    idAudio 		varchar(20) 							not null,
+    genre 			varchar(50) 							not null,
+    constraint AudioGenres_Audio_id_fk
+        foreign key (idAudio) references Audio(id) on update cascade on delete cascade,
+    constraint AudioGenres_Genre_genre_fk
+        foreign key (genre) references Genre(genre) on update cascade on delete cascade
+);
+
+create table Playlist (
+    id 				varchar(20) 							not null,
+	isVisible 		boolean 		default TRUE 			not null,
+    constraint idPlaylist___fk
+        foreign key (id) references Collection(id) on update cascade on delete cascade
+);
+
+create table PlaylistAudios (
+    idPlaylist 		varchar(20) 							not null,
+    idAudio    		varchar(20) 							not null,
+    constraint PlaylistAudios_Audio_id_fk
+        foreign key (idAudio) references Audio (id) on update cascade on delete cascade,
+    constraint PlaylistAudios_Playlist_id_fk
+        foreign key (idPlaylist) references Playlist (id) on update cascade on delete cascade
+);
+
+create table Podcast (
+    id 				varchar(20) 							not null,
+    constraint idPodcast_fk
+        foreign key (id) references Collection (id) on update cascade on delete cascade
+);
+
+create table PodcastEpisodes (
+    idPodcast 		varchar(20) 							not null,
+    idEpisode 		varchar(20) 							not null,
+    constraint PodcastEpisodes_Episode_id_fk
+        foreign key (idEpisode) references Episode (id) on update cascade on delete cascade,
+    constraint PodcastEpisodes_Podcast_id_fk
+        foreign key (idPodcast) references Podcast (id) on update cascade on delete cascade
+);
+
+create table Profile (
+    username       varchar(30)          					not null,
+    mail           varchar(100)         					not null 		primary key,
+    password       varchar(100)         					not null,
+    name           varchar(50)          					null,
+    surname        varchar(50)          					null,
+    biography      text                 					null,
+    profilePicture blob                	 					null
+);
+
+create table Artist (
+    mail         	varchar(100) 							not null,
+    constraint Artist_mail_fk
+        foreign key (mail) references Profile (mail) on update cascade on delete cascade
+);
+
+create table ArtistAlbums (
+    artistMail 		varchar(100) 							not null,
+    idAlbum  		varchar(20) 							not null,
+    constraint ArtistAlbums_Album_id_fk
+        foreign key (idAlbum) references Album (id) on update cascade on delete cascade,
+    constraint ArtistAlbums_Artist_mail_fk
+        foreign key (artistMail) references Artist (mail) on update cascade on delete cascade
+);
+
+create table ArtistAudios (
+    idAudio  		varchar(20) 							not null,
+    artistMail 		varchar(100) 							not null,
+    constraint ArtistAudios_Artist_mail_fk
+        foreign key (artistMail) references Artist (mail) on update cascade on delete cascade,
+    constraint ArtistAudios_Audio_id_fk
+        foreign key (idAudio) references Audio (id) on update cascade on delete cascade
+);
+
+create table ArtistPodcasts (
+    idPodcast 		varchar(20) 							null,
+    artistMail  	varchar(100) 							not null,
+    constraint ArtistPodcasts_Artist_mail_fk
+        foreign key (artistMail) references Artist (mail) on update cascade on delete cascade,
+    constraint ArtistPodcasts_Podcast_id_fk
+        foreign key (idPodcast) references Podcast (id) on update cascade on delete cascade
+);
+
+create table ProfilePlaylists (
+    idPlaylist 		varchar(20) 							not null,
+    profileMail  	varchar(100) 							not null,
+    constraint ProfilePlaylists_Playlist_id_fk
+        foreign key (idPlaylist) references Playlist (id) on update cascade on delete cascade,
+    constraint ProfilePlaylists_Profile_mail_fk
+        foreign key (profileMail) references Profile (mail) on update cascade on delete cascade
+);
+
+create table Song (
+    id 				varchar(20) 							not null,
+    constraint idSong___fk
+        foreign key (id) references Audio (id) on update cascade on delete cascade
+);
+
+create table AlbumSongs (
+    idAlbum 		varchar(20) 							not null,
+    idSong  		varchar(20) 							not null,
+    constraint AlbumSongs_Album_id_fk
+        foreign key (idAlbum) references Album (id) on update cascade on delete cascade,
+    constraint AlbumSongs_Song_id_fk
+        foreign key (idSong) references Song (id) on update cascade on delete cascade
+);
+
+create table User (
+    mail 			varchar(20) 							not null,
+    isVisible 		boolean 		default TRUE 			not null,
+    constraint User_mail_fk
+        foreign key (mail) references Profile (mail) on update cascade on delete cascade
+);
+
+create table ListeningHistory (
+    profileMail    	varchar(100)        					not null,
+    idAudio	    	varchar(20)                             not null,
+    listeningDate 	datetime	default CURRENT_TIMESTAMP	not null,
+    constraint ListeningHistory_Profile_mail_fk
+		foreign key (profileMail) references Profile(mail) on update cascade on delete cascade,
+	constraint ListeningHistory_Audio_id_fk
+		foreign key (idAudio) references Audio(id) on update cascade on delete cascade
+);
+
+create table Favorites (
+    profileMail    	varchar(100)        					not null,
+    idAudio	    	varchar(20)                             not null,
+    constraint Favorites_Profile_mail_fk
+		foreign key (profileMail) references Profile(mail) on update cascade on delete cascade,
+	constraint Favorites_Audio_id_fk
+		foreign key (idAudio) references Audio(id) on update cascade on delete cascade
+);

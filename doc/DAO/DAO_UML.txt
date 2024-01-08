@@ -1,0 +1,101 @@
+@startuml
+!theme carbon-gray
+
+title JavaBeats 1.7 - DAO Diagram
+
+package DAO{
+  interface IProfileDAO{
+    + insert(JBProfile): void
+    + remove(JBProfile): void
+    + update(JBProfile): void
+    + get(JBProfile): JBProfile
+  }
+  class ProfileDAO implements IProfileDAO{
+    - getArtist(JBProfile)
+    - getUser(JBProfile)
+    - getMinuteListened(User)
+    - getTotalListeners(Artist)
+    - getListeningHistory(JBProfile)
+    - updateUsername(JBProfile)
+    - updatePassword(JBProfile)
+    - updateName(JBProfile)
+    - updateSurname(JBProfile)
+    - updateBiography(JBProfile)
+    - updateProfilePicture(JBProfile)
+    - updateVisibility(User)
+    - updateTotalListeners(Artist)
+  }
+
+  interface IAudioDAO{
+    + insert(JBAudio): void
+    + remove(JBAudio): void
+    + updateIsFavorite(JBAudio, JBProfile): void
+    + get(JBAudio, JBProfile): void
+    + get(JBAudio)
+    + addToListeningHistory(JBAudio audio, JBProfile profile): void
+    + selectByPlaylist(Playlist): ArrayList<JBAudio>
+    + selectByAlbum(Album): ArrayList<Song>
+    + selectByPodcast(Podcast): ArrayList<Episode>
+  }
+  class AudioDAO implements IAudioDAO{
+    - getSong(JBAudio)
+    - getEpisode(JBAudio)
+    - getGenres(JBAudio)
+    - getNumberOfStreams(JBAudio)
+    - isFavorite(JBAudio, JBProfile)
+    - insertAudio(JBAudio)
+    - linkAudioToArtist(JBAudio)
+    - linkAudioToCollection(JBAudio)
+    - linkAudioToGenres(JBAudio)
+  }
+
+  interface ICollectionDAO{
+    + insert(JBCollection): void
+    + remove(JBCollection): void
+    + update(JBCollection): void
+    + get(JBCollection): JBCollection
+    + selectByProfile(JBCollection): ArrayList<JBCollection>
+  }
+  class CollectionDAO implements ICollectionDAO {
+    - getPlaylist(String)
+    - getAlbum(String)
+    - getPodcast(String)
+    - updateName(JBCollection)
+    - updatePicture(JBCollection)
+    - updateTrackList(JBCollection)
+    - insertColection(JBCollection)
+    - linkCollectionToProfile(JBCollection)
+    - linkPlaylistToProfile(JBCollection)
+    - linkAlbumToArtist(Album)
+    - linkPodcastToArtist(Podcast)
+    - linkCollectionToAudio(JBCollection)
+    - linkPlaylistToAudios(Playlist)
+    - linkAlbumToSongs(Album)
+    - linkPodcastToEpisode(Podcast)
+  }
+
+  interface ISearchDAO{
+    + search(String): IJBResearchable[]
+    + searchBy(String, ERESEARCH): IJBResearchable[]
+  }
+  class SearchDAO implements ISearchDAO{
+  }
+
+  enum ERESEARCH {
+    USER
+    ARTIST
+    SONG
+    EPISODE
+    PLAYLIST
+    ALBUM
+    PODCAST
+  }
+
+    ISearchDAO -- ERESEARCH
+
+}
+
+hide empty fields
+hide empty methods
+
+@enduml
