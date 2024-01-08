@@ -131,10 +131,9 @@ public abstract class JBAudio {
     @Override
     public String toString() {
         if(this instanceof Song)
-            return "SONG    -  Title: " + this.getMetadata().getTitle() + ";  Artist: " + this.getMetadata().getArtist().getUsername();
-        if(this instanceof Episode)
-            return "EPISODE -  Title: " + this.getMetadata().getTitle() + ";  Artist: " + this.getMetadata().getArtist().getUsername();
-        else
-            return "AUDIO   -  Title: " + this.getMetadata().getTitle() + ";  Artist: " + this.getMetadata().getArtist().getUsername();
+            return "SONG      -  Title: " + this.getMetadata().getTitle() + ";  Artist: " + this.getMetadata().getArtist().getUsername() + ".";
+        else if(this instanceof Episode)
+            return "EPISODE   -  Title: " + this.getMetadata().getTitle() + ";  Artist: " + this.getMetadata().getArtist().getUsername() + ".";
+        else return super.toString();
     }
 }

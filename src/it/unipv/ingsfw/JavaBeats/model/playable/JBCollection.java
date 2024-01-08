@@ -77,4 +77,15 @@ public abstract class JBCollection implements IJBPlayable{
     public void play() {
     }
 
+    @Override
+    public String toString() {
+        if(this instanceof Playlist)
+            return "PLAYLIST  -  Name: " + this.getName() + ";  Creator: " + this.getCreator() + ".";
+        else if(this instanceof Album)
+            return "ALBUM     -  Name: " + this.getName() + ";  Creator: " + this.getCreator() + ".";
+        else if(this instanceof Podcast)
+            return "PODCAST   -  Name: " + this.getName() + ";  Creator: " + this.getCreator() + ".";
+        else return super.toString();
+    }
+
 }

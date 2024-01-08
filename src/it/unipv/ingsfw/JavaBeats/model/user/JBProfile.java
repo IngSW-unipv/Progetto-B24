@@ -76,10 +76,9 @@ public abstract class JBProfile {
     @Override
     public String toString() {
         if(this instanceof User)
-            return "USER    -  Mail: " + this.getMail() + ";  Username: " + this.getUsername();
-        if(this instanceof Artist)
-            return "ARTIST  -  Mail: " + this.getMail() + ";  Username: " + this.getUsername();
-        else
-            return "PROFILE -  Mail: " + this.getMail() + ";  Username: " + this.getUsername();
+            return "USER      -  Mail: " + this.getMail() + ";  Username: " + this.getUsername() + ".";
+        else if(this instanceof Artist)
+            return "ARTIST    -  Mail: " + this.getMail() + ";  Username: " + this.getUsername() + ".";
+        else return super.toString();
     }
 }
