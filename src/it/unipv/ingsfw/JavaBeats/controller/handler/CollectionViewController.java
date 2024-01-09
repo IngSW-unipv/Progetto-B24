@@ -2,7 +2,7 @@ package it.unipv.ingsfw.JavaBeats.controller.handler;
 import it.unipv.ingsfw.JavaBeats.model.playable.collection.Playlist;
 import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
 import it.unipv.ingsfw.JavaBeats.view.library.CollectionViewGUI;
-import it.unipv.ingsfw.JavaBeats.view.presets.CollectionDialog;
+import it.unipv.ingsfw.JavaBeats.view.presets.dialogs.EditPlaylistDialog;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -36,8 +36,9 @@ public class CollectionViewController{
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
         gui.getGp().setEffect(new BoxBlur(10, 10, 10));
 
-        CollectionDialog dialog=new CollectionDialog(stage, new Playlist("id", "name", new Artist("mail", "name", "username")));
-        DialogController dialogController=new DialogController(dialog);
+        Playlist originalCollection=new Playlist(1, "name", new Artist("mail", "name", "username"));
+        EditPlaylistDialog dialog=new EditPlaylistDialog(stage, originalCollection, (Playlist)originalCollection.getCopy(originalCollection));
+        EditPlaylistDialogController editPlaylistDialogController=new EditPlaylistDialogController(dialog);
         dialog.show();
       }
     };

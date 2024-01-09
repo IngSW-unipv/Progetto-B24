@@ -22,7 +22,7 @@ public class LoginController{
   //Metodi
   /*---------------------------------------*/
   private void initComponents(){
-    EventHandler<ActionEvent> loginButtonHandler=new EventHandler <ActionEvent>(){
+    EventHandler<ActionEvent> loginButtonHandler=new EventHandler<ActionEvent>(){
       @Override
       public void handle(ActionEvent actionEvent){
         /*
@@ -30,7 +30,7 @@ public class LoginController{
          */
       }
     };
-    EventHandler<ActionEvent> registerButtonHandler=new EventHandler <ActionEvent>(){
+    EventHandler<ActionEvent> registerButtonHandler=new EventHandler<ActionEvent>(){
       @Override
       public void handle(ActionEvent actionEvent){
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();

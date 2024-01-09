@@ -1,36 +1,30 @@
 package it.unipv.ingsfw.JavaBeats.controller.handler;
-import it.unipv.ingsfw.JavaBeats.view.presets.CollectionDialog;
+import it.unipv.ingsfw.JavaBeats.view.presets.dialogs.EditPlaylistDialog;
+import it.unipv.ingsfw.JavaBeats.view.presets.dialogs.EditProfileDialog;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import javax.imageio.ImageIO;
 import javax.sql.rowset.serial.SerialBlob;
-import javax.sql.rowset.serial.SerialException;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.sql.SQLException;
-public class DialogController{
+public class EditProfileDialogController{
   /*---------------------------------------*/
   //Attributi
   /*---------------------------------------*/
-  private CollectionDialog gui;
+  private EditProfileDialog gui;
 
   /*---------------------------------------*/
   //Costruttori
   /*---------------------------------------*/
-  public DialogController(CollectionDialog gui){
+  public EditProfileDialogController(EditProfileDialog gui){
     this.gui=gui;
     initComponents();
   }
@@ -58,14 +52,28 @@ public class DialogController{
           fileInputStream=new FileInputStream(f);
           fileInputStream.read(fileContent);
           fileInputStream.close();
-          gui.getNewCollection().setPicture(new SerialBlob(fileContent));
+          gui.getNewProfile().setProfilePicture(new SerialBlob(fileContent));
           gui.getCollectionImageView().setImage(new Image(url.toExternalForm(), true));
         }catch(IOException | SQLException e){
           throw new RuntimeException(e);
         }//end-try
       }
     };
+    EventHandler<ActionEvent> saveButtonHandler=new EventHandler<ActionEvent>(){
+      @Override
+      public void handle(ActionEvent actionEvent){
+        System.out.println("save clicked");
+      }
+    };
+    EventHandler<ActionEvent> cancelButtonHandler=new EventHandler<ActionEvent>(){
+      @Override
+      public void handle(ActionEvent actionEvent){
+        System.out.println("cancel clicked");
+      }
+    };
     gui.getInputImageButton().setOnAction(inputImageButtonHandler);
+    gui.getSaveButton().setOnAction(saveButtonHandler);
+    gui.getCancelButton().setOnAction(cancelButtonHandler);
   }
   /*---------------------------------------*/
 }

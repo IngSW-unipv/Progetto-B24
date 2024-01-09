@@ -27,7 +27,7 @@
   -fx-background-color: darkslategray;
   -fx-background-radius: 25;
 }
-#TextField{
+.textField{
   -fx-background-color: rgb(15, 15, 15);
   -fx-background-radius: 10;
   -fx-text-fill: lightgray;
@@ -44,6 +44,17 @@
 }
 #checkBox:selected .box{
   -fx-background-color: blueviolet;
+}
+.textArea .content{
+  -fx-background-radius: 0;
+  -fx-background-color: rgb(10, 10, 10);
+}
+.textArea{
+  -fx-text-fill: lightgray;
+  -fx-font-family: Verdana;
+  -fx-font-size: 14;
+  -fx-font-weight: normal;
+  -fx-font-style: normal;
 }
 /* .myDialog > *.label.content{ */
 /*   -fx-font-size: 14px; */
