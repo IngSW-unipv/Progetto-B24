@@ -1,8 +1,10 @@
 package it.unipv.ingsfw.JavaBeats.view.presets;
-import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
+import it.unipv.ingsfw.JavaBeats.model.playable.JBCollection;
+import it.unipv.ingsfw.JavaBeats.model.playable.Playlist;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -15,16 +17,17 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import javax.xml.stream.events.EndDocument;
+
 public class CollectionDialog extends Dialog<JBCollection>{
   /*---------------------------------------*/
   //Attributi
   /*---------------------------------------*/
-  private static final Background bgHome=new Background(new BackgroundFill(Color.rgb(18, 18, 18), CornerRadii.EMPTY, Insets.EMPTY));
-  private static final int clientWidth=(int)Screen.getPrimary().getBounds().getWidth();
-  private static final int clientHeight=(int)Screen.getPrimary().getBounds().getHeight();
+  private static final Background bgHome=new Background(new BackgroundFill(Color.rgb(20, 20, 20), CornerRadii.EMPTY, Insets.EMPTY));
   private JBCollection originalCollection;
   private JBCollection newCollection;
-  private Button inputImage;
+  private ImageView collectionImageView;
+  private Button inputImageButton;
   private CheckBox checkBox;
 
   /*---------------------------------------*/
@@ -33,7 +36,7 @@ public class CollectionDialog extends Dialog<JBCollection>{
   public CollectionDialog(Stage stage, JBCollection originalCollection){
     super();
     this.originalCollection=originalCollection;
-//    newCollection=originalCollection.getCopy();
+    newCollection=originalCollection.getCopy(originalCollection);
     initOwner(stage);
     initStyle(StageStyle.UNDECORATED);
     initComponents();
@@ -45,14 +48,17 @@ public class CollectionDialog extends Dialog<JBCollection>{
   public JBCollection getOriginalCollection(){
     return originalCollection;
   }
-  public Button getInputImage(){
-    return inputImage;
+  public Button getInputImageButton(){
+    return inputImageButton;
   }
   public JBCollection getNewCollection(){
     return newCollection;
   }
   public CheckBox getCheckBox(){
     return checkBox;
+  }
+  public ImageView getCollectionImageView(){
+    return collectionImageView;
   }
   /*---------------------------------------*/
   //Metodi
@@ -66,28 +72,34 @@ public class CollectionDialog extends Dialog<JBCollection>{
     editLabelCloseButtonHBox.setAlignment(Pos.CENTER_LEFT);
 
     Image collectionImage=new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/RecordBig.png", true);
-    ImageView collectionImageView=new ImageView(collectionImage);
+    collectionImageView=new ImageView(collectionImage);
     collectionImageView.setPreserveRatio(true);
     collectionImageView.setFitHeight(200);
-    inputImage=new Button();
-    inputImage.setGraphic(collectionImageView);
-    inputImage.setBackground(bgHome);
-    inputImage.setCursor(Cursor.HAND);
+    inputImageButton=new Button();
+    inputImageButton.setGraphic(collectionImageView);
+    inputImageButton.setBackground(bgHome);
+    inputImageButton.setCursor(Cursor.HAND);
 
     TextField textField=new TextField(originalCollection.getName());
     textField.setId("TextField");
     textField.setFont(Font.font("Verdana", FontWeight.NORMAL, FontPosture.REGULAR, 20));
 
     checkBox=new CheckBox();
+    Playlist p=(Playlist)originalCollection;
+    p.setVisible(false); /* just trying the logic, IT MUST BE CHANGED */
+    if(!p.isVisible()){
+      checkBox.setSelected(true);
+    }//endif
     checkBox.setFont(Font.font("Verdana", FontWeight.NORMAL, FontPosture.ITALIC, 15));
     checkBox.setText("Private");
     checkBox.setTextFill(Color.LIGHTGRAY);
     checkBox.setId("checkBox");
 
+
     VBox namePrivacyVBox=new VBox(100, textField, checkBox);
     namePrivacyVBox.setAlignment(Pos.CENTER_LEFT);
 
-    HBox imageTextInputHBox=new HBox(20, inputImage, namePrivacyVBox);
+    HBox imageTextInputHBox=new HBox(20, inputImageButton, namePrivacyVBox);
     imageTextInputHBox.setAlignment(Pos.CENTER_LEFT);
 
     BorderPane bp=new BorderPane();
@@ -100,7 +112,8 @@ public class CollectionDialog extends Dialog<JBCollection>{
     ButtonType closeButtonType=new ButtonType("Save", ButtonBar.ButtonData.CANCEL_CLOSE);
     getDialogPane().getButtonTypes().addAll(cancelButtonType, closeButtonType);
     ButtonBar buttonBar=(ButtonBar)getDialogPane().lookup(".button-bar");
-    buttonBar.getButtons().forEach(b -> b.setId("buttonTypes"));
+    buttonBar.getButtons().get(0).setId("buttonCancel");
+    buttonBar.getButtons().get(1).setId("buttonSave");
 
 //    Button startStopBtn=(Button)getDialogPane().lookupButton(resetBtnType);
 //    Button closeBtn=(Button)getDialogPane().lookupButton(closeBtnType);

@@ -3,13 +3,23 @@ import it.unipv.ingsfw.JavaBeats.view.presets.CollectionDialog;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import javax.imageio.ImageIO;
 import javax.sql.rowset.serial.SerialBlob;
+import javax.sql.rowset.serial.SerialException;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.sql.SQLException;
 public class DialogController{
   /*---------------------------------------*/
@@ -42,17 +52,20 @@ public class DialogController{
         File f=fileChooser.showOpenDialog(stage);
         byte[] fileContent=new byte[(int)f.length()];
         FileInputStream fileInputStream=null;
+        URL url=null;
         try{
+          url=f.toURI().toURL();
           fileInputStream=new FileInputStream(f);
           fileInputStream.read(fileContent);
           fileInputStream.close();
           gui.getNewCollection().setPicture(new SerialBlob(fileContent));
+          gui.getCollectionImageView().setImage(new Image(url.toExternalForm(), true));
         }catch(IOException | SQLException e){
           throw new RuntimeException(e);
         }//end-try
       }
     };
-    gui.getInputImage().setOnAction(inputImageButtonHandler);
+    gui.getInputImageButton().setOnAction(inputImageButtonHandler);
   }
   /*---------------------------------------*/
 }

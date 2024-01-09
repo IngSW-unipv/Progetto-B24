@@ -1,11 +1,11 @@
 .myDialog{
-  -fx-background-color: rgb(18, 18, 18);
+  -fx-background-color: rgb(20, 20, 20);
   -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.8), 10, 0, 0, 0);
 }
 .myDialog > *.button-bar > *.container{
-  -fx-background-color: #121212;
+  -fx-background-color: rgb(20, 20, 20);
 }
-#buttonTypes{
+#buttonSave{
   -fx-border-color: transparent !important;
   -fx-text-fill: white;
   -fx-font-size: 14;
@@ -16,12 +16,23 @@
   -fx-background-color: blueviolet;
   -fx-background-radius: 25;
 }
+#buttonCancel{
+  -fx-border-color: transparent !important;
+  -fx-text-fill: white;
+  -fx-font-size: 14;
+  -fx-font-family: Verdana;
+  -fx-font-style: normal;
+  -fx-font-weight: bold;
+  -fx-padding: 10 20 10 20;
+  -fx-background-color: gray;
+  -fx-background-radius: 25;
+}
 #TextField{
   -fx-background-color: rgb(15, 15, 15);
   -fx-background-radius: 10;
   -fx-text-fill: lightgray;
-  -fx-border-color: blueviolet;
-  -fx-border-radius: 25;
+  /* -fx-border-color: blueviolet; */
+  /* -fx-border-radius: 25; */
 }
 #checkBox .box{
   -fx-background-color: rgb(15, 15, 15);
