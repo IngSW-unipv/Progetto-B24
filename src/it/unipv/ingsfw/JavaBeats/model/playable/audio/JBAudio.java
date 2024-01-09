@@ -1,6 +1,7 @@
-package it.unipv.ingsfw.JavaBeats.model.playable;
+package it.unipv.ingsfw.JavaBeats.model.playable.audio;
 
-import it.unipv.ingsfw.JavaBeats.model.user.Artist;
+import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
+import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
 import java.sql.Blob;
 import java.sql.Date;
 import java.sql.Time;

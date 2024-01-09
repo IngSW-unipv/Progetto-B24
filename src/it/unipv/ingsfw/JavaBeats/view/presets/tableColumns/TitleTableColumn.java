@@ -1,5 +1,5 @@
 package it.unipv.ingsfw.JavaBeats.view.presets.tableColumns;
-import it.unipv.ingsfw.JavaBeats.model.playable.JBAudio;
+import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.geometry.Pos;
 import javafx.scene.control.ContentDisplay;

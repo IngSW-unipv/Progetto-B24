@@ -1,6 +1,6 @@
-package it.unipv.ingsfw.JavaBeats.model.user;
+package it.unipv.ingsfw.JavaBeats.model.profile;
 
-import it.unipv.ingsfw.JavaBeats.model.playable.JBAudio;
+import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 
 import java.sql.Blob;
 import java.util.ArrayList;

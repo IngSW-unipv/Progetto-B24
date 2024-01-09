@@ -1,11 +1,13 @@
-package it.unipv.ingsfw.JavaBeats.model.playable;
+package it.unipv.ingsfw.JavaBeats.model.playable.collection;
 
 import it.unipv.ingsfw.JavaBeats.model.EJBMODE;
-import it.unipv.ingsfw.JavaBeats.model.user.JBProfile;
+import it.unipv.ingsfw.JavaBeats.model.playable.IJBItem;
+import it.unipv.ingsfw.JavaBeats.model.playable.IJBPlayable;
+import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import java.sql.Blob;
 import java.util.ArrayList;
 
-public abstract class JBCollection implements IJBPlayable{
+public abstract class JBCollection implements IJBPlayable {
 
     //ATTRIBUTES:
     private String id;

@@ -1,9 +1,8 @@
 package it.unipv.ingsfw.JavaBeats.view.presets;
-import it.unipv.ingsfw.JavaBeats.model.playable.JBCollection;
+import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -15,8 +14,6 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-
-import javax.xml.stream.events.EndDocument;
 
 public class CollectionDialog extends Dialog<JBCollection>{
   /*---------------------------------------*/

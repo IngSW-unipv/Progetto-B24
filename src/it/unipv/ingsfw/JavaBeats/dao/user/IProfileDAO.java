@@ -1,6 +1,6 @@
-package it.unipv.ingsfw.JavaBeats.dao;
+package it.unipv.ingsfw.JavaBeats.dao.user;
 
-import it.unipv.ingsfw.JavaBeats.model.user.JBProfile;
+import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 
 public interface IProfileDAO {
 

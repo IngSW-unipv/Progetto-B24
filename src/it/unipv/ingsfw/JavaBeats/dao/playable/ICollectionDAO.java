@@ -1,7 +1,7 @@
-package it.unipv.ingsfw.JavaBeats.dao;
+package it.unipv.ingsfw.JavaBeats.dao.playable;
 
-import it.unipv.ingsfw.JavaBeats.model.playable.JBCollection;
-import it.unipv.ingsfw.JavaBeats.model.user.JBProfile;
+import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
+import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import java.util.ArrayList;
 
 public interface ICollectionDAO {

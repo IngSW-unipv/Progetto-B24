@@ -1,12 +1,14 @@
-package it.unipv.ingsfw.JavaBeats.dao;
+package it.unipv.ingsfw.JavaBeats.dao.user;
 
 import it.unipv.ingsfw.JavaBeats.controller.factory.DBManagerFactory;
-import it.unipv.ingsfw.JavaBeats.model.playable.Episode;
-import it.unipv.ingsfw.JavaBeats.model.playable.JBAudio;
-import it.unipv.ingsfw.JavaBeats.model.playable.Song;
-import it.unipv.ingsfw.JavaBeats.model.user.Artist;
-import it.unipv.ingsfw.JavaBeats.model.user.JBProfile;
-import it.unipv.ingsfw.JavaBeats.model.user.User;
+import it.unipv.ingsfw.JavaBeats.dao.playable.AudioDAO;
+import it.unipv.ingsfw.JavaBeats.dao.user.IProfileDAO;
+import it.unipv.ingsfw.JavaBeats.model.playable.audio.Episode;
+import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
+import it.unipv.ingsfw.JavaBeats.model.playable.audio.Song;
+import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
+import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
+import it.unipv.ingsfw.JavaBeats.model.profile.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

@@ -1,10 +1,7 @@
 package it.unipv.ingsfw.JavaBeats.view.primary.search;
-import it.unipv.ingsfw.JavaBeats.model.playable.Playlist;
-import it.unipv.ingsfw.JavaBeats.model.user.User;
 import it.unipv.ingsfw.JavaBeats.view.presets.AudioCard;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;

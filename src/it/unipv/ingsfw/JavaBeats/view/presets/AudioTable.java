@@ -1,11 +1,9 @@
 package it.unipv.ingsfw.JavaBeats.view.presets;
-import com.sun.javafx.collections.ObservableListWrapper;
-import it.unipv.ingsfw.JavaBeats.model.playable.JBAudio;
+import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.view.presets.tableColumns.FavoriteButtonTableColumn;
 import it.unipv.ingsfw.JavaBeats.view.presets.tableColumns.PlayButtonTableColumn;
 import it.unipv.ingsfw.JavaBeats.view.presets.tableColumns.TitleTableColumn;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.stage.Screen;
