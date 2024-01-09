@@ -9,7 +9,7 @@ import java.sql.Time;
 public abstract class JBAudio {
 
     //ATTRIBUTES:
-    private String id;
+    private int id;
     private boolean isFavorite;
     private Metadata metadata;
     private Blob audioFile;
@@ -77,21 +77,21 @@ public abstract class JBAudio {
 
 
     //CONSTRUCTORS:
-    public JBAudio(String id, String title, Artist artist, JBCollection collection, Blob audioFile, Time duration, Date releaseDate, String[] genres, boolean isFavorite, int numberOfStreams) {
+    public JBAudio(int id, String title, Artist artist, JBCollection collection, Blob audioFile, Time duration, Date releaseDate, String[] genres, boolean isFavorite, int numberOfStreams) {
         this.id = id;
         metadata = new Metadata(artist, title, collection, duration, releaseDate, genres);
         this.audioFile=audioFile;
         this.isFavorite=isFavorite;
         this.numberOfStreams=numberOfStreams;
     }
-    public JBAudio(String id, String title, Artist artist, Blob audioFile) {
+    public JBAudio(int id, String title, Artist artist, Blob audioFile) {
         this(id, title, artist, null, audioFile, Time.valueOf("00:00:00"), new Date(System.currentTimeMillis()), null, false, 0);
     }
 
 
 
     //GETTERS:
-    public String getId() {
+    public int getId() {
         return id;
     }
     public boolean isFavorite() {
@@ -108,8 +108,9 @@ public abstract class JBAudio {
     }
 
 
+
     //SETTER:
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
     public void setFavorite(boolean isFavorite) {
@@ -136,12 +137,4 @@ public abstract class JBAudio {
 
     }
 
-    @Override
-    public String toString() {
-        if(this instanceof Song)
-            return "SONG      -  Title: " + this.getMetadata().getTitle() + ";  Artist Mail: " + this.getMetadata().getArtist().getMail() + ".";
-        else if(this instanceof Episode)
-            return "EPISODE   -  Title: " + this.getMetadata().getTitle() + ";  Artist Mail: " + this.getMetadata().getArtist().getMail() + ".";
-        else return super.toString();
-    }
 }

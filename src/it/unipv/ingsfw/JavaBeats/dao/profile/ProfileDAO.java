@@ -1,32 +1,28 @@
-package it.unipv.ingsfw.JavaBeats.dao.user;
+package it.unipv.ingsfw.JavaBeats.dao.profile;
 
 import it.unipv.ingsfw.JavaBeats.controller.factory.DBManagerFactory;
 import it.unipv.ingsfw.JavaBeats.dao.playable.AudioDAO;
-import it.unipv.ingsfw.JavaBeats.model.playable.audio.Episode;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.Song;
-import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
-import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
-import it.unipv.ingsfw.JavaBeats.model.profile.User;
+import it.unipv.ingsfw.JavaBeats.model.profile.*;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class ProfileDAO implements IProfileDAO {
 
     //ATTRIBUTES:
-    private String schema;
+    private final String schema = "JavaBeats_DB";
     private Connection connection;
 
 
 
-    //CONTRUCTOR:
+    //CONSTRUCTOR:
     public ProfileDAO() {
         super();
-        this.schema = "JavaBeats_DB";
     }
 
 
@@ -52,21 +48,18 @@ public class ProfileDAO implements IProfileDAO {
 
             st1.executeUpdate();
 
-            if(profile instanceof User) {               //if JBProfile is a User insert it into User table
+            try {                           //if profile is a User insert it into User table
+                User u = (User) profile;
                 String q2=  "INSERT INTO User(mail, isVisible) VALUES(?, 1);";
                 st2 = connection.prepareStatement(q2);
-                st2.setString(1, profile.getMail());
+                st2.setString(1, u.getMail());
                 st2.executeUpdate();
-
             }
-            else if (profile instanceof Artist) {     //if JBProfile is an Artist insert it to Artist table
-                String q3=  "INSERT INTO Artist(mail) VALUES(?);";
-                st3= connection.prepareStatement(q3);
+            catch (ClassCastException e) {  //if profile is an Artist insert it to Artist table
+                String q3 = "INSERT INTO Artist(mail) VALUES(?);";
+                st3 = connection.prepareStatement(q3);
                 st3.setString(1, profile.getMail());
                 st3.executeUpdate();
-            }
-            else {
-                throw new Exception("Unable to recognize if JBProfile IS-A User or Artist.");
             }
 
         } catch (Exception e) {
@@ -124,23 +117,14 @@ public class ProfileDAO implements IProfileDAO {
             if (!(profile.getProfilePicture().equals(oldProfile.getProfilePicture())))
                 updateProfilePicture(profile);
 
-        if ((profile instanceof User)) {                                    //if profile is a USER
+        try {                           //if profile is a User
             User userProfile = (User) profile;
             User oldUserProfile = (User) oldProfile;
-
             if (userProfile.isVisible() != oldUserProfile.isVisible())
                 updateVisibility(userProfile);
-
         }
-        else if (profile instanceof Artist) {                               //if profile is an ARTIST
+        catch (ClassCastException e) {  //if profile is an Artist
             //do nothing
-        }
-        else {
-            try {
-                throw new Exception("Unable to recognize if JBProfile IS-A User or Artist.");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
 
     }
@@ -154,10 +138,8 @@ public class ProfileDAO implements IProfileDAO {
         return profileOut;
     }
 
-
-
-    //PRIVATE METHODS:
-    private Artist getArtist(JBProfile profile) {
+    @Override
+    public Artist getArtist(JBProfile profile) {
         connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
         PreparedStatement st;
         ResultSet rs;
@@ -197,7 +179,8 @@ public class ProfileDAO implements IProfileDAO {
         return result;
     }
 
-    private User getUser(JBProfile profile) {
+    @Override
+    public User getUser(JBProfile profile) {
         connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
         PreparedStatement st;
         ResultSet rs;
@@ -238,6 +221,9 @@ public class ProfileDAO implements IProfileDAO {
         return result;
     }
 
+
+
+    //PRIVATE METHODS:
     private Time getTotalListeningTime(User user) {
         connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
         PreparedStatement st;
@@ -295,7 +281,7 @@ public class ProfileDAO implements IProfileDAO {
         connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
         PreparedStatement st;
         ResultSet rs;
-        ArrayList<String> audioIDs = null;
+        ArrayList<Integer> audioIDs = null;
         ArrayList<JBAudio> result = new ArrayList<>();
 
         try {
@@ -307,7 +293,7 @@ public class ProfileDAO implements IProfileDAO {
             rs = st.executeQuery();
 
             while(rs.next())
-                audioIDs.add(rs.getString("idAudio"));
+                audioIDs.add(rs.getInt("idAudio"));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -317,14 +303,8 @@ public class ProfileDAO implements IProfileDAO {
 
         if(audioIDs != null) {
             AudioDAO aDAO = new AudioDAO();
-            Iterator<String> audioIDsIT = audioIDs.iterator();
-            while (audioIDsIT.hasNext()) {
-                String track = audioIDsIT.next();
-                if (aDAO.get(new Song(track, null, null, null)) != null) {                  //if audio is in Song table
-                    result.add(aDAO.get(new Song(track, null, null, null)));
-                } else if ((aDAO.get(new Episode(track, null, null, null)) != null)) {      //if audio is in Episode table
-                    result.add(aDAO.get(new Episode(track, null, null, null)));
-                }
+            for (int track : audioIDs) {
+                result.add(aDAO.get(new Song(track, null, null, null)));      //aDAO.get() will return either Song or Episode (only cares about the id of the JBAudio input, not the type)
             }
         }
 

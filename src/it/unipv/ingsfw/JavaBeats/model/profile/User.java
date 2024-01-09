@@ -42,4 +42,11 @@ public class User extends JBProfile {
 		this.totalListeningTime = minuteListened;
 	}
 
+
+	//METHODS:
+	@Override
+	public String toString() {
+		return "USER      -  Username: " + this.getUsername() + ";  Mail: " + this.getMail() + ".";
+	}
+
 }

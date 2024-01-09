@@ -14,15 +14,15 @@ public class Playlist extends JBCollection {
 
 
 	//CONSTRUCTOR:
-	public Playlist(String id, String name, JBProfile creator, ArrayList<JBAudio> trackList, Blob picture, boolean isVisible) {
+	public Playlist(int id, String name, JBProfile creator, ArrayList<JBAudio> trackList, Blob picture, boolean isVisible) {
 		super(id, name, creator, picture);
 		this.trackList=trackList;
 		this.isVisible=isVisible;
 	}
-	public Playlist(String id, String name, JBProfile creator, ArrayList<JBAudio> trackList) {
+	public Playlist(int id, String name, JBProfile creator, ArrayList<JBAudio> trackList) {
 		this(id, name, creator, trackList, null, true);
 	}
-	public Playlist(String id, String name, JBProfile creator) {
+	public Playlist(int id, String name, JBProfile creator) {
 		this(id, name, creator, null, null, true);
 	}
 
@@ -33,8 +33,8 @@ public class Playlist extends JBCollection {
 		return trackList;
 	}
 
+	@Override
 	public JBCollection getCopy(JBCollection collection) {
-
 		return new Playlist(collection.getId(), collection.getName(), collection.getCreator(), ((Playlist)collection).getTrackList(), collection.getPicture(), ((Playlist)collection).isVisible);
 	}
 
@@ -50,6 +50,13 @@ public class Playlist extends JBCollection {
 	}
 	public void setVisible(boolean Visible) {
 		isVisible = Visible;
+	}
+
+
+	//METHODS:
+	@Override
+	public String toString() {
+		return "PLAYLIST  -  Name: " + this.getName() + ";  Creator Mail: " + this.getCreator().getMail() + ".";
 	}
 
 }

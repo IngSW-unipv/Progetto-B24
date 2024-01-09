@@ -9,10 +9,10 @@ package DAO{
     + remove(JBProfile): void
     + update(JBProfile): void
     + get(JBProfile): JBProfile
+    + getArtist(JBProfile): Artist
+    + getUser(JBProfile): User
   }
   class ProfileDAO implements IProfileDAO{
-    - getArtist(JBProfile)
-    - getUser(JBProfile)
     - getMinuteListened(User)
     - getTotalListeners(Artist)
     - getListeningHistory(JBProfile)
@@ -31,15 +31,14 @@ package DAO{
     + remove(JBAudio): void
     + updateIsFavorite(JBAudio, JBProfile): void
     + get(JBAudio, JBProfile): void
-    + get(JBAudio)
+    + getSong(JBAudio, JBProfile): Song
+    + getEpisode(JBAudio, JBProfile): Episode
     + addToListeningHistory(JBAudio audio, JBProfile profile): void
     + selectByPlaylist(Playlist): ArrayList<JBAudio>
     + selectByAlbum(Album): ArrayList<Song>
     + selectByPodcast(Podcast): ArrayList<Episode>
   }
   class AudioDAO implements IAudioDAO{
-    - getSong(JBAudio)
-    - getEpisode(JBAudio)
     - getGenres(JBAudio)
     - getNumberOfStreams(JBAudio)
     - isFavorite(JBAudio, JBProfile)
@@ -54,12 +53,13 @@ package DAO{
     + remove(JBCollection): void
     + update(JBCollection): void
     + get(JBCollection): JBCollection
-    + selectByProfile(JBCollection): ArrayList<JBCollection>
+    + getPlaylist(JBCollection): JBCollection
+    + getAlbum(JBCollection): Album
+    + getPodcast(JBCollection): Podcast
+    + selectByProfile(JBProfile): ArrayList<JBCollection>
   }
   class CollectionDAO implements ICollectionDAO {
-    - getPlaylist(String)
-    - getAlbum(String)
-    - getPodcast(String)
+
     - updateName(JBCollection)
     - updatePicture(JBCollection)
     - updateTrackList(JBCollection)
