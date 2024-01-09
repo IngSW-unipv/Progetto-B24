@@ -22,7 +22,7 @@ import java.sql.SQLException;
 import java.sql.Time;
 import java.util.ArrayList;
 
-public class CollectionViewGui{
+public class CollectionViewGUI{
   /*---------------------------------------*/
   //Attributi
   /*---------------------------------------*/
@@ -35,7 +35,7 @@ public class CollectionViewGui{
   /*---------------------------------------*/
   //Costruttori
   /*---------------------------------------*/
-  public CollectionViewGui(EJBPLAYABLE collectionType){
+  public CollectionViewGUI(EJBPLAYABLE collectionType){
     super();
     initComponents(collectionType);
   }
@@ -50,9 +50,11 @@ public class CollectionViewGui{
   public CollectionHeader getCollectionHeader(){
     return collectionHeader;
   }
+
   public GridPane getGp(){
     return gp;
   }
+
   /*---------------------------------------*/
   //Metodi
   /*---------------------------------------*/
@@ -61,7 +63,7 @@ public class CollectionViewGui{
     ObservableList<JBAudio> songList=FXCollections.observableArrayList();
     try{
       for(int i=0; i<4; i++){
-        songList.add(new Song("id", "Unknown title", new Artist("rob", "rob", "rob"), new Album("id", "nomeAlbum", new Artist("rob", "rob", "rob"), new ArrayList<Song>()), new SerialBlob(new byte[]{0, 1}), new Time(100), new Date(100), new String[]{"rock", "pop"}, true, 20));
+        songList.add(new Song("id", "Unknown title", new Artist("rob", "rob", "rob"), new Album("id", "nomeAlbum", new Artist("rob", "rob", "rob"), new ArrayList<Song>()), new SerialBlob(new byte[] {0, 1}), new Time(100), new Date(100), new String[] {"rock", "pop"}, true, 20));
       }//end-for
     }catch(SQLException e){
       throw new RuntimeException(e);

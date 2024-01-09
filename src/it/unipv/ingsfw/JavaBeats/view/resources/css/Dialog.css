@@ -24,7 +24,7 @@
   -fx-font-style: normal;
   -fx-font-weight: bold;
   -fx-padding: 10 20 10 20;
-  -fx-background-color: gray;
+  -fx-background-color: darkslategray;
   -fx-background-radius: 25;
 }
 #TextField{
