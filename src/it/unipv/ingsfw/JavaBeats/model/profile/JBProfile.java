@@ -1,6 +1,8 @@
 package it.unipv.ingsfw.JavaBeats.model.profile;
 
+import it.unipv.ingsfw.JavaBeats.model.playable.audio.Episode;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
+import it.unipv.ingsfw.JavaBeats.model.playable.audio.Song;
 
 import java.sql.Blob;
 import java.util.ArrayList;
@@ -82,13 +84,5 @@ public abstract class JBProfile {
         this.listeningHistory = listeningHistory;
     }
 
-    //METHODS:
-    @Override
-    public String toString() {
-        if(this instanceof User)
-            return "USER      -  Username: " + this.getUsername() + ";  Mail: " + this.getMail() + ".";
-        else if(this instanceof Artist)
-            return "ARTIST    -  Username: " + this.getUsername() + ";  Mail: " + this.getMail() + ".";
-        else return super.toString();
-    }
+
 }

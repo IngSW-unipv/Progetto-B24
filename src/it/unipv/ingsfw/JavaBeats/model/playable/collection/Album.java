@@ -12,11 +12,11 @@ public class Album extends JBCollection {
 
 
 	//CONSTRUCTORS:
-	public Album(String id, String name, JBProfile creator, ArrayList<Song> trackList, Blob picture) {
+	public Album(int id, String name, JBProfile creator, ArrayList<Song> trackList, Blob picture) {
 		super(id, name, creator, picture);
 		this.trackList=trackList;
 	}
-	public Album(String id, String name, JBProfile creator, ArrayList<Song> trackList) {
+	public Album(int id, String name, JBProfile creator, ArrayList<Song> trackList) {
 		this(id, name, creator, trackList, null);
 	}
 
@@ -29,7 +29,6 @@ public class Album extends JBCollection {
 
 	@Override
 	public JBCollection getCopy(JBCollection collection) {
-
 		return new Album(collection.getId(), collection.getName(), collection.getCreator(), ((Album)collection).getTrackList(), collection.getPicture());
 	}
 
@@ -38,6 +37,13 @@ public class Album extends JBCollection {
 	@Override
 	public void setTrackList(ArrayList trackList) {
 		this.trackList = trackList;
+	}
+
+
+	//METHODS:
+	@Override
+	public String toString() {
+		return "ALBUM     -  Name: " + this.getName() + ";  Creator Mail: " + this.getCreator().getMail() + ".";
 	}
 
 }

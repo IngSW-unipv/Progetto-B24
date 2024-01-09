@@ -32,4 +32,11 @@ public class Artist extends JBProfile {
 		this.totalListeners = totalListeners;
 	}
 
+
+	//METHODS:
+	@Override
+	public String toString() {
+		return "ARTIST    -  Username: " + this.getUsername() + ";  Mail: " + this.getMail() + ".";
+	}
+
 }

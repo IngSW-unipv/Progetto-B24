@@ -13,31 +13,40 @@ public class Podcast extends JBCollection {
 
 
 	//CONSTRUCTOR:
-	public Podcast(String id, String name, JBProfile creator, ArrayList<Episode> trackList, Blob picture) {
+	public Podcast(int id, String name, JBProfile creator, ArrayList<Episode> trackList, Blob picture) {
 		super(id, name, creator, picture);
 		this.trackList=trackList;
 	}
-	public Podcast(String id, String name, JBProfile creator, ArrayList<Episode> trackList) {
+	public Podcast(int id, String name, JBProfile creator, ArrayList<Episode> trackList) {
 		this(id, name, creator, trackList, null);
 	}
 
 
-	//GETTER:
+	//GETTERS:
 	@Override
 	public ArrayList<Episode> getTrackList() {
 		return trackList;
 	}
 
+	@Override
 	public JBCollection getCopy(JBCollection collection) {
 
 		return new Podcast(collection.getId(), collection.getName(), collection.getCreator(), ((Podcast)collection).getTrackList(), collection.getPicture());
 	}
 
 
+
 	//SETTER:
 	@Override
 	public void setTrackList(ArrayList trackList) {
 		this.trackList = trackList;
+	}
+
+
+	//METHODS:
+	@Override
+	public String toString() {
+		return "PODCAST   -  Name: " + this.getName() + ";  Creator Mail: " + this.getCreator().getMail() + ".";
 	}
 
 }
