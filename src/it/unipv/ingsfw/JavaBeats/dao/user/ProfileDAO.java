@@ -2,7 +2,6 @@ package it.unipv.ingsfw.JavaBeats.dao.user;
 
 import it.unipv.ingsfw.JavaBeats.controller.factory.DBManagerFactory;
 import it.unipv.ingsfw.JavaBeats.dao.playable.AudioDAO;
-import it.unipv.ingsfw.JavaBeats.dao.user.IProfileDAO;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.Episode;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.Song;
