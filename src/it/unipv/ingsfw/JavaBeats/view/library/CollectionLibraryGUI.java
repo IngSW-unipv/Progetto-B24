@@ -1,6 +1,7 @@
 package it.unipv.ingsfw.JavaBeats.view.library;
 
 import it.unipv.ingsfw.JavaBeats.model.playable.EJBPLAYABLE;
+import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
 import it.unipv.ingsfw.JavaBeats.view.presets.AudioCard;
 import it.unipv.ingsfw.JavaBeats.view.presets.Sidebar;
 import it.unipv.ingsfw.JavaBeats.view.presets.Songbar;
@@ -29,21 +30,30 @@ public class CollectionLibraryGUI{
   private static final int clientHeight=(int)Screen.getPrimary().getBounds().getHeight();
   private static final Background bg=new Background(new BackgroundFill(Color.rgb(15, 15, 15), CornerRadii.EMPTY, Insets.EMPTY));
   private static final Font fontCollection=Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 25);
+  private EJBPLAYABLE ejbplayable;
   private Scene scene;
+
+
+
+  public CollectionLibraryGUI(EJBPLAYABLE ejbplayable){
+    this.ejbplayable= ejbplayable;
+    initComponents();
+  }
 
 
   /*---------------------------------------*/
   //Getter/Setter
   /*---------------------------------------*/
+
   public Scene getScene(){
     return scene;
   }
 
-  public CollectionLibraryGUI(EJBPLAYABLE ejbplayable){
-    initComponents(ejbplayable);
+  public EJBPLAYABLE getEjbplayable() {
+    return ejbplayable;
   }
 
-  private void initComponents(EJBPLAYABLE ejbplayable){
+  private void initComponents(){
 
     //Label collection title
 

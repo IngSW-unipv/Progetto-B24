@@ -1,7 +1,7 @@
 package it.unipv.ingsfw.JavaBeats.controller.handler;
 import it.unipv.ingsfw.JavaBeats.model.playable.collection.Playlist;
 import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
-import it.unipv.ingsfw.JavaBeats.view.library.CollectionViewGui;
+import it.unipv.ingsfw.JavaBeats.view.library.CollectionViewGUI;
 import it.unipv.ingsfw.JavaBeats.view.presets.CollectionDialog;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -13,12 +13,12 @@ public class CollectionViewController{
   /*---------------------------------------*/
   //Attributi
   /*---------------------------------------*/
-  private CollectionViewGui gui;
+  private CollectionViewGUI gui;
 
   /*---------------------------------------*/
   //Costruttori
   /*---------------------------------------*/
-  public CollectionViewController(CollectionViewGui gui){
+  public CollectionViewController(CollectionViewGUI gui){
     this.gui=gui;
     initComponents();
   }

@@ -3,7 +3,9 @@ import it.unipv.ingsfw.JavaBeats.model.playable.*;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.Song;
 import it.unipv.ingsfw.JavaBeats.model.playable.collection.Album;
+import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
 import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
+import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.view.presets.AudioTable;
 import it.unipv.ingsfw.JavaBeats.view.presets.Sidebar;
 import it.unipv.ingsfw.JavaBeats.view.presets.Songbar;
@@ -22,7 +24,7 @@ import java.sql.SQLException;
 import java.sql.Time;
 import java.util.ArrayList;
 
-public class CollectionViewGui{
+public class CollectionViewGUI {
   /*---------------------------------------*/
   //Attributi
   /*---------------------------------------*/
@@ -35,9 +37,9 @@ public class CollectionViewGui{
   /*---------------------------------------*/
   //Costruttori
   /*---------------------------------------*/
-  public CollectionViewGui(EJBPLAYABLE collectionType){
+  public CollectionViewGUI(EJBPLAYABLE collectionType, JBProfile jbProfile, JBCollection jbCollection){
     super();
-    initComponents(collectionType);
+    initComponents(collectionType, jbProfile, jbCollection);
   }
 
   /*---------------------------------------*/
@@ -50,18 +52,20 @@ public class CollectionViewGui{
   public CollectionHeader getCollectionHeader(){
     return collectionHeader;
   }
+
   public GridPane getGp(){
     return gp;
   }
+
   /*---------------------------------------*/
   //Metodi
   /*---------------------------------------*/
-  private void initComponents(EJBPLAYABLE collectionType){
-    collectionHeader=new CollectionHeader(collectionType);
+  private void initComponents(EJBPLAYABLE collectionType, JBProfile jbProfile, JBCollection jbCollection){
+    collectionHeader=new CollectionHeader(collectionType, jbProfile, jbCollection);
     ObservableList<JBAudio> songList=FXCollections.observableArrayList();
     try{
       for(int i=0; i<4; i++){
-        songList.add(new Song("id", "Unknown title", new Artist("rob", "rob", "rob"), new Album("id", "nomeAlbum", new Artist("rob", "rob", "rob"), new ArrayList<Song>()), new SerialBlob(new byte[]{0, 1}), new Time(100), new Date(100), new String[]{"rock", "pop"}, true, 20));
+        songList.add(new Song("id", "Unknown title", new Artist("rob", "rob", "rob"), new Album("id", "nomeAlbum", new Artist("rob", "rob", "rob"), new ArrayList<Song>()), new SerialBlob(new byte[] {0, 1}), new Time(100), new Date(100), new String[] {"rock", "pop"}, true, 20));
       }//end-for
     }catch(SQLException e){
       throw new RuntimeException(e);

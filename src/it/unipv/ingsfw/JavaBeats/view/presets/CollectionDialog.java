@@ -1,10 +1,9 @@
 package it.unipv.ingsfw.JavaBeats.view.presets;
-import it.unipv.ingsfw.JavaBeats.model.playable.JBCollection;
-import it.unipv.ingsfw.JavaBeats.model.playable.Playlist;
+import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
+import it.unipv.ingsfw.JavaBeats.model.playable.collection.Playlist;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -13,11 +12,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-
-import javax.xml.stream.events.EndDocument;
 
 public class CollectionDialog extends Dialog<JBCollection>{
   /*---------------------------------------*/
@@ -48,18 +44,23 @@ public class CollectionDialog extends Dialog<JBCollection>{
   public JBCollection getOriginalCollection(){
     return originalCollection;
   }
+
   public Button getInputImageButton(){
     return inputImageButton;
   }
+
   public JBCollection getNewCollection(){
     return newCollection;
   }
+
   public CheckBox getCheckBox(){
     return checkBox;
   }
+
   public ImageView getCollectionImageView(){
     return collectionImageView;
   }
+
   /*---------------------------------------*/
   //Metodi
   /*---------------------------------------*/
@@ -108,10 +109,11 @@ public class CollectionDialog extends Dialog<JBCollection>{
     bp.setPadding(new Insets(20));
     getDialogPane().setContent(bp);
 
+    ButtonType saveButtonType=new ButtonType("Save", ButtonBar.ButtonData.CANCEL_CLOSE);
     ButtonType cancelButtonType=new ButtonType("Cancel", ButtonBar.ButtonData.BACK_PREVIOUS);
-    ButtonType closeButtonType=new ButtonType("Save", ButtonBar.ButtonData.CANCEL_CLOSE);
-    getDialogPane().getButtonTypes().addAll(cancelButtonType, closeButtonType);
+    getDialogPane().getButtonTypes().addAll(cancelButtonType, saveButtonType);
     ButtonBar buttonBar=(ButtonBar)getDialogPane().lookup(".button-bar");
+    buttonBar.getButtons().forEach(b -> b.setCursor(Cursor.HAND));
     buttonBar.getButtons().get(0).setId("buttonCancel");
     buttonBar.getButtons().get(1).setId("buttonSave");
 
