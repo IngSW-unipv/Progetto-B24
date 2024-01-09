@@ -1,11 +1,16 @@
 package it.unipv.ingsfw.JavaBeats.view.presets;
+import it.unipv.ingsfw.JavaBeats.model.playable.EJBPLAYABLE;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
+import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
+import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
+import it.unipv.ingsfw.JavaBeats.view.presets.tableColumns.DeleteButtonTableColumn;
 import it.unipv.ingsfw.JavaBeats.view.presets.tableColumns.FavoriteButtonTableColumn;
 import it.unipv.ingsfw.JavaBeats.view.presets.tableColumns.PlayButtonTableColumn;
 import it.unipv.ingsfw.JavaBeats.view.presets.tableColumns.TitleTableColumn;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.stage.Screen;
 
 public class AudioTable extends TableView<JBAudio>{
@@ -16,19 +21,19 @@ public class AudioTable extends TableView<JBAudio>{
   /*---------------------------------------*/
   //Constructor
   /*---------------------------------------*/
-  public AudioTable(ObservableList<JBAudio> jbAudios){
+  public AudioTable(ObservableList<JBAudio> jbAudios, EJBPLAYABLE collectionType, JBProfile jbProfile, JBCollection jbCollection){
     super();
-    initComponents(jbAudios);
+    initComponents(jbAudios, collectionType, jbProfile, jbCollection);
   }
   /*---------------------------------------*/
   //Methods
   /*---------------------------------------*/
-  private void initComponents(ObservableList<JBAudio> jbAudios){
+  private void initComponents(ObservableList<JBAudio> jbAudios, EJBPLAYABLE collectionType, JBProfile jbProfile, JBCollection jbCollection){
     /* 80% of clientWidth and 125 is the padding */
     double tableWidth=((double)80/100*clientWidth)-125;
 
     /* PlayButton column, contains the button to play the audio */
-    PlayButtonTableColumn playColumn=new PlayButtonTableColumn("#");
+    PlayButtonTableColumn playColumn=new PlayButtonTableColumn("");
     playColumn.setPrefWidth((double)5/100*tableWidth);
 
     /* Title column, with audio picture, title and artist */
@@ -55,9 +60,29 @@ public class AudioTable extends TableView<JBAudio>{
     durationColumn.setPrefWidth((double)10/100*tableWidth);
     durationColumn.getStyleClass().add("durationColumn");
 
+    /* Delete Button column, contains the button to delete the audio */
+    DeleteButtonTableColumn deleteColumn=new DeleteButtonTableColumn("");
+    deleteColumn.setPrefWidth((double)5/100*tableWidth);
+
+
+
+    if(!jbProfile.equals(jbCollection.getCreator())){
+      getColumns().addAll(playColumn, titleColumn, collectionColumn, dateColumn, favoriteColumn, durationColumn);
+
+    }
+
+    switch(collectionType){
+      case ALBUM:
+        getColumns().addAll(playColumn, titleColumn, collectionColumn, dateColumn, favoriteColumn, durationColumn);
+        break;
+      default:
+        getColumns().addAll(playColumn, titleColumn, collectionColumn, dateColumn, favoriteColumn, durationColumn, deleteColumn);
+        break;
+    }
+
+
     /* Adding the list of audios in the table and adding all the columns */
     setItems(jbAudios);
-    getColumns().addAll(playColumn, titleColumn, collectionColumn, dateColumn, favoriteColumn, durationColumn);
     setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
 
     /* Block of code to lock the table height given the number of rows, maxHeight=N_Of_Rows * Rows_Size +29. The 29 is given for the header row which is 55px */

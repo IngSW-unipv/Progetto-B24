@@ -3,7 +3,9 @@ import it.unipv.ingsfw.JavaBeats.model.playable.*;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.Song;
 import it.unipv.ingsfw.JavaBeats.model.playable.collection.Album;
+import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
 import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
+import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.view.presets.AudioTable;
 import it.unipv.ingsfw.JavaBeats.view.presets.Sidebar;
 import it.unipv.ingsfw.JavaBeats.view.presets.Songbar;
@@ -22,7 +24,7 @@ import java.sql.SQLException;
 import java.sql.Time;
 import java.util.ArrayList;
 
-public class CollectionViewGUI{
+public class CollectionViewGUI {
   /*---------------------------------------*/
   //Attributi
   /*---------------------------------------*/
@@ -35,9 +37,9 @@ public class CollectionViewGUI{
   /*---------------------------------------*/
   //Costruttori
   /*---------------------------------------*/
-  public CollectionViewGUI(EJBPLAYABLE collectionType){
+  public CollectionViewGUI(EJBPLAYABLE collectionType, JBProfile jbProfile, JBCollection jbCollection){
     super();
-    initComponents(collectionType);
+    initComponents(collectionType, jbProfile, jbCollection);
   }
 
   /*---------------------------------------*/
@@ -58,8 +60,8 @@ public class CollectionViewGUI{
   /*---------------------------------------*/
   //Metodi
   /*---------------------------------------*/
-  private void initComponents(EJBPLAYABLE collectionType){
-    collectionHeader=new CollectionHeader(collectionType);
+  private void initComponents(EJBPLAYABLE collectionType, JBProfile jbProfile, JBCollection jbCollection){
+    collectionHeader=new CollectionHeader(collectionType, jbProfile, jbCollection);
     ObservableList<JBAudio> songList=FXCollections.observableArrayList();
     try{
       for(int i=0; i<4; i++){

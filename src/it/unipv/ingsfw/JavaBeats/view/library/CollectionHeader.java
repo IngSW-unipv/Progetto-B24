@@ -1,5 +1,7 @@
 package it.unipv.ingsfw.JavaBeats.view.library;
 import it.unipv.ingsfw.JavaBeats.model.playable.EJBPLAYABLE;
+import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
+import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -28,8 +30,8 @@ public class CollectionHeader extends VBox{
   /*---------------------------------------*/
   //Costruttori
   /*---------------------------------------*/
-  public CollectionHeader(EJBPLAYABLE collectionType){
-    initComponents(collectionType);
+  public CollectionHeader(EJBPLAYABLE collectionType, JBProfile jbProfile, JBCollection jbCollection){
+    initComponents(collectionType, jbProfile, jbCollection);
   }
 
   /*---------------------------------------*/
@@ -42,7 +44,7 @@ public class CollectionHeader extends VBox{
   /*---------------------------------------*/
   //Metodi
   /*---------------------------------------*/
-  private void initComponents(EJBPLAYABLE collectionType){
+  private void initComponents(EJBPLAYABLE collectionType, JBProfile jbProfile, JBCollection jbCollection){
     Image collectionImage=new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/RecordBig.png", true);
     ImageView collectionImageView=new ImageView(collectionImage);
     collectionImageView.setPreserveRatio(true);
@@ -148,11 +150,31 @@ public class CollectionHeader extends VBox{
     buttonBin.setCursor(Cursor.HAND);
     buttonBin.setTooltip(new Tooltip("Delete"));
 
+    HBox buttonsHBbox=null;
+    if(!jbProfile.equals(jbCollection.getCreator())){
+      buttonsHBbox=new HBox(buttonPlayPause, buttonRandom, buttonLoop);
+    }
 
-    HBox buttonsHBbox=new HBox(buttonPlayPause, buttonRandom, buttonLoop, editButton, buttonBin);
+    switch(collectionType){
+      case PLAYLIST:
+        buttonsHBbox=new HBox(buttonPlayPause, buttonRandom, buttonLoop, editButton, buttonBin);
+        getChildren().addAll(topViewHBox, buttonsHBbox);
+        break;
+      case ALBUM:
+        buttonsHBbox=new HBox(buttonPlayPause, buttonRandom, buttonLoop, buttonBin);
+        getChildren().addAll(topViewHBox, buttonsHBbox);
+        break;
+      case PODCAST:
+        buttonsHBbox=new HBox(buttonPlayPause, buttonRandom, buttonLoop, buttonBin);
+        getChildren().addAll(topViewHBox, buttonsHBbox);
+        break;
+    }
+
+
+
     buttonsHBbox.setPadding(new Insets(40, 0, 0, 0));
 
-    getChildren().addAll(topViewHBox, buttonsHBbox);
+
     setPadding(new Insets(50, 0, 30, 0));
     setBackground(bgHome);
   }
