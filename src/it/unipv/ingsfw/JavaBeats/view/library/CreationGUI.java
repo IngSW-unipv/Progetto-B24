@@ -22,7 +22,7 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
 
 
-public class CreationGui {
+public class CreationGUI {
 
     //Attributi
     private static final int clientWidth=(int) Screen.getPrimary().getBounds().getWidth();
@@ -42,7 +42,7 @@ public class CreationGui {
         return scene;
     }
 
-    public CreationGui(EJBPLAYABLE ejbplayable){
+    public CreationGUI(EJBPLAYABLE ejbplayable){
         initComponents(ejbplayable);
     }
 
@@ -74,6 +74,7 @@ public class CreationGui {
 
         HBox titleHbox= new HBox(collectionButton, textFieldHBox);
         titleHbox.setAlignment(Pos.TOP_LEFT);
+        titleHbox.setPadding(new Insets(0, 0, 0, 10));
 
 
         //Add button
