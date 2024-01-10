@@ -50,7 +50,7 @@ public class EditPlaylistDialogController{
           fileInputStream=new FileInputStream(f);
           fileInputStream.read(fileContent);
           fileInputStream.close();
-          gui.getNewCollection().setPicture(new SerialBlob(fileContent));
+          gui.getNewPlaylist().setPicture(new SerialBlob(fileContent));
           gui.getCollectionImageView().setImage(new Image(url.toExternalForm(), true));
         }catch(IOException | SQLException e){
           throw new RuntimeException(e);

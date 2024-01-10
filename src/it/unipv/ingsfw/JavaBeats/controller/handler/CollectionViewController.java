@@ -39,7 +39,9 @@ public class CollectionViewController{
         Playlist originalCollection=new Playlist(1, "name", new Artist("mail", "name", "username"));
         EditPlaylistDialog dialog=new EditPlaylistDialog(stage, originalCollection, (Playlist)originalCollection.getCopy(originalCollection));
         EditPlaylistDialogController editPlaylistDialogController=new EditPlaylistDialogController(dialog);
-        dialog.show();
+        dialog.showAndWait();
+        gui.getGp().setEffect(null);
+
       }
     };
     gui.getCollectionHeader().getEditButton().setOnAction(editButtonHandler);

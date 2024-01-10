@@ -9,6 +9,7 @@ import it.unipv.ingsfw.JavaBeats.view.primary.profile.ProfileViewGUI;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
+import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
@@ -40,7 +41,7 @@ public class ProfileViewController{
       @Override
       public void handle(ActionEvent actionEvent){
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-//        gui.getGp().setEffect(new BoxBlur(10, 10, 10));
+        gui.getGp().setEffect(new BoxBlur(10, 10, 10));
 
         EditProfileDialog dialog=null;
         try{
@@ -52,6 +53,8 @@ public class ProfileViewController{
         }//end-try
         EditProfileDialogController editProfileDialogController=new EditProfileDialogController(dialog);
         dialog.showAndWait();
+        gui.getGp().setEffect(null); /* Removing blur effect */
+
         /* Checking if an edit has been made */
         if(!dialog.getOriginalProfile().equals(dialog.getNewProfile())){
           try{

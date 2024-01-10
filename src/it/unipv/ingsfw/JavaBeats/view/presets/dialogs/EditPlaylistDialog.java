@@ -2,7 +2,6 @@ package it.unipv.ingsfw.JavaBeats.view.presets.dialogs;
 import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
 import it.unipv.ingsfw.JavaBeats.model.playable.collection.Playlist;
 import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.*;
@@ -21,58 +20,62 @@ public class EditPlaylistDialog extends Dialog<JBCollection>{
   //Attributi
   /*---------------------------------------*/
   private static final Background bgHome=new Background(new BackgroundFill(Color.rgb(20, 20, 20), CornerRadii.EMPTY, Insets.EMPTY));
-  private Playlist originalCollection;
-  private Playlist newCollection;
+  private Playlist originalPlaylist;
+  private Playlist newPlaylist;
   private ImageView collectionImageView;
   private Button inputImageButton;
   private CheckBox checkBox;
+  private Button saveButton;
+  private Button cancelButton;
 
   /*---------------------------------------*/
   //Costruttori
   /*---------------------------------------*/
-  public EditPlaylistDialog(Stage stage, Playlist originalCollection, Playlist newCollection){
+  public EditPlaylistDialog(Stage stage, Playlist originalPlaylist, Playlist newPlaylist){
     super();
-    this.originalCollection=originalCollection;
-    this.newCollection=newCollection;
+    this.originalPlaylist=originalPlaylist;
+    this.newPlaylist=newPlaylist;
     initOwner(stage);
-    initStyle(StageStyle.UNDECORATED);
+    initStyle(StageStyle.UNDECORATED); /* Remove unnecessary button to control the dialog */
     initComponents();
   }
 
   /*---------------------------------------*/
   //Getter/Setter
   /*---------------------------------------*/
-  public JBCollection getOriginalCollection(){
-    return originalCollection;
+  public JBCollection getOriginalPlaylist(){
+    return originalPlaylist;
   }
-
   public Button getInputImageButton(){
     return inputImageButton;
   }
-
-  public JBCollection getNewCollection(){
-    return newCollection;
+  public JBCollection getNewPlaylist(){
+    return newPlaylist;
   }
-
   public CheckBox getCheckBox(){
     return checkBox;
   }
-
   public ImageView getCollectionImageView(){
     return collectionImageView;
   }
-
+  public Button getSaveButton(){
+    return saveButton;
+  }
+  public Button getCancelButton(){
+    return cancelButton;
+  }
   /*---------------------------------------*/
   //Metodi
   /*---------------------------------------*/
   private void initComponents(){
+    /* Setup of ediLabel */
     Label editLabel=new Label("Edit details");
     editLabel.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 25));
     editLabel.setTextFill(Color.LIGHTGRAY);
+    HBox editLabelHBox=new HBox(editLabel);
+    editLabelHBox.setAlignment(Pos.CENTER_LEFT);
 
-    HBox editLabelCloseButtonHBox=new HBox(editLabel);
-    editLabelCloseButtonHBox.setAlignment(Pos.CENTER_LEFT);
-
+    /* Setup of the collection's image */
     Image collectionImage=new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/RecordBig.png", true);
     collectionImageView=new ImageView(collectionImage);
     collectionImageView.setPreserveRatio(true);
@@ -82,12 +85,14 @@ public class EditPlaylistDialog extends Dialog<JBCollection>{
     inputImageButton.setBackground(bgHome);
     inputImageButton.setCursor(Cursor.HAND);
 
-    TextField textField=new TextField(originalCollection.getName());
+    /* Text field containing collection's name */
+    TextField textField=new TextField(originalPlaylist.getName());
     textField.setId("TextField");
     textField.setFont(Font.font("Verdana", FontWeight.NORMAL, FontPosture.REGULAR, 20));
 
+    /* Check box to choose whether the playlist is private or public */
     checkBox=new CheckBox();
-    Playlist p=(Playlist)originalCollection;
+    Playlist p=(Playlist)originalPlaylist;
     p.setVisible(false); /* just trying the logic, IT MUST BE CHANGED */
     if(!p.isVisible()){
       checkBox.setSelected(true);
@@ -97,19 +102,22 @@ public class EditPlaylistDialog extends Dialog<JBCollection>{
     checkBox.setTextFill(Color.LIGHTGRAY);
     checkBox.setId("checkBox");
 
-
+    /* VBox with text field and checkbox */
     VBox namePrivacyVBox=new VBox(100, textField, checkBox);
     namePrivacyVBox.setAlignment(Pos.CENTER_LEFT);
 
+    /* final HBox with all the above components */
     HBox imageTextInputHBox=new HBox(20, inputImageButton, namePrivacyVBox);
     imageTextInputHBox.setAlignment(Pos.CENTER_LEFT);
 
+    /* Chosen layout to display the dialog */
     BorderPane bp=new BorderPane();
-    bp.setTop(editLabelCloseButtonHBox);
+    bp.setTop(editLabelHBox);
     bp.setCenter(imageTextInputHBox);
     bp.setPadding(new Insets(20));
     getDialogPane().setContent(bp);
 
+    /* Adding the functionality to save the edit or cancelling it using Button Types */
     ButtonType saveButtonType=new ButtonType("Save", ButtonBar.ButtonData.CANCEL_CLOSE);
     ButtonType cancelButtonType=new ButtonType("Cancel", ButtonBar.ButtonData.BACK_PREVIOUS);
     getDialogPane().getButtonTypes().addAll(cancelButtonType, saveButtonType);
@@ -118,8 +126,9 @@ public class EditPlaylistDialog extends Dialog<JBCollection>{
     buttonBar.getButtons().get(0).setId("buttonCancel");
     buttonBar.getButtons().get(1).setId("buttonSave");
 
-//    Button startStopBtn=(Button)getDialogPane().lookupButton(resetBtnType);
-//    Button closeBtn=(Button)getDialogPane().lookupButton(closeBtnType);
+    /* expliciting the buttons to handle the interaction */
+    saveButton=(Button)getDialogPane().lookupButton(saveButtonType);
+    cancelButton=(Button)getDialogPane().lookupButton(cancelButtonType);
     getDialogPane().getStylesheets().add("it/unipv/ingsfw/JavaBeats/view/resources/css/Dialog.css");
     getDialogPane().getStyleClass().add("myDialog");
     getDialogPane().setPrefSize(600, 400);

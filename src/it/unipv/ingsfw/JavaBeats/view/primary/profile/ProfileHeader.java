@@ -2,12 +2,9 @@ package it.unipv.ingsfw.JavaBeats.view.primary.profile;
 import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
 import it.unipv.ingsfw.JavaBeats.model.profile.User;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
-import it.unipv.ingsfw.JavaBeats.view.presets.Sidebar;
-import it.unipv.ingsfw.JavaBeats.view.presets.Songbar;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -20,14 +17,12 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.stage.Screen;
 
 import java.sql.Time;
 public class ProfileHeader extends VBox{
   /*---------------------------------------*/
   //Attributi
   /*---------------------------------------*/
-  private static final Background bgButton=new Background(new BackgroundFill(Color.BLUEVIOLET, new CornerRadii(15), Insets.EMPTY));
   private static final Font fontLabels=Font.font("Verdana", FontWeight.NORMAL, FontPosture.REGULAR, 14);
   private ImageView profileImageView;
   private Label usernameLabel;
@@ -38,8 +33,9 @@ public class ProfileHeader extends VBox{
   /*---------------------------------------*/
   //Costruttori
   /*---------------------------------------*/
-  public ProfileHeader(JBProfile activeProfile){
-    initComponents(activeProfile);
+  public ProfileHeader(JBProfile searchedProfile){
+    super();
+    initComponents(searchedProfile);
   }
   /*---------------------------------------*/
   //Getter/Setter
@@ -65,15 +61,11 @@ public class ProfileHeader extends VBox{
   /*---------------------------------------*/
   //Metodi
   /*---------------------------------------*/
-  private void initComponents(JBProfile activeProfile){
-    Image profileImage=new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/RecordBig.png", true);
-    profileImageView=new ImageView(profileImage);
-    profileImageView.setPreserveRatio(true);
-    profileImageView.setFitHeight(200);
-
+  private void initComponents(JBProfile searchedProfile){
+    /* Dynamically choosign between user or artist label */
     Label profileType=null;
     try{
-      User u=(User)activeProfile;
+      User u=(User)searchedProfile;
       profileType=new Label("User");
     }catch(ClassCastException c){
       profileType=new Label("Artist");
@@ -83,6 +75,7 @@ public class ProfileHeader extends VBox{
     profileType.setTextFill(Color.BLUEVIOLET);
     profileType.setBorder(new Border(new BorderStroke(Color.BLUEVIOLET, BorderStrokeStyle.SOLID, new CornerRadii(10), new BorderWidths(3), Insets.EMPTY)));
 
+    /* Setup of username, name and surname labels */
     usernameLabel=new Label("Really long username");
     usernameLabel.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 95));
     usernameLabel.setTextFill(Color.LIGHTGRAY);
@@ -97,55 +90,68 @@ public class ProfileHeader extends VBox{
     surnameLabel.setTextFill(Color.LIGHTGRAY);
     surnameLabel.setUnderline(true);
 
+    /* Dyanmically chosees between: minutes listened for users; all time total listeners for artists */
     Label listenersLabel=null;
     try{
-      User u=(User)activeProfile;
+      User u=(User)searchedProfile;
       u.setMinuteListened(new Time(4000));
       listenersLabel=new Label(u.getMinuteListened().getTime()+" minutes listened all time");
     }catch(ClassCastException c){
-      listenersLabel=new Label(((Artist)activeProfile).getTotalListeners()+" all time total listeners");
+      listenersLabel=new Label(((Artist)searchedProfile).getTotalListeners()+" all time total listeners");
     }//end-try
     listenersLabel.setFont(fontLabels);
     listenersLabel.setTextFill(Color.LIGHTGRAY);
     listenersLabel.setUnderline(true);
 
+    /* Hbox containing base info of profile */
     HBox nameSurnameMinutesHBox=new HBox(20, nameLabel, surnameLabel, listenersLabel);
     nameSurnameMinutesHBox.setPadding(new Insets(5, 0, 0, 0));
 
+    /* VBox containing all the labels */
     VBox labelsVBox=new VBox(profileType, usernameLabel, nameSurnameMinutesHBox);
     labelsVBox.setAlignment(Pos.BOTTOM_LEFT);
 
+    /* Setup of profile picture, put inside a HBox with labels */
+    Image profileImage=new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/RecordBig.png", true);
+    profileImageView=new ImageView(profileImage);
+    profileImageView.setPreserveRatio(true);
+    profileImageView.setFitHeight(200);
     HBox imageLabelsHBox=new HBox(10, profileImageView, labelsVBox);
 
-    activeProfile.setBiography("Incredible biography on how much i have accomplished during all my career because i'm the best artist in the whole universe, no one will ever catch me. \nAnd even if they did... I guess we'll never know.");
-    biographyText=new TextArea(activeProfile.getBiography());
+    /* Biography text area setup */
+    searchedProfile.setBiography("Incredible biography on how much i have accomplished during all my career because i'm the best artist in the whole universe, no one will ever catch me. \nAnd even if they did... I guess we'll never know.");
+    biographyText=new TextArea(searchedProfile.getBiography());
     biographyText.setEditable(false);
     biographyText.setStyle("-fx-background-color: #0A0A0AFF");
     biographyText.getStyleClass().add("textArea");
-    sizeTextArea(biographyText, activeProfile.getBiography());
+    sizeTextArea(biographyText, searchedProfile.getBiography());
 
     HBox biographyHBox=new HBox(biographyText);
     HBox.setHgrow(biographyText, Priority.ALWAYS);
 
+    /* Setup of button used for editing profile details */
     Image editImage=new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Edit.png", true);
     ImageView editImageView=new ImageView(editImage);
     editImageView.setPreserveRatio(true);
     editButton=new Button();
     editButton.setGraphic(editImageView);
-    editButton.setBackground(bgButton);
+    editButton.setStyle("-fx-background-color: blueviolet; -fx-background-radius: 15");
     editButton.setCursor(Cursor.HAND);
     editButton.setPadding(new Insets(20));
     editButton.setTooltip(new Tooltip("Edit"));
 
     HBox editButtonHBox=new HBox(editButton);
 
+    /* adding everything to VBox */
     getChildren().addAll(imageLabelsHBox, biographyHBox, editButtonHBox);
     setAlignment(Pos.CENTER_LEFT);
     setSpacing(30);
   }
+  /* Method used to calculate the size that the text will occupy inside the TextArea so that it can be resized accordingly */
   public void sizeTextArea(TextArea biographyText, String s){
     Text t=new Text(s);
     Pane p=new Pane(t);
+    p.setPadding(new Insets(10));
     p.layout();
     biographyText.setPrefHeight(t.getLayoutBounds().getHeight()+20);
   }
