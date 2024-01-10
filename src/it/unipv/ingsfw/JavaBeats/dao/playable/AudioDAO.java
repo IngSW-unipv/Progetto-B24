@@ -90,17 +90,10 @@ public class AudioDAO implements IAudioDAO {
 
     @Override
     public JBAudio get(JBAudio audio, JBProfile activeProfile) {
-        ProfileDAO pDAO = new ProfileDAO();
-        CollectionDAO cDAO = new CollectionDAO();
 
         JBAudio audioOut = getSong(audio, activeProfile);
         if(audioOut==null)
             audioOut=getEpisode(audio, activeProfile);
-
-        if(audioOut != null) {
-            audioOut.getMetadata().setArtist(pDAO.getArtist(audioOut.getMetadata().getArtist()));
-            audioOut.getMetadata().setCollection(cDAO.get(audioOut.getMetadata().getCollection()));
-        }
 
         return audioOut;
     }
@@ -150,7 +143,13 @@ public class AudioDAO implements IAudioDAO {
             result.getMetadata().setGenres(getGenres(result));      //set Genres in metadata
             result.setFavorite(isFavorite(result, activeProfile));  //set isFavorite
             result.setNumberOfStreams(getNumberOfStreams(result));  //set total number of streams
-            if(activeProfile!=null) result.setFavorite(isFavorite(result, activeProfile));
+
+            ProfileDAO pDAO = new ProfileDAO();
+            CollectionDAO cDAO = new CollectionDAO();
+            result.getMetadata().setArtist(pDAO.getArtist(result.getMetadata().getArtist()));       //set complete artist profile
+            result.getMetadata().setCollection(cDAO.get(result.getMetadata().getCollection()));     //set complete collection data
+
+            if(activeProfile!=null) result.setFavorite(isFavorite(result, activeProfile));  //set isFavorite (only if profile is specified)
         }
 
         return result;
@@ -198,10 +197,16 @@ public class AudioDAO implements IAudioDAO {
         DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
 
         if(result != null) {
-            result.getMetadata().setGenres(getGenres(result));
-            result.setFavorite(isFavorite(result, activeProfile));
-            result.setNumberOfStreams(getNumberOfStreams(result));
-            if(activeProfile!=null) result.setFavorite(isFavorite(result, activeProfile));  //THROWS EXCEPTIONS IF ACTIVE PROFILE IS NULL
+            result.getMetadata().setGenres(getGenres(result));      //set Genres in metadata
+            result.setFavorite(isFavorite(result, activeProfile));  //set isFavorite
+            result.setNumberOfStreams(getNumberOfStreams(result));  //set total number of streams
+
+            ProfileDAO pDAO = new ProfileDAO();
+            CollectionDAO cDAO = new CollectionDAO();
+            result.getMetadata().setArtist(pDAO.getArtist(result.getMetadata().getArtist()));       //set complete artist profile
+            result.getMetadata().setCollection(cDAO.get(result.getMetadata().getCollection()));     //set complete collection data
+
+            if(activeProfile!=null) result.setFavorite(isFavorite(result, activeProfile));  //set isFavorite (only if profile is specified)
         }
 
         return result;
