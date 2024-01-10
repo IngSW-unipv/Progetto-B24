@@ -66,7 +66,6 @@ public class ProfileHeader extends VBox{
   //Metodi
   /*---------------------------------------*/
   private void initComponents(JBProfile activeProfile){
-
     Image profileImage=new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/RecordBig.png", true);
     profileImageView=new ImageView(profileImage);
     profileImageView.setPreserveRatio(true);
@@ -111,6 +110,7 @@ public class ProfileHeader extends VBox{
     listenersLabel.setUnderline(true);
 
     HBox nameSurnameMinutesHBox=new HBox(20, nameLabel, surnameLabel, listenersLabel);
+    nameSurnameMinutesHBox.setPadding(new Insets(5, 0, 0, 0));
 
     VBox labelsVBox=new VBox(profileType, usernameLabel, nameSurnameMinutesHBox);
     labelsVBox.setAlignment(Pos.BOTTOM_LEFT);
@@ -122,10 +122,7 @@ public class ProfileHeader extends VBox{
     biographyText.setEditable(false);
     biographyText.setStyle("-fx-background-color: #0A0A0AFF");
     biographyText.getStyleClass().add("textArea");
-    Text t=new Text(activeProfile.getBiography());
-    Pane p=new Pane(t);
-    p.layout();
-    biographyText.setPrefHeight(t.getLayoutBounds().getHeight()+20);
+    sizeTextArea(biographyText, activeProfile.getBiography());
 
     HBox biographyHBox=new HBox(biographyText);
     HBox.setHgrow(biographyText, Priority.ALWAYS);
@@ -145,7 +142,12 @@ public class ProfileHeader extends VBox{
     getChildren().addAll(imageLabelsHBox, biographyHBox, editButtonHBox);
     setAlignment(Pos.CENTER_LEFT);
     setSpacing(30);
-
+  }
+  public void sizeTextArea(TextArea biographyText, String s){
+    Text t=new Text(s);
+    Pane p=new Pane(t);
+    p.layout();
+    biographyText.setPrefHeight(t.getLayoutBounds().getHeight()+20);
   }
   /*---------------------------------------*/
 }

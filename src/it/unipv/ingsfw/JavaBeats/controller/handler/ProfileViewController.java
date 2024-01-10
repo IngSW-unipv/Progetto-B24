@@ -59,10 +59,11 @@ public class ProfileViewController{
           }catch(SQLException e){
             throw new RuntimeException(e);
           }//end-try
-          gui.getProfileHeader().getUsernameLabel().setText(dialog.getNewProfile().getUsername());
           gui.getProfileHeader().getNameLabel().setText(dialog.getNewProfile().getName());
           gui.getProfileHeader().getSurnameLabel().setText(dialog.getNewProfile().getSurname());
-          gui.getProfileHeader().getBiographyText().setText(dialog.getNewProfile().getSurname());
+          gui.getProfileHeader().getBiographyText().setText(dialog.getNewProfile().getBiography());
+          gui.getProfileHeader().sizeTextArea(gui.getProfileHeader().getBiographyText(), gui.getProfileHeader().getBiographyText().getText());
+          gui.getProfileHeader().getUsernameLabel().setText(dialog.getNewProfile().getUsername());
         }//end-if
       }
     };

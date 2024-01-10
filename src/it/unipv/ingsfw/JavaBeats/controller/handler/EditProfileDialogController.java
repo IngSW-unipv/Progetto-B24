@@ -69,7 +69,7 @@ public class EditProfileDialogController{
         }//end-try
         profileDialog.getNewProfile().setBiography(profileDialog.getBiography().getText());
         profileDialog.getNewProfile().setName(profileDialog.getNameTextField().getText());
-        profileDialog.getNewProfile().setName(profileDialog.getSurnameTextField().getText());
+        profileDialog.getNewProfile().setSurname(profileDialog.getSurnameTextField().getText());
         /* Here we need to check whether the username is already present, for we assume is not */
         profileDialog.getNewProfile().setUsername(profileDialog.getUsernameTextField().getText());
       }
