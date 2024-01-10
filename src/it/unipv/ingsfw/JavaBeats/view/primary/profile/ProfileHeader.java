@@ -30,6 +30,10 @@ public class ProfileHeader extends VBox{
   private static final Background bgButton=new Background(new BackgroundFill(Color.BLUEVIOLET, new CornerRadii(15), Insets.EMPTY));
   private static final Font fontLabels=Font.font("Verdana", FontWeight.NORMAL, FontPosture.REGULAR, 14);
   private ImageView profileImageView;
+  private Label usernameLabel;
+  private Label nameLabel;
+  private Label surnameLabel;
+  private TextArea biographyText;
   private Button editButton;
   /*---------------------------------------*/
   //Costruttori
@@ -45,6 +49,18 @@ public class ProfileHeader extends VBox{
   }
   public Button getEditButton(){
     return editButton;
+  }
+  public Label getUsernameLabel(){
+    return usernameLabel;
+  }
+  public Label getNameLabel(){
+    return nameLabel;
+  }
+  public Label getSurnameLabel(){
+    return surnameLabel;
+  }
+  public TextArea getBiographyText(){
+    return biographyText;
   }
   /*---------------------------------------*/
   //Metodi
@@ -68,16 +84,16 @@ public class ProfileHeader extends VBox{
     profileType.setTextFill(Color.BLUEVIOLET);
     profileType.setBorder(new Border(new BorderStroke(Color.BLUEVIOLET, BorderStrokeStyle.SOLID, new CornerRadii(10), new BorderWidths(3), Insets.EMPTY)));
 
-    Label usernameLabel=new Label("Really long username");
+    usernameLabel=new Label("Really long username");
     usernameLabel.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 95));
     usernameLabel.setTextFill(Color.LIGHTGRAY);
 
-    Label nameLabel=new Label("Name");
+    nameLabel=new Label("Name");
     nameLabel.setFont(fontLabels);
     nameLabel.setTextFill(Color.LIGHTGRAY);
     nameLabel.setUnderline(true);
 
-    Label surnameLabel=new Label("Surname");
+    surnameLabel=new Label("Surname");
     surnameLabel.setFont(fontLabels);
     surnameLabel.setTextFill(Color.LIGHTGRAY);
     surnameLabel.setUnderline(true);
@@ -102,7 +118,7 @@ public class ProfileHeader extends VBox{
     HBox imageLabelsHBox=new HBox(10, profileImageView, labelsVBox);
 
     activeProfile.setBiography("Incredible biography on how much i have accomplished during all my career because i'm the best artist in the whole universe, no one will ever catch me. \nAnd even if they did... I guess we'll never know.");
-    TextArea biographyText=new TextArea(activeProfile.getBiography());
+    biographyText=new TextArea(activeProfile.getBiography());
     biographyText.setEditable(false);
     biographyText.setStyle("-fx-background-color: #0A0A0AFF");
     biographyText.getStyleClass().add("textArea");

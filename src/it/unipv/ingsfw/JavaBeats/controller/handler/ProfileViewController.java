@@ -9,7 +9,12 @@ import it.unipv.ingsfw.JavaBeats.view.primary.profile.ProfileViewGUI;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+
+import java.io.InputStreamReader;
+import java.sql.SQLException;
 public class ProfileViewController{
   /*---------------------------------------*/
   //Attributi
@@ -46,7 +51,19 @@ public class ProfileViewController{
           dialog=new EditProfileDialog(stage, (Artist)originalProfile, new Artist("us", "mail", "psw"));
         }//end-try
         EditProfileDialogController editProfileDialogController=new EditProfileDialogController(dialog);
-        dialog.show();
+        dialog.showAndWait();
+        /* Checking if an edit has been made */
+        if(!dialog.getOriginalProfile().equals(dialog.getNewProfile())){
+          try{
+            gui.getProfileHeader().getProfileImageView().setImage(new Image(dialog.getNewProfile().getProfilePicture().getBinaryStream()));
+          }catch(SQLException e){
+            throw new RuntimeException(e);
+          }//end-try
+          gui.getProfileHeader().getUsernameLabel().setText(dialog.getNewProfile().getUsername());
+          gui.getProfileHeader().getNameLabel().setText(dialog.getNewProfile().getName());
+          gui.getProfileHeader().getSurnameLabel().setText(dialog.getNewProfile().getSurname());
+          gui.getProfileHeader().getBiographyText().setText(dialog.getNewProfile().getSurname());
+        }//end-if
       }
     };
     gui.getProfileHeader().getEditButton().setOnAction(editButtonHandler);

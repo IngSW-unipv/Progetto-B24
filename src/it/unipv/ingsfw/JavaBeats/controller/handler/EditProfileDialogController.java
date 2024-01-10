@@ -19,13 +19,14 @@ public class EditProfileDialogController{
   /*---------------------------------------*/
   //Attributi
   /*---------------------------------------*/
-  private EditProfileDialog gui;
+  private EditProfileDialog profileDialog;
+  private byte[] fileContent;
 
   /*---------------------------------------*/
   //Costruttori
   /*---------------------------------------*/
-  public EditProfileDialogController(EditProfileDialog gui){
-    this.gui=gui;
+  public EditProfileDialogController(EditProfileDialog profileDialog){
+    this.profileDialog=profileDialog;
     initComponents();
   }
   /*---------------------------------------*/
@@ -44,7 +45,7 @@ public class EditProfileDialogController{
         FileChooser fileChooser=new FileChooser();
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("PNG file", "*png"));
         File f=fileChooser.showOpenDialog(stage);
-        byte[] fileContent=new byte[(int)f.length()];
+        fileContent=new byte[(int)f.length()];
         FileInputStream fileInputStream=null;
         URL url=null;
         try{
@@ -52,9 +53,8 @@ public class EditProfileDialogController{
           fileInputStream=new FileInputStream(f);
           fileInputStream.read(fileContent);
           fileInputStream.close();
-          gui.getNewProfile().setProfilePicture(new SerialBlob(fileContent));
-          gui.getCollectionImageView().setImage(new Image(url.toExternalForm(), true));
-        }catch(IOException | SQLException e){
+          profileDialog.getProfileImageView().setImage(new Image(url.toExternalForm(), true));
+        }catch(IOException e){
           throw new RuntimeException(e);
         }//end-try
       }
@@ -62,18 +62,27 @@ public class EditProfileDialogController{
     EventHandler<ActionEvent> saveButtonHandler=new EventHandler<ActionEvent>(){
       @Override
       public void handle(ActionEvent actionEvent){
-        System.out.println("save clicked");
+        try{
+          profileDialog.getNewProfile().setProfilePicture(new SerialBlob(fileContent));
+        }catch(SQLException e){
+          throw new RuntimeException(e);
+        }//end-try
+        profileDialog.getNewProfile().setBiography(profileDialog.getBiography().getText());
+        profileDialog.getNewProfile().setName(profileDialog.getNameTextField().getText());
+        profileDialog.getNewProfile().setName(profileDialog.getSurnameTextField().getText());
+        /* Here we need to check whether the username is already present, for we assume is not */
+        profileDialog.getNewProfile().setUsername(profileDialog.getUsernameTextField().getText());
       }
     };
     EventHandler<ActionEvent> cancelButtonHandler=new EventHandler<ActionEvent>(){
       @Override
       public void handle(ActionEvent actionEvent){
-        System.out.println("cancel clicked");
+
       }
     };
-    gui.getInputImageButton().setOnAction(inputImageButtonHandler);
-    gui.getSaveButton().setOnAction(saveButtonHandler);
-    gui.getCancelButton().setOnAction(cancelButtonHandler);
+    profileDialog.getInputImageButton().setOnAction(inputImageButtonHandler);
+    profileDialog.getSaveButton().setOnAction(saveButtonHandler);
+    profileDialog.getCancelButton().setOnAction(cancelButtonHandler);
   }
   /*---------------------------------------*/
 }

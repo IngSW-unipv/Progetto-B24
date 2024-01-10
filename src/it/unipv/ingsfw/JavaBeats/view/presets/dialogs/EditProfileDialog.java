@@ -26,7 +26,7 @@ public class EditProfileDialog extends Dialog<JBCollection>{
   private static final Background bgHome=new Background(new BackgroundFill(Color.rgb(20, 20, 20), CornerRadii.EMPTY, Insets.EMPTY));
   private JBProfile originalProfile;
   private JBProfile newProfile;
-  private ImageView collectionImageView;
+  private ImageView profileImageView;
   private TextField usernameTextField;
   private TextField nameTextField;
   private TextField surnameTextField;
@@ -53,8 +53,8 @@ public class EditProfileDialog extends Dialog<JBCollection>{
     return inputImageButton;
   }
 
-  public ImageView getCollectionImageView(){
-    return collectionImageView;
+  public ImageView getProfileImageView(){
+    return profileImageView;
   }
   public JBProfile getOriginalProfile(){
     return originalProfile;
@@ -92,12 +92,12 @@ public class EditProfileDialog extends Dialog<JBCollection>{
     HBox editLabelCloseButtonHBox=new HBox(editLabel);
     editLabelCloseButtonHBox.setAlignment(Pos.CENTER_LEFT);
 
-    Image collectionImage=new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/RecordBig.png", true);
-    collectionImageView=new ImageView(collectionImage);
-    collectionImageView.setPreserveRatio(true);
-    collectionImageView.setFitHeight(250);
+    Image profileImage=new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/RecordBig.png", true);
+    profileImageView=new ImageView(profileImage);
+    profileImageView.setPreserveRatio(true);
+    profileImageView.setFitHeight(250);
     inputImageButton=new Button();
-    inputImageButton.setGraphic(collectionImageView);
+    inputImageButton.setGraphic(profileImageView);
     inputImageButton.setBackground(bgHome);
     inputImageButton.setCursor(Cursor.HAND);
 
