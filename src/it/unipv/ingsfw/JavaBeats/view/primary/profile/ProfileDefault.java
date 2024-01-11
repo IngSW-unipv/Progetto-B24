@@ -10,12 +10,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
+
 public class ProfileDefault extends VBox{
   /*---------------------------------------*/
   //Attributi
   /*---------------------------------------*/
   private static final Background bgHome=new Background(new BackgroundFill(Color.rgb(15, 15, 15), CornerRadii.EMPTY, Insets.EMPTY));
   private static final Font fontFindings=Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 20);
+
   /*---------------------------------------*/
   //Costruttori
   /*---------------------------------------*/
@@ -51,6 +53,8 @@ public class ProfileDefault extends VBox{
         VBox.setVgrow(playlistScroll, Priority.ALWAYS);
 
         mainVBox=new VBox(foundPlaylistsLabel, playlistScroll);
+      }else{
+        mainVBox=new VBox();
       }//end-if
     }catch(ClassCastException c){
       /* You searched an artist, and he's not you => we display all playlists, albums and podcasts */
@@ -92,6 +96,8 @@ public class ProfileDefault extends VBox{
         VBox.setVgrow(playlistScroll, Priority.ALWAYS);
 
         mainVBox=new VBox(foundAlbumsLabel, albumsScroll, foundPodcastsLabel, podcastScroll, foundPlaylistsLabel, playlistScroll);
+      }else{
+        mainVBox=new VBox();
       }//end-if
     }//end-try
 

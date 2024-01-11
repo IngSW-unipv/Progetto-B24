@@ -19,6 +19,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 import java.sql.Time;
+
 public class ProfileHeader extends VBox{
   /*---------------------------------------*/
   //Attributi
@@ -30,38 +31,46 @@ public class ProfileHeader extends VBox{
   private Label surnameLabel;
   private TextArea biographyText;
   private Button editButton;
+
   /*---------------------------------------*/
   //Costruttori
   /*---------------------------------------*/
-  public ProfileHeader(JBProfile searchedProfile){
+  public ProfileHeader(JBProfile currentProfile, JBProfile searchedProfile){
     super();
-    initComponents(searchedProfile);
+    initComponents(currentProfile, searchedProfile);
   }
+
   /*---------------------------------------*/
   //Getter/Setter
   /*---------------------------------------*/
   public ImageView getProfileImageView(){
     return profileImageView;
   }
+
   public Button getEditButton(){
     return editButton;
   }
+
   public Label getUsernameLabel(){
     return usernameLabel;
   }
+
   public Label getNameLabel(){
     return nameLabel;
   }
+
   public Label getSurnameLabel(){
     return surnameLabel;
   }
+
   public TextArea getBiographyText(){
     return biographyText;
   }
+
   /*---------------------------------------*/
   //Metodi
   /*---------------------------------------*/
-  private void initComponents(JBProfile searchedProfile){
+  private void initComponents(JBProfile currentProfile, JBProfile searchedProfile){
     /* Dynamically choosign between user or artist label */
     Label profileType=null;
     try{
@@ -129,24 +138,30 @@ public class ProfileHeader extends VBox{
     HBox biographyHBox=new HBox(biographyText);
     HBox.setHgrow(biographyText, Priority.ALWAYS);
 
-    /* Setup of button used for editing profile details */
-    Image editImage=new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Edit.png", true);
-    ImageView editImageView=new ImageView(editImage);
-    editImageView.setPreserveRatio(true);
-    editButton=new Button();
-    editButton.setGraphic(editImageView);
-    editButton.setStyle("-fx-background-color: blueviolet; -fx-background-radius: 15");
-    editButton.setCursor(Cursor.HAND);
-    editButton.setPadding(new Insets(20));
-    editButton.setTooltip(new Tooltip("Edit"));
+    /* Setup of button used for editing profile details but only if the searchedProfile is equals to the activeProfile */
+    if(currentProfile.equals(searchedProfile)){
+      Image editImage=new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Edit.png", true);
+      ImageView editImageView=new ImageView(editImage);
+      editImageView.setPreserveRatio(true);
+      editButton=new Button();
+      editButton.setGraphic(editImageView);
+      editButton.setStyle("-fx-background-color: blueviolet; -fx-background-radius: 15");
+      editButton.setCursor(Cursor.HAND);
+      editButton.setPadding(new Insets(20));
+      editButton.setTooltip(new Tooltip("Edit"));
 
-    HBox editButtonHBox=new HBox(editButton);
+      HBox editButtonHBox=new HBox(editButton);
+
+      getChildren().addAll(imageLabelsHBox, biographyHBox, editButtonHBox);
+    }else{
+      getChildren().addAll(imageLabelsHBox, biographyHBox);
+    }//end-if
 
     /* adding everything to VBox */
-    getChildren().addAll(imageLabelsHBox, biographyHBox, editButtonHBox);
     setAlignment(Pos.CENTER_LEFT);
     setSpacing(30);
   }
+
   /* Method used to calculate the size that the text will occupy inside the TextArea so that it can be resized accordingly */
   public void sizeTextArea(TextArea biographyText, String s){
     Text t=new Text(s);

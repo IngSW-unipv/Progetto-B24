@@ -18,6 +18,7 @@ public class AudioTable extends TableView<JBAudio>{
   //Attributes
   /*---------------------------------------*/
   private static final int clientWidth=(int)Screen.getPrimary().getBounds().getWidth();
+
   /*---------------------------------------*/
   //Constructor
   /*---------------------------------------*/
@@ -25,6 +26,7 @@ public class AudioTable extends TableView<JBAudio>{
     super();
     initComponents(jbAudios, collectionType, jbProfile, jbCollection);
   }
+
   /*---------------------------------------*/
   //Methods
   /*---------------------------------------*/
@@ -65,21 +67,17 @@ public class AudioTable extends TableView<JBAudio>{
     deleteColumn.setPrefWidth((double)5/100*tableWidth);
 
 
-
     if(!jbProfile.equals(jbCollection.getCreator())){
       getColumns().addAll(playColumn, titleColumn, collectionColumn, dateColumn, favoriteColumn, durationColumn);
-
+    }else{
+      switch(collectionType){
+        case ALBUM:
+          getColumns().addAll(playColumn, titleColumn, collectionColumn, dateColumn, favoriteColumn, durationColumn);
+          break;
+        default:
+          getColumns().addAll(playColumn, titleColumn, collectionColumn, dateColumn, favoriteColumn, durationColumn, deleteColumn);
+      }
     }
-
-    switch(collectionType){
-      case ALBUM:
-        getColumns().addAll(playColumn, titleColumn, collectionColumn, dateColumn, favoriteColumn, durationColumn);
-        break;
-      default:
-        getColumns().addAll(playColumn, titleColumn, collectionColumn, dateColumn, favoriteColumn, durationColumn, deleteColumn);
-        break;
-    }
-
 
     /* Adding the list of audios in the table and adding all the columns */
     setItems(jbAudios);

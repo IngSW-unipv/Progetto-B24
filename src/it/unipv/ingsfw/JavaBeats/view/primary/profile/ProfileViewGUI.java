@@ -8,6 +8,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Screen;
+
 public class ProfileViewGUI{
   /*---------------------------------------*/
   //Attributi
@@ -19,33 +20,39 @@ public class ProfileViewGUI{
   private ProfileDefault profileDefault;
   private GridPane gp;
   private Scene scene;
+
   /*---------------------------------------*/
   //Costruttori
   /*---------------------------------------*/
   public ProfileViewGUI(JBProfile activeProfile, JBProfile searchedProfile){
     initComponents(activeProfile, searchedProfile);
   }
+
   /*---------------------------------------*/
   //Getter/Setter
   /*---------------------------------------*/
   public Scene getScene(){
     return scene;
   }
+
   public ProfileHeader getProfileHeader(){
     return profileHeader;
   }
+
   public ProfileDefault getProfileDefault(){
     return profileDefault;
   }
+
   public GridPane getGp(){
     return gp;
   }
+
   /*---------------------------------------*/
   //Metodi
   /*---------------------------------------*/
   private void initComponents(JBProfile activeProfile, JBProfile searchedProfile){
     /* Header and main components */
-    profileHeader=new ProfileHeader(searchedProfile);
+    profileHeader=new ProfileHeader(activeProfile, searchedProfile);
     profileDefault=new ProfileDefault(activeProfile, searchedProfile);
 
     ScrollPane mainContent=new ScrollPane(new VBox(profileHeader, profileDefault));

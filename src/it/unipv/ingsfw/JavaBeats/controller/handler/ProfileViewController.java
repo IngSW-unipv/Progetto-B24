@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 
 import java.io.InputStreamReader;
 import java.sql.SQLException;
+
 public class ProfileViewController{
   /*---------------------------------------*/
   //Attributi
@@ -70,7 +71,11 @@ public class ProfileViewController{
         }//end-if
       }
     };
-    gui.getProfileHeader().getEditButton().setOnAction(editButtonHandler);
+    try{
+      gui.getProfileHeader().getEditButton().setOnAction(editButtonHandler);
+    }catch(NullPointerException n){
+      
+    }//end-try
   }
   /*---------------------------------------*/
 }
