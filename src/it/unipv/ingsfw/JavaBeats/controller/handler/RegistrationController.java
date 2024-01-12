@@ -1,11 +1,18 @@
 package it.unipv.ingsfw.JavaBeats.controller.handler;
+import it.unipv.ingsfw.JavaBeats.controller.factory.ProfileManagerFactory;
+import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
+import it.unipv.ingsfw.JavaBeats.model.profile.User;
 import it.unipv.ingsfw.JavaBeats.view.access.LoginGUI;
 import it.unipv.ingsfw.JavaBeats.view.access.RegistrationGUI;
+import it.unipv.ingsfw.JavaBeats.view.primary.home.HomePageGUI;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Dimension2D;
 import javafx.scene.Node;
 import javafx.stage.Stage;
+
+import java.util.StringTokenizer;
+
 public class RegistrationController{
   /*---------------------------------------*/
   //Attributi
@@ -39,9 +46,27 @@ public class RegistrationController{
     EventHandler<ActionEvent> registerButtonHandler=new EventHandler <ActionEvent>(){
       @Override
       public void handle(ActionEvent actionEvent){
-        /*
-        Profile Manager fa query
-         */
+
+        StringTokenizer stringTokenizer= new StringTokenizer(gui.getNameSurname().getText());
+        String name= new String(stringTokenizer.nextToken());
+        String surname= new String(stringTokenizer.nextToken());
+
+        JBProfile profile= new User(gui.getUsername().getText(), gui.getMail().getText(), gui.getPassword2().getText(), name, surname);
+
+        //Register the profile exists or handles the exception
+        ProfileManagerFactory.getInstance().getProfileManager().registration(profile);
+
+        //Goes to HomePage
+        Stage s=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+        HomePageGUI homePageGUI= new HomePageGUI();
+        HomePageController homePageController= new HomePageController();
+
+        //Saving previous dimension and using it for the next page
+        Dimension2D previousDimension=new Dimension2D(s.getWidth(), s.getHeight());
+        s.setScene(homePageGUI.getScene());
+        s.setTitle("HomePage");
+        s.setWidth(previousDimension.getWidth());
+        s.setHeight(previousDimension.getHeight());
       }
     };
     gui.getLogin().setOnAction(loginButtonHandler);
