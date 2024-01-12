@@ -1,0 +1,14 @@
+.hbox:hover, .hbox:hover .button{
+  -fx-background-color: darkslateblue;
+  -fx-background-radius: 10;
+  -fx-text-fill: lightgray;
+}
+.hbox, .button{
+  -fx-background-color: rgb(10, 10, 10);
+  -fx-text-fill: lightgray;
+}
+.hbox.active, .button.active{
+  -fx-background-color: midnightblue !important;
+  -fx-background-radius: 10;
+  -fx-text-fill: lightgray !important;
+}
