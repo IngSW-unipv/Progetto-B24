@@ -1,6 +1,7 @@
 package it.unipv.ingsfw.JavaBeats.view.library;
 import it.unipv.ingsfw.JavaBeats.model.playable.EJBPLAYABLE;
 import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
+import it.unipv.ingsfw.JavaBeats.model.playable.collection.Playlist;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -153,22 +154,19 @@ public class CollectionHeader extends VBox{
     HBox buttonsHBbox=null;
     if(!jbProfile.equals(jbCollection.getCreator())){
       buttonsHBbox=new HBox(buttonPlayPause, buttonRandom, buttonLoop);
-    }
-
-    switch(collectionType){
-      case PLAYLIST:
+      getChildren().addAll(topViewHBox, buttonsHBbox);
+    }else{
+      try{
+        Playlist playlist=(Playlist) jbCollection;
         buttonsHBbox=new HBox(buttonPlayPause, buttonRandom, buttonLoop, editButton, buttonBin);
         getChildren().addAll(topViewHBox, buttonsHBbox);
-        break;
-      case ALBUM:
+      }catch(ClassCastException e){
         buttonsHBbox=new HBox(buttonPlayPause, buttonRandom, buttonLoop, buttonBin);
         getChildren().addAll(topViewHBox, buttonsHBbox);
-        break;
-      case PODCAST:
-        buttonsHBbox=new HBox(buttonPlayPause, buttonRandom, buttonLoop, buttonBin);
-        getChildren().addAll(topViewHBox, buttonsHBbox);
-        break;
+      }
     }
+
+
 
 
 

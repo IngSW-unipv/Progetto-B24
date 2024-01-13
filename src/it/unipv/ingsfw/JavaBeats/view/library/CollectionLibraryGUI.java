@@ -49,9 +49,6 @@ public class CollectionLibraryGUI{
     return scene;
   }
 
-  public EJBPLAYABLE getEjbplayable() {
-    return ejbplayable;
-  }
 
   private void initComponents(){
 

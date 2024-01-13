@@ -1,5 +1,6 @@
-package it.unipv.ingsfw.JavaBeats.controller.handler;
+package it.unipv.ingsfw.JavaBeats.controller.handler.access;
 import it.unipv.ingsfw.JavaBeats.controller.factory.ProfileManagerFactory;
+import it.unipv.ingsfw.JavaBeats.controller.handler.HomePageHandler;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.model.profile.User;
 import it.unipv.ingsfw.JavaBeats.view.access.LoginGUI;
@@ -10,7 +11,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Dimension2D;
 import javafx.scene.Node;
 import javafx.stage.Stage;
-public class LoginController{
+public class LoginHandler {
   /*---------------------------------------*/
   //Attributi
   /*---------------------------------------*/
@@ -18,7 +19,7 @@ public class LoginController{
   /*---------------------------------------*/
   //Costruttori
   /*---------------------------------------*/
-  public LoginController(LoginGUI gui){
+  public LoginHandler(LoginGUI gui){
     this.gui=gui;
     initComponents();
   }
@@ -38,7 +39,7 @@ public class LoginController{
         //Login
         Stage s=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
         HomePageGUI homePageGUI= new HomePageGUI();
-        HomePageController homePageController= new HomePageController();
+        HomePageHandler homePageHandler = new HomePageHandler();
 
         //Saving previous dimension and using it for the next page
         Dimension2D previousDimension=new Dimension2D(s.getWidth(), s.getHeight());
@@ -54,7 +55,7 @@ public class LoginController{
       public void handle(ActionEvent actionEvent){
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
         RegistrationGUI registrationGUI=new RegistrationGUI();
-        RegistrationController registrationController=new RegistrationController(registrationGUI);
+        RegistrationHandler registrationHandler =new RegistrationHandler(registrationGUI);
 
         //Saving previous dimension and using it for the next page
         Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());

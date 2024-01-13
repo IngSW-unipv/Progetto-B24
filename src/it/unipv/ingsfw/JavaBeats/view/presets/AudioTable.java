@@ -1,6 +1,7 @@
 package it.unipv.ingsfw.JavaBeats.view.presets;
 import it.unipv.ingsfw.JavaBeats.model.playable.EJBPLAYABLE;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
+import it.unipv.ingsfw.JavaBeats.model.playable.collection.Album;
 import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.view.presets.tableColumns.DeleteButtonTableColumn;
@@ -70,13 +71,13 @@ public class AudioTable extends TableView<JBAudio>{
     if(!jbProfile.equals(jbCollection.getCreator())){
       getColumns().addAll(playColumn, titleColumn, collectionColumn, dateColumn, favoriteColumn, durationColumn);
     }else{
-      switch(collectionType){
-        case ALBUM:
-          getColumns().addAll(playColumn, titleColumn, collectionColumn, dateColumn, favoriteColumn, durationColumn);
-          break;
-        default:
-          getColumns().addAll(playColumn, titleColumn, collectionColumn, dateColumn, favoriteColumn, durationColumn, deleteColumn);
+      try{
+        Album album=(Album) jbCollection;
+        getColumns().addAll(playColumn, titleColumn, collectionColumn, dateColumn, favoriteColumn, durationColumn);
+      }catch (ClassCastException e){
+        getColumns().addAll(playColumn, titleColumn, collectionColumn, dateColumn, favoriteColumn, durationColumn, deleteColumn);
       }
+
     }
 
     /* Adding the list of audios in the table and adding all the columns */

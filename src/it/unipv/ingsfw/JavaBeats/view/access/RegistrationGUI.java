@@ -150,7 +150,7 @@ public class RegistrationGUI{
     confirmPassword=new Label("Confirm password");
     confirmPassword.setTextFill(Color.WHITE);
 
-    errorMessage=new Label("Esempio errore!");
+    errorMessage=new Label("");
     errorMessage.setTextFill(Color.RED);
 
     /* Setup of Login or Register Buttons, two different styles: rounded violet for login and clickable link for register */

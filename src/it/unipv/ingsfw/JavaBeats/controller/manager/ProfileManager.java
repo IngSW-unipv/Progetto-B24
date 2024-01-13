@@ -29,6 +29,11 @@ public class ProfileManager {
     public void registration(JBProfile profile){
         ProfileDAO p= new ProfileDAO();
         p.insert(profile);
+
+
+
+
+
         activeProfile= profile;
     }
 
