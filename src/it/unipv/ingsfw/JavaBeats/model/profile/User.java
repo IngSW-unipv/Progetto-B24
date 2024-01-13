@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class User extends JBProfile {
 
 	//ATTRIBUTES:
-	private boolean isVisible = true;
+	private boolean isVisible;
 	private Time totalListeningTime;
 
 
@@ -39,6 +39,9 @@ public class User extends JBProfile {
 	}
 	public Time getMinuteListened() {
 		return totalListeningTime;
+	}
+	public JBProfile getCopy() {
+		return new User(this.getUsername(), this.getMail(), this.getPassword(), this.getName(), this.getSurname(), this.getBiography(), this.getProfilePicture(), this.isVisible, this.totalListeningTime, this.getListeningHistory());
 	}
 
 

@@ -28,8 +28,8 @@ public class Album extends JBCollection {
 	}
 
 	@Override
-	public JBCollection getCopy(JBCollection collection) {
-		return new Album(collection.getId(), collection.getName(), collection.getCreator(), ((Album)collection).getTrackList(), collection.getPicture());
+	public JBCollection getCopy() {
+		return new Album(this.getId(), this.getName(), this.getCreator(), this.trackList, this.getPicture());
 	}
 
 

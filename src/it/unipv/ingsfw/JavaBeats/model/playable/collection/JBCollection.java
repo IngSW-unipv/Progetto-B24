@@ -3,9 +3,7 @@ package it.unipv.ingsfw.JavaBeats.model.playable.collection;
 import it.unipv.ingsfw.JavaBeats.model.EJBMODE;
 import it.unipv.ingsfw.JavaBeats.model.playable.IJBItem;
 import it.unipv.ingsfw.JavaBeats.model.playable.IJBPlayable;
-import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
-import it.unipv.ingsfw.JavaBeats.model.profile.User;
 
 import java.sql.Blob;
 import java.util.ArrayList;
@@ -16,7 +14,6 @@ public abstract class JBCollection implements IJBPlayable {
     private int id;
     private String name;
     private JBProfile creator;
-    private int itemAmount;
     private Blob picture;
 
 
@@ -47,7 +44,7 @@ public abstract class JBCollection implements IJBPlayable {
         return picture;
     }
     public abstract ArrayList getTrackList();
-    public abstract JBCollection getCopy(JBCollection collection);
+    public abstract JBCollection getCopy();
 
 
 

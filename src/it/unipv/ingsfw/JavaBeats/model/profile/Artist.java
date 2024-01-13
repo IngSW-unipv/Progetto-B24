@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class Artist extends JBProfile {
 
 	//ATTRIBUTES:
-	private int totalListeners = 0;
+	private int totalListeners;
 
 
 	//CONSTRUCTORS:
@@ -21,9 +21,12 @@ public class Artist extends JBProfile {
 	}
 
 
-	//GETTER:
+	//GETTERS:
 	public int getTotalListeners() {
 		return totalListeners;
+	}
+	public JBProfile getCopy() {
+		return new Artist(this.getUsername(), this.getMail(), this.getPassword(), this.getName(), this.getSurname(), this.getBiography(), this.getProfilePicture(), this.totalListeners, this.getListeningHistory());
 	}
 
 

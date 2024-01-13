@@ -10,7 +10,7 @@ public class Playlist extends JBCollection {
 
 	//ATTRIBUTES:
 	private ArrayList<JBAudio> trackList;
-	private boolean isVisible = true;
+	private boolean isVisible;
 
 
 	//CONSTRUCTOR:
@@ -34,8 +34,8 @@ public class Playlist extends JBCollection {
 	}
 
 	@Override
-	public JBCollection getCopy(JBCollection collection) {
-		return new Playlist(collection.getId(), collection.getName(), collection.getCreator(), ((Playlist)collection).getTrackList(), collection.getPicture(), ((Playlist)collection).isVisible);
+	public JBCollection getCopy() {
+		return new Playlist(this.getId(), this.getName(), this.getCreator(), this.trackList, this.getPicture(), this.isVisible);
 	}
 
 	public boolean isVisible() {

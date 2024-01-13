@@ -1,8 +1,6 @@
 package it.unipv.ingsfw.JavaBeats.model.profile;
 
-import it.unipv.ingsfw.JavaBeats.model.playable.audio.Episode;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
-import it.unipv.ingsfw.JavaBeats.model.playable.audio.Song;
 
 import java.sql.Blob;
 import java.util.ArrayList;
@@ -56,6 +54,7 @@ public abstract class JBProfile {
     public ArrayList<JBAudio> getListeningHistory() {
         return listeningHistory;
     }
+    public abstract JBProfile getCopy();
 
 
     //SETTERS:

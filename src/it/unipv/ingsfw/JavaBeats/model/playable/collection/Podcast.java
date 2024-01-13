@@ -29,9 +29,8 @@ public class Podcast extends JBCollection {
 	}
 
 	@Override
-	public JBCollection getCopy(JBCollection collection) {
-
-		return new Podcast(collection.getId(), collection.getName(), collection.getCreator(), ((Podcast)collection).getTrackList(), collection.getPicture());
+	public JBCollection getCopy() {
+		return new Podcast(this.getId(), this.getName(), this.getCreator(), this.trackList, this.getPicture());
 	}
 
 
