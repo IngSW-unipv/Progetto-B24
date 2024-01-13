@@ -1,11 +1,11 @@
 package it.unipv.ingsfw.JavaBeats.view.primary.home;
 import it.unipv.ingsfw.JavaBeats.view.presets.AudioCard;
+import it.unipv.ingsfw.JavaBeats.view.presets.scrollpanes.ScrollPanePreset;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -13,7 +13,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
+
 import java.time.LocalTime;
+
 public class Home extends VBox{
   /*---------------------------------------*/
   //Attributi
@@ -23,6 +25,7 @@ public class Home extends VBox{
   private static final Font fontUser=Font.font("Verdana", FontWeight.NORMAL, FontPosture.ITALIC, 15);
   private static final Background bgHome=new Background(new BackgroundFill(Color.rgb(15, 15, 15), CornerRadii.EMPTY, Insets.EMPTY));
   private static final LocalTime time=LocalTime.now();
+
   /*---------------------------------------*/
   //Costruttori
   /*---------------------------------------*/
@@ -39,10 +42,10 @@ public class Home extends VBox{
   /*---------------------------------------*/
   private void initComponents(){
     /*
-    *  Setup of top HBox component containing Logo, a warm welcome for the user and the profile image with its username
-    */
+     *  Setup of top HBox component containing Logo, a warm welcome for the user and the profile image with its username
+     */
     /* Logo */
-    Image logo = new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Logo.png", true);
+    Image logo=new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Logo.png", true);
     ImageView logoImageView=new ImageView(logo);
     logoImageView.setPreserveRatio(true);
 
@@ -58,7 +61,7 @@ public class Home extends VBox{
     HBox.setHgrow(whitePane, Priority.ALWAYS);
 
     /* Button with user's profile picture and username */
-    Image userPic = new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/DefaultUser.png", true);
+    Image userPic=new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/DefaultUser.png", true);
     ImageView userPicImageView=new ImageView(userPic);
     userPicImageView.setPreserveRatio(true);
     Button userProfileButton=new Button("Username");
@@ -71,57 +74,55 @@ public class Home extends VBox{
     /* Hbox containing all above components */
     HBox userHBox=new HBox(logoImageView, userWelcome, whitePane, userProfileButton);
     userHBox.setAlignment(Pos.CENTER_LEFT);
-    userHBox.setPadding(new Insets(40, 10, 10, 10));
+    userHBox.setPadding(new Insets(20, 10, 10, 10));
 
     /*
-    *   Setup of the Main visual content, all the recent types of listening. Songs, playlists and artists.
-    */
-    /* Recent songs block, we have a label and a HBox of AudioCards inside a ScrollPane */
+     *   Setup of the Main visual content, all the recent types of listening. Songs, playlists and artists.
+     */
+    /* Recent songs block, we have a label and a HBox of AudioCards inside a JBScrollPane */
     Label recentSongsLabel=new Label("Recent songs");
     recentSongsLabel.setFont(fontRecents);
     recentSongsLabel.setTextFill(Color.LIGHTGRAY);
     recentSongsLabel.setPadding(new Insets(30, 0, 40, 0));
     HBox songsHBox=new HBox(50, new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard());
-    ScrollPane songsScroll=new ScrollPane(songsHBox);
+    ScrollPanePreset songsScroll=new ScrollPanePreset(songsHBox);
     songsScroll.setStyle("-fx-background: #0F0F0FFF; -fx-border-color: #0F0F0FFF");
-    songsScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-    songsScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+    songsScroll.setVbarPolicy(ScrollPanePreset.ScrollBarPolicy.NEVER);
     setVgrow(songsScroll, Priority.ALWAYS);
 
-    /* Recent songs block, we have a label and a HBox of AudioCards inside a ScrollPane */
+    /* Recent songs block, we have a label and a HBox of AudioCards inside a JBScrollPane */
     Label recentPlaylistLabel=new Label("Recent playlists");
     recentPlaylistLabel.setFont(fontRecents);
     recentPlaylistLabel.setTextFill(Color.LIGHTGRAY);
-    recentPlaylistLabel.setPadding(new Insets(40,0, 40, 0));
+    recentPlaylistLabel.setPadding(new Insets(40, 0, 40, 0));
     HBox playlistsHBox=new HBox(50, new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard());
-    ScrollPane playlistScroll=new ScrollPane(playlistsHBox);
+    ScrollPanePreset playlistScroll=new ScrollPanePreset(playlistsHBox);
     playlistScroll.setStyle("-fx-background: #0F0F0FFF; -fx-border-color: #0F0F0FFF");
-    playlistScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-    playlistScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+    playlistScroll.setVbarPolicy(ScrollPanePreset.ScrollBarPolicy.NEVER);
     setVgrow(playlistScroll, Priority.ALWAYS);
 
-    /* Recent songs block, we have a label and a HBox of AudioCards inside a ScrollPane */
+    /* Recent songs block, we have a label and a HBox of AudioCards inside a JBScrollPane */
     Label recentArtists=new Label("Recent artists");
     recentArtists.setFont(fontRecents);
     recentArtists.setTextFill(Color.LIGHTGRAY);
-    recentArtists.setPadding(new Insets(40,0, 40, 0));
+    recentArtists.setPadding(new Insets(40, 0, 40, 0));
     HBox artistsHBox=new HBox(50, new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard());
-    ScrollPane artistScroll=new ScrollPane(artistsHBox);
+    ScrollPanePreset artistScroll=new ScrollPanePreset(artistsHBox);
     artistScroll.setStyle("-fx-background: #0F0F0FFF; -fx-border-color: #0F0F0FFF");
-    artistScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-    artistScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+    artistScroll.setVbarPolicy(ScrollPanePreset.ScrollBarPolicy.NEVER);
     setVgrow(artistScroll, Priority.ALWAYS);
 
-    /* VBox with all the above components, inside a ScrollPane */
+    /* VBox with all the above components, inside a JBScrollPane */
     VBox mainContent=new VBox(recentSongsLabel, songsScroll, recentPlaylistLabel, playlistScroll, recentArtists, artistScroll);
-    ScrollPane contentScroll=new ScrollPane(mainContent);
+    ScrollPanePreset contentScroll=new ScrollPanePreset(mainContent);
     contentScroll.setStyle("-fx-background: #0F0F0FFF; -fx-border-color: #0F0F0FFF");
     contentScroll.setPadding(new Insets(15));
     contentScroll.setFitToWidth(true);
     setVgrow(contentScroll, Priority.ALWAYS);
 
-    /* adding Top HBox and main ScrollPane to the Home VBox */
+    /* adding Top HBox and main JBScrollPane to the Home VBox */
     getChildren().addAll(userHBox, contentScroll);
+    getStylesheets().add("it/unipv/ingsfw/JavaBeats/view/resources/css/scrollbar.css");
     setBackground(bgHome);
   }
   /*---------------------------------------*/

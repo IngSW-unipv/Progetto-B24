@@ -1,18 +1,17 @@
 package it.unipv.ingsfw.JavaBeats.view.library;
 
 import it.unipv.ingsfw.JavaBeats.model.playable.EJBPLAYABLE;
-import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.view.presets.AudioCard;
 import it.unipv.ingsfw.JavaBeats.view.presets.Sidebar;
 import it.unipv.ingsfw.JavaBeats.view.presets.Songbar;
+import it.unipv.ingsfw.JavaBeats.view.presets.scrollpanes.ScrollPanePreset;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -91,12 +90,12 @@ public class CollectionLibraryGUI{
     collectionFlowPane.setVgap(70);
 
 
-    //Scrollpane
-    ScrollPane collectionScrollPane=new ScrollPane(collectionFlowPane);
-    collectionScrollPane.setFitToWidth(true);
-    collectionScrollPane.setFitToHeight(true);
-    collectionScrollPane.setStyle("-fx-background: #0F0F0FFF; -fx-border-color: #0F0F0FFF");
-
+    //JBScrollPane
+    ScrollPanePreset collectionScrollPanePreset=new ScrollPanePreset(collectionFlowPane);
+    collectionScrollPanePreset.setFitToWidth(true);
+    collectionScrollPanePreset.setFitToHeight(true);
+    collectionScrollPanePreset.setStyle("-fx-background: #0F0F0FFF; -fx-border-color: #0F0F0FFF");
+    collectionScrollPanePreset.getStylesheets().add("it/unipv/ingsfw/JavaBeats/view/resources/css/scrollbar.css");
 
     //Add button
     Image plusImage=new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Plus.png", true);
@@ -115,9 +114,9 @@ public class CollectionLibraryGUI{
     buttonHBox.setPadding(new Insets(0, 20, 10, 0));
 
     //Vbox collection
-    VBox collectionVBox=new VBox(25, titleHBox, collectionScrollPane, buttonHBox);
+    VBox collectionVBox=new VBox(25, titleHBox, collectionScrollPanePreset, buttonHBox);
     collectionVBox.setBackground(bg);
-    VBox.setVgrow(collectionScrollPane, Priority.ALWAYS);
+    VBox.setVgrow(collectionScrollPanePreset, Priority.ALWAYS);
 
     /* Setup of left Sidebar, bottom songbar and center collection */
     Sidebar sidebar=Sidebar.getInstance(activeProfile);

@@ -36,23 +36,25 @@ public class LoginHandler{
       @Override
       public void handle(ActionEvent actionEvent){
 
-        JBProfile profile=new User(gui.getUsername().getText(),null, gui.getPassword().getText());
+        JBProfile profile=new User(gui.getUsername().getText(), null, gui.getPassword().getText());
 
         //Checks if the profile exists or handles the exception
-        activeProfile=ProfileManagerFactory.getInstance().getProfileManager().login(profile);
+        try{
+          activeProfile=ProfileManagerFactory.getInstance().getProfileManager().login(profile);
+          //Login
+          Stage s=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+          HomePageGUI homePageGUI=new HomePageGUI(activeProfile);
+          HomePageHandler homePageHandler=new HomePageHandler(homePageGUI, activeProfile);
 
-        //Login
-        Stage s=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        HomePageGUI homePageGUI=new HomePageGUI(activeProfile);
-        HomePageHandler homePageHandler=new HomePageHandler(homePageGUI, activeProfile);
-
-        //Saving previous dimension and using it for the next page
-        Dimension2D previousDimension=new Dimension2D(s.getWidth(), s.getHeight());
-        s.setScene(homePageGUI.getScene());
-        s.setTitle("HomePage");
-        s.setWidth(previousDimension.getWidth());
-        s.setHeight(previousDimension.getHeight());
-
+          //Saving previous dimension and using it for the next page
+          Dimension2D previousDimension=new Dimension2D(s.getWidth(), s.getHeight());
+          s.setScene(homePageGUI.getScene());
+          s.setTitle("HomePage");
+          s.setWidth(previousDimension.getWidth());
+          s.setHeight(previousDimension.getHeight());
+        }catch(IllegalArgumentException e){
+          gui.getErrorMessage().setText("Login Error!!");
+        }//end-try
       }
     };
     EventHandler<ActionEvent> registerButtonHandler=new EventHandler<ActionEvent>(){

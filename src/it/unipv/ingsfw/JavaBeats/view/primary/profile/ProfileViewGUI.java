@@ -2,9 +2,9 @@ package it.unipv.ingsfw.JavaBeats.view.primary.profile;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.view.presets.Sidebar;
 import it.unipv.ingsfw.JavaBeats.view.presets.Songbar;
+import it.unipv.ingsfw.JavaBeats.view.presets.scrollpanes.ScrollPanePreset;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Screen;
@@ -55,7 +55,7 @@ public class ProfileViewGUI{
     profileHeader=new ProfileHeader(activeProfile, searchedProfile);
     profileDefault=new ProfileDefault(activeProfile, searchedProfile);
 
-    ScrollPane mainContent=new ScrollPane(new VBox(profileHeader, profileDefault));
+    ScrollPanePreset mainContent=new ScrollPanePreset(new VBox(profileHeader, profileDefault));
     mainContent.setPadding(new Insets(20, 20, 0, 20));
     mainContent.setStyle("-fx-background: #0F0F0FFF; -fx-border-color: #0F0F0FFF;");
     mainContent.setFitToWidth(true);

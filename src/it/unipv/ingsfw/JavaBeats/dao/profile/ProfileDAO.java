@@ -12,436 +12,436 @@ import java.sql.ResultSet;
 import java.sql.Time;
 import java.util.ArrayList;
 
-public class ProfileDAO implements IProfileDAO {
+public class ProfileDAO implements IProfileDAO{
 
-    //ATTRIBUTES:
-    private final String schema = "JavaBeats_DB";
-    private Connection connection;
+  //ATTRIBUTES:
+  private final String schema="JavaBeats_DB";
+  private Connection connection;
 
 
+  //CONSTRUCTOR:
+  public ProfileDAO(){
+    super();
+  }
 
-    //CONSTRUCTOR:
-    public ProfileDAO() {
-        super();
+
+  //PUBLIC METHODS:
+  @Override
+  public void insert(JBProfile profile){         //add new profile to database
+    connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+    PreparedStatement st1, st2, st3;
+
+    try{       //insert JBProfile to Profile table
+      String q1="INSERT INTO Profile(username, mail, password, name, surname, biography, profilePicture)"+
+              "VALUES(?, ?, ?, ?, ?, ?, ?);";
+
+      st1=connection.prepareStatement(q1);
+      st1.setString(1, profile.getUsername());
+      st1.setString(2, profile.getMail());
+      st1.setString(3, profile.getPassword());
+      st1.setString(4, profile.getName());
+      st1.setString(5, profile.getSurname());
+      st1.setString(6, profile.getBiography());
+      st1.setBlob(7, profile.getProfilePicture());
+
+      st1.executeUpdate();
+
+      try{                           //if profile is a User insert it into User table
+        User u=(User)profile;
+        String q2="INSERT INTO User(mail, isVisible) VALUES(?, 1);";
+        st2=connection.prepareStatement(q2);
+        st2.setString(1, u.getMail());
+        st2.executeUpdate();
+      }catch(ClassCastException e){  //if profile is an Artist insert it to Artist table
+        String q3="INSERT INTO Artist(mail) VALUES(?);";
+        st3=connection.prepareStatement(q3);
+        st3.setString(1, profile.getMail());
+        st3.executeUpdate();
+      }
+
+    }catch(Exception e){
+      e.printStackTrace();
     }
 
+    DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+  }
 
+  @Override
+  public void remove(JBProfile profile){         //remove profile from database
+    connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+    PreparedStatement st;
 
-    //PUBLIC METHODS:
-    @Override
-    public void insert(JBProfile profile) {         //add new profile to database
-        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
-        PreparedStatement st1, st2, st3;
+    try{
+      String query="DELETE FROM Profile WHERE mail=?;";
 
-        try {       //insert JBProfile to Profile table
-            String q1 = "INSERT INTO Profile(username, mail, password, name, surname, biography, profilePicture)" +
-                        "VALUES(?, ?, ?, ?, ?, ?, ?);";
+      st=connection.prepareStatement(query);
+      st.setString(1, profile.getMail());
 
-            st1 = connection.prepareStatement(q1);
-            st1.setString(1, profile.getUsername());
-            st1.setString(2, profile.getMail());
-            st1.setString(3, profile.getPassword());
-            st1.setString(4, profile.getName());
-            st1.setString(5, profile.getSurname());
-            st1.setString(6, profile.getBiography());
-            st1.setBlob(7, profile.getProfilePicture());
+      st.executeUpdate();
 
-            st1.executeUpdate();
-
-            try {                           //if profile is a User insert it into User table
-                User u = (User) profile;
-                String q2=  "INSERT INTO User(mail, isVisible) VALUES(?, 1);";
-                st2 = connection.prepareStatement(q2);
-                st2.setString(1, u.getMail());
-                st2.executeUpdate();
-            }
-            catch (ClassCastException e) {  //if profile is an Artist insert it to Artist table
-                String q3 = "INSERT INTO Artist(mail) VALUES(?);";
-                st3 = connection.prepareStatement(q3);
-                st3.setString(1, profile.getMail());
-                st3.executeUpdate();
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+    }catch(Exception e){
+      e.printStackTrace();
     }
 
-    @Override
-    public void remove(JBProfile profile) {         //remove profile from database
-        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
-        PreparedStatement st;
+    DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+  }
 
-        try {
-            String query = "DELETE FROM Profile WHERE mail=?;";
+  @Override
+  public void update(JBProfile profile){
+    JBProfile oldProfile=get(profile);        //get profile as it is in DB to check for changes
 
-            st = connection.prepareStatement(query);
-            st.setString(1, profile.getMail());
+    if(profile.getUsername()!=null)          //check for null before using .equals to avoid exceptions
+      if(!(profile.getUsername().equals(oldProfile.getUsername())))
+        updateUsername(profile);
 
-            st.executeUpdate();
+    if(profile.getPassword()!=null)
+      if(!(profile.getPassword().equals(oldProfile.getPassword())))
+        updatePassword(profile);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    if(profile.getName()!=null)
+      if(!(profile.getName().equals(oldProfile.getName())))
+        updateName(profile);
 
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+    if(profile.getSurname()!=null)
+      if(!(profile.getSurname().equals(oldProfile.getSurname())))
+        updateSurname(profile);
+
+    if(profile.getBiography()!=null)
+      if(!(profile.getBiography().equals(oldProfile.getBiography())))
+        updateBiography(profile);
+
+    if(profile.getProfilePicture()!=null)
+      if(!(profile.getProfilePicture().equals(oldProfile.getProfilePicture())))
+        updateProfilePicture(profile);
+
+    try{                           //if profile is a User
+      User userProfile=(User)profile;
+      User oldUserProfile=(User)oldProfile;
+      if(userProfile.isVisible()!=oldUserProfile.isVisible())
+        updateVisibility(userProfile);
+    }catch(ClassCastException e){  //if profile is an Artist
+      //do nothing
     }
 
-    @Override
-    public void update(JBProfile profile) {
-        JBProfile oldProfile = get(profile);        //get profile as it is in DB to check for changes
+  }
 
-        if (profile.getUsername() != null)          //check for null before using .equals to avoid exceptions
-            if (!(profile.getUsername().equals(oldProfile.getUsername())))
-                updateUsername(profile);
+  @Override
+  public JBProfile get(JBProfile profile) throws IllegalArgumentException{            //retrieve profile from database
 
-        if (profile.getPassword() != null)
-            if (!(profile.getPassword().equals(oldProfile.getPassword())))
-                updatePassword(profile);
+    JBProfile profileOut=getUser(profile);                 //check if profile is in User table
+    if(profileOut==null) profileOut=getArtist(profile);    //check if profile is in Artist table
 
-        if (profile.getName() != null)
-            if (!(profile.getName().equals(oldProfile.getName())))
-                updateName(profile);
+    if(profileOut==null){
+      throw new IllegalArgumentException();
+    }
+    return profileOut;
+  }
 
-        if (profile.getSurname() != null)
-            if (!(profile.getSurname().equals(oldProfile.getSurname())))
-                updateSurname(profile);
+  @Override
+  public Artist getArtist(JBProfile profile){
+    connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+    PreparedStatement st;
+    ResultSet rs;
+    Artist result=null;
 
-        if (profile.getBiography() != null)
-            if (!(profile.getBiography().equals(oldProfile.getBiography())))
-                updateBiography(profile);
+    try{
+      String query="SELECT * FROM Profile INNER JOIN Artist ON Profile.mail = Artist.mail WHERE Artist.mail=? OR username=?;";
 
-        if (profile.getProfilePicture() != null)
-            if (!(profile.getProfilePicture().equals(oldProfile.getProfilePicture())))
-                updateProfilePicture(profile);
+      st=connection.prepareStatement(query);
+      st.setString(1, profile.getUsername());
+      st.setString(2, profile.getMail());
 
-        try {                           //if profile is a User
-            User userProfile = (User) profile;
-            User oldUserProfile = (User) oldProfile;
-            if (userProfile.isVisible() != oldUserProfile.isVisible())
-                updateVisibility(userProfile);
-        }
-        catch (ClassCastException e) {  //if profile is an Artist
-            //do nothing
-        }
+      rs=st.executeQuery();
 
+      if(rs.next()){
+        result=new Artist(rs.getString("username"),
+                rs.getString("mail"),
+                rs.getString("password"),
+                rs.getString("name"),
+                rs.getString("surname"),
+                rs.getString("biography"),
+                rs.getBlob("profilePicture"),
+                0,
+                null);
+      }
+
+    }catch(Exception e){
+      e.printStackTrace();
     }
 
-    @Override
-    public JBProfile get(JBProfile profile) {            //retrieve profile from database
+    DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
 
-        JBProfile profileOut = getUser(profile);                 //check if profile is in User table
-        if(profileOut==null) profileOut = getArtist(profile);    //check if profile is in Artist table
-
-        return profileOut;
+    if(result!=null){
+      result.setTotalListeners(getTotalListeners(result));        //set total listeners
+      result.setListeningHistory(getListeningHistory(result));    //set listening history
     }
 
-    @Override
-    public Artist getArtist(JBProfile profile) {
-        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
-        PreparedStatement st;
-        ResultSet rs;
-        Artist result = null;
+    return result;
+  }
 
-        try {
-            String query = "SELECT * FROM Profile NATURAL JOIN Artist WHERE mail=?;";
+  @Override
+  public User getUser(JBProfile profile){
+    connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+    PreparedStatement st;
+    ResultSet rs;
+    User result=null;
 
-            st = connection.prepareStatement(query);
-            st.setString(1, profile.getMail());
+    try{
+      String query="SELECT * FROM Profile INNER JOIN User ON Profile.mail = User.mail WHERE User.mail=? OR username=?;";
 
-            rs = st.executeQuery();
+      st=connection.prepareStatement(query);
+      st.setString(1, profile.getUsername());
+      st.setString(2, profile.getMail());
 
-            if(rs.next()) {
-                result = new Artist(rs.getString("username"),
-                        rs.getString("mail"),
-                        rs.getString("password"),
-                        rs.getString("name"),
-                        rs.getString("surname"),
-                        rs.getString("biography"),
-                        rs.getBlob("profilePicture"),
-                        0,
-                        null);
-            }
+      rs=st.executeQuery();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+      if(rs.next()){
+        result=new User(rs.getString("username"),
+                rs.getString("mail"),
+                rs.getString("password"),
+                rs.getString("name"),
+                rs.getString("surname"),
+                rs.getString("biography"),
+                rs.getBlob("profilePicture"),
+                rs.getBoolean("isVisible"),
+                null,
+                null);
+      }
 
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
-
-        if(result!=null) {
-            result.setTotalListeners(getTotalListeners(result));        //set total listeners
-            result.setListeningHistory(getListeningHistory(result));    //set listening history
-        }
-
-        return result;
+    }catch(Exception e){
+      e.printStackTrace();
     }
 
-    @Override
-    public User getUser(JBProfile profile) {
-        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
-        PreparedStatement st;
-        ResultSet rs;
-        User result = null;
+    DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
 
-        try {
-            String query = "SELECT * FROM Profile NATURAL JOIN User WHERE mail=?;";
-
-            st = connection.prepareStatement(query);
-            st.setString(1, profile.getMail());
-
-            rs = st.executeQuery();
-
-            if(rs.next()) {
-                result = new User(rs.getString("username"),
-                        rs.getString("mail"),
-                        rs.getString("password"),
-                        rs.getString("name"),
-                        rs.getString("surname"),
-                        rs.getString("biography"),
-                        rs.getBlob("profilePicture"),
-                        rs.getBoolean("isVisible"),
-                        null,
-                        null);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
-
-        if(result != null) {
-            result.setMinuteListened(getTotalListeningTime(result));        //set minute listened
-            result.setListeningHistory(getListeningHistory(result));    //set listening history
-        }
-
-        return result;
+    if(result!=null){
+      result.setMinuteListened(getTotalListeningTime(result));        //set minute listened
+      result.setListeningHistory(getListeningHistory(result));    //set listening history
     }
 
+    return result;
+  }
 
 
-    //PRIVATE METHODS:
-    private Time getTotalListeningTime(User user) {
-        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
-        PreparedStatement st;
-        ResultSet rs;
-        Time result = null;
+  //PRIVATE METHODS:
+  private Time getTotalListeningTime(User user){
+    connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+    PreparedStatement st;
+    ResultSet rs;
+    Time result=null;
 
-        try {
-            String query =  "SELECT (SUM(TIMEDIFF(duration, '00:00:00'))) as 'total' FROM ListeningHistory A " +
-                            "NATURAL JOIN (SELECT id as 'idAudio', duration FROM Audio) B WHERE profileMail=?;";
+    try{
+      String query="SELECT (SUM(TIMEDIFF(duration, '00:00:00'))) as 'total' FROM ListeningHistory A "+
+              "NATURAL JOIN (SELECT id as 'idAudio', duration FROM Audio) B WHERE profileMail=?;";
 
-            st = connection.prepareStatement(query);
-            st.setString(1, user.getMail());
+      st=connection.prepareStatement(query);
+      st.setString(1, user.getMail());
 
-            rs = st.executeQuery();
+      rs=st.executeQuery();
 
-            rs.next();
-            result = rs.getTime("total");
+      rs.next();
+      result=rs.getTime("total");
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
-
-        return result;
+    }catch(Exception e){
+      e.printStackTrace();
     }
 
-    private int getTotalListeners(Artist artist) {
-        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
-        PreparedStatement st;
-        ResultSet rs;
-        int result = 0;
+    DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
 
-        try {
-            String query = "SELECT count(idAudio) as 'total' FROM ListeningHistory NATURAL JOIN ArtistAudios WHERE artistMail=?;";
+    return result;
+  }
 
-            st = connection.prepareStatement(query);
-            st.setString(1, artist.getMail());
+  private int getTotalListeners(Artist artist){
+    connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+    PreparedStatement st;
+    ResultSet rs;
+    int result=0;
 
-            rs = st.executeQuery();
+    try{
+      String query="SELECT count(idAudio) as 'total' FROM ListeningHistory NATURAL JOIN ArtistAudios WHERE artistMail=?;";
 
-            if(rs.next())
-                result = rs.getInt("total");
+      st=connection.prepareStatement(query);
+      st.setString(1, artist.getMail());
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+      rs=st.executeQuery();
 
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+      if(rs.next())
+        result=rs.getInt("total");
 
-        return result;
+    }catch(Exception e){
+      e.printStackTrace();
     }
 
-    private ArrayList<JBAudio> getListeningHistory (JBProfile profile) {
-        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
-        PreparedStatement st;
-        ResultSet rs;
-        ArrayList<Integer> audioIDs = null;
-        ArrayList<JBAudio> result = new ArrayList<>();
+    DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
 
-        try {
-            String query = "SELECT idAudio FROM ListeningHistory WHERE profileMail=? ORDER BY listeningDate DESC LIMIT 25;";
+    return result;
+  }
 
-            st = connection.prepareStatement(query);
-            st.setString(1, profile.getMail());
+  private ArrayList<JBAudio> getListeningHistory(JBProfile profile){
+    connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+    PreparedStatement st;
+    ResultSet rs;
+    ArrayList<Integer> audioIDs=null;
+    ArrayList<JBAudio> result=new ArrayList<>();
 
-            rs = st.executeQuery();
+    try{
+      String query="SELECT idAudio FROM ListeningHistory WHERE profileMail=? ORDER BY listeningDate DESC LIMIT 25;";
 
-            while(rs.next())
-                audioIDs.add(rs.getInt("idAudio"));
+      st=connection.prepareStatement(query);
+      st.setString(1, profile.getMail());
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+      rs=st.executeQuery();
 
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+      while(rs.next())
+        audioIDs.add(rs.getInt("idAudio"));
 
-        if(audioIDs != null) {
-            AudioDAO aDAO = new AudioDAO();
-            for (int track : audioIDs) {
-                result.add(aDAO.get(new Song(track, null, null, null)));      //aDAO.get() will return either Song or Episode (only cares about the id of the JBAudio input, not the type)
-            }
-        }
-
-        return result;
+    }catch(Exception e){
+      e.printStackTrace();
     }
 
-    private void updateUsername(JBProfile profile) {
-        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+    DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
 
-        try {
-            String q1 = "UPDATE Profile SET username=? WHERE mail=?;";
-
-            PreparedStatement st1 = connection.prepareStatement(q1);
-            st1.setString(1, profile.getUsername());
-            st1.setString(2, profile.getMail());
-
-            st1.executeUpdate();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+    if(audioIDs!=null){
+      AudioDAO aDAO=new AudioDAO();
+      for(int track: audioIDs){
+        result.add(aDAO.get(new Song(track, null, null, null)));      //aDAO.get() will return either Song or Episode (only cares about the id of the JBAudio input, not the type)
+      }
     }
 
-    private void updatePassword(JBProfile profile) {
-        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+    return result;
+  }
 
-        try {
-            String q2 = "UPDATE Profile SET password=? WHERE mail=?;";
+  private void updateUsername(JBProfile profile){
+    connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
 
-            PreparedStatement st2 = connection.prepareStatement(q2);
-            st2.setString(1, profile.getPassword());
-            st2.setString(2, profile.getMail());
+    try{
+      String q1="UPDATE Profile SET username=? WHERE mail=?;";
 
-            st2.executeUpdate();
+      PreparedStatement st1=connection.prepareStatement(q1);
+      st1.setString(1, profile.getUsername());
+      st1.setString(2, profile.getMail());
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+      st1.executeUpdate();
 
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+    }catch(Exception e){
+      e.printStackTrace();
     }
 
-    private void updateName(JBProfile profile) {
-        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+    DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+  }
 
-        try {
-            String q3 = "UPDATE Profile SET name=? WHERE mail=?;";
+  private void updatePassword(JBProfile profile){
+    connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
 
-            PreparedStatement st3 = connection.prepareStatement(q3);
-            st3.setString(1, profile.getName());
-            st3.setString(2, profile.getMail());
+    try{
+      String q2="UPDATE Profile SET password=? WHERE mail=?;";
 
-            st3.executeUpdate();
+      PreparedStatement st2=connection.prepareStatement(q2);
+      st2.setString(1, profile.getPassword());
+      st2.setString(2, profile.getMail());
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+      st2.executeUpdate();
 
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+    }catch(Exception e){
+      e.printStackTrace();
     }
 
-    private void updateSurname(JBProfile profile) {
-        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+    DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+  }
 
-        try {
-            String q4 = "UPDATE Profile SET surname=? WHERE mail=?;";
+  private void updateName(JBProfile profile){
+    connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
 
-            PreparedStatement st4 = connection.prepareStatement(q4);
-            st4.setString(1, profile.getSurname());
-            st4.setString(2, profile.getMail());
+    try{
+      String q3="UPDATE Profile SET name=? WHERE mail=?;";
 
-            st4.executeUpdate();
+      PreparedStatement st3=connection.prepareStatement(q3);
+      st3.setString(1, profile.getName());
+      st3.setString(2, profile.getMail());
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+      st3.executeUpdate();
 
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+    }catch(Exception e){
+      e.printStackTrace();
     }
 
-    private void updateBiography(JBProfile profile) {
-        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+    DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+  }
 
-        try {
-            String q5 = "UPDATE Profile SET biography=? WHERE mail=?;";
+  private void updateSurname(JBProfile profile){
+    connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
 
-            PreparedStatement st5 = connection.prepareStatement(q5);
-            st5.setString(1, profile.getBiography());
-            st5.setString(2, profile.getMail());
+    try{
+      String q4="UPDATE Profile SET surname=? WHERE mail=?;";
 
-            st5.executeUpdate();
+      PreparedStatement st4=connection.prepareStatement(q4);
+      st4.setString(1, profile.getSurname());
+      st4.setString(2, profile.getMail());
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+      st4.executeUpdate();
 
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+    }catch(Exception e){
+      e.printStackTrace();
     }
 
-    private void updateProfilePicture(JBProfile profile) {
-        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+    DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+  }
 
-        try {
-            String q6 = "UPDATE Profile SET profilePicture=? WHERE mail=?;";
+  private void updateBiography(JBProfile profile){
+    connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
 
-            PreparedStatement st6 = connection.prepareStatement(q6);
-            st6.setBlob(1, profile.getProfilePicture());
-            st6.setString(2, profile.getMail());
+    try{
+      String q5="UPDATE Profile SET biography=? WHERE mail=?;";
 
-            st6.executeUpdate();
+      PreparedStatement st5=connection.prepareStatement(q5);
+      st5.setString(1, profile.getBiography());
+      st5.setString(2, profile.getMail());
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+      st5.executeUpdate();
 
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+    }catch(Exception e){
+      e.printStackTrace();
     }
 
-    private void updateVisibility(User user) {
-        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+    DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+  }
 
-        try {
-            String q7 = "UPDATE User SET isVisible=? WHERE mail=?;";
+  private void updateProfilePicture(JBProfile profile){
+    connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
 
-            PreparedStatement st7 = connection.prepareStatement(q7);
-            st7.setBoolean(1, user.isVisible());
-            st7.setString(2, user.getMail());
+    try{
+      String q6="UPDATE Profile SET profilePicture=? WHERE mail=?;";
 
-            st7.executeUpdate();
+      PreparedStatement st6=connection.prepareStatement(q6);
+      st6.setBlob(1, profile.getProfilePicture());
+      st6.setString(2, profile.getMail());
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+      st6.executeUpdate();
 
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+    }catch(Exception e){
+      e.printStackTrace();
     }
+
+    DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+  }
+
+  private void updateVisibility(User user){
+    connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+
+    try{
+      String q7="UPDATE User SET isVisible=? WHERE mail=?;";
+
+      PreparedStatement st7=connection.prepareStatement(q7);
+      st7.setBoolean(1, user.isVisible());
+      st7.setString(2, user.getMail());
+
+      st7.executeUpdate();
+
+    }catch(Exception e){
+      e.printStackTrace();
+    }
+
+    DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+  }
 
 }

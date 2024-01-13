@@ -9,11 +9,11 @@ import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.view.presets.AudioTable;
 import it.unipv.ingsfw.JavaBeats.view.presets.Sidebar;
 import it.unipv.ingsfw.JavaBeats.view.presets.Songbar;
+import it.unipv.ingsfw.JavaBeats.view.presets.scrollpanes.ScrollPanePreset;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.*;
 import javafx.stage.Screen;
@@ -74,16 +74,16 @@ public class CollectionViewGUI{
     VBox mainVBox=new VBox(collectionHeader, audioTable);
     mainVBox.setPadding(new Insets(0, 50, 0, 50));
 
-    ScrollPane scrollPane=new ScrollPane(mainVBox);
-    scrollPane.setFitToWidth(true);
-    scrollPane.setStyle("-fx-background: #0F0F0FFF; -fx-border-color: #0F0F0FFF");
-    scrollPane.getStylesheets().add("it/unipv/ingsfw/JavaBeats/view/resources/css/scrollbar.css");
-    VBox scrollableScrollPane=new VBox(scrollPane);
-    VBox.setVgrow(scrollPane, Priority.ALWAYS);
+    ScrollPanePreset ScrollPanePreset=new ScrollPanePreset(mainVBox);
+    ScrollPanePreset.setFitToWidth(true);
+    ScrollPanePreset.setStyle("-fx-background: #0F0F0FFF; -fx-border-color: #0F0F0FFF");
+    ScrollPanePreset.getStylesheets().add("it/unipv/ingsfw/JavaBeats/view/resources/css/scrollbar.css");
+    VBox scrollableScrollPanePreset=new VBox(ScrollPanePreset);
+    VBox.setVgrow(ScrollPanePreset, Priority.ALWAYS);
 
     /* Setup of left Sidebar, bottom songbar and center mainVBox */
     gp=new GridPane();
-    gp.addRow(0, Sidebar.getInstance(activeProfile), scrollableScrollPane);
+    gp.addRow(0, Sidebar.getInstance(activeProfile), scrollableScrollPanePreset);
     gp.add(Songbar.getInstance(), 0, 1, 2, 1);
 
     ColumnConstraints ccSidebar=new ColumnConstraints();

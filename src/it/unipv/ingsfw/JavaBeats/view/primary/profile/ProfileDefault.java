@@ -2,9 +2,9 @@ package it.unipv.ingsfw.JavaBeats.view.primary.profile;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.model.profile.User;
 import it.unipv.ingsfw.JavaBeats.view.presets.AudioCard;
+import it.unipv.ingsfw.JavaBeats.view.presets.scrollpanes.ScrollPanePreset;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -40,16 +40,16 @@ public class ProfileDefault extends VBox{
       if(!activeProfile.equals(searchedProfile)){
         User u=(User)searchedProfile;
 
-        /* Playlists found block, we have a label and a HBox of AudioCards inside a ScrollPane */
+        /* Playlists found block, we have a label and a HBox of AudioCards inside a ScrollPanePreset */
         Label foundPlaylistsLabel=new Label("Playlists");
         foundPlaylistsLabel.setFont(fontFindings);
         foundPlaylistsLabel.setTextFill(Color.LIGHTGRAY);
         foundPlaylistsLabel.setPadding(new Insets(40, 0, 40, 0));
         HBox playlistsHBox=new HBox(50, new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard());
-        ScrollPane playlistScroll=new ScrollPane(playlistsHBox);
+        ScrollPanePreset playlistScroll=new ScrollPanePreset(playlistsHBox);
         playlistScroll.setStyle("-fx-background: #0F0F0FFF; -fx-border-color: #0F0F0FFF");
-        playlistScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        playlistScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        playlistScroll.setHbarPolicy(ScrollPanePreset.ScrollBarPolicy.NEVER);
+        playlistScroll.setVbarPolicy(ScrollPanePreset.ScrollBarPolicy.NEVER);
         VBox.setVgrow(playlistScroll, Priority.ALWAYS);
 
         mainVBox=new VBox(foundPlaylistsLabel, playlistScroll);
@@ -59,40 +59,40 @@ public class ProfileDefault extends VBox{
     }catch(ClassCastException c){
       /* You searched an artist, and he's not you => we display all playlists, albums and podcasts */
       if(!activeProfile.equals(searchedProfile)){
-        /* Albums found, we have a label and a HBox of AudioCards inside a ScrollPane */
+        /* Albums found, we have a label and a HBox of AudioCards inside a ScrollPanePreset */
         Label foundAlbumsLabel=new Label("Albums");
         foundAlbumsLabel.setFont(fontFindings);
         foundAlbumsLabel.setTextFill(Color.LIGHTGRAY);
         foundAlbumsLabel.setPadding(new Insets(40, 0, 40, 0));
         HBox albumsHBox=new HBox(50, new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard());
-        ScrollPane albumsScroll=new ScrollPane(albumsHBox);
+        ScrollPanePreset albumsScroll=new ScrollPanePreset(albumsHBox);
         albumsScroll.setStyle("-fx-background: #0F0F0FFF; -fx-border-color: #0F0F0FFF");
-        albumsScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        albumsScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        albumsScroll.setHbarPolicy(ScrollPanePreset.ScrollBarPolicy.NEVER);
+        albumsScroll.setVbarPolicy(ScrollPanePreset.ScrollBarPolicy.NEVER);
         VBox.setVgrow(albumsScroll, Priority.ALWAYS);
 
-        /* Podcasts found block, we have a label and a HBox of AudioCards inside a ScrollPane */
+        /* Podcasts found block, we have a label and a HBox of AudioCards inside a ScrollPanePreset */
         Label foundPodcastsLabel=new Label("Podcasts");
         foundPodcastsLabel.setFont(fontFindings);
         foundPodcastsLabel.setTextFill(Color.LIGHTGRAY);
         foundPodcastsLabel.setPadding(new Insets(40, 0, 40, 0));
         HBox podcastsHBox=new HBox(50, new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard());
-        ScrollPane podcastScroll=new ScrollPane(podcastsHBox);
+        ScrollPanePreset podcastScroll=new ScrollPanePreset(podcastsHBox);
         podcastScroll.setStyle("-fx-background: #0F0F0FFF; -fx-border-color: #0F0F0FFF");
-        podcastScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        podcastScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        podcastScroll.setHbarPolicy(ScrollPanePreset.ScrollBarPolicy.NEVER);
+        podcastScroll.setVbarPolicy(ScrollPanePreset.ScrollBarPolicy.NEVER);
         VBox.setVgrow(podcastScroll, Priority.ALWAYS);
 
-        /* Playlists found block, we have a label and a HBox of AudioCards inside a ScrollPane */
+        /* Playlists found block, we have a label and a HBox of AudioCards inside a ScrollPanePreset */
         Label foundPlaylistsLabel=new Label("Playlists");
         foundPlaylistsLabel.setFont(fontFindings);
         foundPlaylistsLabel.setTextFill(Color.LIGHTGRAY);
         foundPlaylistsLabel.setPadding(new Insets(40, 0, 40, 0));
         HBox playlistsHBox=new HBox(50, new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard());
-        ScrollPane playlistScroll=new ScrollPane(playlistsHBox);
+        ScrollPanePreset playlistScroll=new ScrollPanePreset(playlistsHBox);
         playlistScroll.setStyle("-fx-background: #0F0F0FFF; -fx-border-color: #0F0F0FFF");
-        playlistScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        playlistScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        playlistScroll.setHbarPolicy(ScrollPanePreset.ScrollBarPolicy.NEVER);
+        playlistScroll.setVbarPolicy(ScrollPanePreset.ScrollBarPolicy.NEVER);
         VBox.setVgrow(playlistScroll, Priority.ALWAYS);
 
         mainVBox=new VBox(foundAlbumsLabel, albumsScroll, foundPodcastsLabel, podcastScroll, foundPlaylistsLabel, playlistScroll);
@@ -102,6 +102,7 @@ public class ProfileDefault extends VBox{
     }//end-try
 
     getChildren().add(mainVBox);
+    getStylesheets().add("it/unipv/ingsfw/JavaBeats/view/resources/css/scrollbar.css");
   }
   /*---------------------------------------*/
 }

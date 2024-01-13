@@ -22,20 +22,18 @@ public class ProfileManager{
 
   //Login
   //Propagates exception from dao
-  public JBProfile login(JBProfile profile){
+  public JBProfile login(JBProfile profile) throws IllegalArgumentException{
     ProfileDAO p=new ProfileDAO();
     activeProfile=p.get(profile);
     return activeProfile;
   }
 
-    //Registration
-    //Propagates exception from dao
-    public JBProfile registration(JBProfile profile){
-        ProfileDAO p= new ProfileDAO();
-        p.insert(profile);
-        activeProfile= profile;
-        return activeProfile;
-    }
-
-
+  //Registration
+  //Propagates exception from dao
+  public JBProfile registration(JBProfile profile){
+    ProfileDAO p=new ProfileDAO();
+    p.insert(profile);
+    activeProfile=profile;
+    return activeProfile;
+  }
 }

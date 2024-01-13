@@ -2,12 +2,12 @@ package it.unipv.ingsfw.JavaBeats.view.primary.search;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.view.presets.Sidebar;
 import it.unipv.ingsfw.JavaBeats.view.presets.Songbar;
+import it.unipv.ingsfw.JavaBeats.view.presets.scrollpanes.ScrollPanePreset;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -83,11 +83,12 @@ public class SearchPageGUI{
     searchBar.setPadding(new Insets(10, 0, 10, 5));
     searchBar.setAlignment(Pos.CENTER_LEFT);
 
-    //Scrollpane Search
-    ScrollPane searchScrollPane=isDefault ? new SearchDefault() : new SearchResults();
+    //ScrollPanePreset Search
+    ScrollPanePreset searchScrollPanePreset=isDefault ? new SearchDefault() : new SearchResults();
+    searchScrollPanePreset.getStylesheets().add("it/unipv/ingsfw/JavaBeats/view/resources/css/scrollbar.css");
 
     //Vbox Search
-    VBox searchVBox=new VBox(searchBar, searchScrollPane);
+    VBox searchVBox=new VBox(searchBar, searchScrollPanePreset);
     searchVBox.setBackground(bgSearchPage);
 
 
