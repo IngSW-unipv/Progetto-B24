@@ -1,4 +1,5 @@
 package it.unipv.ingsfw.JavaBeats.view.primary.search;
+import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.view.presets.Sidebar;
 import it.unipv.ingsfw.JavaBeats.view.presets.Songbar;
 import javafx.geometry.Insets;
@@ -16,33 +17,37 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
-public class SearchPageGUI {
+
+public class SearchPageGUI{
   /*---------------------------------------*/
   //Attributi
   /*---------------------------------------*/
-  private static final int clientWidth=(int) Screen.getPrimary().getBounds().getWidth();
+  private static final int clientWidth=(int)Screen.getPrimary().getBounds().getWidth();
   private static final int clientHeight=(int)Screen.getPrimary().getBounds().getHeight();
   private static final Font fontUser=Font.font("Verdana", FontWeight.NORMAL, FontPosture.ITALIC, 15);
   private static final Background bgSearchPage=new Background(new BackgroundFill(Color.rgb(15, 15, 15), CornerRadii.EMPTY, Insets.EMPTY));
   private static final Background bgSearchBar=new Background(new BackgroundFill(Color.rgb(10, 10, 10), new CornerRadii(25), Insets.EMPTY));
   private static final Font fontSearchBar=Font.font("Verdana", FontWeight.NORMAL, FontPosture.REGULAR, 16);
   private Scene scene;
+
   /*---------------------------------------*/
   //Costruttori
   /*---------------------------------------*/
-  public SearchPageGUI(boolean isDefault){
-    initComponents(isDefault);
+  public SearchPageGUI(boolean isDefault, JBProfile activeProfile){
+    initComponents(isDefault, activeProfile);
   }
+
   /*---------------------------------------*/
   //Getter/Setter
   /*---------------------------------------*/
   public Scene getScene(){
     return scene;
   }
+
   /*---------------------------------------*/
   //Metodi
   /*---------------------------------------*/
-  private void initComponents(boolean isDefault){
+  private void initComponents(boolean isDefault, JBProfile activeProfile){
 
     //Search
 
@@ -50,7 +55,7 @@ public class SearchPageGUI {
 
 
     //Search textfield
-    TextField searchTextField= new TextField();
+    TextField searchTextField=new TextField();
     searchTextField.setPrefSize(500, 50);
     searchTextField.setFont(fontSearchBar);
     searchTextField.setBackground(bgSearchBar);
@@ -62,7 +67,7 @@ public class SearchPageGUI {
     HBox.setHgrow(whitePane, Priority.ALWAYS);
 
     /* Button with user's profile picture and username */
-    Image userPic = new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/DefaultUser.png", true);
+    Image userPic=new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/DefaultUser.png", true);
     ImageView userPicImageView=new ImageView(userPic);
     userPicImageView.setPreserveRatio(true);
     Button userProfileButton=new Button("Username");
@@ -74,7 +79,7 @@ public class SearchPageGUI {
     userProfileButton.setAlignment(Pos.CENTER_RIGHT);
 
 
-    HBox searchBar= new HBox(20, searchTextField, whitePane, userProfileButton);
+    HBox searchBar=new HBox(20, searchTextField, whitePane, userProfileButton);
     searchBar.setPadding(new Insets(10, 0, 10, 5));
     searchBar.setAlignment(Pos.CENTER_LEFT);
 
@@ -82,12 +87,12 @@ public class SearchPageGUI {
     ScrollPane searchScrollPane=isDefault ? new SearchDefault() : new SearchResults();
 
     //Vbox Search
-    VBox searchVBox= new VBox(searchBar, searchScrollPane);
+    VBox searchVBox=new VBox(searchBar, searchScrollPane);
     searchVBox.setBackground(bgSearchPage);
 
 
     /* Setup of left Sidebar, bottom songbar and center Search */
-    Sidebar sidebar=Sidebar.getInstance();
+    Sidebar sidebar=Sidebar.getInstance(activeProfile);
     Songbar songbar=Songbar.getInstance();
 
     GridPane gp=new GridPane();
