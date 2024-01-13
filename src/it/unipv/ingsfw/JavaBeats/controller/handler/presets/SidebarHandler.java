@@ -5,6 +5,7 @@ import it.unipv.ingsfw.JavaBeats.controller.handler.HomePageHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.ProfileViewHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.primary.search.SearchPageHandler;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
+import it.unipv.ingsfw.JavaBeats.view.library.CollectionViewGUI;
 import it.unipv.ingsfw.JavaBeats.view.presets.Sidebar;
 import it.unipv.ingsfw.JavaBeats.view.primary.home.HomePageGUI;
 import it.unipv.ingsfw.JavaBeats.view.primary.profile.ProfileViewGUI;
@@ -65,7 +66,7 @@ public class SidebarHandler{
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
         SearchPageGUI searchPageGUI=new SearchPageGUI(true, activeProfile);
         SearchPageHandler searchPageHandler=new SearchPageHandler();
-        Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getProfileButton());
+        Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getSearchButton());
 
         Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
         stage.setScene(searchPageGUI.getScene());
@@ -81,7 +82,7 @@ public class SidebarHandler{
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
         ProfileViewGUI profileViewGUI=new ProfileViewGUI(activeProfile, activeProfile);
         ProfileViewHandler profileViewHandler=new ProfileViewHandler(profileViewGUI, activeProfile);
-        Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getSearchButton());
+        Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getProfileButton());
 
         Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
         stage.setScene(profileViewGUI.getScene());
@@ -90,6 +91,23 @@ public class SidebarHandler{
         stage.setHeight(previousDimension.getHeight());
       }
     };
+
+//    //FavoritesButtonHandler
+//    EventHandler<ActionEvent> favoritesButtonHandler=new EventHandler<ActionEvent>(){
+//      @Override
+//      public void handle(ActionEvent actionEvent){
+//        Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+//        CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, );
+//        ProfileViewHandler profileViewHandler=new ProfileViewHandler(profileViewGUI, activeProfile);
+//        Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getProfileButton());
+//
+//        Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
+//        stage.setScene(profileViewGUI.getScene());
+//        stage.setTitle("Profile");
+//        stage.setWidth(previousDimension.getWidth());
+//        stage.setHeight(previousDimension.getHeight());
+//      }
+//    };
 
     Sidebar.getInstance(activeProfile).getHomeButton().setOnAction(homeButtonHandler);
     Sidebar.getInstance(activeProfile).getSearchButton().setOnAction(searchButtonHandler);

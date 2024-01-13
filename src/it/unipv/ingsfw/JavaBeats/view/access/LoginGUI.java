@@ -102,7 +102,7 @@ public class LoginGUI{
       t.setStyle("-fx-text-fill: #7a7a7a;");
       t.styleProperty().bind(Bindings.when(username.focusedProperty()).then("-fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);").otherwise("-fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);"));
     }//end-for
-    username.setPromptText("Username");
+    username.setPromptText("Username or mail");
     password.setPromptText("Password");
 
     errorMessage=new Label("Esempio errore!");

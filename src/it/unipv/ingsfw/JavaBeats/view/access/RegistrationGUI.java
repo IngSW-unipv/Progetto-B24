@@ -29,7 +29,7 @@ public class RegistrationGUI{
   private static final Border borderTextField=new Border(new BorderStroke(Color.BLUEVIOLET, BorderStrokeStyle.SOLID, new CornerRadii(25), new BorderWidths(3)));
   private static final Font fontTextField=Font.font("Verdana", FontWeight.EXTRA_LIGHT, FontPosture.REGULAR, 17);
   private Scene scene;
-  private TextField username, nameSurname, mail;
+  private TextField username, name, surname, mail;
   private PasswordField password1, password2;
   private Label confirmPassword, errorMessage;
   private Button login;
@@ -55,11 +55,17 @@ public class RegistrationGUI{
   public void setUsername(TextField username) {
     this.username = username;
   }
-  public TextField getNameSurname() {
-    return nameSurname;
+  public TextField getSurname() {
+    return surname;
   }
-  public void setNameSurname(TextField nameSurname) {
-    this.nameSurname = nameSurname;
+  public void setSurname(TextField surname) {
+    this.surname = surname;
+  }
+  public TextField getName() {
+    return name;
+  }
+  public void setName(TextField name) {
+    this.name = name;
   }
   public TextField getMail() {
     return mail;
@@ -118,13 +124,14 @@ public class RegistrationGUI{
     HBox logoTitleHBox=new HBox(20, imageView, title);
 
     /* Setup of Username and Password TextFields as well as erroreMessage Label */
-    nameSurname= new TextField();
+    name= new TextField();
+    surname= new TextField();
     mail=new TextField(); 
     username=new TextField();
     password1=new PasswordField();
     password2=new PasswordField();
     
-    TextField[] tf={nameSurname, mail, username, password1, password2};
+    TextField[] tf={name, surname, mail, username, password1, password2};
     for(TextField t : tf){
       t.setPrefSize(300, 50);
       t.setBorder(borderTextField);
@@ -141,7 +148,8 @@ public class RegistrationGUI{
       }//end-for
     }//end-for
     
-    nameSurname.setPromptText("Name and surname");
+    name.setPromptText("Name");
+    surname.setPromptText("Surname");
     mail.setPromptText("Mail");
     username.setPromptText("Username");
     password1.setPromptText("Password");
@@ -169,13 +177,14 @@ public class RegistrationGUI{
     login.setCursor(Cursor.HAND);
 
     /* Set up of the main VBox containing all the elements for the login page */
-    VBox v=new VBox(logoTitleHBox, nameSurname, mail, username, password1, confirmPassword, password2, errorMessage, register, login);
+    VBox v=new VBox(logoTitleHBox, name, surname, mail, username, password1, confirmPassword, password2, errorMessage, register, login);
     v.setPrefSize(vboxWidth, vboxHeight);
     v.setFillWidth(false);
     v.setAlignment(Pos.CENTER);
     v.setBackground(bgVBox);
     VBox.setMargin(logoTitleHBox, new Insets(0, 0, 50, 0));
-    VBox.setMargin(nameSurname, new Insets(0, 0, 15, 0));
+    VBox.setMargin(name, new Insets(0, 0, 15, 0));
+    VBox.setMargin(surname, new Insets(0, 0, 15, 0));
     VBox.setMargin(mail, new Insets(0, 0, 15, 0));
     VBox.setMargin(username, new Insets(0, 0, 15, 0));
     VBox.setMargin(password1, new Insets(0, 0, 20, 0));

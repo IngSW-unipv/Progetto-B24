@@ -37,9 +37,9 @@ public class CollectionViewGUI{
   /*---------------------------------------*/
   //Costruttori
   /*---------------------------------------*/
-  public CollectionViewGUI(EJBPLAYABLE collectionType, JBProfile jbProfile, JBCollection jbCollection){
+  public CollectionViewGUI(JBProfile jbProfile, JBCollection jbCollection){
     super();
-    initComponents(collectionType, jbProfile, jbCollection);
+    initComponents(jbProfile, jbCollection);
   }
 
   /*---------------------------------------*/
@@ -60,8 +60,8 @@ public class CollectionViewGUI{
   /*---------------------------------------*/
   //Metodi
   /*---------------------------------------*/
-  private void initComponents(EJBPLAYABLE collectionType, JBProfile activeProfile, JBCollection jbCollection){
-    collectionHeader=new CollectionHeader(collectionType, activeProfile, jbCollection);
+  private void initComponents(JBProfile activeProfile, JBCollection jbCollection){
+    collectionHeader=new CollectionHeader(activeProfile, jbCollection);
     ObservableList<JBAudio> songList=FXCollections.observableArrayList();
     try{
       for(int i=0; i<20; i++){
@@ -70,7 +70,7 @@ public class CollectionViewGUI{
     }catch(SQLException e){
       throw new RuntimeException(e);
     }
-    TableView<JBAudio> audioTable=new AudioTable(songList, collectionType, activeProfile, jbCollection);
+    TableView<JBAudio> audioTable=new AudioTable(songList, activeProfile, jbCollection);
     VBox mainVBox=new VBox(collectionHeader, audioTable);
     mainVBox.setPadding(new Insets(0, 50, 0, 50));
 

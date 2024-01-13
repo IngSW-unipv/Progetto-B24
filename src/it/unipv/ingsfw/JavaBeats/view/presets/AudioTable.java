@@ -23,15 +23,15 @@ public class AudioTable extends TableView<JBAudio>{
   /*---------------------------------------*/
   //Constructor
   /*---------------------------------------*/
-  public AudioTable(ObservableList<JBAudio> jbAudios, EJBPLAYABLE collectionType, JBProfile jbProfile, JBCollection jbCollection){
+  public AudioTable(ObservableList<JBAudio> jbAudios, JBProfile jbProfile, JBCollection jbCollection){
     super();
-    initComponents(jbAudios, collectionType, jbProfile, jbCollection);
+    initComponents(jbAudios, jbProfile, jbCollection);
   }
 
   /*---------------------------------------*/
   //Methods
   /*---------------------------------------*/
-  private void initComponents(ObservableList<JBAudio> jbAudios, EJBPLAYABLE collectionType, JBProfile jbProfile, JBCollection jbCollection){
+  private void initComponents(ObservableList<JBAudio> jbAudios, JBProfile jbProfile, JBCollection jbCollection){
     /* 80% of clientWidth and 125 is the padding */
     double tableWidth=((double)80/100*clientWidth)-125;
 

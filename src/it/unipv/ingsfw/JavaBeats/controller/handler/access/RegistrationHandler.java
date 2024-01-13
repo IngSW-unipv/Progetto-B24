@@ -52,14 +52,10 @@ public class RegistrationHandler{
       @Override
       public void handle(ActionEvent actionEvent){
 
-        StringTokenizer stringTokenizer=new StringTokenizer(gui.getNameSurname().getText());
-        String name=new String(stringTokenizer.nextToken());
-        String surname=new String(stringTokenizer.nextToken());
-
         if(!gui.getPassword1().getText().equals(gui.getPassword2().getText())){
           gui.getErrorMessage().setText("Your passwords don't correspond");
         }else{
-          JBProfile profile=new User(gui.getUsername().getText(), gui.getMail().getText(), gui.getPassword2().getText(), name, surname);
+          JBProfile profile=new User(gui.getUsername().getText(), gui.getMail().getText(), gui.getPassword2().getText(), gui.getName().getText(), gui.getSurname().getText());
 
           //Register the profile exists or handles the exception
           activeProfile=ProfileManagerFactory.getInstance().getProfileManager().registration(profile);

@@ -1,5 +1,6 @@
 package it.unipv.ingsfw.JavaBeats.view.library;
 import it.unipv.ingsfw.JavaBeats.model.playable.EJBPLAYABLE;
+import it.unipv.ingsfw.JavaBeats.model.playable.collection.Album;
 import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
 import it.unipv.ingsfw.JavaBeats.model.playable.collection.Playlist;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
@@ -31,8 +32,8 @@ public class CollectionHeader extends VBox{
   /*---------------------------------------*/
   //Costruttori
   /*---------------------------------------*/
-  public CollectionHeader(EJBPLAYABLE collectionType, JBProfile jbProfile, JBCollection jbCollection){
-    initComponents(collectionType, jbProfile, jbCollection);
+  public CollectionHeader(JBProfile jbProfile, JBCollection jbCollection){
+    initComponents(jbProfile, jbCollection);
   }
 
   /*---------------------------------------*/
@@ -45,7 +46,7 @@ public class CollectionHeader extends VBox{
   /*---------------------------------------*/
   //Metodi
   /*---------------------------------------*/
-  private void initComponents(EJBPLAYABLE collectionType, JBProfile jbProfile, JBCollection jbCollection){
+  private void initComponents(JBProfile jbProfile, JBCollection jbCollection){
     Image collectionImage=new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/RecordBig.png", true);
     ImageView collectionImageView=new ImageView(collectionImage);
     collectionImageView.setPreserveRatio(true);
@@ -53,12 +54,19 @@ public class CollectionHeader extends VBox{
 
     //Con case switch
     Label collectionLabel=null;
-    switch(collectionType){
-      case PLAYLIST -> collectionLabel=new Label("Playlist");
-      case ALBUM -> collectionLabel=new Label("Album");
-      case PODCAST -> collectionLabel=new Label("Podcast");
-      default -> collectionLabel=new Label("Error!");
-    }//end-switch
+    try{
+      Playlist playlist= (Playlist) jbCollection;
+      collectionLabel=new Label("Playlist");
+
+    }catch(ClassCastException e){
+      try{
+        Album album= (Album) jbCollection;
+        collectionLabel=new Label("Album");
+      }catch (ClassCastException e1){
+        collectionLabel=new Label("Podcast");
+      }
+    }
+
     collectionLabel.setBackground(bgPills);
     collectionLabel.setPadding(new Insets(3));
     collectionLabel.setTextFill(Color.LIGHTGRAY);
