@@ -2,6 +2,7 @@ package it.unipv.ingsfw.JavaBeats.view.library;
 
 import it.unipv.ingsfw.JavaBeats.model.playable.EJBPLAYABLE;
 import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
+import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.view.presets.AudioCard;
 import it.unipv.ingsfw.JavaBeats.view.presets.Sidebar;
 import it.unipv.ingsfw.JavaBeats.view.presets.Songbar;
@@ -34,10 +35,9 @@ public class CollectionLibraryGUI{
   private Scene scene;
 
 
-
-  public CollectionLibraryGUI(EJBPLAYABLE ejbplayable){
-    this.ejbplayable= ejbplayable;
-    initComponents();
+  public CollectionLibraryGUI(EJBPLAYABLE ejbplayable, JBProfile activeProfile){
+    this.ejbplayable=ejbplayable;
+    initComponents(activeProfile);
   }
 
 
@@ -49,8 +49,11 @@ public class CollectionLibraryGUI{
     return scene;
   }
 
+  public EJBPLAYABLE getEjbplayable(){
+    return ejbplayable;
+  }
 
-  private void initComponents(){
+  private void initComponents(JBProfile activeProfile){
 
     //Label collection title
 
@@ -117,7 +120,7 @@ public class CollectionLibraryGUI{
     VBox.setVgrow(collectionScrollPane, Priority.ALWAYS);
 
     /* Setup of left Sidebar, bottom songbar and center collection */
-    Sidebar sidebar=Sidebar.getInstance();
+    Sidebar sidebar=Sidebar.getInstance(activeProfile);
     Songbar songbar=Songbar.getInstance();
     GridPane gp=new GridPane();
     gp.addRow(0, sidebar, collectionVBox);

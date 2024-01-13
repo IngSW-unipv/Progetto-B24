@@ -60,17 +60,17 @@ public class CollectionViewGUI{
   /*---------------------------------------*/
   //Metodi
   /*---------------------------------------*/
-  private void initComponents(EJBPLAYABLE collectionType, JBProfile jbProfile, JBCollection jbCollection){
-    collectionHeader=new CollectionHeader(collectionType, jbProfile, jbCollection);
+  private void initComponents(EJBPLAYABLE collectionType, JBProfile activeProfile, JBCollection jbCollection){
+    collectionHeader=new CollectionHeader(collectionType, activeProfile, jbCollection);
     ObservableList<JBAudio> songList=FXCollections.observableArrayList();
     try{
       for(int i=0; i<4; i++){
-        songList.add(new Song(2, "Unknown title", new Artist("rob", "rob", "rob"), new Album(1, "nomeAlbum", new Artist("rob", "rob", "rob"), new ArrayList<Song>()), new SerialBlob(new byte[]{0, 1}), new Time(100), new Date(100), new String[]{"rock", "pop"}, true, 20));
+        songList.add(new Song(2, "Unknown title", new Artist("rob", "rob", "rob"), new Album(1, "nomeAlbum", new Artist("rob", "rob", "rob"), new ArrayList<Song>()), new SerialBlob(new byte[] {0, 1}), new Time(100), new Date(100), new String[] {"rock", "pop"}, true, 20));
       }//end-for
     }catch(SQLException e){
       throw new RuntimeException(e);
     }
-    TableView<JBAudio> audioTable=new AudioTable(songList, collectionType, jbProfile, jbCollection);
+    TableView<JBAudio> audioTable=new AudioTable(songList, collectionType, activeProfile, jbCollection);
     VBox mainVBox=new VBox(collectionHeader, audioTable);
     mainVBox.setPadding(new Insets(0, 50, 0, 50));
 
@@ -82,7 +82,7 @@ public class CollectionViewGUI{
 
     /* Setup of left Sidebar, bottom songbar and center mainVBox */
     gp=new GridPane();
-    gp.addRow(0, Sidebar.getInstance(), scrollableScrollPane);
+    gp.addRow(0, Sidebar.getInstance(activeProfile), scrollableScrollPane);
     gp.add(Songbar.getInstance(), 0, 1, 2, 1);
 
     ColumnConstraints ccSidebar=new ColumnConstraints();

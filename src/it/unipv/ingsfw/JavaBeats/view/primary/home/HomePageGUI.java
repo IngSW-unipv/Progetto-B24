@@ -1,9 +1,11 @@
 package it.unipv.ingsfw.JavaBeats.view.primary.home;
+import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.view.presets.Sidebar;
 import it.unipv.ingsfw.JavaBeats.view.presets.Songbar;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
 import javafx.stage.Screen;
+
 public class HomePageGUI{
   /*---------------------------------------*/
   //Attributi
@@ -11,24 +13,27 @@ public class HomePageGUI{
   private static final int clientWidth=(int)Screen.getPrimary().getBounds().getWidth();
   private static final int clientHeight=(int)Screen.getPrimary().getBounds().getHeight();
   private Scene scene;
+
   /*---------------------------------------*/
   //Costruttori
   /*---------------------------------------*/
-  public HomePageGUI(){
-    initComponents();
+  public HomePageGUI(JBProfile activeProfile){
+    initComponents(activeProfile);
   }
+
   /*---------------------------------------*/
   //Getter/Setter
   /*---------------------------------------*/
   public Scene getScene(){
     return scene;
   }
+
   /*---------------------------------------*/
   //Metodi
   /*---------------------------------------*/
-  private void initComponents(){
+  private void initComponents(JBProfile activeProfile){
     /* Setup of left Sidebar, bottom songbar and center home */
-    Sidebar sidebar=Sidebar.getInstance();
+    Sidebar sidebar=Sidebar.getInstance(activeProfile);
     Songbar songbar=Songbar.getInstance();
     Home home=new Home();
 

@@ -1,5 +1,6 @@
 package it.unipv.ingsfw.JavaBeats.view.presets;
-import com.mysql.cj.xdevapi.Collection;
+import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
+import it.unipv.ingsfw.JavaBeats.model.profile.User;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -15,9 +16,7 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class Sidebar extends VBox{
   /*---------------------------------------*/
@@ -28,6 +27,7 @@ public class Sidebar extends VBox{
   private static final Background bgSidebar=new Background(new BackgroundFill(Color.rgb(10, 10, 10), CornerRadii.EMPTY, Insets.EMPTY));
   private static final Font fontMenu=Font.font("Verdana", FontWeight.NORMAL, FontPosture.REGULAR, 17);
   private static final Font fontLibrary=Font.font("Verdana", FontWeight.NORMAL, FontPosture.REGULAR, 20);
+  private ArrayList<Button> allButtons=new ArrayList<>();
   private Button homeButton;
   private Button searchButton;
   private Button profileButton;
@@ -39,17 +39,17 @@ public class Sidebar extends VBox{
   /*---------------------------------------*/
   //Costruttore
   /*---------------------------------------*/
-  private Sidebar(){
+  private Sidebar(JBProfile activeProfile){
     super();
-    initComponents();
+    initComponents(activeProfile);
   }
 
   /*---------------------------------------*/
   //Getter/Setter
   /*---------------------------------------*/
-  public static Sidebar getInstance(){
+  public static Sidebar getInstance(JBProfile activeProfile){
     if(instance==null){
-      instance=new Sidebar();
+      instance=new Sidebar(activeProfile);
     }//end-if
     return instance;
   }
@@ -85,7 +85,7 @@ public class Sidebar extends VBox{
   /*---------------------------------------*/
   //Metodi
   /*---------------------------------------*/
-  private void initComponents(){
+  private void initComponents(JBProfile activeProfile){
     /* Setup of LEFT VBox -> MenuVbox */
     Image homeImage=new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Home.png", true);
     ImageView homeImageView=new ImageView(homeImage);
@@ -154,15 +154,28 @@ public class Sidebar extends VBox{
     playlistsButton=new Button("Playlists");
     albumButton=new Button("Albums");
     podcastButton=new Button("Podcasts");
-    Button[] allButtons={favoritesButton, playlistsButton, albumButton, podcastButton};
-    for(Button b: allButtons){
-      b.setBackground(bgSidebar);
-      b.setFont(fontLibrary);
+    ArrayList<Button> libraryButtons=new ArrayList<>();
+    try{
+      User u=(User)activeProfile;
+      Collections.addAll(libraryButtons, favoritesButton, playlistsButton);
+      Collections.addAll(allButtons, homeButton, searchButton, profileButton, favoritesButton, playlistsButton);
+    }catch(ClassCastException c){
+      Collections.addAll(libraryButtons, favoritesButton, playlistsButton, albumButton, podcastButton);
+      Collections.addAll(allButtons, homeButton, searchButton, profileButton, favoritesButton, playlistsButton, albumButton, podcastButton);
+    }//end-try
+    VBox libraryVBox=new VBox(libraryHBox);
+    for(Button b: libraryButtons){
+      b.setFont(fontMenu);
       b.setTextFill(Color.LIGHTGRAY);
       b.setCursor(Cursor.HAND);
-      b.setPadding(new Insets(20, 0, 20, 35));
+      Pane libraryPane=new Pane();
+      HBox libraryButtonHBox=new HBox(b, libraryPane);
+      HBox.setHgrow(libraryPane, Priority.ALWAYS);
+      libraryButtonHBox.setPadding(new Insets(10, 0, 10, 0));
+      libraryButtonHBox.getStyleClass().add("hbox");
+      libraryVBox.getChildren().add(libraryButtonHBox);
+      VBox.setMargin(libraryButtonHBox, new Insets(3, 0, 2, 0));
     }//end-for
-    VBox libraryVBox=new VBox(libraryHBox, favoritesButton, playlistsButton, albumButton, podcastButton);
 
     Pane whitePane2=new Pane();
     setVgrow(whitePane2, Priority.ALWAYS);
@@ -171,19 +184,15 @@ public class Sidebar extends VBox{
     setBackground(bgSidebar);
 
     setMargin(menuVBox, new Insets(10, 35, 0, 20));
-    setMargin(libraryHBox, new Insets(0, 45, 0, 35));
+    setMargin(libraryVBox, new Insets(0, 25, 0, 20));
     getStylesheets().add("it/unipv/ingsfw/JavaBeats/view/resources/css/sidebar.css");
-
-    setActive(searchButton);
   }
 
-  private void setActive(Button b){
-    homeButton.getParent().getStyleClass().remove("active");
-    homeButton.getStyleClass().remove("active");
-    searchButton.getParent().getStyleClass().remove("active");
-    searchButton.getStyleClass().remove("active");
-    profileButton.getParent().getStyleClass().remove("active");
-    profileButton.getStyleClass().remove("active");
+  public void setActive(Button b){
+    for(Button button: allButtons){
+      button.getParent().getStyleClass().remove("active");
+      button.getStyleClass().remove("active");
+    }//end-for-each
 
     b.getParent().getStyleClass().add("active");
     b.getStyleClass().add("active");

@@ -61,7 +61,7 @@ public class ProfileViewGUI{
     mainContent.setFitToWidth(true);
 
     gp=new GridPane();
-    gp.addRow(0, Sidebar.getInstance(), mainContent);
+    gp.addRow(0, Sidebar.getInstance(activeProfile), mainContent);
     gp.add(Songbar.getInstance(), 0, 1, 2, 1);
 
     ColumnConstraints ccSidebar=new ColumnConstraints();
