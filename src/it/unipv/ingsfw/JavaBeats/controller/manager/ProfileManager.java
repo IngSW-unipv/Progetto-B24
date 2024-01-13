@@ -3,41 +3,40 @@ package it.unipv.ingsfw.JavaBeats.controller.manager;
 import it.unipv.ingsfw.JavaBeats.dao.profile.ProfileDAO;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 
-public class ProfileManager {
+public class ProfileManager{
 
-    //Attributi
+  //Attributi
 
-    private static JBProfile activeProfile;
-
-
-    //Getters and Setters
+  private static JBProfile activeProfile;
 
 
-    //Metodi
+  //Getters and Setters
+
+  public static JBProfile getActiveProfile(){
+    return activeProfile;
+  }
 
 
-    //Login
-    //Propagates exception from dao
-    public JBProfile login(JBProfile profile){
-        ProfileDAO p= new ProfileDAO();
-        activeProfile=p.get(profile);
-        return activeProfile;
-    }
-
-    //Registration
-    //Propagates exception from dao
-    public void registration(JBProfile profile){
-        ProfileDAO p= new ProfileDAO();
-        p.insert(profile);
+  //Metodi
 
 
+  //Login
+  //Propagates exception from dao
+  public JBProfile login(JBProfile profile){
+    ProfileDAO p=new ProfileDAO();
+    activeProfile=p.get(profile);
+    return activeProfile;
+  }
+
+  //Registration
+  //Propagates exception from dao
+  public void registration(JBProfile profile){
+    ProfileDAO p=new ProfileDAO();
+    p.insert(profile);
 
 
+    activeProfile=profile;
+  }
 
-        activeProfile= profile;
-    }
 
-	
-	
-	
 }

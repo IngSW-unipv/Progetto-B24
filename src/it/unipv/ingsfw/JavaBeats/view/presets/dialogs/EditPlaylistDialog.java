@@ -46,24 +46,31 @@ public class EditPlaylistDialog extends Dialog<JBCollection>{
   public JBCollection getOriginalPlaylist(){
     return originalPlaylist;
   }
+
   public Button getInputImageButton(){
     return inputImageButton;
   }
+
   public JBCollection getNewPlaylist(){
     return newPlaylist;
   }
+
   public CheckBox getCheckBox(){
     return checkBox;
   }
+
   public ImageView getCollectionImageView(){
     return collectionImageView;
   }
+
   public Button getSaveButton(){
     return saveButton;
   }
+
   public Button getCancelButton(){
     return cancelButton;
   }
+
   /*---------------------------------------*/
   //Metodi
   /*---------------------------------------*/
@@ -129,7 +136,7 @@ public class EditPlaylistDialog extends Dialog<JBCollection>{
     /* expliciting the buttons to handle the interaction */
     saveButton=(Button)getDialogPane().lookupButton(saveButtonType);
     cancelButton=(Button)getDialogPane().lookupButton(cancelButtonType);
-    getDialogPane().getStylesheets().add("it/unipv/ingsfw/JavaBeats/view/resources/css/Dialog.css");
+    getDialogPane().getStylesheets().add("it/unipv/ingsfw/JavaBeats/view/resources/css/dialog.css");
     getDialogPane().getStyleClass().add("myDialog");
     getDialogPane().setPrefSize(600, 400);
   }

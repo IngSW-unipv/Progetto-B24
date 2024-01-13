@@ -1,9 +1,7 @@
 package it.unipv.ingsfw.JavaBeats.view.presets.dialogs;
 import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
-import it.unipv.ingsfw.JavaBeats.model.playable.collection.Playlist;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.*;
@@ -16,8 +14,6 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-
-import java.io.PipedOutputStream;
 
 public class EditProfileDialog extends Dialog<JBCollection>{
   /*---------------------------------------*/
@@ -34,6 +30,7 @@ public class EditProfileDialog extends Dialog<JBCollection>{
   private Button inputImageButton;
   private Button saveButton;
   private Button cancelButton;
+
   /*---------------------------------------*/
   //Costruttori
   /*---------------------------------------*/
@@ -45,39 +42,50 @@ public class EditProfileDialog extends Dialog<JBCollection>{
     initStyle(StageStyle.UNDECORATED);
     initComponents();
   }
+
   /*---------------------------------------*/
   //Getter/Setter
   /*---------------------------------------*/
   public Button getInputImageButton(){
     return inputImageButton;
   }
+
   public ImageView getProfileImageView(){
     return profileImageView;
   }
+
   public JBProfile getOriginalProfile(){
     return originalProfile;
   }
+
   public JBProfile getNewProfile(){
     return newProfile;
   }
+
   public Button getSaveButton(){
     return saveButton;
   }
+
   public Button getCancelButton(){
     return cancelButton;
   }
+
   public TextField getUsernameTextField(){
     return usernameTextField;
   }
+
   public TextField getNameTextField(){
     return nameTextField;
   }
+
   public TextField getSurnameTextField(){
     return surnameTextField;
   }
+
   public TextArea getBiography(){
     return biography;
   }
+
   /*---------------------------------------*/
   //Metodi
   /*---------------------------------------*/
@@ -148,7 +156,7 @@ public class EditProfileDialog extends Dialog<JBCollection>{
     saveButton=(Button)getDialogPane().lookupButton(saveButtonType);
     cancelButton=(Button)getDialogPane().lookupButton(cancelButtonType);
 
-    getDialogPane().getStylesheets().add("it/unipv/ingsfw/JavaBeats/view/resources/css/Dialog.css");
+    getDialogPane().getStylesheets().add("it/unipv/ingsfw/JavaBeats/view/resources/css/dialog.css");
     getDialogPane().getStyleClass().add("myDialog");
     getDialogPane().setPrefSize(600, 400);
   }

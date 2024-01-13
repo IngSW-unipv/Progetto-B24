@@ -77,7 +77,7 @@ public class ProfileViewGUI{
     gp.getRowConstraints().addAll(rcSideHome, rcSongbar);
 
     scene=new Scene(gp, clientWidth, clientHeight);
-    scene.getStylesheets().add("it/unipv/ingsfw/JavaBeats/view/resources/css/Profile.css");
+    scene.getStylesheets().add("it/unipv/ingsfw/JavaBeats/view/resources/css/profile.css");
   }
   /*---------------------------------------*/
 }

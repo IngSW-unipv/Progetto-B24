@@ -37,7 +37,7 @@ public class CollectionViewController{
         gui.getGp().setEffect(new BoxBlur(10, 10, 10));
 
         Playlist originalCollection=new Playlist(1, "name", new Artist("mail", "name", "username"));
-        EditPlaylistDialog dialog=new EditPlaylistDialog(stage, originalCollection, (Playlist)originalCollection.getCopy(originalCollection));
+        EditPlaylistDialog dialog=new EditPlaylistDialog(stage, originalCollection, (Playlist)originalCollection.getCopy());
         EditPlaylistDialogController editPlaylistDialogController=new EditPlaylistDialogController(dialog);
         dialog.showAndWait();
         gui.getGp().setEffect(null);

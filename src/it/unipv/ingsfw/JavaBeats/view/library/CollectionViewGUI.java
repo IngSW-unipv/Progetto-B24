@@ -64,7 +64,7 @@ public class CollectionViewGUI{
     collectionHeader=new CollectionHeader(collectionType, activeProfile, jbCollection);
     ObservableList<JBAudio> songList=FXCollections.observableArrayList();
     try{
-      for(int i=0; i<4; i++){
+      for(int i=0; i<20; i++){
         songList.add(new Song(2, "Unknown title", new Artist("rob", "rob", "rob"), new Album(1, "nomeAlbum", new Artist("rob", "rob", "rob"), new ArrayList<Song>()), new SerialBlob(new byte[] {0, 1}), new Time(100), new Date(100), new String[] {"rock", "pop"}, true, 20));
       }//end-for
     }catch(SQLException e){
@@ -77,6 +77,7 @@ public class CollectionViewGUI{
     ScrollPane scrollPane=new ScrollPane(mainVBox);
     scrollPane.setFitToWidth(true);
     scrollPane.setStyle("-fx-background: #0F0F0FFF; -fx-border-color: #0F0F0FFF");
+    scrollPane.getStylesheets().add("it/unipv/ingsfw/JavaBeats/view/resources/css/scrollbar.css");
     VBox scrollableScrollPane=new VBox(scrollPane);
     VBox.setVgrow(scrollPane, Priority.ALWAYS);
 
