@@ -28,10 +28,6 @@ public class User extends JBProfile {
 		this(username, mail, password, name, surname, null, null, true, null, null);
 	}
 
-	public User(String username, String password) {
-		this(username, null, password, null, null, null, null, true, null, null);
-	}
-
 
 	//GETTERS:
 	public boolean isVisible() {

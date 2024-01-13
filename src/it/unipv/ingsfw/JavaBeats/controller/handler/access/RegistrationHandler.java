@@ -62,12 +62,12 @@ public class RegistrationHandler{
           JBProfile profile=new User(gui.getUsername().getText(), gui.getMail().getText(), gui.getPassword2().getText(), name, surname);
 
           //Register the profile exists or handles the exception
-          ProfileManagerFactory.getInstance().getProfileManager().registration(profile);
+          activeProfile=ProfileManagerFactory.getInstance().getProfileManager().registration(profile);
 
           //Goes to HomePage
           Stage s=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
           HomePageGUI homePageGUI=new HomePageGUI(activeProfile);
-          HomePageHandler homePageHandler=new HomePageHandler();
+          HomePageHandler homePageHandler=new HomePageHandler(homePageGUI, activeProfile);
 
           //Saving previous dimension and using it for the next page
           Dimension2D previousDimension=new Dimension2D(s.getWidth(), s.getHeight());

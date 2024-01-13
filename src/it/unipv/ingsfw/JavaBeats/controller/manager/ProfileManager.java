@@ -28,15 +28,14 @@ public class ProfileManager{
     return activeProfile;
   }
 
-  //Registration
-  //Propagates exception from dao
-  public void registration(JBProfile profile){
-    ProfileDAO p=new ProfileDAO();
-    p.insert(profile);
-
-
-    activeProfile=profile;
-  }
+    //Registration
+    //Propagates exception from dao
+    public JBProfile registration(JBProfile profile){
+        ProfileDAO p= new ProfileDAO();
+        p.insert(profile);
+        activeProfile= profile;
+        return activeProfile;
+    }
 
 
 }

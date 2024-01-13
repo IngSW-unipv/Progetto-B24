@@ -1,9 +1,7 @@
 package it.unipv.ingsfw.JavaBeats.controller.handler;
-import it.unipv.ingsfw.JavaBeats.model.playable.collection.Playlist;
 import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.model.profile.User;
-import it.unipv.ingsfw.JavaBeats.view.presets.dialogs.EditPlaylistDialog;
 import it.unipv.ingsfw.JavaBeats.view.presets.dialogs.EditProfileDialog;
 import it.unipv.ingsfw.JavaBeats.view.primary.profile.ProfileViewGUI;
 import javafx.event.ActionEvent;
@@ -11,13 +9,11 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
-import java.io.InputStreamReader;
 import java.sql.SQLException;
 
-public class ProfileViewController{
+public class ProfileViewHandler {
   /*---------------------------------------*/
   //Attributi
   /*---------------------------------------*/
@@ -26,7 +22,7 @@ public class ProfileViewController{
   /*---------------------------------------*/
   //Costruttori
   /*---------------------------------------*/
-  public ProfileViewController(ProfileViewGUI gui, JBProfile originalProfile){
+  public ProfileViewHandler(ProfileViewGUI gui, JBProfile originalProfile){
     this.gui=gui;
     initComponents(originalProfile);
   }

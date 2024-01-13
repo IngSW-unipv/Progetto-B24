@@ -32,20 +32,19 @@ public class LoginHandler{
   //Metodi
   /*---------------------------------------*/
   private void initComponents(){
-    activeProfile=ProfileManagerFactory.getInstance().getProfileManager().getActiveProfile();
     EventHandler<ActionEvent> loginButtonHandler=new EventHandler<ActionEvent>(){
       @Override
       public void handle(ActionEvent actionEvent){
 
-        JBProfile profile=new User(gui.getUsername().getText(), gui.getPassword().getText());
+        JBProfile profile=new User(gui.getUsername().getText(),null, gui.getPassword().getText());
 
         //Checks if the profile exists or handles the exception
-        ProfileManagerFactory.getInstance().getProfileManager().login(profile);
+        activeProfile=ProfileManagerFactory.getInstance().getProfileManager().login(profile);
 
         //Login
         Stage s=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
         HomePageGUI homePageGUI=new HomePageGUI(activeProfile);
-        HomePageHandler homePageHandler=new HomePageHandler();
+        HomePageHandler homePageHandler=new HomePageHandler(homePageGUI, activeProfile);
 
         //Saving previous dimension and using it for the next page
         Dimension2D previousDimension=new Dimension2D(s.getWidth(), s.getHeight());
