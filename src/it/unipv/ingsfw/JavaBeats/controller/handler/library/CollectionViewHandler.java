@@ -1,6 +1,7 @@
-package it.unipv.ingsfw.JavaBeats.controller.handler;
+package it.unipv.ingsfw.JavaBeats.controller.handler.library;
 import it.unipv.ingsfw.JavaBeats.model.playable.collection.Playlist;
 import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
+import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.view.library.CollectionViewGUI;
 import it.unipv.ingsfw.JavaBeats.view.presets.dialogs.EditPlaylistDialog;
 import javafx.event.ActionEvent;
@@ -9,7 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.effect.BoxBlur;
 import javafx.stage.Stage;
 
-public class CollectionViewController{
+public class CollectionViewHandler {
   /*---------------------------------------*/
   //Attributi
   /*---------------------------------------*/
@@ -18,9 +19,9 @@ public class CollectionViewController{
   /*---------------------------------------*/
   //Costruttori
   /*---------------------------------------*/
-  public CollectionViewController(CollectionViewGUI gui){
+  public CollectionViewHandler(CollectionViewGUI gui, JBProfile activeProfile){
     this.gui=gui;
-    initComponents();
+    initComponents(activeProfile);
   }
   /*---------------------------------------*/
   //Getter/Setter
@@ -29,7 +30,7 @@ public class CollectionViewController{
   /*---------------------------------------*/
   //Metodi
   /*---------------------------------------*/
-  private void initComponents(){
+  private void initComponents(JBProfile activeProfile){
     EventHandler<ActionEvent> editButtonHandler=new EventHandler<ActionEvent>(){
       @Override
       public void handle(ActionEvent actionEvent){

@@ -1,10 +1,16 @@
 package it.unipv.ingsfw.JavaBeats.controller.handler.presets;
 
+import it.unipv.ingsfw.JavaBeats.controller.factory.CollectionManagerFactory;
 import it.unipv.ingsfw.JavaBeats.controller.factory.ProfileManagerFactory;
+import it.unipv.ingsfw.JavaBeats.controller.handler.library.CollectionLibraryHandler;
+import it.unipv.ingsfw.JavaBeats.controller.handler.library.CollectionViewHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.HomePageHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.ProfileViewHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.primary.search.SearchPageHandler;
+import it.unipv.ingsfw.JavaBeats.model.playable.EJBPLAYABLE;
+import it.unipv.ingsfw.JavaBeats.model.playable.collection.Playlist;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
+import it.unipv.ingsfw.JavaBeats.view.library.CollectionLibraryGUI;
 import it.unipv.ingsfw.JavaBeats.view.library.CollectionViewGUI;
 import it.unipv.ingsfw.JavaBeats.view.presets.Sidebar;
 import it.unipv.ingsfw.JavaBeats.view.primary.home.HomePageGUI;
@@ -92,26 +98,47 @@ public class SidebarHandler{
       }
     };
 
-//    //FavoritesButtonHandler
-//    EventHandler<ActionEvent> favoritesButtonHandler=new EventHandler<ActionEvent>(){
-//      @Override
-//      public void handle(ActionEvent actionEvent){
-//        Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-//        CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, );
-//        ProfileViewHandler profileViewHandler=new ProfileViewHandler(profileViewGUI, activeProfile);
-//        Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getProfileButton());
-//
-//        Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
-//        stage.setScene(profileViewGUI.getScene());
-//        stage.setTitle("Profile");
-//        stage.setWidth(previousDimension.getWidth());
-//        stage.setHeight(previousDimension.getHeight());
-//      }
-//    };
+    //FavoritesButtonHandler
+    EventHandler<ActionEvent> favoritesButtonHandler=new EventHandler<ActionEvent>(){
+      @Override
+      public void handle(ActionEvent actionEvent){
+        Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+        Playlist favorites= CollectionManagerFactory.getInstance().getCollectionManager().getFavorites(activeProfile);
+        CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, favorites);
+        CollectionViewHandler collectionViewHandler=new CollectionViewHandler(collectionViewGUI, activeProfile);
+        Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getFavoritesButton());
+
+        Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
+        stage.setScene(collectionViewGUI.getScene());
+        stage.setTitle("Favorites");
+        stage.setWidth(previousDimension.getWidth());
+        stage.setHeight(previousDimension.getHeight());
+      }
+    };
+
+    //FavoritesButtonHandler
+    EventHandler<ActionEvent> playlistsButtonHandler=new EventHandler<ActionEvent>(){
+      @Override
+      public void handle(ActionEvent actionEvent){
+        Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+        CollectionLibraryGUI collectionLibraryGUI=new CollectionLibraryGUI(EJBPLAYABLE.PLAYLIST, activeProfile);
+        CollectionLibraryHandler collectionLibraryHandler=new CollectionLibraryHandler(activeProfile);
+        Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getPlaylistsButton());
+
+        Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
+        stage.setScene(collectionLibraryGUI.getScene());
+        stage.setTitle("Playlists");
+        stage.setWidth(previousDimension.getWidth());
+        stage.setHeight(previousDimension.getHeight());
+      }
+    };
 
     Sidebar.getInstance(activeProfile).getHomeButton().setOnAction(homeButtonHandler);
     Sidebar.getInstance(activeProfile).getSearchButton().setOnAction(searchButtonHandler);
     Sidebar.getInstance(activeProfile).getProfileButton().setOnAction(profileButtonHandler);
+    Sidebar.getInstance(activeProfile).getFavoritesButton().setOnAction(favoritesButtonHandler);
+    Sidebar.getInstance(activeProfile).getPlaylistsButton().setOnAction(playlistsButtonHandler);
+
 
   }
 

@@ -1,4 +1,4 @@
-package it.unipv.ingsfw.JavaBeats.controller.handler;
+package it.unipv.ingsfw.JavaBeats.controller.handler.library;
 import it.unipv.ingsfw.JavaBeats.view.presets.dialogs.EditPlaylistDialog;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
