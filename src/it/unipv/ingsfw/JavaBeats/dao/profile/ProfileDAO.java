@@ -2,6 +2,7 @@ package it.unipv.ingsfw.JavaBeats.dao.profile;
 
 import it.unipv.ingsfw.JavaBeats.controller.factory.DBManagerFactory;
 import it.unipv.ingsfw.JavaBeats.dao.playable.AudioDAO;
+import it.unipv.ingsfw.JavaBeats.dao.playable.CollectionDAO;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.Song;
 import it.unipv.ingsfw.JavaBeats.model.profile.*;
@@ -148,8 +149,8 @@ public class ProfileDAO implements IProfileDAO{
       String query="SELECT * FROM Profile INNER JOIN Artist ON Profile.mail = Artist.mail WHERE Artist.mail=? OR username=?;";
 
       st=connection.prepareStatement(query);
-      st.setString(1, profile.getUsername());
-      st.setString(2, profile.getMail());
+      st.setString(1, profile.getMail());
+      st.setString(2, profile.getUsername());
 
       rs=st.executeQuery();
 
@@ -174,6 +175,8 @@ public class ProfileDAO implements IProfileDAO{
     if(result!=null){
       result.setTotalListeners(getTotalListeners(result));        //set total listeners
       result.setListeningHistory(getListeningHistory(result));    //set listening history
+      CollectionDAO cDAO = new CollectionDAO();
+      result.setFavorites(cDAO.getFavorites(result));             //set favorites playlist
     }
 
     return result;
@@ -190,8 +193,8 @@ public class ProfileDAO implements IProfileDAO{
       String query="SELECT * FROM Profile INNER JOIN User ON Profile.mail = User.mail WHERE User.mail=? OR username=?;";
 
       st=connection.prepareStatement(query);
-      st.setString(1, profile.getUsername());
-      st.setString(2, profile.getMail());
+      st.setString(1, profile.getMail());
+      st.setString(2, profile.getUsername());
 
       rs=st.executeQuery();
 
@@ -216,7 +219,9 @@ public class ProfileDAO implements IProfileDAO{
 
     if(result!=null){
       result.setMinuteListened(getTotalListeningTime(result));        //set minute listened
-      result.setListeningHistory(getListeningHistory(result));    //set listening history
+      result.setListeningHistory(getListeningHistory(result));        //set listening history
+      CollectionDAO cDAO = new CollectionDAO();
+      result.setFavorites(cDAO.getFavorites(result));                 //set favorites playlist
     }
 
     return result;

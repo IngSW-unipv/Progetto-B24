@@ -1,6 +1,7 @@
 package it.unipv.ingsfw.JavaBeats.model.profile;
 
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
+import it.unipv.ingsfw.JavaBeats.model.playable.collection.Playlist;
 
 import java.sql.Blob;
 import java.util.ArrayList;
@@ -11,10 +12,11 @@ public abstract class JBProfile {
     private String   username, mail, password, name, surname, biography;
     private Blob profilePicture;
     private ArrayList<JBAudio> listeningHistory;
+    private Playlist favorites;
 
 
     //CONSTRUCTORS:
-    public JBProfile(String username, String mail, String password, String name, String surname, String biography, Blob profilePicture, ArrayList<JBAudio> listeningHistory) {
+    public JBProfile(String username, String mail, String password, String name, String surname, String biography, Blob profilePicture, ArrayList<JBAudio> listeningHistory, Playlist favorites) {
         this.username = username;
         this.mail = mail;
         this.password = password;
@@ -23,9 +25,10 @@ public abstract class JBProfile {
         this.biography = biography;
         this.profilePicture = profilePicture;
         this.listeningHistory = listeningHistory;
+        this.favorites=favorites;
     }
     protected JBProfile(String username, String mail, String password) {
-        this(username, mail, password, null, null, null, null, null);
+        this(username, mail, password, null, null, null, null, null, null);
     }
 
 
@@ -53,6 +56,9 @@ public abstract class JBProfile {
     }
     public ArrayList<JBAudio> getListeningHistory() {
         return listeningHistory;
+    }
+    public Playlist getFavorites() {
+        return favorites;
     }
     public abstract JBProfile getCopy();
 
@@ -82,6 +88,7 @@ public abstract class JBProfile {
     public void setListeningHistory(ArrayList<JBAudio> listeningHistory) {
         this.listeningHistory = listeningHistory;
     }
-
-
+    public void setFavorites(Playlist favorites) {
+        this.favorites = favorites;
+    }
 }

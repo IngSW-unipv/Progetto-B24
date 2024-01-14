@@ -319,6 +319,36 @@ public class AudioDAO implements IAudioDAO {
         return result;
     }
 
+    @Override
+    public ArrayList<JBAudio> selectFavorites(JBProfile activeProfile) {
+        ArrayList<JBAudio> result = new ArrayList<>();
+
+        if(activeProfile!=null) {
+            connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+            PreparedStatement st;
+            ResultSet rs;
+
+            try {
+                String query = "SELECT idAudio FROM Favorites WHERE profileMail=?;";
+
+                st = connection.prepareStatement(query);
+                st.setString(1, activeProfile.getMail());
+
+                rs = st.executeQuery();
+
+                while(rs.next())
+                    result.add(get(new Song(rs.getInt("idAudio"), null, null, null)));
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+        }
+
+        return result;
+    }
+
 
 
     //PRIVATE METHODS:

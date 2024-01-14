@@ -200,6 +200,12 @@ public class CollectionDAO implements ICollectionDAO {
     }
 
     @Override
+    public Playlist getFavorites(JBProfile activeProfile) {
+        AudioDAO aDAO = new AudioDAO();
+        return new Playlist(0, "Favorites", activeProfile, aDAO.selectFavorites(activeProfile));
+    }
+
+    @Override
     public ArrayList<JBCollection> selectByProfile(JBProfile profile) {
         connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
         PreparedStatement st1;

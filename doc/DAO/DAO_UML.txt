@@ -37,6 +37,7 @@ package DAO{
     + selectByPlaylist(Playlist): ArrayList<JBAudio>
     + selectByAlbum(Album): ArrayList<Song>
     + selectByPodcast(Podcast): ArrayList<Episode>
+    + selectFavorites(JBProfile): ArrayList<JBAudio>
   }
   class AudioDAO implements IAudioDAO{
     - getGenres(JBAudio)
@@ -56,10 +57,10 @@ package DAO{
     + getPlaylist(JBCollection): JBCollection
     + getAlbum(JBCollection): Album
     + getPodcast(JBCollection): Podcast
+    + getFavorites(JBProfile): Playlist
     + selectByProfile(JBProfile): ArrayList<JBCollection>
   }
   class CollectionDAO implements ICollectionDAO {
-
     - updateName(JBCollection)
     - updatePicture(JBCollection)
     - updateTrackList(JBCollection)

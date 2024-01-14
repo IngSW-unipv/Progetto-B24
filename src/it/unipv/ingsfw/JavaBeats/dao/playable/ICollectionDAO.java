@@ -14,6 +14,7 @@ public interface ICollectionDAO {
     Playlist getPlaylist(JBCollection collection);
     Album getAlbum(JBCollection collection);
     Podcast getPodcast(JBCollection collection);
+    Playlist getFavorites(JBProfile activeProfile);
     ArrayList<JBCollection> selectByProfile(JBProfile profile);
 
 }

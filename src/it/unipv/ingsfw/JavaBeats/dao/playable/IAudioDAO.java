@@ -24,5 +24,6 @@ public interface IAudioDAO {
     ArrayList<JBAudio> selectByPlalist(Playlist playlist);
     ArrayList<Song> selectByAlbum(Album album);
     ArrayList<Episode> selectByPodcast(Podcast podcast);
+    ArrayList<JBAudio> selectFavorites(JBProfile activeProfile);
 
 }
