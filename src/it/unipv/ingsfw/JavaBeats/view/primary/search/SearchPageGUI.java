@@ -18,6 +18,8 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
 
+import java.sql.SQLException;
+
 public class SearchPageGUI{
   /*---------------------------------------*/
   //Attributi
@@ -59,7 +61,7 @@ public class SearchPageGUI{
     searchTextField.setPrefSize(500, 50);
     searchTextField.setFont(fontSearchBar);
     searchTextField.setBackground(bgSearchBar);
-    searchTextField.setStyle("-fx-text-fill: #ffffffff; -fx-prompt-text-fill: #dededeaa;");
+    searchTextField.setStyle("-fx-text-fill: #FFFFFFFF; -fx-prompt-text-fill: #DEDEDEAA;");
     searchTextField.setPromptText("Search here");
 
     /* Pane for spacing */
@@ -67,10 +69,15 @@ public class SearchPageGUI{
     HBox.setHgrow(whitePane, Priority.ALWAYS);
 
     /* Button with user's profile picture and username */
-    Image userPic=new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/DefaultUser.png", true);
-    ImageView userPicImageView=new ImageView(userPic);
+    ImageView userPicImageView=null;
+    try{
+      userPicImageView=new ImageView(new Image(activeProfile.getProfilePicture().getBinaryStream()));
+    }catch(SQLException e){
+      throw new RuntimeException(e);
+    }//end-try
     userPicImageView.setPreserveRatio(true);
-    Button userProfileButton=new Button("Username");
+    userPicImageView.setFitHeight(60);
+    Button userProfileButton=new Button(activeProfile.getUsername());
     userProfileButton.setBackground(bgSearchPage);
     userProfileButton.setGraphic(userPicImageView);
     userProfileButton.setCursor(Cursor.HAND);

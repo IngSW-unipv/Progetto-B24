@@ -1,11 +1,9 @@
 package it.unipv.ingsfw.JavaBeats.controller.handler;
-import it.unipv.ingsfw.JavaBeats.view.presets.dialogs.EditPlaylistDialog;
 import it.unipv.ingsfw.JavaBeats.view.presets.dialogs.EditProfileDialog;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 

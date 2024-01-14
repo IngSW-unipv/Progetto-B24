@@ -18,6 +18,7 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
+import java.sql.SQLException;
 import java.sql.Time;
 
 public class ProfileHeader extends VBox{
@@ -85,16 +86,16 @@ public class ProfileHeader extends VBox{
     profileType.setBorder(new Border(new BorderStroke(Color.BLUEVIOLET, BorderStrokeStyle.SOLID, new CornerRadii(10), new BorderWidths(3), Insets.EMPTY)));
 
     /* Setup of username, name and surname labels */
-    usernameLabel=new Label("Really long username");
+    usernameLabel=new Label(searchedProfile.getUsername());
     usernameLabel.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 95));
     usernameLabel.setTextFill(Color.LIGHTGRAY);
 
-    nameLabel=new Label("Name");
+    nameLabel=new Label(searchedProfile.getName());
     nameLabel.setFont(fontLabels);
     nameLabel.setTextFill(Color.LIGHTGRAY);
     nameLabel.setUnderline(true);
 
-    surnameLabel=new Label("Surname");
+    surnameLabel=new Label(searchedProfile.getSurname());
     surnameLabel.setFont(fontLabels);
     surnameLabel.setTextFill(Color.LIGHTGRAY);
     surnameLabel.setUnderline(true);
@@ -121,17 +122,19 @@ public class ProfileHeader extends VBox{
     labelsVBox.setAlignment(Pos.BOTTOM_LEFT);
 
     /* Setup of profile picture, put inside a HBox with labels */
-    Image profileImage=new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/RecordBig.png", true);
-    profileImageView=new ImageView(profileImage);
-    profileImageView.setPreserveRatio(true);
+    try{
+      profileImageView=new ImageView(new Image(searchedProfile.getProfilePicture().getBinaryStream()));
+    }catch(SQLException e){
+      throw new RuntimeException(e);
+    }//end-try
     profileImageView.setFitHeight(200);
+    profileImageView.setPreserveRatio(true);
     HBox imageLabelsHBox=new HBox(10, profileImageView, labelsVBox);
 
     /* Biography text area setup */
-    searchedProfile.setBiography("Incredible biography on how much i have accomplished during all my career because i'm the best artist in the whole universe, no one will ever catch me. \nAnd even if they did... I guess we'll never know.");
     biographyText=new TextArea(searchedProfile.getBiography());
     biographyText.setEditable(false);
-    biographyText.setStyle("-fx-background-color: #0A0A0AFF");
+//    biographyText.setStyle("-fx-background-color: #0A0A0AFF");
     biographyText.getStyleClass().add("textArea");
     sizeTextArea(biographyText, searchedProfile.getBiography());
 

@@ -1,4 +1,6 @@
 package it.unipv.ingsfw.JavaBeats.view.primary.search;
+import it.unipv.ingsfw.JavaBeats.model.playable.audio.Song;
+import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
 import it.unipv.ingsfw.JavaBeats.view.presets.AudioCard;
 import it.unipv.ingsfw.JavaBeats.view.presets.scrollpanes.ScrollPanePreset;
 import javafx.geometry.Insets;
@@ -163,7 +165,8 @@ public class SearchResults extends ScrollPanePreset{
     foundArtistsLabel.setFont(fontFindings);
     foundArtistsLabel.setTextFill(Color.LIGHTGRAY);
     foundArtistsLabel.setPadding(new Insets(40, 0, 40, 0));
-    HBox artistsHBox=new HBox(50, new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard());
+    Song s=new Song(1, "Title", new Artist("us", "mail", "psw"), null);
+    HBox artistsHBox=new HBox(50, new AudioCard(s), new AudioCard(s), new AudioCard(s), new AudioCard(s), new AudioCard(s), new AudioCard(s), new AudioCard(s), new AudioCard(s), new AudioCard(s));
     ScrollPanePreset artistScroll=new ScrollPanePreset(artistsHBox);
     artistScroll.setStyle("-fx-background: #0F0F0FFF; -fx-border-color: #0F0F0FFF");
     artistScroll.setHbarPolicy(ScrollPanePreset.ScrollBarPolicy.NEVER);
@@ -175,7 +178,7 @@ public class SearchResults extends ScrollPanePreset{
     foundAlbumsLabel.setFont(fontFindings);
     foundAlbumsLabel.setTextFill(Color.LIGHTGRAY);
     foundAlbumsLabel.setPadding(new Insets(40, 0, 40, 0));
-    HBox albumsHBox=new HBox(50, new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard());
+    HBox albumsHBox=new HBox(50, new AudioCard(s), new AudioCard(s), new AudioCard(s), new AudioCard(s), new AudioCard(s), new AudioCard(s), new AudioCard(s), new AudioCard(s), new AudioCard(s));
     ScrollPanePreset albumsScroll=new ScrollPanePreset(albumsHBox);
     albumsScroll.setStyle("-fx-background: #0F0F0FFF; -fx-border-color: #0F0F0FFF");
     albumsScroll.setHbarPolicy(ScrollPanePreset.ScrollBarPolicy.NEVER);
@@ -187,7 +190,7 @@ public class SearchResults extends ScrollPanePreset{
     foundPodcastsLabel.setFont(fontFindings);
     foundPodcastsLabel.setTextFill(Color.LIGHTGRAY);
     foundPodcastsLabel.setPadding(new Insets(40, 0, 40, 0));
-    HBox podcastsHBox=new HBox(50, new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard());
+    HBox podcastsHBox=new HBox(50, new AudioCard(s), new AudioCard(s), new AudioCard(s), new AudioCard(s), new AudioCard(s), new AudioCard(s), new AudioCard(s), new AudioCard(s), new AudioCard(s));
     ScrollPanePreset podcastScroll=new ScrollPanePreset(podcastsHBox);
     podcastScroll.setStyle("-fx-background: #0F0F0FFF; -fx-border-color: #0F0F0FFF");
     podcastScroll.setHbarPolicy(ScrollPanePreset.ScrollBarPolicy.NEVER);
@@ -199,7 +202,7 @@ public class SearchResults extends ScrollPanePreset{
     foundPlaylistsLabel.setFont(fontFindings);
     foundPlaylistsLabel.setTextFill(Color.LIGHTGRAY);
     foundPlaylistsLabel.setPadding(new Insets(40, 0, 40, 0));
-    HBox playlistsHBox=new HBox(50, new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard());
+    HBox playlistsHBox=new HBox(50, new AudioCard(s), new AudioCard(s), new AudioCard(s), new AudioCard(s), new AudioCard(s), new AudioCard(s), new AudioCard(s), new AudioCard(s), new AudioCard(s));
     ScrollPanePreset playlistScroll=new ScrollPanePreset(playlistsHBox);
     playlistScroll.setStyle("-fx-background: #0F0F0FFF; -fx-border-color: #0F0F0FFF");
     playlistScroll.setHbarPolicy(ScrollPanePreset.ScrollBarPolicy.NEVER);
@@ -211,7 +214,7 @@ public class SearchResults extends ScrollPanePreset{
     foundProfilesLabel.setFont(fontFindings);
     foundProfilesLabel.setTextFill(Color.LIGHTGRAY);
     foundProfilesLabel.setPadding(new Insets(40, 0, 40, 0));
-    HBox profilesHBox=new HBox(50, new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard());
+    HBox profilesHBox=new HBox(50, new AudioCard(s), new AudioCard(s), new AudioCard(s), new AudioCard(s), new AudioCard(s), new AudioCard(s), new AudioCard(s), new AudioCard(s), new AudioCard(s));
     ScrollPanePreset profilesScroll=new ScrollPanePreset(profilesHBox);
     profilesScroll.setStyle("-fx-background: #0F0F0FFF; -fx-border-color: #0F0F0FFF");
     profilesScroll.setHbarPolicy(ScrollPanePreset.ScrollBarPolicy.NEVER);

@@ -35,7 +35,7 @@ public class HomePageGUI{
     /* Setup of left Sidebar, bottom songbar and center home */
     Sidebar sidebar=Sidebar.getInstance(activeProfile);
     Songbar songbar=Songbar.getInstance();
-    Home home=new Home();
+    Home home=new Home(activeProfile);
 
     GridPane gp=new GridPane();
     gp.addRow(0, sidebar, home);

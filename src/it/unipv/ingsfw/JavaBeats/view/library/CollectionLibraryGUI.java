@@ -1,6 +1,8 @@
 package it.unipv.ingsfw.JavaBeats.view.library;
 
 import it.unipv.ingsfw.JavaBeats.model.playable.EJBPLAYABLE;
+import it.unipv.ingsfw.JavaBeats.model.playable.audio.Song;
+import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.view.presets.AudioCard;
 import it.unipv.ingsfw.JavaBeats.view.presets.Sidebar;
@@ -83,7 +85,8 @@ public class CollectionLibraryGUI{
 
     FlowPane collectionFlowPane=new FlowPane();
     for(int i=0; i<100; i+=1){
-      collectionFlowPane.getChildren().add(new AudioCard());
+      Song s=new Song(1, "Title", new Artist("us", "mail", "psw"), null);
+      collectionFlowPane.getChildren().add(new AudioCard(activeProfile));
     }//end-for
     collectionFlowPane.setPrefWrapLength(Double.MAX_VALUE);
     collectionFlowPane.setHgap(50);

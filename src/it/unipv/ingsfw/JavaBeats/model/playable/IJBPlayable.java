@@ -1,4 +1,5 @@
 package it.unipv.ingsfw.JavaBeats.model.playable;
 
-public interface IJBPlayable {
+import it.unipv.ingsfw.JavaBeats.model.IJBResearchable;
+public interface IJBPlayable extends IJBResearchable{
 }

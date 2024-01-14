@@ -1,4 +1,7 @@
 package it.unipv.ingsfw.JavaBeats.view.primary.home;
+import it.unipv.ingsfw.JavaBeats.model.playable.audio.Song;
+import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
+import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.view.presets.AudioCard;
 import it.unipv.ingsfw.JavaBeats.view.presets.scrollpanes.ScrollPanePreset;
 import javafx.geometry.Insets;
@@ -14,6 +17,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 
+import java.sql.SQLException;
 import java.time.LocalTime;
 
 public class Home extends VBox{
@@ -29,9 +33,9 @@ public class Home extends VBox{
   /*---------------------------------------*/
   //Costruttori
   /*---------------------------------------*/
-  public Home(){
+  public Home(JBProfile activeProfile){
     super();
-    initComponents();
+    initComponents(activeProfile);
   }
   /*---------------------------------------*/
   //Getter/Setter
@@ -40,7 +44,7 @@ public class Home extends VBox{
   /*---------------------------------------*/
   //Metodi
   /*---------------------------------------*/
-  private void initComponents(){
+  private void initComponents(JBProfile activeProfile){
     /*
      *  Setup of top HBox component containing Logo, a warm welcome for the user and the profile image with its username
      */
@@ -51,7 +55,7 @@ public class Home extends VBox{
 
     /* Welcome */
     Label userWelcome;
-    userWelcome=time.getHour()>17 ? new Label("Good evening, Username") : new Label("Good morning, Username");
+    userWelcome=time.getHour()>17 ? new Label("Good evening, "+activeProfile.getUsername()) : new Label("Good morning, "+activeProfile.getUsername());
     userWelcome.setPadding(new Insets(0, 0, 0, 10));
     userWelcome.setFont(fontWelcome);
     userWelcome.setTextFill(Color.LIGHTGRAY);
@@ -61,10 +65,15 @@ public class Home extends VBox{
     HBox.setHgrow(whitePane, Priority.ALWAYS);
 
     /* Button with user's profile picture and username */
-    Image userPic=new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/DefaultUser.png", true);
-    ImageView userPicImageView=new ImageView(userPic);
+    ImageView userPicImageView=null;
+    try{
+      userPicImageView=new ImageView(new Image(activeProfile.getProfilePicture().getBinaryStream()));
+    }catch(SQLException e){
+      throw new RuntimeException(e);
+    }//end-try
     userPicImageView.setPreserveRatio(true);
-    Button userProfileButton=new Button("Username");
+    userPicImageView.setFitHeight(60);
+    Button userProfileButton=new Button(activeProfile.getUsername());
     userProfileButton.setBackground(bgHome);
     userProfileButton.setGraphic(userPicImageView);
     userProfileButton.setCursor(Cursor.HAND);
@@ -84,7 +93,7 @@ public class Home extends VBox{
     recentSongsLabel.setFont(fontRecents);
     recentSongsLabel.setTextFill(Color.LIGHTGRAY);
     recentSongsLabel.setPadding(new Insets(30, 0, 40, 0));
-    HBox songsHBox=new HBox(50, new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard());
+    HBox songsHBox=new HBox(50, new AudioCard(activeProfile), new AudioCard(activeProfile), new AudioCard(activeProfile), new AudioCard(activeProfile), new AudioCard(activeProfile), new AudioCard(activeProfile), new AudioCard(activeProfile), new AudioCard(activeProfile), new AudioCard(activeProfile));
     ScrollPanePreset songsScroll=new ScrollPanePreset(songsHBox);
     songsScroll.setStyle("-fx-background: #0F0F0FFF; -fx-border-color: #0F0F0FFF");
     songsScroll.setVbarPolicy(ScrollPanePreset.ScrollBarPolicy.NEVER);
@@ -95,7 +104,7 @@ public class Home extends VBox{
     recentPlaylistLabel.setFont(fontRecents);
     recentPlaylistLabel.setTextFill(Color.LIGHTGRAY);
     recentPlaylistLabel.setPadding(new Insets(40, 0, 40, 0));
-    HBox playlistsHBox=new HBox(50, new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard());
+    HBox playlistsHBox=new HBox(50, new AudioCard(activeProfile), new AudioCard(activeProfile), new AudioCard(activeProfile), new AudioCard(activeProfile), new AudioCard(activeProfile), new AudioCard(activeProfile), new AudioCard(activeProfile), new AudioCard(activeProfile), new AudioCard(activeProfile));
     ScrollPanePreset playlistScroll=new ScrollPanePreset(playlistsHBox);
     playlistScroll.setStyle("-fx-background: #0F0F0FFF; -fx-border-color: #0F0F0FFF");
     playlistScroll.setVbarPolicy(ScrollPanePreset.ScrollBarPolicy.NEVER);
@@ -106,7 +115,7 @@ public class Home extends VBox{
     recentArtists.setFont(fontRecents);
     recentArtists.setTextFill(Color.LIGHTGRAY);
     recentArtists.setPadding(new Insets(40, 0, 40, 0));
-    HBox artistsHBox=new HBox(50, new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard(), new AudioCard());
+    HBox artistsHBox=new HBox(50, new AudioCard(activeProfile), new AudioCard(activeProfile), new AudioCard(activeProfile), new AudioCard(activeProfile), new AudioCard(activeProfile), new AudioCard(activeProfile), new AudioCard(activeProfile), new AudioCard(activeProfile), new AudioCard(activeProfile));
     ScrollPanePreset artistScroll=new ScrollPanePreset(artistsHBox);
     artistScroll.setStyle("-fx-background: #0F0F0FFF; -fx-border-color: #0F0F0FFF");
     artistScroll.setVbarPolicy(ScrollPanePreset.ScrollBarPolicy.NEVER);
