@@ -130,7 +130,8 @@ public class ProfileDAO implements IProfileDAO{
   public JBProfile get(JBProfile profile) throws IllegalArgumentException{            //retrieve profile from database
 
     JBProfile profileOut=getUser(profile);                 //check if profile is in User table
-    if(profileOut==null) profileOut=getArtist(profile);    //check if profile is in Artist table
+    if(profileOut==null)
+      profileOut=getArtist(profile);    //check if profile is in Artist table
 
     if(profileOut==null){
       throw new IllegalArgumentException();
@@ -163,7 +164,7 @@ public class ProfileDAO implements IProfileDAO{
                 rs.getString("biography"),
                 rs.getBlob("profilePicture"),
                 0,
-                null);
+                null, null);
       }
 
     }catch(Exception e){
@@ -175,7 +176,7 @@ public class ProfileDAO implements IProfileDAO{
     if(result!=null){
       result.setTotalListeners(getTotalListeners(result));        //set total listeners
       result.setListeningHistory(getListeningHistory(result));    //set listening history
-      CollectionDAO cDAO = new CollectionDAO();
+      CollectionDAO cDAO=new CollectionDAO();
       result.setFavorites(cDAO.getFavorites(result));             //set favorites playlist
     }
 
@@ -208,7 +209,7 @@ public class ProfileDAO implements IProfileDAO{
                 rs.getBlob("profilePicture"),
                 rs.getBoolean("isVisible"),
                 null,
-                null);
+                null, null);
       }
 
     }catch(Exception e){
@@ -220,7 +221,7 @@ public class ProfileDAO implements IProfileDAO{
     if(result!=null){
       result.setMinuteListened(getTotalListeningTime(result));        //set minute listened
       result.setListeningHistory(getListeningHistory(result));        //set listening history
-      CollectionDAO cDAO = new CollectionDAO();
+      CollectionDAO cDAO=new CollectionDAO();
       result.setFavorites(cDAO.getFavorites(result));                 //set favorites playlist
     }
 
