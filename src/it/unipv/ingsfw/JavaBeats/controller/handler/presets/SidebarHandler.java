@@ -146,7 +146,7 @@ public class SidebarHandler{
           throw new RuntimeException(e);
         }//end-try
         CollectionLibraryGUI collectionLibraryGUI=new CollectionLibraryGUI(activeProfile, playlists, EJBPLAYABLE.PLAYLIST);
-        CollectionLibraryHandler collectionLibraryHandler=new CollectionLibraryHandler(activeProfile);
+        CollectionLibraryHandler collectionLibraryHandler=new CollectionLibraryHandler(activeProfile, collectionLibraryGUI);
         Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getPlaylistsButton());
 
         Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());

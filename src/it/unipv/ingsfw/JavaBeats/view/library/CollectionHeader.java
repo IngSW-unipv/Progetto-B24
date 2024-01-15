@@ -1,5 +1,6 @@
 package it.unipv.ingsfw.JavaBeats.view.library;
 import it.unipv.ingsfw.JavaBeats.model.playable.EJBPLAYABLE;
+import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.playable.collection.Album;
 import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
 import it.unipv.ingsfw.JavaBeats.model.playable.collection.Playlist;
@@ -18,6 +19,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 
+import java.sql.SQLException;
+import java.sql.Time;
+
 public class CollectionHeader extends VBox{
   /*---------------------------------------*/
   //Attributi
@@ -32,8 +36,8 @@ public class CollectionHeader extends VBox{
   /*---------------------------------------*/
   //Costruttori
   /*---------------------------------------*/
-  public CollectionHeader(JBProfile jbProfile, JBCollection jbCollection){
-    initComponents(jbProfile, jbCollection);
+  public CollectionHeader(JBProfile activeProfile, JBCollection jbCollection){
+    initComponents(activeProfile, jbCollection);
   }
 
   /*---------------------------------------*/
@@ -46,7 +50,7 @@ public class CollectionHeader extends VBox{
   /*---------------------------------------*/
   //Metodi
   /*---------------------------------------*/
-  private void initComponents(JBProfile jbProfile, JBCollection jbCollection){
+  private void initComponents(JBProfile activeProfile, JBCollection jbCollection){
     Image collectionImage=new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/RecordBig.png", true);
     ImageView collectionImageView=new ImageView(collectionImage);
     collectionImageView.setPreserveRatio(true);
@@ -55,44 +59,52 @@ public class CollectionHeader extends VBox{
     //Con case switch
     Label collectionLabel=null;
     try{
-      Playlist playlist= (Playlist) jbCollection;
+      Playlist playlist=(Playlist)jbCollection;
       collectionLabel=new Label("Playlist");
 
     }catch(ClassCastException e){
       try{
-        Album album= (Album) jbCollection;
+        Album album=(Album)jbCollection;
         collectionLabel=new Label("Album");
-      }catch (ClassCastException e1){
+      }catch(ClassCastException e1){
         collectionLabel=new Label("Podcast");
-      }
-    }
-
+      }//end-try
+    }//end-try
     collectionLabel.setBackground(bgPills);
     collectionLabel.setPadding(new Insets(3));
     collectionLabel.setTextFill(Color.LIGHTGRAY);
     collectionLabel.setFont(fontCollectionInfo);
 
-    Label collectionTitle=new Label("Really long title");
+    Label collectionTitle=new Label(jbCollection.getName());
     collectionTitle.setFont(fontTitle);
     collectionTitle.setTextFill(Color.LIGHTGRAY);
 
     /* Button with user's profile picture and username */
     Image userPic=new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/DefaultUser.png", true);
-    ImageView userPicImageView=new ImageView(userPic);
+    ImageView userPicImageView=null;
+    try{
+      userPicImageView=new ImageView(new Image(activeProfile.getProfilePicture().getBinaryStream()));
+    }catch(SQLException e){
+      throw new RuntimeException(e);
+    }//end-try
     userPicImageView.setPreserveRatio(true);
     userPicImageView.setFitHeight(20);
-    Button userProfileButton=new Button("Creator");
+    Button userProfileButton=new Button(jbCollection.getCreator().getUsername());
     userProfileButton.setGraphic(userPicImageView);
     userProfileButton.setStyle("-fx-background-color: #121212FF; -fx-background-radius: 10");
     userProfileButton.setFont(fontUser);
     userProfileButton.setTextFill(Color.LIGHTGRAY);
 
-    Label numberOfAudiosLabel=new Label("12"+"songs");
+    Label numberOfAudiosLabel=new Label(jbCollection.getTrackList().size()+" audios");
     numberOfAudiosLabel.setFont(fontCollectionInfo);
     numberOfAudiosLabel.setTextFill(Color.LIGHTGRAY);
     numberOfAudiosLabel.setUnderline(true);
 
-    Label totalDurationLabel=new Label("55"+"mins");
+    long totalTime=0;
+    for(JBAudio a: jbCollection.getTrackList()){
+      totalTime+=a.getMetadata().getDuration().getTime();
+    }//end-foreach
+    Label totalDurationLabel=new Label(new Time(totalTime).getTime()+" mins");
     totalDurationLabel.setFont(fontCollectionInfo);
     totalDurationLabel.setTextFill(Color.LIGHTGRAY);
     totalDurationLabel.setUnderline(true);
@@ -105,7 +117,6 @@ public class CollectionHeader extends VBox{
 
     HBox topViewHBox=new HBox(15, collectionImageView, collectionTitleInfo);
 
-
     //Hbox buttons
 
     //PlayPause
@@ -117,7 +128,6 @@ public class CollectionHeader extends VBox{
     buttonPlayPause.setStyle("-fx-background-color: #0F0F0FFF;");
     buttonPlayPause.setCursor(Cursor.HAND);
     buttonPlayPause.setTooltip(new Tooltip("Play/Pause"));
-
 
     //Random
     Image randomImage=new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/EmptyRandom.png", true);
@@ -160,26 +170,21 @@ public class CollectionHeader extends VBox{
     buttonBin.setTooltip(new Tooltip("Delete"));
 
     HBox buttonsHBbox=null;
-    if(!jbProfile.equals(jbCollection.getCreator())){
+    if(!activeProfile.equals(jbCollection.getCreator())){
       buttonsHBbox=new HBox(buttonPlayPause, buttonRandom, buttonLoop);
       getChildren().addAll(topViewHBox, buttonsHBbox);
     }else{
       try{
-        Playlist playlist=(Playlist) jbCollection;
+        Playlist playlist=(Playlist)jbCollection;
         buttonsHBbox=new HBox(buttonPlayPause, buttonRandom, buttonLoop, editButton, buttonBin);
         getChildren().addAll(topViewHBox, buttonsHBbox);
       }catch(ClassCastException e){
         buttonsHBbox=new HBox(buttonPlayPause, buttonRandom, buttonLoop, buttonBin);
         getChildren().addAll(topViewHBox, buttonsHBbox);
-      }
-    }
-
-
-
-
+      }//end-try
+    }//end-try
 
     buttonsHBbox.setPadding(new Insets(40, 0, 0, 0));
-
 
     setPadding(new Insets(50, 0, 30, 0));
     setBackground(bgHome);

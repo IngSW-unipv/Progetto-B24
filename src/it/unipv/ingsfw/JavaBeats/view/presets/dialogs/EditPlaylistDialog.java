@@ -96,12 +96,12 @@ public class EditPlaylistDialog extends Dialog<JBCollection>{
     TextField textField=new TextField(originalPlaylist.getName());
     textField.setId("TextField");
     textField.setFont(Font.font("Verdana", FontWeight.NORMAL, FontPosture.REGULAR, 20));
+    textField.getStyleClass().add("textField");
+
 
     /* Check box to choose whether the playlist is private or public */
     checkBox=new CheckBox();
-    Playlist p=(Playlist)originalPlaylist;
-    p.setVisible(false); /* just trying the logic, IT MUST BE CHANGED */
-    if(!p.isVisible()){
+    if(!originalPlaylist.isVisible()){
       checkBox.setSelected(true);
     }//endif
     checkBox.setFont(Font.font("Verdana", FontWeight.NORMAL, FontPosture.ITALIC, 15));

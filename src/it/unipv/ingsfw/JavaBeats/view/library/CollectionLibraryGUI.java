@@ -38,6 +38,7 @@ public class CollectionLibraryGUI{
   private static final Background bg=new Background(new BackgroundFill(Color.rgb(15, 15, 15), CornerRadii.EMPTY, Insets.EMPTY));
   private static final Font fontCollection=Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 25);
   private ArrayList<JBCollection> jbCollectionArrayList;
+  private FlowPane collectionFlowPane;
   private Scene scene;
 
 
@@ -57,6 +58,9 @@ public class CollectionLibraryGUI{
 
   public ArrayList<JBCollection> getJbCollectionArrayList(){
     return jbCollectionArrayList;
+  }
+  public FlowPane getCollectionFlowPane(){
+    return collectionFlowPane;
   }
   /*---------------------------------------*/
   //Methods
@@ -88,7 +92,7 @@ public class CollectionLibraryGUI{
 
     //Flowpane
 
-    FlowPane collectionFlowPane=new FlowPane();
+    collectionFlowPane=new FlowPane();
     for(JBCollection jb: jbCollectionArrayList){
       collectionFlowPane.getChildren().add(new AudioCard(jb));
     }//end-foreach

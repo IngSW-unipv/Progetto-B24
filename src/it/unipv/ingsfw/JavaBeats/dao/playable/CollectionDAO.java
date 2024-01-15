@@ -12,604 +12,604 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class CollectionDAO implements ICollectionDAO {
+public class CollectionDAO implements ICollectionDAO{
 
-    //ATTRIBUTES:
-    private final String schema = "JavaBeats_DB";
-    private Connection connection;
+  //ATTRIBUTES:
+  private final String schema="JavaBeats_DB";
+  private Connection connection;
 
 
+  //CONSTRUCTOR:
+  public CollectionDAO(){
+    super();
+  }
 
-    //CONSTRUCTOR:
-    public CollectionDAO() {
-        super();
+
+  //PUBLIC METHODS:
+  @Override
+  public void insert(JBCollection collection){
+    insertCollection(collection);
+
+    linkCollectionToProfile(collection);
+
+    linkCollectionToAudios(collection);
+  }
+
+  @Override
+  public void remove(JBCollection collection){
+    connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+    PreparedStatement st;
+
+    try{
+      String query="DELETE FROM Collection WHERE id=?;";
+
+      st=connection.prepareStatement(query);
+      st.setInt(1, collection.getId());
+
+      st.executeUpdate();
+
+    }catch(Exception e){
+      e.printStackTrace();
     }
 
+    DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+  }
 
+  @Override
+  public void update(JBCollection collection){
+    JBCollection oldCollection=get(collection);
 
-    //PUBLIC METHODS:
-    @Override
-    public void insert(JBCollection collection) {
-        insertCollection(collection);
+    if(collection.getName()!=null)               //check for null before using .equals to avoid exceptions
+      if(!(collection.getName().equals(oldCollection.getName())))
+        updateName(collection);
 
-        linkCollectionToProfile(collection);
+    if(collection.getPicture()!=null)
+      if(!(collection.getPicture().equals(oldCollection.getPicture())))
+        updatePicture(collection);
 
-        linkCollectionToAudios(collection);
+    if(collection.getTrackList()!=null)
+      if(!(collection.getTrackList().equals(oldCollection.getTrackList())))
+        updateTrackList(collection);
+  }
+
+  @Override
+  public JBCollection get(JBCollection collection){
+
+    JBCollection collectionOut=getPlaylist(collection);               //if collection is a playlist
+    if(collectionOut==null)
+      collectionOut=getAlbum(collection);       //if collection is an album
+    if(collectionOut==null)
+      collectionOut=getPodcast(collection);     //if collection is a podcast
+
+    return collectionOut;
+  }
+
+  @Override
+  public Playlist getPlaylist(JBCollection collection){
+    connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+    PreparedStatement st;
+    ResultSet rs;
+    Playlist result=null;
+
+    try{
+      String query="SELECT * FROM Collection A NATURAL JOIN Playlist B NATURAL JOIN"+
+              "(SELECT idPlaylist AS 'id', profileMail FROM ProfilePlaylists) C WHERE id=?;";
+
+      st=connection.prepareStatement(query);
+      st.setInt(1, collection.getId());
+
+      rs=st.executeQuery();
+
+      if(rs.next()){
+        result=new Playlist(rs.getInt("id"),
+                rs.getString("name"),
+                new User(null, rs.getString("profileMail"), null),
+                null,
+                rs.getBlob("picture"),
+                rs.getBoolean("isVisible"));
+      }
+
+    }catch(Exception e){
+      e.printStackTrace();
     }
 
-    @Override
-    public void remove(JBCollection collection) {
-        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
-        PreparedStatement st;
+    DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
 
-        try {
-            String query = "DELETE FROM Collection WHERE id=?;";
-
-            st = connection.prepareStatement(query);
-            st.setInt(1, collection.getId());
-
-            st.executeUpdate();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+    if(result!=null){
+      ProfileDAO pDAO=new ProfileDAO();
+      result.setCreator(pDAO.get(result.getCreator()));
     }
 
-    @Override
-    public void update(JBCollection collection) {
-        JBCollection oldCollection = get(collection);
+    return result;
+  }
 
-        if (collection.getName() != null)               //check for null before using .equals to avoid exceptions
-            if(!(collection.getName().equals(oldCollection.getName())))
-                updateName(collection);
+  @Override
+  public Album getAlbum(JBCollection collection){
+    connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+    PreparedStatement st;
+    ResultSet rs;
+    Album result=null;
 
-        if (collection.getPicture() != null)
-            if(!(collection.getPicture().equals(oldCollection.getPicture())))
-                updatePicture(collection);
+    try{
+      String query="SELECT * FROM Collection A NATURAL JOIN Album B NATURAL JOIN"+
+              "(SELECT idAlbum AS 'id', artistMail FROM ArtistAlbums) C WHERE id=?;";
 
-        if (collection.getTrackList() != null)
-            if(!(collection.getTrackList().equals(oldCollection.getTrackList())))
-                updateTrackList(collection);
+      st=connection.prepareStatement(query);
+      st.setInt(1, collection.getId());
+
+      rs=st.executeQuery();
+
+      if(rs.next()){
+        result=new Album(rs.getInt("id"),
+                rs.getString("name"),
+                new Artist(null, rs.getString("artistMail"), null),
+                null,
+                rs.getBlob("picture"));
+      }
+
+    }catch(Exception e){
+      e.printStackTrace();
     }
 
-    @Override
-    public JBCollection get(JBCollection collection) {
+    DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
 
-        JBCollection collectionOut = getPlaylist(collection);               //if collection is a playlist
-        if(collectionOut==null) collectionOut = getAlbum(collection);       //if collection is an album
-        if(collectionOut==null) collectionOut = getPodcast(collection);     //if collection is a podcast
-
-        return collectionOut;
+    if(result!=null){
+      ProfileDAO pDAO=new ProfileDAO();
+      result.setCreator(pDAO.get(result.getCreator()));
     }
 
-    @Override
-    public Playlist getPlaylist(JBCollection collection) {
-        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
-        PreparedStatement st;
-        ResultSet rs;
-        Playlist result = null;
+    return result;
+  }
 
-        try {
-            String query =  "SELECT * FROM Collection A NATURAL JOIN Playlist B NATURAL JOIN" +
-                    "(SELECT idPlaylist AS 'id', profileMail FROM ProfilePlaylists) C WHERE id=?;";
+  @Override
+  public Podcast getPodcast(JBCollection collection){
+    connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+    PreparedStatement st;
+    ResultSet rs;
+    Podcast result=null;
 
-            st = connection.prepareStatement(query);
-            st.setInt(1, collection.getId());
+    try{
+      String query="SELECT * FROM Collection A NATURAL JOIN Podcast B NATURAL JOIN"+
+              "(SELECT idPodcast AS 'id', artistMail FROM ArtistPodcasts) C WHERE id=?;";
 
-            rs = st.executeQuery();
+      st=connection.prepareStatement(query);
+      st.setInt(1, collection.getId());
 
-            if(rs.next()) {
-                result = new Playlist(  rs.getInt("id"),
-                        rs.getString("name"),
-                        new User(null, rs.getString("profileMail"), null),
-                        null,
-                        rs.getBlob("picture"),
-                        rs.getBoolean("isVisible"));
-            }
+      rs=st.executeQuery();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+      if(rs.next()){
+        result=new Podcast(rs.getInt("id"),
+                rs.getString("name"),
+                new Artist(null, rs.getString("artistMail"), null),
+                null,
+                rs.getBlob("picture"));
+      }
 
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
-
-        if(result != null) {
-            ProfileDAO pDAO = new ProfileDAO();
-            result.setCreator(pDAO.get(result.getCreator()));
-        }
-
-        return result;
+    }catch(Exception e){
+      e.printStackTrace();
     }
 
-    @Override
-    public Album getAlbum(JBCollection collection) {
-        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
-        PreparedStatement st;
-        ResultSet rs;
-        Album result = null;
+    DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
 
-        try {
-            String query =  "SELECT * FROM Collection A NATURAL JOIN Album B NATURAL JOIN" +
-                    "(SELECT idAlbum AS 'id', artistMail FROM ArtistAlbums) C WHERE id=?;";
-
-            st = connection.prepareStatement(query);
-            st.setInt(1, collection.getId());
-
-            rs = st.executeQuery();
-
-            if(rs.next()) {
-                result = new Album( rs.getInt("id"),
-                        rs.getString("name"),
-                        new Artist(null, rs.getString("artistMail"), null),
-                        null,
-                        rs.getBlob("picture"));
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
-
-        if(result != null) {
-            ProfileDAO pDAO = new ProfileDAO();
-            result.setCreator(pDAO.get(result.getCreator()));
-        }
-
-        return result;
+    if(result!=null){
+      ProfileDAO pDAO=new ProfileDAO();
+      result.setCreator(pDAO.get(result.getCreator()));
     }
 
-    @Override
-    public Podcast getPodcast(JBCollection collection) {
-        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
-        PreparedStatement st;
-        ResultSet rs;
-        Podcast result = null;
+    return result;
+  }
 
-        try {
-            String query =  "SELECT * FROM Collection A NATURAL JOIN Podcast B NATURAL JOIN" +
-                    "(SELECT idPodcast AS 'id', artistMail FROM ArtistPodcasts) C WHERE id=?;";
+  @Override
+  public Playlist getFavorites(JBProfile activeProfile){
+    AudioDAO aDAO=new AudioDAO();
+    return new Playlist(0, "Favorites", activeProfile, aDAO.selectFavorites(activeProfile));
+  }
 
-            st = connection.prepareStatement(query);
-            st.setInt(1, collection.getId());
+  @Override
+  public ArrayList<JBCollection> selectByProfile(JBProfile profile){
+    connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+    PreparedStatement st1;
+    ResultSet rs1;
+    ArrayList<JBCollection> result=null;
 
-            rs = st.executeQuery();
+    //get all Playlists
+    try{
+      String q1="SELECT idPlaylist FROM ProfilePlaylists WHERE profileMail=? LIMIT 50;";
 
-            if(rs.next()) {
-                result = new Podcast(rs.getInt("id"),
-                        rs.getString("name"),
-                        new Artist(null, rs.getString("artistMail"), null),
-                        null,
-                        rs.getBlob("picture"));
-            }
+      st1=connection.prepareStatement(q1);
+      st1.setString(1, profile.getMail());
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+      rs1=st1.executeQuery();
 
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+      while(rs1.next()){
+        result.add(get(new Playlist(rs1.getInt("idPlaylist"), null, null)));
+      }
 
-        if(result != null) {
-            ProfileDAO pDAO = new ProfileDAO();
-            result.setCreator(pDAO.get(result.getCreator()));
-        }
-
-        return result;
+    }catch(Exception e){
+      e.printStackTrace();
     }
 
-    @Override
-    public Playlist getFavorites(JBProfile activeProfile) {
-        AudioDAO aDAO = new AudioDAO();
-        return new Playlist(0, "Favorites", activeProfile, aDAO.selectFavorites(activeProfile));
+    DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+
+    //if profile is an artist get also Podcasts ad Albums
+    if(profile instanceof Artist){
+      connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+      PreparedStatement st2, st3;
+      ResultSet rs2, rs3;
+
+      try{
+        String q2="SELECT idAlbum FROM ArtistAlbums WHERE artistMail=?;";
+
+        st2=connection.prepareStatement(q2);
+        st2.setString(1, profile.getMail());
+
+        rs2=st2.executeQuery();
+
+        while(rs2.next()){
+          result.add(get(new Album(rs2.getInt("idAlbum"), null, null, null)));
+        }
+
+
+        String q3="SELECT idPodcast FROM ArtistPodcasts WHERE artistMail=?;";
+
+        st3=connection.prepareStatement(q3);
+        st3.setString(1, profile.getMail());
+
+        rs3=st3.executeQuery();
+
+        while(rs3.next()){
+          result.add(get(new Podcast(rs3.getInt("idPodcast"), null, null, null, null)));
+        }
+
+      }catch(Exception e){
+        e.printStackTrace();
+      }
+
+      DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
     }
 
-    @Override
-    public ArrayList<JBCollection> selectByProfile(JBProfile profile) {
-        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
-        PreparedStatement st1;
-        ResultSet rs1;
-        ArrayList<JBCollection> result = null;
-
-        //get all Playlists
-        try {
-            String q1 = "SELECT idPlaylist FROM ProfilePlaylists WHERE profileMail=? LIMIT 50;";
-
-            st1 = connection.prepareStatement(q1);
-            st1.setString(1, profile.getMail());
-
-            rs1 = st1.executeQuery();
-
-            while (rs1.next()) {
-                result.add(get(new Playlist(rs1.getInt("idPlaylist"), null, null)));
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
-
-        //if profile is an artist get also Podcasts ad Albums
-        if (profile instanceof Artist) {
-            connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
-            PreparedStatement st2, st3;
-            ResultSet rs2, rs3;
-
-            try {
-                String q2 = "SELECT idAlbum FROM ArtistAlbums WHERE artistMail=?;";
-
-                st2 = connection.prepareStatement(q2);
-                st2.setString(1, profile.getMail());
-
-                rs2 = st2.executeQuery();
-
-                while(rs2.next()) {
-                    result.add(get(new Album(rs2.getInt("idAlbum"), null, null, null)));
-                }
+    return result;
+  }
 
 
-                String q3 = "SELECT idPodcast FROM ArtistPodcasts WHERE artistMail=?;";
+  //PRIVATE METHODS:
+  private void updateName(JBCollection collection){
+    connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
 
-                st3 = connection.prepareStatement(q3);
-                st3.setString(1, profile.getMail());
+    try{
+      String q3="UPDATE Collection SET name=? WHERE id=?;";
 
-                rs3 = st3.executeQuery();
+      PreparedStatement st3=connection.prepareStatement(q3);
+      st3.setString(1, collection.getName());
+      st3.setInt(2, collection.getId());
 
-                while(rs3.next()) {
-                    result.add(get(new Podcast(rs3.getInt("idPodcast"), null, null, null, null)));
-                }
+      st3.executeUpdate();
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
-        }
-
-        return result;
+    }catch(Exception e){
+      e.printStackTrace();
     }
 
+    DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+  }
 
+  private void updatePicture(JBCollection collection){
+    connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
 
-    //PRIVATE METHODS:
-    private void updateName(JBCollection collection) {
-        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+    try{
+      String q6="UPDATE Collection SET picture=? WHERE id=?;";
 
-        try {
-            String q3 = "UPDATE Collection SET name=? WHERE id=?;";
+      PreparedStatement st6=connection.prepareStatement(q6);
+      st6.setBlob(1, collection.getPicture());
+      st6.setInt(2, collection.getId());
 
-            PreparedStatement st3 = connection.prepareStatement(q3);
-            st3.setString(1, collection.getName());
-            st3.setInt(2, collection.getId());
+      st6.executeUpdate();
 
-            st3.executeUpdate();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+    }catch(Exception e){
+      e.printStackTrace();
     }
 
-    private void updatePicture(JBCollection collection) {
-        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+    DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+  }
 
-        try {
-            String q6 = "UPDATE Collection SET picture=? WHERE id=?;";
+  private void updateTrackList(JBCollection collection){
 
-            PreparedStatement st6 = connection.prepareStatement(q6);
-            st6.setBlob(1, collection.getPicture());
-            st6.setInt(2, collection.getId());
+    if(collection instanceof Playlist){
+      ArrayList<JBAudio> audioList=((Playlist)collection).getTrackList();
+      Iterator<JBAudio> audioListIT=audioList.iterator();
+      connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+      PreparedStatement st1, st2;
 
-            st6.executeUpdate();
+      try{
+        String q1="DELETE FROM PlaylistAudios WHERE idPlaylist=?;";
+        st1=connection.prepareStatement(q1);
+        st1.setInt(1, collection.getId());
+        st1.executeUpdate();
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        while(audioListIT.hasNext()){
+          String q2="INSERT INTO PlaylistAudios(idPlaylist, idAudio) VALUES(?, ?);";
+          st2=connection.prepareStatement(q2);
+          st2.setInt(1, collection.getId());
+          st2.setInt(2, audioListIT.next().getId());
+          st2.executeUpdate();
         }
 
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+      }catch(Exception e){
+        e.printStackTrace();
+      }
+
+      DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+    }else if(collection instanceof Podcast){
+      ArrayList<JBAudio> episodeList=((Podcast)collection).getTrackList();
+      Iterator<JBAudio> audioListIT=episodeList.iterator();
+      connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+      PreparedStatement st1, st2;
+
+      try{
+        String q1="DELETE FROM PodcastEpisodes WHERE idPodcast=?;";
+        st1=connection.prepareStatement(q1);
+        st1.setInt(1, collection.getId());
+        st1.executeUpdate();
+
+        while(audioListIT.hasNext()){
+          String q2="INSERT INTO PodcastEpisodes(idPodcast, idEpisodes) VALUES(?, ?);";
+          st2=connection.prepareStatement(q2);
+          st2.setInt(1, collection.getId());
+          st2.setInt(2, audioListIT.next().getId());
+          st2.executeUpdate();
+        }
+
+      }catch(Exception e){
+        e.printStackTrace();
+      }
+
+      DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
     }
 
-    private void updateTrackList(JBCollection collection) {
+  }
 
-        if(collection instanceof Playlist) {
-            ArrayList<JBAudio> audioList = ((Playlist) collection).getTrackList();
-            Iterator<JBAudio> audioListIT = audioList.iterator();
-            connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
-            PreparedStatement st1, st2;
+  private void insertCollection(JBCollection collection){
+    connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+    PreparedStatement st1, st2, st3;
+    String q1, q2, q3;
+    ResultSet rs2;
 
-            try {
-                String q1 = "DELETE FROM PlaylistAudios WHERE idPlaylist=?;";
-                st1 = connection.prepareStatement(q1);
-                st1.setInt(1, collection.getId());
-                st1.executeUpdate();
+    try{       //insert JBCollection to Collection table
+      q1="INSERT INTO Collection(id, name, picture) VALUES(default, ?, ?);";
 
-                while(audioListIT.hasNext()) {
-                    String q2 = "INSERT INTO PlaylistAudios(idPlaylist, idAudio) VALUES(?, ?);";
-                    st2 = connection.prepareStatement(q2);
-                    st2.setInt(1, collection.getId());
-                    st2.setInt(2, audioListIT.next().getId());
-                    st2.executeUpdate();
-                }
+      st1=connection.prepareStatement(q1);
+      st1.setString(1, collection.getName());
+      st1.setBlob(2, collection.getPicture());
+      st1.executeUpdate();
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+      q2="SELECT LAST_INSERT_ID();";
+      st2=connection.prepareStatement(q2);
+      rs2=st2.executeQuery();
 
-            DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
-        }
-        else if (collection instanceof Podcast) {
-            ArrayList<Episode> episodeList = ((Podcast) collection).getTrackList();
-            Iterator<Episode> audioListIT = episodeList.iterator();
-            connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
-            PreparedStatement st1, st2;
+      if(rs2.next())
+        collection.setId(rs2.getInt("LAST_INSERT_ID()"));
 
-            try {
-                String q1 = "DELETE FROM PodcastEpisodes WHERE idPodcast=?;";
-                st1 = connection.prepareStatement(q1);
-                st1.setInt(1, collection.getId());
-                st1.executeUpdate();
+      switch(collection){
+        case Playlist playlist ->               //if collection is a Playlist insert it into Playlist table
+                q3="INSERT INTO Playlist(id, isVisible) VALUES(?, 1);";
+        case Album album ->                     //if collection is an Album insert it to Album table
+                q3="INSERT INTO Album(id) VALUES(?);";
+        case Podcast podcast ->                //if collection is a Podcast insert it to Podcast table
+                q3="INSERT INTO Podcast(id) VALUES(?);";
+        default -> q3=null;
 
-                while (audioListIT.hasNext()) {
-                    String q2 = "INSERT INTO PodcastEpisodes(idPodcast, idEpisodes) VALUES(?, ?);";
-                    st2 = connection.prepareStatement(q2);
-                    st2.setInt(1, collection.getId());
-                    st2.setInt(2, audioListIT.next().getId());
-                    st2.executeUpdate();
-                }
+      }
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+      st3=connection.prepareStatement(q3);
+      st3.setInt(1, collection.getId());
+      st3.executeUpdate();
 
-            DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
-        }
-
+    }catch(Exception e){
+      e.printStackTrace();
     }
 
-    private void insertCollection(JBCollection collection) {
-        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
-        PreparedStatement st1, st2, st3;
-        String q1, q2, q3;
-        ResultSet rs2;
+    DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+  }
 
-        try {       //insert JBCollection to Collection table
-            q1 =  "INSERT INTO Collection(id, name, picture) VALUES(default, ?, ?);";
+  private void linkCollectionToProfile(JBCollection collection){
 
-            st1 = connection.prepareStatement(q1);
-            st1.setString(1, collection.getName());
-            st1.setBlob(2, collection.getPicture());
-            st1.executeUpdate();
+    if(collection.getCreator()!=null){
 
-            q2 = "SELECT LAST_INSERT_ID();";
-            st2 = connection.prepareStatement(q2);
-            rs2 = st2.executeQuery();
-
-            if(rs2.next())
-                collection.setId(rs2.getInt("LAST_INSERT_ID()"));
-
-            switch (collection) {
-                case Playlist playlist ->               //if collection is a Playlist insert it into Playlist table
-                        q3 = "INSERT INTO Playlist(id, isVisible) VALUES(?, 1);";
-                case Album album ->                     //if collection is an Album insert it to Album table
-                        q3 = "INSERT INTO Album(id) VALUES(?);";
-                case Podcast podcast ->                //if collection is a Podcast insert it to Podcast table
-                        q3 = "INSERT INTO Podcast(id) VALUES(?);";
-                default -> q3 = null;
-
-            }
-
-            st3 = connection.prepareStatement(q3);
-            st3.setInt(1, collection.getId());
-            st3.executeUpdate();
-
-        } catch (Exception e) {
-            e.printStackTrace();
+      switch(collection){
+        case Playlist playlist -> linkPlaylistToProfile(playlist);
+        case Album album -> linkAlbumToArtist(album);
+        case Podcast podcast -> linkPodcastToArtist(podcast);
+        default -> {
         }
-
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+      }
     }
 
-    private void linkCollectionToProfile(JBCollection collection) {
+  }
 
-        if(collection.getCreator() != null) {
+  private void linkPlaylistToProfile(Playlist playlist){
+    ProfileDAO pDAO=new ProfileDAO();
 
-            switch (collection) {
-                case Playlist playlist  ->  linkPlaylistToProfile(playlist);
-                case Album album        ->  linkAlbumToArtist(album);
-                case Podcast podcast    ->  linkPodcastToArtist(podcast);
-                default -> {}
-            }
-        }
+    if(pDAO.get(playlist.getCreator())==null)        //if artist not present in DB
+      pDAO.insert(playlist.getCreator());             //insert new artist
 
+    connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+    PreparedStatement st;
+
+    try{
+      String query="INSERT INTO ProfilePlaylists(idPlaylist, profileMail) VALUES(?, ?);";
+      st=connection.prepareStatement(query);
+      st.setInt(1, playlist.getId());
+      st.setString(2, playlist.getCreator().getMail());
+      st.executeUpdate();
+
+    }catch(Exception e){
+      e.printStackTrace();
     }
 
-    private void linkPlaylistToProfile(Playlist playlist) {
-        ProfileDAO pDAO = new ProfileDAO();
+    DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+  }
 
-        if (pDAO.get(playlist.getCreator()) == null)        //if artist not present in DB
-            pDAO.insert(playlist.getCreator());             //insert new artist
+  private void linkAlbumToArtist(Album album){
+    ProfileDAO pDAO=new ProfileDAO();
 
-        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
-        PreparedStatement st;
+    if(pDAO.get(album.getCreator())==null)        //if artist not present in DB
+      pDAO.insert(album.getCreator());            //insert new artist
 
-        try {
-            String query = "INSERT INTO ProfilePlaylists(idPlaylist, profileMail) VALUES(?, ?);";
-            st = connection.prepareStatement(query);
-            st.setInt(1, playlist.getId());
-            st.setString(2, playlist.getCreator().getMail());
-            st.executeUpdate();
+    connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+    PreparedStatement st;
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    try{
+      String query="INSERT INTO ArtistAlbums(idAlbum, artistMail) VALUES(?, ?);";
+      st=connection.prepareStatement(query);
+      st.setInt(1, album.getId());
+      st.setString(2, album.getCreator().getMail());
+      st.executeUpdate();
 
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+    }catch(Exception e){
+      e.printStackTrace();
     }
 
-    private void linkAlbumToArtist(Album album) {
-        ProfileDAO pDAO = new ProfileDAO();
+    DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+  }
 
-        if(pDAO.get(album.getCreator()) == null)        //if artist not present in DB
-            pDAO.insert(album.getCreator());            //insert new artist
+  private void linkPodcastToArtist(Podcast podcast){
+    ProfileDAO pDAO=new ProfileDAO();
 
-        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
-        PreparedStatement st;
+    if(pDAO.get(podcast.getCreator())==null)         //if artist not present in DB
+      pDAO.insert(podcast.getCreator());              //insert new artist
 
-        try {
-            String query =  "INSERT INTO ArtistAlbums(idAlbum, artistMail) VALUES(?, ?);";
-            st = connection.prepareStatement(query);
-            st.setInt(1, album.getId());
-            st.setString(2, album.getCreator().getMail());
-            st.executeUpdate();
+    connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+    PreparedStatement st;
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    try{
+      String query="INSERT INTO ArtistPodcasts(idPodcast, artistMail) VALUES(?, ?);";
+      st=connection.prepareStatement(query);
+      st.setInt(1, podcast.getId());
+      st.setString(2, podcast.getCreator().getMail());
+      st.executeUpdate();
 
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+    }catch(Exception e){
+      e.printStackTrace();
     }
 
-    private void linkPodcastToArtist(Podcast podcast) {
-        ProfileDAO pDAO = new ProfileDAO();
+    DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+  }
 
-        if (pDAO.get(podcast.getCreator()) == null)         //if artist not present in DB
-            pDAO.insert(podcast.getCreator());              //insert new artist
+  private void linkCollectionToAudios(JBCollection collection){
 
-        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
-        PreparedStatement st;
+    if(collection.getTrackList()!=null){
 
-        try {
-            String query = "INSERT INTO ArtistPodcasts(idPodcast, artistMail) VALUES(?, ?);";
-            st = connection.prepareStatement(query);
-            st.setInt(1, podcast.getId());
-            st.setString(2, podcast.getCreator().getMail());
-            st.executeUpdate();
-
-        } catch (Exception e) {
-            e.printStackTrace();
+      switch(collection){
+        case Playlist playlist -> linkPlaylistToAudios(playlist);
+        case Album album -> linkAlbumToSongs(album);
+        case Podcast podcast -> linkPodcastToEpisodes(podcast);
+        default -> {
         }
+      }
 
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+    }
+  }
+
+  private void linkPlaylistToAudios(Playlist playlist){
+    AudioDAO aDAO=new AudioDAO();
+    ArrayList<JBAudio> trackList=playlist.getTrackList();
+    Iterator<JBAudio> trackListIT=trackList.iterator();
+
+    while(trackListIT.hasNext()){
+      JBAudio track=trackListIT.next();
+      if(aDAO.get(track)==null)        //if audio not present in DB
+        aDAO.insert(track);             //insert new audio
     }
 
-    private void linkCollectionToAudios(JBCollection collection) {
+    trackListIT=trackList.iterator();     //get a new iterator
 
-        if(collection.getTrackList() != null) {
+    connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+    PreparedStatement st;
 
-            switch (collection) {
-                case Playlist playlist  ->  linkPlaylistToAudios(playlist);
-                case Album album        ->  linkAlbumToSongs(album);
-                case Podcast podcast    ->  linkPodcastToEpisodes(podcast);
-                default -> {}
-            }
+    try{
+      String query="INSERT INTO PlaylistAudios(idPlaylist, idAudio) VALUES(?, ?);";
+      st=connection.prepareStatement(query);
+      st.setInt(1, playlist.getId());
 
-        }
+      while(trackListIT.hasNext()){
+        JBAudio track=trackListIT.next();
+        st.setInt(2, track.getId());
+        st.executeUpdate();
+      }
+
+    }catch(Exception e){
+      e.printStackTrace();
     }
 
-    private void linkPlaylistToAudios(Playlist playlist) {
-        AudioDAO aDAO = new AudioDAO();
-        ArrayList<JBAudio> trackList = playlist.getTrackList();
-        Iterator<JBAudio> trackListIT = trackList.iterator();
+    DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+  }
 
-        while(trackListIT.hasNext()) {
-            JBAudio track = trackListIT.next();
-            if (aDAO.get(track) == null)        //if audio not present in DB
-                aDAO.insert(track);             //insert new audio
-        }
+  private void linkAlbumToSongs(Album album){
+    AudioDAO aDAO=new AudioDAO();
+    ArrayList<JBAudio> trackList=album.getTrackList();
+    Iterator<JBAudio> trackListIT=trackList.iterator();
 
-        trackListIT = trackList.iterator();     //get a new iterator
-
-        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
-        PreparedStatement st;
-
-        try {
-            String query = "INSERT INTO PlaylistAudios(idPlaylist, idAudio) VALUES(?, ?);";
-            st = connection.prepareStatement(query);
-            st.setInt(1, playlist.getId());
-
-            while(trackListIT.hasNext()) {
-                JBAudio track = trackListIT.next();
-                st.setInt(2, track.getId());
-                st.executeUpdate();
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+    while(trackListIT.hasNext()){
+      JBAudio track=trackListIT.next();
+      if(aDAO.get(track)==null)        //if song not present in DB
+        aDAO.insert(track);             //insert new song
     }
 
-    private void linkAlbumToSongs(Album album) {
-        AudioDAO aDAO = new AudioDAO();
-        ArrayList<Song> trackList = album.getTrackList();
-        Iterator<Song> trackListIT = trackList.iterator();
+    trackListIT=trackList.iterator();     //get a new iterator
 
-        while(trackListIT.hasNext()) {
-            Song track = trackListIT.next();
-            if (aDAO.get(track) == null)        //if song not present in DB
-                aDAO.insert(track);             //insert new song
-        }
+    connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+    PreparedStatement st;
 
-        trackListIT = trackList.iterator();     //get a new iterator
+    try{
+      String query="INSERT INTO AlbumSongs(idAlbum, idSong) VALUES(?, ?);";
+      st=connection.prepareStatement(query);
+      st.setInt(1, album.getId());
 
-        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
-        PreparedStatement st;
+      while(trackListIT.hasNext()){
+        JBAudio track=trackListIT.next();
+        st.setInt(2, track.getId());
+        st.executeUpdate();
+      }
 
-        try {
-            String query = "INSERT INTO AlbumSongs(idAlbum, idSong) VALUES(?, ?);";
-            st = connection.prepareStatement(query);
-            st.setInt(1, album.getId());
-
-            while(trackListIT.hasNext()) {
-                Song track = trackListIT.next();
-                st.setInt(2, track.getId());
-                st.executeUpdate();
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+    }catch(Exception e){
+      e.printStackTrace();
     }
 
-    private void linkPodcastToEpisodes(Podcast podcast) {
-        AudioDAO aDAO = new AudioDAO();
-        ArrayList<Episode> trackList = podcast.getTrackList();
-        Iterator<Episode> trackListIT = trackList.iterator();
+    DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+  }
 
-        while(trackListIT.hasNext()) {
-            Episode track = trackListIT.next();
-            if (aDAO.get(track) == null)        //if episode not present in DB
-                aDAO.insert(track);             //insert new episode
-        }
+  private void linkPodcastToEpisodes(Podcast podcast){
+    AudioDAO aDAO=new AudioDAO();
+    ArrayList<JBAudio> trackList=podcast.getTrackList();
+    Iterator<JBAudio> trackListIT=trackList.iterator();
 
-        trackListIT = trackList.iterator();     //get a new iterator
-
-        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
-        PreparedStatement st;
-
-        try {
-            String query = "INSERT INTO PodcastEpisodes(idPodcast, idEpisode) VALUES(?, ?);";
-            st = connection.prepareStatement(query);
-            st.setInt(1, podcast.getId());
-
-            while(trackListIT.hasNext()) {
-                Episode track = trackListIT.next();
-                st.setInt(2, track.getId());
-                st.executeUpdate();
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+    while(trackListIT.hasNext()){
+      JBAudio track=trackListIT.next();
+      if(aDAO.get(track)==null)        //if episode not present in DB
+        aDAO.insert(track);             //insert new episode
     }
+
+    trackListIT=trackList.iterator();     //get a new iterator
+
+    connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+    PreparedStatement st;
+
+    try{
+      String query="INSERT INTO PodcastEpisodes(idPodcast, idEpisode) VALUES(?, ?);";
+      st=connection.prepareStatement(query);
+      st.setInt(1, podcast.getId());
+
+      while(trackListIT.hasNext()){
+        JBAudio track=trackListIT.next();
+        st.setInt(2, track.getId());
+        st.executeUpdate();
+      }
+
+    }catch(Exception e){
+      e.printStackTrace();
+    }
+
+    DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+  }
 
 }
 

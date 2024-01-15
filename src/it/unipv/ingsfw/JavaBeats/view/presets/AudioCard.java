@@ -6,6 +6,7 @@ import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -89,8 +90,6 @@ public class AudioCard extends VBox{
     setPadding(new Insets(15));
     setAlignment(Pos.CENTER);
     setBackground(bgCard);
-
-
+    setCursor(Cursor.HAND);
   }
-
 }
