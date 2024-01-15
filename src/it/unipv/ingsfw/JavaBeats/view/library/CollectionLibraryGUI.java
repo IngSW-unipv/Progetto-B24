@@ -2,6 +2,9 @@ package it.unipv.ingsfw.JavaBeats.view.library;
 
 import it.unipv.ingsfw.JavaBeats.model.playable.EJBPLAYABLE;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.Song;
+import it.unipv.ingsfw.JavaBeats.model.playable.collection.Album;
+import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
+import it.unipv.ingsfw.JavaBeats.model.playable.collection.Playlist;
 import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.view.presets.AudioCard;
@@ -23,6 +26,8 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
 
+import java.util.ArrayList;
+
 public class CollectionLibraryGUI{
 
   /*---------------------------------------*/
@@ -32,13 +37,13 @@ public class CollectionLibraryGUI{
   private static final int clientHeight=(int)Screen.getPrimary().getBounds().getHeight();
   private static final Background bg=new Background(new BackgroundFill(Color.rgb(15, 15, 15), CornerRadii.EMPTY, Insets.EMPTY));
   private static final Font fontCollection=Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 25);
-  private EJBPLAYABLE ejbplayable;
+  private ArrayList<JBCollection> jbCollectionArrayList;
   private Scene scene;
 
 
-  public CollectionLibraryGUI(EJBPLAYABLE ejbplayable, JBProfile activeProfile){
-    this.ejbplayable=ejbplayable;
-    initComponents(activeProfile);
+  public CollectionLibraryGUI(JBProfile activeProfile, ArrayList<JBCollection> jbCollectionArrayList, EJBPLAYABLE ejbplayable){
+    this.jbCollectionArrayList=jbCollectionArrayList;
+    initComponents(activeProfile, jbCollectionArrayList, ejbplayable);
   }
 
 
@@ -50,16 +55,17 @@ public class CollectionLibraryGUI{
     return scene;
   }
 
-  public EJBPLAYABLE getEjbplayable(){
-    return ejbplayable;
+  public ArrayList<JBCollection> getJbCollectionArrayList(){
+    return jbCollectionArrayList;
   }
-
-  private void initComponents(JBProfile activeProfile){
+  /*---------------------------------------*/
+  //Methods
+  /*---------------------------------------*/
+  private void initComponents(JBProfile activeProfile, ArrayList<JBCollection> jbCollectionArrayList, EJBPLAYABLE ejbplayable){
 
     //Label collection title
 
-    Label collectionLabel=new Label();
-
+    Label collectionLabel=null;
     switch(ejbplayable){
       case PLAYLIST:
         collectionLabel=new Label("Your playlists");
@@ -70,8 +76,7 @@ public class CollectionLibraryGUI{
       case PODCAST:
         collectionLabel=new Label("Your podcasts");
         break;
-    }
-
+    }//end-switch
     collectionLabel.setFont(fontCollection);
     collectionLabel.setTextFill(Color.LIGHTGRAY);
     collectionLabel.setAlignment(Pos.CENTER);
@@ -84,13 +89,13 @@ public class CollectionLibraryGUI{
     //Flowpane
 
     FlowPane collectionFlowPane=new FlowPane();
-    for(int i=0; i<100; i+=1){
-      Song s=new Song(1, "Title", new Artist("us", "mail", "psw"), null);
-      collectionFlowPane.getChildren().add(new AudioCard(activeProfile));
-    }//end-for
+    for(JBCollection jb: jbCollectionArrayList){
+      collectionFlowPane.getChildren().add(new AudioCard(jb));
+    }//end-foreach
     collectionFlowPane.setPrefWrapLength(Double.MAX_VALUE);
     collectionFlowPane.setHgap(50);
     collectionFlowPane.setVgap(70);
+    collectionFlowPane.setPadding(new Insets(20));
 
 
     //JBScrollPane
@@ -141,8 +146,6 @@ public class CollectionLibraryGUI{
     gp.getRowConstraints().addAll(rcSideHome, rcSongbar);
 
     scene=new Scene(gp, clientWidth, clientHeight);
-
-
   }
-
+  /*---------------------------------------*/
 }

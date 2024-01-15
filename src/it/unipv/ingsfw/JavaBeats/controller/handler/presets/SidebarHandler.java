@@ -8,7 +8,9 @@ import it.unipv.ingsfw.JavaBeats.controller.handler.HomePageHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.ProfileViewHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.primary.search.SearchPageHandler;
 import it.unipv.ingsfw.JavaBeats.model.playable.EJBPLAYABLE;
+import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
 import it.unipv.ingsfw.JavaBeats.model.playable.collection.Playlist;
+import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.view.library.CollectionLibraryGUI;
 import it.unipv.ingsfw.JavaBeats.view.library.CollectionViewGUI;
@@ -21,6 +23,15 @@ import javafx.event.EventHandler;
 import javafx.geometry.Dimension2D;
 import javafx.scene.Node;
 import javafx.stage.Stage;
+
+import javax.imageio.ImageIO;
+import javax.sql.rowset.serial.SerialBlob;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class SidebarHandler{
 
@@ -103,7 +114,7 @@ public class SidebarHandler{
       @Override
       public void handle(ActionEvent actionEvent){
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        Playlist favorites= CollectionManagerFactory.getInstance().getCollectionManager().getFavorites(activeProfile);
+        Playlist favorites=CollectionManagerFactory.getInstance().getCollectionManager().getFavorites(activeProfile);
         CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, favorites);
         CollectionViewHandler collectionViewHandler=new CollectionViewHandler(collectionViewGUI, activeProfile);
         Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getFavoritesButton());
@@ -121,7 +132,20 @@ public class SidebarHandler{
       @Override
       public void handle(ActionEvent actionEvent){
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        CollectionLibraryGUI collectionLibraryGUI=new CollectionLibraryGUI(EJBPLAYABLE.PLAYLIST, activeProfile);
+
+        ArrayList<JBCollection> playlists=new ArrayList<>();
+        playlists.add(new Playlist(1, "really long", new Artist("username", "mail", "pass")));
+        BufferedImage bufferedImage=null;
+        try{
+          bufferedImage=ImageIO.read(new File("src/it/unipv/ingsfw/JavaBeats/view/resources/icons/Record.png"));
+          ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
+          ImageIO.write(bufferedImage, "png", byteArrayOutputStream);
+          byte[] image=byteArrayOutputStream.toByteArray();
+          playlists.getFirst().setPicture(new SerialBlob(image));
+        }catch(IOException | SQLException e){
+          throw new RuntimeException(e);
+        }//end-try
+        CollectionLibraryGUI collectionLibraryGUI=new CollectionLibraryGUI(activeProfile, playlists, EJBPLAYABLE.PLAYLIST);
         CollectionLibraryHandler collectionLibraryHandler=new CollectionLibraryHandler(activeProfile);
         Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getPlaylistsButton());
 
