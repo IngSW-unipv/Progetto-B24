@@ -31,6 +31,7 @@ public class Sidebar extends VBox{
   private Button homeButton;
   private Button searchButton;
   private Button profileButton;
+  private Button queueButton;
   private Button favoritesButton;
   private Button playlistsButton;
   private Button albumButton;
@@ -80,6 +81,10 @@ public class Sidebar extends VBox{
 
   public Button getPodcastButton(){
     return podcastButton;
+  }
+
+  public Button getQueueButton() {
+    return queueButton;
   }
 
   /*---------------------------------------*/
@@ -132,8 +137,27 @@ public class Sidebar extends VBox{
     HBox.setHgrow(profilePane, Priority.ALWAYS);
     profileButtonHBox.setPadding(new Insets(5, 0, 5, 0));
     profileButtonHBox.getStyleClass().add("hbox");
-    VBox menuVBox=new VBox(homeButtonHBox, searchButtonHBox, profileButtonHBox);
+
+
+    Image queueImage=new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Queue.png", true);
+    ImageView queueImageView=new ImageView(queueImage);
+    queueImageView.setPreserveRatio(true);
+    queueImageView.setFitHeight(30);
+    queueButton=new Button("  Queue");
+    queueButton.setGraphic(queueImageView);
+    queueButton.setContentDisplay(ContentDisplay.LEFT);
+    queueButton.setFont(fontMenu);
+    queueButton.setTextFill(Color.LIGHTGRAY);
+    queueButton.setCursor(Cursor.HAND);
+    Pane queuePane=new Pane();
+    HBox queueButtonHBox=new HBox(queueButton, queuePane);
+    HBox.setHgrow(queuePane, Priority.ALWAYS);
+    queueButtonHBox.setPadding(new Insets(5, 0, 5, 0));
+    queueButtonHBox.getStyleClass().add("hbox");
+
+    VBox menuVBox=new VBox(homeButtonHBox, searchButtonHBox, profileButtonHBox, queueButtonHBox);
     VBox.setMargin(searchButtonHBox, new Insets(3, 0, 3, 0));
+    VBox.setMargin(queueButtonHBox, new Insets(3, 0, 0, 0));
 
     /* Pane used just for padding */
     Pane whitePane1=new Pane();

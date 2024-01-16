@@ -111,6 +111,24 @@ public class SidebarHandler{
       }
     };
 
+    //QueueButtonHandler
+    EventHandler<ActionEvent> queueButtonHandler=new EventHandler<ActionEvent>(){
+      @Override
+      public void handle(ActionEvent actionEvent){
+        Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+        Playlist favorites=CollectionManagerFactory.getInstance().getCollectionManager().getFavorites(activeProfile);
+        CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, favorites);
+        CollectionViewHandler collectionViewHandler=new CollectionViewHandler(collectionViewGUI, activeProfile);
+        Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getQueueButton());
+
+        Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
+        stage.setScene(collectionViewGUI.getScene());
+        stage.setTitle("Favorites");
+        stage.setWidth(previousDimension.getWidth());
+        stage.setHeight(previousDimension.getHeight());
+      }
+    };
+
     //FavoritesButtonHandler
     EventHandler<ActionEvent> favoritesButtonHandler=new EventHandler<ActionEvent>(){
       @Override
@@ -204,6 +222,7 @@ public class SidebarHandler{
     Sidebar.getInstance(activeProfile).getHomeButton().setOnAction(homeButtonHandler);
     Sidebar.getInstance(activeProfile).getSearchButton().setOnAction(searchButtonHandler);
     Sidebar.getInstance(activeProfile).getProfileButton().setOnAction(profileButtonHandler);
+    Sidebar.getInstance(activeProfile).getQueueButton().setOnAction(queueButtonHandler);
     Sidebar.getInstance(activeProfile).getFavoritesButton().setOnAction(favoritesButtonHandler);
     Sidebar.getInstance(activeProfile).getPlaylistsButton().setOnAction(playlistsButtonHandler);
     Sidebar.getInstance(activeProfile).getAlbumButton().setOnAction(albumsButtonHandler);
