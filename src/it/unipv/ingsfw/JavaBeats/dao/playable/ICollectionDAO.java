@@ -1,6 +1,7 @@
 package it.unipv.ingsfw.JavaBeats.dao.playable;
 
 import it.unipv.ingsfw.JavaBeats.model.playable.collection.*;
+import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 
 import java.util.ArrayList;
@@ -24,6 +25,11 @@ public interface ICollectionDAO{
 
   Playlist getFavorites(JBProfile activeProfile);
 
-  ArrayList<JBCollection> selectByProfile(JBProfile profile);
+  ArrayList<JBCollection> selectPlaylistsByProfile(JBProfile profile);
+  ArrayList<JBCollection> selectAlbumsByArtist(Artist artist);
+  ArrayList<JBCollection> selectPodcastsByArtist(Artist artist);
+
+
+
 
 }

@@ -1,8 +1,11 @@
 package it.unipv.ingsfw.JavaBeats.controller.manager;
 
 import it.unipv.ingsfw.JavaBeats.dao.playable.CollectionDAO;
+import it.unipv.ingsfw.JavaBeats.model.playable.collection.Album;
 import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
 import it.unipv.ingsfw.JavaBeats.model.playable.collection.Playlist;
+import it.unipv.ingsfw.JavaBeats.model.playable.collection.Podcast;
+import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 
 import javax.imageio.ImageIO;
@@ -39,10 +42,19 @@ public class CollectionManager{
     return jbCollection;
   }
 
-  public ArrayList<JBCollection> getCollectionList(JBProfile activeProfile){
+  public ArrayList<JBCollection> getPlaylists(JBProfile activeProfile){
     CollectionDAO c=new CollectionDAO();
-    return c.selectByProfile(activeProfile);
+    return c.selectPlaylistsByProfile(activeProfile);
   }
+  public ArrayList<JBCollection> getAlbums(Artist artist) {
+    CollectionDAO c = new CollectionDAO();
+    return c.selectAlbumsByArtist(artist);
+  }
+
+    public ArrayList<JBCollection> getPodcasts(Artist artist){
+      CollectionDAO c=new CollectionDAO();
+      return c.selectPodcastsByArtist(artist);
+      }
 
   //GetFavorites
   public Playlist getFavorites(JBProfile activeProfile){

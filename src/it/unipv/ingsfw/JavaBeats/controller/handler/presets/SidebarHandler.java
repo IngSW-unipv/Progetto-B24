@@ -9,6 +9,7 @@ import it.unipv.ingsfw.JavaBeats.controller.handler.ProfileViewHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.primary.search.SearchPageHandler;
 import it.unipv.ingsfw.JavaBeats.model.playable.EJBPLAYABLE;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
+import it.unipv.ingsfw.JavaBeats.model.playable.collection.Album;
 import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
 import it.unipv.ingsfw.JavaBeats.model.playable.collection.Playlist;
 import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
@@ -128,25 +129,12 @@ public class SidebarHandler{
       }
     };
 
-    //FavoritesButtonHandler
+    //PlaylistButtonHandler
     EventHandler<ActionEvent> playlistsButtonHandler=new EventHandler<ActionEvent>(){
       @Override
       public void handle(ActionEvent actionEvent){
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-
-        ArrayList<JBCollection> playlists=new ArrayList<>();
-        playlists.add(new Playlist(1, "really long", new Artist("username", "mail", "pass")));
-        playlists.getFirst().setTrackList(new ArrayList<JBAudio>());
-        BufferedImage bufferedImage=null;
-        try{
-          bufferedImage=ImageIO.read(new File("src/it/unipv/ingsfw/JavaBeats/view/resources/icons/Record.png"));
-          ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
-          ImageIO.write(bufferedImage, "png", byteArrayOutputStream);
-          byte[] image=byteArrayOutputStream.toByteArray();
-          playlists.getFirst().setPicture(new SerialBlob(image));
-        }catch(IOException | SQLException e){
-          throw new RuntimeException(e);
-        }//end-try
+        ArrayList<JBCollection> playlists= CollectionManagerFactory.getInstance().getCollectionManager().getPlaylists(activeProfile);
         CollectionLibraryGUI collectionLibraryGUI=new CollectionLibraryGUI(activeProfile, playlists, EJBPLAYABLE.PLAYLIST);
         CollectionLibraryHandler collectionLibraryHandler=new CollectionLibraryHandler(activeProfile, collectionLibraryGUI);
         Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getPlaylistsButton());
@@ -159,11 +147,67 @@ public class SidebarHandler{
       }
     };
 
+    //AlbumButtonHandler
+    EventHandler<ActionEvent> albumsButtonHandler=new EventHandler<ActionEvent>(){
+      @Override
+      public void handle(ActionEvent actionEvent){
+        Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+
+        //Retrieve albums
+        ArrayList<JBCollection> albums= null;
+        try{
+          albums= CollectionManagerFactory.getInstance().getCollectionManager().getAlbums((Artist) activeProfile);
+        }catch(ClassCastException e){
+          //popup
+        }
+
+        CollectionLibraryGUI collectionLibraryGUI=new CollectionLibraryGUI(activeProfile, albums, EJBPLAYABLE.ALBUM);
+        CollectionLibraryHandler collectionLibraryHandler=new CollectionLibraryHandler(activeProfile, collectionLibraryGUI);
+        Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getAlbumButton());
+
+
+        Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
+        stage.setScene(collectionLibraryGUI.getScene());
+        stage.setTitle("Albums");
+        stage.setWidth(previousDimension.getWidth());
+        stage.setHeight(previousDimension.getHeight());
+      }
+    };
+
+    //PodcastButtonHandler
+    EventHandler<ActionEvent> podcastsButtonHandler=new EventHandler<ActionEvent>(){
+      @Override
+      public void handle(ActionEvent actionEvent){
+        Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+
+        //Retrieve podcasts
+        ArrayList<JBCollection> podcasts= null;
+        try{
+          podcasts= CollectionManagerFactory.getInstance().getCollectionManager().getPodcasts((Artist) activeProfile);
+        }catch(ClassCastException e){
+          //popup
+        }
+
+        CollectionLibraryGUI collectionLibraryGUI=new CollectionLibraryGUI(activeProfile, podcasts, EJBPLAYABLE.ALBUM);
+        CollectionLibraryHandler collectionLibraryHandler=new CollectionLibraryHandler(activeProfile, collectionLibraryGUI);
+        Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getPodcastButton());
+
+
+        Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
+        stage.setScene(collectionLibraryGUI.getScene());
+        stage.setTitle("Podcasts");
+        stage.setWidth(previousDimension.getWidth());
+        stage.setHeight(previousDimension.getHeight());
+      }
+    };
+
     Sidebar.getInstance(activeProfile).getHomeButton().setOnAction(homeButtonHandler);
     Sidebar.getInstance(activeProfile).getSearchButton().setOnAction(searchButtonHandler);
     Sidebar.getInstance(activeProfile).getProfileButton().setOnAction(profileButtonHandler);
     Sidebar.getInstance(activeProfile).getFavoritesButton().setOnAction(favoritesButtonHandler);
     Sidebar.getInstance(activeProfile).getPlaylistsButton().setOnAction(playlistsButtonHandler);
+    Sidebar.getInstance(activeProfile).getAlbumButton().setOnAction(albumsButtonHandler);
+    Sidebar.getInstance(activeProfile).getPodcastButton().setOnAction(podcastsButtonHandler);
 
 
   }

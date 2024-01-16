@@ -69,7 +69,7 @@ public class CollectionLibraryHandler{
             break;
         }//end-switch
         newCollection=CollectionManagerFactory.getInstance().getCollectionManager().createJBCollection(newCollection);
-        ArrayList<JBCollection> jbCollectionArrayList=CollectionManagerFactory.getInstance().getCollectionManager().getCollectionList(activeProfile);
+        ArrayList<JBCollection> jbCollectionArrayList=CollectionManagerFactory.getInstance().getCollectionManager().getPlaylists(activeProfile);
 
         CollectionLibraryGUI collectionLibraryGUI1=new CollectionLibraryGUI(activeProfile, jbCollectionArrayList, collectionLibraryGUI.getEjbplayable());
         CollectionLibraryHandler collectionLibraryHandler=new CollectionLibraryHandler(activeProfile, collectionLibraryGUI1);

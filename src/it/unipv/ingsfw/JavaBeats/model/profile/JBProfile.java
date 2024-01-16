@@ -92,4 +92,18 @@ public abstract class JBProfile implements IJBResearchable{
   public void setFavorites(Playlist favorites){
     this.favorites=favorites;
   }
+
+
+  @Override
+  public boolean equals(Object obj) {
+    JBProfile profile= (JBProfile) obj;
+    if (this.username.equals(profile.getUsername()) && this.mail.equals(profile.getMail()) && this.password.equals(profile.getPassword()) && this.name.equals(profile.getName())
+    && this.surname.equals(profile.getSurname()) && this.biography.equals(profile.getBiography()) && this.profilePicture==profile.getProfilePicture()){
+      return true;
+    }else{
+      return false;
+    }
+  }
 }
+
+

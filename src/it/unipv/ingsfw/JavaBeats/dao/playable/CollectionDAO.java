@@ -106,7 +106,7 @@ public class CollectionDAO implements ICollectionDAO{
         result=new Playlist(rs.getInt("id"),
                 rs.getString("name"),
                 new User(null, rs.getString("profileMail"), null),
-                null,
+                new ArrayList<JBAudio>(),
                 rs.getBlob("picture"),
                 rs.getBoolean("isVisible"));
       }
@@ -145,7 +145,7 @@ public class CollectionDAO implements ICollectionDAO{
         result=new Album(rs.getInt("id"),
                 rs.getString("name"),
                 new Artist(null, rs.getString("artistMail"), null),
-                null,
+                new ArrayList<JBAudio>(),
                 rs.getBlob("picture"));
       }
 
@@ -183,7 +183,7 @@ public class CollectionDAO implements ICollectionDAO{
         result=new Podcast(rs.getInt("id"),
                 rs.getString("name"),
                 new Artist(null, rs.getString("artistMail"), null),
-                null,
+                new ArrayList<JBAudio>(),
                 rs.getBlob("picture"));
       }
 
@@ -208,7 +208,7 @@ public class CollectionDAO implements ICollectionDAO{
   }
 
   @Override
-  public ArrayList<JBCollection> selectByProfile(JBProfile profile){
+  public ArrayList<JBCollection> selectPlaylistsByProfile(JBProfile profile){
     connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
     PreparedStatement st1;
     ResultSet rs1;
@@ -224,7 +224,7 @@ public class CollectionDAO implements ICollectionDAO{
       rs1=st1.executeQuery();
 
       while(rs1.next()){
-        result.add(get(new Playlist(rs1.getInt("idPlaylist"), null, null)));
+        result.add(getPlaylist(new Playlist(rs1.getInt("idPlaylist"), null, null)));
       }
 
     }catch(Exception e){
@@ -233,45 +233,70 @@ public class CollectionDAO implements ICollectionDAO{
 
     DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
 
-    //if profile is an artist get also Podcasts ad Albums
-    if(profile instanceof Artist){
-      connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
-      PreparedStatement st2, st3;
-      ResultSet rs2, rs3;
-
-      try{
-        String q2="SELECT idAlbum FROM ArtistAlbums WHERE artistMail=?;";
-
-        st2=connection.prepareStatement(q2);
-        st2.setString(1, profile.getMail());
-
-        rs2=st2.executeQuery();
-
-        while(rs2.next()){
-          result.add(get(new Album(rs2.getInt("idAlbum"), null, null, null)));
-        }
+    return result;
+  }
 
 
-        String q3="SELECT idPodcast FROM ArtistPodcasts WHERE artistMail=?;";
+  @Override
+  public ArrayList<JBCollection> selectAlbumsByArtist(Artist artist){
+    connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+    PreparedStatement st1;
+    ResultSet rs1;
+    ArrayList<JBCollection> result=new ArrayList<>();
 
-        st3=connection.prepareStatement(q3);
-        st3.setString(1, profile.getMail());
 
-        rs3=st3.executeQuery();
+    try{
+      String q1="SELECT idAlbum FROM ArtistAlbums WHERE artistMail=? LIMIT 50;";
 
-        while(rs3.next()){
-          result.add(get(new Podcast(rs3.getInt("idPodcast"), null, null, null, null)));
-        }
+      st1=connection.prepareStatement(q1);
+      st1.setString(1, artist.getMail());
 
-      }catch(Exception e){
-        e.printStackTrace();
+      rs1=st1.executeQuery();
+
+      while(rs1.next()){
+        result.add(getAlbum(new Album(rs1.getInt("idAlbum"), null, null, null)));
       }
 
-      DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+    }catch(Exception e){
+      e.printStackTrace();
     }
+
+    DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
 
     return result;
   }
+
+
+  @Override
+  public ArrayList<JBCollection> selectPodcastsByArtist(Artist artist){
+    connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+    PreparedStatement st1;
+    ResultSet rs1;
+    ArrayList<JBCollection> result=new ArrayList<>();
+
+
+    try{
+      String q1="SELECT idPodcast FROM ArtistPodcasts WHERE artistMail=? LIMIT 50;";
+
+      st1=connection.prepareStatement(q1);
+      st1.setString(1, artist.getMail());
+
+      rs1=st1.executeQuery();
+
+      while(rs1.next()){
+        result.add(getPodcast(new Podcast(rs1.getInt("idPlaylist"), null, null, null)));
+      }
+
+    }catch(Exception e){
+      e.printStackTrace();
+    }
+
+    DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+
+    return result;
+  }
+
+
 
 
   //PRIVATE METHODS:
