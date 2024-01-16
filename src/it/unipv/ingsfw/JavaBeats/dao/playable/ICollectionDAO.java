@@ -2,19 +2,28 @@ package it.unipv.ingsfw.JavaBeats.dao.playable;
 
 import it.unipv.ingsfw.JavaBeats.model.playable.collection.*;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
+
 import java.util.ArrayList;
 
-public interface ICollectionDAO {
+public interface ICollectionDAO{
 
-    //METHODS:
-    void insert(JBCollection collection);
-    void remove(JBCollection collection);
-    void update(JBCollection collection);
-    JBCollection get(JBCollection collection);
-    Playlist getPlaylist(JBCollection collection);
-    Album getAlbum(JBCollection collection);
-    Podcast getPodcast(JBCollection collection);
-    Playlist getFavorites(JBProfile activeProfile);
-    ArrayList<JBCollection> selectByProfile(JBProfile profile);
+  //METHODS:
+  JBCollection insert(JBCollection collection);
+
+  void remove(JBCollection collection);
+
+  void update(JBCollection collection);
+
+  JBCollection get(JBCollection collection);
+
+  Playlist getPlaylist(JBCollection collection);
+
+  Album getAlbum(JBCollection collection);
+
+  Podcast getPodcast(JBCollection collection);
+
+  Playlist getFavorites(JBProfile activeProfile);
+
+  ArrayList<JBCollection> selectByProfile(JBProfile profile);
 
 }

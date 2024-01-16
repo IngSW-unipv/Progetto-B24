@@ -24,15 +24,20 @@ import java.sql.SQLException;
 public class AudioCard extends VBox{
 
   //Attributi
+  private IJBResearchable ijbResearchable;
 
   private static final Background bgCard=new Background(new BackgroundFill(Color.rgb(25, 25, 25), new CornerRadii(20), Insets.EMPTY));
 
   public AudioCard(IJBResearchable ijbResearchable){
     super();
-    initComponents(ijbResearchable);
+    this.ijbResearchable=ijbResearchable;
+    initComponents();
   }
 
-  private void initComponents(IJBResearchable ijbResearchable){
+  public IJBResearchable getIjbResearchable(){
+    return ijbResearchable;
+  }
+  private void initComponents(){
 
     ImageView cardImageView=null;
     Label title=null;

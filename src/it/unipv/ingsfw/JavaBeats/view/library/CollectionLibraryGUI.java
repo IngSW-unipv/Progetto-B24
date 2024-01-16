@@ -37,38 +37,39 @@ public class CollectionLibraryGUI{
   private static final int clientHeight=(int)Screen.getPrimary().getBounds().getHeight();
   private static final Background bg=new Background(new BackgroundFill(Color.rgb(15, 15, 15), CornerRadii.EMPTY, Insets.EMPTY));
   private static final Font fontCollection=Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 25);
+  private EJBPLAYABLE ejbplayable;
   private ArrayList<JBCollection> jbCollectionArrayList;
   private FlowPane collectionFlowPane;
+  private Button buttonPlus;
   private Scene scene;
-
-
   public CollectionLibraryGUI(JBProfile activeProfile, ArrayList<JBCollection> jbCollectionArrayList, EJBPLAYABLE ejbplayable){
     this.jbCollectionArrayList=jbCollectionArrayList;
+    this.ejbplayable=ejbplayable;
     initComponents(activeProfile, jbCollectionArrayList, ejbplayable);
   }
-
-
   /*---------------------------------------*/
   //Getter/Setter
   /*---------------------------------------*/
-
   public Scene getScene(){
     return scene;
   }
-
   public ArrayList<JBCollection> getJbCollectionArrayList(){
     return jbCollectionArrayList;
   }
   public FlowPane getCollectionFlowPane(){
     return collectionFlowPane;
   }
+  public Button getButtonPlus(){
+    return buttonPlus;
+  }
+  public EJBPLAYABLE getEjbplayable(){
+    return ejbplayable;
+  }
   /*---------------------------------------*/
   //Methods
   /*---------------------------------------*/
   private void initComponents(JBProfile activeProfile, ArrayList<JBCollection> jbCollectionArrayList, EJBPLAYABLE ejbplayable){
-
     //Label collection title
-
     Label collectionLabel=null;
     switch(ejbplayable){
       case PLAYLIST:
@@ -87,11 +88,9 @@ public class CollectionLibraryGUI{
     collectionLabel.setPadding(new Insets(20));
 
     //Hbox title
-
     HBox titleHBox=new HBox(collectionLabel);
 
     //Flowpane
-
     collectionFlowPane=new FlowPane();
     for(JBCollection jb: jbCollectionArrayList){
       collectionFlowPane.getChildren().add(new AudioCard(jb));
@@ -100,7 +99,6 @@ public class CollectionLibraryGUI{
     collectionFlowPane.setHgap(50);
     collectionFlowPane.setVgap(70);
     collectionFlowPane.setPadding(new Insets(20));
-
 
     //JBScrollPane
     ScrollPanePreset collectionScrollPanePreset=new ScrollPanePreset(collectionFlowPane);
@@ -114,11 +112,10 @@ public class CollectionLibraryGUI{
     ImageView plusImageView=new ImageView(plusImage);
     plusImageView.setPreserveRatio(true);
     plusImageView.setFitHeight(40);
-    Button buttonPlus=new Button();
+    buttonPlus=new Button();
     buttonPlus.setGraphic(plusImageView);
     buttonPlus.setCursor(Cursor.HAND);
     buttonPlus.setStyle("-fx-background-radius: 30; -fx-pref-width: 60; -fx-pref-height: 60; -fx-background-color: #8A2BE2");
-
 
     //Hbox button
     HBox buttonHBox=new HBox(buttonPlus);

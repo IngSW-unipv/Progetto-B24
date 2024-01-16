@@ -8,6 +8,7 @@ import it.unipv.ingsfw.JavaBeats.controller.handler.HomePageHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.ProfileViewHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.primary.search.SearchPageHandler;
 import it.unipv.ingsfw.JavaBeats.model.playable.EJBPLAYABLE;
+import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
 import it.unipv.ingsfw.JavaBeats.model.playable.collection.Playlist;
 import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
@@ -135,6 +136,7 @@ public class SidebarHandler{
 
         ArrayList<JBCollection> playlists=new ArrayList<>();
         playlists.add(new Playlist(1, "really long", new Artist("username", "mail", "pass")));
+        playlists.getFirst().setTrackList(new ArrayList<JBAudio>());
         BufferedImage bufferedImage=null;
         try{
           bufferedImage=ImageIO.read(new File("src/it/unipv/ingsfw/JavaBeats/view/resources/icons/Record.png"));

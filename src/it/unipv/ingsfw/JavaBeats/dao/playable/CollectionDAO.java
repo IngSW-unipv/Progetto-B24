@@ -27,12 +27,14 @@ public class CollectionDAO implements ICollectionDAO{
 
   //PUBLIC METHODS:
   @Override
-  public void insert(JBCollection collection){
+  public JBCollection insert(JBCollection collection){
     insertCollection(collection);
 
     linkCollectionToProfile(collection);
 
     linkCollectionToAudios(collection);
+
+    return collection;
   }
 
   @Override
