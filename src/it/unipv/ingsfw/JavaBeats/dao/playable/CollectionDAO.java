@@ -212,7 +212,7 @@ public class CollectionDAO implements ICollectionDAO{
     connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
     PreparedStatement st1;
     ResultSet rs1;
-    ArrayList<JBCollection> result=null;
+    ArrayList<JBCollection> result=new ArrayList<>();
 
     //get all Playlists
     try{

@@ -85,7 +85,7 @@ public class CollectionLibraryGUI{
     collectionLabel.setFont(fontCollection);
     collectionLabel.setTextFill(Color.LIGHTGRAY);
     collectionLabel.setAlignment(Pos.CENTER);
-    collectionLabel.setPadding(new Insets(20));
+    collectionLabel.setPadding(new Insets(20, 20, 0, 20));
 
     //Hbox title
     HBox titleHBox=new HBox(collectionLabel);
@@ -123,7 +123,7 @@ public class CollectionLibraryGUI{
     buttonHBox.setPadding(new Insets(0, 20, 10, 0));
 
     //Vbox collection
-    VBox collectionVBox=new VBox(25, titleHBox, collectionScrollPanePreset, buttonHBox);
+    VBox collectionVBox=new VBox(titleHBox, collectionScrollPanePreset, buttonHBox);
     collectionVBox.setBackground(bg);
     VBox.setVgrow(collectionScrollPanePreset, Priority.ALWAYS);
 
