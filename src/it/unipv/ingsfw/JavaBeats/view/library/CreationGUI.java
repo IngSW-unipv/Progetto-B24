@@ -1,6 +1,6 @@
 package it.unipv.ingsfw.JavaBeats.view.library;
-
-import it.unipv.ingsfw.JavaBeats.model.playable.EJBPLAYABLE;
+import it.unipv.ingsfw.JavaBeats.model.playable.collection.Album;
+import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.view.presets.Sidebar;
 import it.unipv.ingsfw.JavaBeats.view.presets.Songbar;
@@ -20,9 +20,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Screen;
 
-
+import java.sql.SQLException;
 public class CreationGUI{
 
   //Attributi
@@ -32,94 +33,109 @@ public class CreationGUI{
   private static final Background bgTitle=new Background(new BackgroundFill(Color.rgb(10, 10, 10), new CornerRadii(25), Insets.EMPTY));
   private static final Font fontTitle=Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 90);
   private static final Font fontAdd=Font.font("Verdana", FontWeight.LIGHT, FontPosture.ITALIC, 20);
-
+  private JBCollection newCollection;
+  private ImageView collectionImageView;
+  private Button collectionPictureButton;
+  private TextField nameTextField;
+  private Button addButton;
+  private Button create;
   private Scene scene;
 
-
   //Getters and setters
-
-
   public Scene getScene(){
     return scene;
   }
-
-  public CreationGUI(EJBPLAYABLE ejbplayable, JBProfile activeProfile){
-    initComponents(ejbplayable, activeProfile);
+  public JBCollection getNewCollection(){
+    return newCollection;
+  }
+  public ImageView getCollectionImageView(){
+    return collectionImageView;
+  }
+  public Button getCollectionPictureButton(){
+    return collectionPictureButton;
+  }
+  public TextField getNameTextField(){
+    return nameTextField;
+  }
+  public Button getAddButton(){
+    return addButton;
+  }
+  public Button getCreate(){
+    return create;
+  }
+  public CreationGUI(JBProfile activeProfile, JBCollection jbCollection){
+    initComponents(activeProfile, jbCollection);
   }
 
-  private void initComponents(EJBPLAYABLE ejbplayable, JBProfile activeProfile){
+  //Methods
+  private void initComponents(JBProfile activeProfile, JBCollection jbCollection){
 
     //HBox Title
 
     //ImageButton
-    Image collectionImage=new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/RecordBig.png", true);
-    ImageView collectionImageView=new ImageView(collectionImage);
+    try{
+      collectionImageView=new ImageView(new Image(jbCollection.getPicture().getBinaryStream()));
+    }catch(SQLException e){
+      throw new RuntimeException(e);
+    }//end-try
     collectionImageView.setPreserveRatio(true);
     collectionImageView.setFitHeight(250);
     collectionImageView.setEffect(new BoxBlur(5, 5, 5));
-    Button collectionButton=new Button();
-    collectionButton.setGraphic(collectionImageView);
-    collectionButton.setTooltip(new Tooltip("Add Image"));
-    collectionButton.setCursor(Cursor.HAND);
-    collectionButton.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
+    collectionPictureButton=new Button();
+    collectionPictureButton.setGraphic(collectionImageView);
+    collectionPictureButton.setTooltip(new Tooltip("Add Image"));
+    collectionPictureButton.setCursor(Cursor.HAND);
+    collectionPictureButton.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
 
     //Title TextField
-    TextField titleTextField=new TextField();
-    titleTextField.setPrefSize(1200, 50);
-    titleTextField.setFont(fontTitle);
-    titleTextField.setBackground(bgTitle);
-    titleTextField.setStyle("-fx-text-fill: #ffffffff; -fx-prompt-text-fill: #dededeaa;");
-    titleTextField.setPromptText("Insert title");
-    HBox textFieldHBox=new HBox(titleTextField);
+    nameTextField=new TextField(jbCollection.getName());
+    nameTextField.setPrefSize(1200, 50);
+    nameTextField.setFont(fontTitle);
+    nameTextField.setBackground(bgTitle);
+    nameTextField.setStyle("-fx-text-fill: #FFFFFFFF; -fx-prompt-text-fill: #DEDEDEAA;");
+    nameTextField.setPromptText("Insert title");
+
+    HBox textFieldHBox=new HBox(nameTextField);
     textFieldHBox.setPadding(new Insets(100, 0, 0, 10));
 
-    HBox titleHbox=new HBox(collectionButton, textFieldHBox);
+    HBox titleHbox=new HBox(collectionPictureButton, textFieldHBox);
     titleHbox.setAlignment(Pos.TOP_LEFT);
     titleHbox.setPadding(new Insets(0, 0, 0, 10));
-
 
     //Add button
     Image plusImage=new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Plus.png", true);
     ImageView plusImageView=new ImageView(plusImage);
     plusImageView.setPreserveRatio(true);
     plusImageView.setFitHeight(40);
-    Button buttonPlus=new Button();
-    buttonPlus.setGraphic(plusImageView);
-    buttonPlus.setCursor(Cursor.HAND);
-    buttonPlus.setStyle("-fx-background-radius: 30; -fx-pref-width: 60; -fx-pref-height: 60; -fx-background-color: #8A2BE2");
+    addButton=new Button();
+    addButton.setGraphic(plusImageView);
+    addButton.setCursor(Cursor.HAND);
+    addButton.setStyle("-fx-background-radius: 30; -fx-pref-width: 60; -fx-pref-height: 60; -fx-background-color: #8A2BE2");
 
     //Add label
     Label addLabel=null;
-    switch(ejbplayable){
-      case ALBUM:
-        addLabel=new Label("Add song");
-        break;
-      case PODCAST:
-        addLabel=new Label("Add episode");
-        break;
-    }
-
+    try{
+      Album a=(Album)jbCollection;
+      addLabel=new Label("Add song");
+    }catch(ClassCastException c){
+      addLabel=new Label("Add episode");
+    }//end-try
     addLabel.setFont(fontAdd);
     addLabel.setTextFill(Color.LIGHTGRAY);
     addLabel.setPadding(new Insets(0, 10, 0, 0));
 
-
     //Add Hbox
-    HBox addHBox=new HBox(addLabel, buttonPlus);
+    HBox addHBox=new HBox(addLabel, addButton);
     addHBox.setAlignment(Pos.CENTER);
 
-
     //Save Button
-    Button create=null;
-    switch(ejbplayable){
-      case ALBUM:
-        create=new Button("Click here to create your album!");
-        break;
-      case PODCAST:
-        create=new Button("Click here to create your podcast!");
-        break;
-    }
-
+    create=null;
+    try{
+      Album a=(Album)jbCollection;
+      create=new Button("Click here to create your album!");
+    }catch(ClassCastException c){
+      create=new Button("Click here to create your podcast!");
+    }//end-try
     create.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
     create.setFont(Font.font("Verdana", FontWeight.SEMI_BOLD, FontPosture.ITALIC, 18));
     create.setTextFill(Color.WHITE);
@@ -132,7 +148,6 @@ public class CreationGUI{
     //VBoxCreationVBox
     VBox creationVBox=new VBox(180, titleHbox, addHBox, createHBox);
     creationVBox.setBackground(bg);
-
 
     //Scene
     Sidebar sidebar=Sidebar.getInstance(activeProfile);

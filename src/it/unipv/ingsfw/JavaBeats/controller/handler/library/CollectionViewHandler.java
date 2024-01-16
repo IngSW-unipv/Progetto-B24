@@ -10,7 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.effect.BoxBlur;
 import javafx.stage.Stage;
 
-public class CollectionViewHandler {
+public class CollectionViewHandler{
   /*---------------------------------------*/
   //Attributi
   /*---------------------------------------*/
@@ -37,8 +37,8 @@ public class CollectionViewHandler {
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
         gui.getGp().setEffect(new BoxBlur(10, 10, 10));
 
-        Playlist originalCollection=new Playlist(1, "name", new Artist("mail", "name", "username"));
-        EditPlaylistDialog dialog=new EditPlaylistDialog(stage, originalCollection, (Playlist)originalCollection.getCopy());
+        Playlist p=(Playlist)gui.getJbCollection();
+        EditPlaylistDialog dialog=new EditPlaylistDialog(stage, p, (Playlist)p.getCopy());
         EditPlaylistDialogController editPlaylistDialogController=new EditPlaylistDialogController(dialog);
         dialog.showAndWait();
         gui.getGp().setEffect(null);

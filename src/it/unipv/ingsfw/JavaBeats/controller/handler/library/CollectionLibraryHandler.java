@@ -10,6 +10,7 @@ import it.unipv.ingsfw.JavaBeats.model.playable.collection.Podcast;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.view.library.CollectionLibraryGUI;
 import it.unipv.ingsfw.JavaBeats.view.library.CollectionViewGUI;
+import it.unipv.ingsfw.JavaBeats.view.library.CreationGUI;
 import it.unipv.ingsfw.JavaBeats.view.presets.AudioCard;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -55,28 +56,36 @@ public class CollectionLibraryHandler{
       @Override
       public void handle(ActionEvent actionEvent){
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+        Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
 
         JBCollection newCollection=null;
         switch(collectionLibraryGUI.getEjbplayable()){
           case PLAYLIST:
             newCollection=new Playlist(1, "New playlist", activeProfile);
+            CollectionManagerFactory.getInstance().getCollectionManager().createJBCollection(newCollection);
+            ArrayList<JBCollection> jbPlaylistsArraylist=CollectionManagerFactory.getInstance().getCollectionManager().getPlaylists(activeProfile);
+            CollectionLibraryGUI collectionLibraryGUI1=new CollectionLibraryGUI(activeProfile, jbPlaylistsArraylist, collectionLibraryGUI.getEjbplayable());
+            CollectionLibraryHandler collectionLibraryHandler=new CollectionLibraryHandler(activeProfile, collectionLibraryGUI1);
+            stage.setScene(collectionLibraryGUI1.getScene());
             break;
           case ALBUM:
             newCollection=new Album(1, "New album", activeProfile, new ArrayList<JBAudio>());
+            newCollection=CollectionManagerFactory.getInstance().getCollectionManager().createJBCollection(newCollection);
+            CreationGUI creationGUI=new CreationGUI(activeProfile, newCollection);
+//            CreationGUIHandler CreationGUIHandler=new CreationGUIHandler();
+            stage.setScene(creationGUI.getScene());
+            stage.setTitle("Create your album");
             break;
           case PODCAST:
             newCollection=new Podcast(1, "New podcast", activeProfile, new ArrayList<JBAudio>());
+            newCollection=CollectionManagerFactory.getInstance().getCollectionManager().createJBCollection(newCollection);
+            creationGUI=new CreationGUI(activeProfile, newCollection);
+//            CreationGUIHandler=new CreationGUIHandler();
+            stage.setScene(creationGUI.getScene());
+            stage.setTitle("Create your podcast");
             break;
         }//end-switch
-        newCollection=CollectionManagerFactory.getInstance().getCollectionManager().createJBCollection(newCollection);
-        ArrayList<JBCollection> jbCollectionArrayList=CollectionManagerFactory.getInstance().getCollectionManager().getPlaylists(activeProfile);
 
-        CollectionLibraryGUI collectionLibraryGUI1=new CollectionLibraryGUI(activeProfile, jbCollectionArrayList, collectionLibraryGUI.getEjbplayable());
-        CollectionLibraryHandler collectionLibraryHandler=new CollectionLibraryHandler(activeProfile, collectionLibraryGUI1);
-
-        Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
-        stage.setScene(collectionLibraryGUI1.getScene());
-        stage.setTitle("Collection");
         stage.setWidth(previousDimension.getWidth());
         stage.setHeight(previousDimension.getHeight());
       }

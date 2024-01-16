@@ -31,6 +31,7 @@ public class CollectionViewGUI{
   private static final int clientWidth=(int)Screen.getPrimary().getBounds().getWidth();
   private static final int clientHeight=(int)Screen.getPrimary().getBounds().getHeight();
   private CollectionHeader collectionHeader;
+  private JBCollection jbCollection;
   private GridPane gp;
   private Scene scene;
 
@@ -39,7 +40,8 @@ public class CollectionViewGUI{
   /*---------------------------------------*/
   public CollectionViewGUI(JBProfile jbProfile, JBCollection jbCollection){
     super();
-    initComponents(jbProfile, jbCollection);
+    this.jbCollection=jbCollection;
+    initComponents(jbProfile);
   }
 
   /*---------------------------------------*/
@@ -52,15 +54,16 @@ public class CollectionViewGUI{
   public CollectionHeader getCollectionHeader(){
     return collectionHeader;
   }
-
+  public JBCollection getJbCollection(){
+    return jbCollection;
+  }
   public GridPane getGp(){
     return gp;
   }
-
   /*---------------------------------------*/
   //Metodi
   /*---------------------------------------*/
-  private void initComponents(JBProfile activeProfile, JBCollection jbCollection){
+  private void initComponents(JBProfile activeProfile){
     collectionHeader=new CollectionHeader(activeProfile, jbCollection);
     ObservableList<JBAudio> songList=FXCollections.observableArrayList();
     try{

@@ -4,8 +4,11 @@ import it.unipv.ingsfw.JavaBeats.model.IJBResearchable;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.playable.collection.Playlist;
 
+import java.io.IOException;
 import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public abstract class JBProfile implements IJBResearchable{
 
@@ -95,14 +98,17 @@ public abstract class JBProfile implements IJBResearchable{
 
 
   @Override
-  public boolean equals(Object obj) {
-    JBProfile profile= (JBProfile) obj;
-    if (this.username.equals(profile.getUsername()) && this.mail.equals(profile.getMail()) && this.password.equals(profile.getPassword()) && this.name.equals(profile.getName())
-    && this.surname.equals(profile.getSurname()) && this.biography.equals(profile.getBiography()) && this.profilePicture==profile.getProfilePicture()){
-      return true;
-    }else{
-      return false;
-    }
+  public boolean equals(Object obj){
+    JBProfile profile=(JBProfile)obj;
+    try{
+      if(this.username.equals(profile.getUsername()) && this.mail.equals(profile.getMail()) && this.password.equals(profile.getPassword()) && this.name.equals(profile.getName()) && this.surname.equals(profile.getSurname()) && this.biography.equals(profile.getBiography()) && Arrays.equals(this.profilePicture.getBinaryStream().readAllBytes(), profile.getProfilePicture().getBinaryStream().readAllBytes())){
+        return true;
+      }else{
+        return false;
+      }//end-if
+    }catch(IOException | SQLException e){
+      throw new RuntimeException(e);
+    }//end-try
   }
 }
 

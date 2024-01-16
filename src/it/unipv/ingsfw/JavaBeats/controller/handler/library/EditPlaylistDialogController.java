@@ -40,6 +40,7 @@ public class EditPlaylistDialogController{
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
 
         FileChooser fileChooser=new FileChooser();
+        fileChooser.setTitle("Select playlist image");
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("PNG file", "*png"));
         File f=fileChooser.showOpenDialog(stage);
         byte[] fileContent=new byte[(int)f.length()];

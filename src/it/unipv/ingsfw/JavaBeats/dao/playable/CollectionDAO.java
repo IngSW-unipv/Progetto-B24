@@ -223,9 +223,14 @@ public class CollectionDAO implements ICollectionDAO{
 
       rs1=st1.executeQuery();
 
+      ArrayList<Playlist> resultSetAlbums=new ArrayList<>();
       while(rs1.next()){
-        result.add(getPlaylist(new Playlist(rs1.getInt("idPlaylist"), null, null)));
-      }
+        resultSetAlbums.add(new Playlist(rs1.getInt("idPlaylist"), null, null));
+      }//end-while
+
+      for(Playlist p: resultSetAlbums){
+        result.add(getPlaylist(p));
+      }//end-foreach
 
     }catch(Exception e){
       e.printStackTrace();
@@ -253,9 +258,14 @@ public class CollectionDAO implements ICollectionDAO{
 
       rs1=st1.executeQuery();
 
+      ArrayList<Album> resultSetAlbums=new ArrayList<>();
       while(rs1.next()){
-        result.add(getAlbum(new Album(rs1.getInt("idAlbum"), null, null, null)));
-      }
+        resultSetAlbums.add(new Album(rs1.getInt("idAlbum"), null, null, null));
+      }//end-while
+
+      for(Album p: resultSetAlbums){
+        result.add(getAlbum(p));
+      }//end-foreach
 
     }catch(Exception e){
       e.printStackTrace();
@@ -283,9 +293,14 @@ public class CollectionDAO implements ICollectionDAO{
 
       rs1=st1.executeQuery();
 
+      ArrayList<Podcast> resultSetPodcasts=new ArrayList<>();
       while(rs1.next()){
-        result.add(getPodcast(new Podcast(rs1.getInt("idPlaylist"), null, null, null)));
-      }
+        resultSetPodcasts.add(new Podcast(rs1.getInt("idAlbum"), null, null, null));
+      }//end-while
+
+      for(Podcast p: resultSetPodcasts){
+        result.add(getAlbum(p));
+      }//end-foreach
 
     }catch(Exception e){
       e.printStackTrace();
@@ -295,8 +310,6 @@ public class CollectionDAO implements ICollectionDAO{
 
     return result;
   }
-
-
 
 
   //PRIVATE METHODS:
