@@ -2,6 +2,7 @@ package it.unipv.ingsfw.JavaBeats.model.playable.audio;
 
 import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
 import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
+import javafx.scene.media.*;
 
 import java.sql.Blob;
 import java.sql.Date;
@@ -22,6 +23,17 @@ public class Song extends JBAudio {
 	@Override
 	public String toString() {
 		return "SONG      -  Title: " + this.getMetadata().getTitle() + ";  Artist Mail: " + this.getMetadata().getArtist().getMail() + ".";
+	}
+
+	//PlayFX
+
+	@Override
+	public void playFX(){
+
+		Media song = new Media(this.getAudioFileBlob().toString());
+		MediaPlayer mediaPlayer = new MediaPlayer(song);
+		mediaPlayer.play();
+
 	}
 
 }

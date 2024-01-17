@@ -21,7 +21,7 @@ public interface IAudioDAO {
     Episode getEpisode(JBAudio audio, JBProfile activeProfile);
     Episode getEpisode(JBAudio audio);
     void addToListeningHistory(JBAudio audio, JBProfile profile);
-    ArrayList<JBAudio> selectByPlalist(Playlist playlist);
+    ArrayList<JBAudio> selectByPlaylist(Playlist playlist);
     ArrayList<Song> selectByAlbum(Album album);
     ArrayList<Episode> selectByPodcast(Podcast podcast);
     ArrayList<JBAudio> selectFavorites(JBProfile activeProfile);

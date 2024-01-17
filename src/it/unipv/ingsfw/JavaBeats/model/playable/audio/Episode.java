@@ -2,6 +2,8 @@ package it.unipv.ingsfw.JavaBeats.model.playable.audio;
 
 import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
 import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 import java.sql.Blob;
 import java.sql.Date;
@@ -24,4 +26,12 @@ public class Episode extends JBAudio {
 		return "EPISODE   -  Title: " + this.getMetadata().getTitle() + ";  Artist Mail: " + this.getMetadata().getArtist().getMail() + ".";
 	}
 
+	@Override
+	public void playFX(){
+
+		Media episode = new Media(this.getAudioFileBlob().toString());
+		MediaPlayer mediaPlayer = new MediaPlayer(episode);
+		mediaPlayer.play();
+
+	}
 }

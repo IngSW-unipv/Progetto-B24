@@ -3,8 +3,10 @@ package it.unipv.ingsfw.JavaBeats.model.playable.collection;
 import java.sql.Blob;
 import java.util.ArrayList;
 
+import it.unipv.ingsfw.JavaBeats.dao.playable.AudioDAO;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.Episode;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
+import it.unipv.ingsfw.JavaBeats.model.playable.audio.Song;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 
 public class Podcast extends JBCollection{
@@ -47,5 +49,15 @@ public class Podcast extends JBCollection{
   public String toString(){
     return "PODCAST   -  Name: "+this.getName()+";  Creator Mail: "+this.getCreator().getMail()+".";
   }
+
+  @Override
+  public void playFX(){
+    AudioDAO a= new AudioDAO();
+    ArrayList<Episode> podcast=a.selectByPodcast(this);
+    for(Episode episode: podcast){
+      episode.playFX();
+    }
+  }
+
 
 }

@@ -72,7 +72,11 @@ public class Songbar extends GridPane{
     songArtist.setFont(Font.font("Verdana", FontWeight.NORMAL, FontPosture.REGULAR, 14));
     songArtist.setTextFill(Color.LIGHTGRAY);
 
-    VBox songLabelVbox=new VBox(5, songTitle, songArtist);
+    Label songGenre=new Label("Unknown Genre");
+    songArtist.setFont(Font.font("Verdana", FontWeight.NORMAL, FontPosture.REGULAR, 12));
+    songArtist.setTextFill(Color.LIGHTGRAY);
+
+    VBox songLabelVbox=new VBox(5, songTitle, songArtist, songGenre);
     songLabelVbox.setAlignment(Pos.CENTER_LEFT);
 
     //Heart

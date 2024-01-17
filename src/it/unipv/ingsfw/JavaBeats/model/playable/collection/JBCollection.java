@@ -71,7 +71,7 @@ public abstract class JBCollection implements IJBPlayable{
   }
   public void play(EJBMODE mode){
   }
-  public void play(){
+  public void playFX(){
   }
 
 

@@ -237,7 +237,7 @@ public class AudioDAO implements IAudioDAO {
     }
 
     @Override
-    public ArrayList<JBAudio> selectByPlalist(Playlist playlist) {
+    public ArrayList<JBAudio> selectByPlaylist(Playlist playlist) {
         connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
         PreparedStatement st;
         ResultSet rs;

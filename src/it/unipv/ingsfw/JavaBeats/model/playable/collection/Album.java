@@ -1,5 +1,6 @@
 package it.unipv.ingsfw.JavaBeats.model.playable.collection;
 
+import it.unipv.ingsfw.JavaBeats.dao.playable.AudioDAO;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.Song;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
@@ -46,6 +47,15 @@ public class Album extends JBCollection{
   @Override
   public String toString(){
     return "ALBUM     -  Name: "+this.getName()+";  Creator Mail: "+this.getCreator().getMail()+".";
+  }
+
+  @Override
+  public void playFX(){
+    AudioDAO a= new AudioDAO();
+    ArrayList<Song> album=a.selectByAlbum(this);
+    for(Song song: album){
+      song.playFX();
+    }
   }
 
 }
