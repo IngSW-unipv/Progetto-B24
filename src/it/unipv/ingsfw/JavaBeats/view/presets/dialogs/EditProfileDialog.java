@@ -30,7 +30,6 @@ public class EditProfileDialog extends Dialog<JBCollection>{
   private TextField surnameTextField;
   private TextArea biography;
   private Button inputImageButton;
-  private Button switchButton;
   private Button saveButton;
   private Button cancelButton;
 
@@ -88,9 +87,7 @@ public class EditProfileDialog extends Dialog<JBCollection>{
   public TextArea getBiography(){
     return biography;
   }
-  public Button getSwitchButton(){
-    return switchButton;
-  }
+
   /*---------------------------------------*/
   //Metodi
   /*---------------------------------------*/
@@ -141,21 +138,7 @@ public class EditProfileDialog extends Dialog<JBCollection>{
     HBox imageTextInputHBox=new HBox(20, inputImageButton, namePrivacyVBox);
     imageTextInputHBox.setAlignment(Pos.CENTER_LEFT);
 
-    /* Adding button to switch from user to artist and vice-versa */
-    try{
-      User u=(User)originalProfile;
-      switchButton=new Button("Switch to artist");
-    }catch(ClassCastException c){
-      switchButton=new Button("Switch to user");
-    }//end-try
-    switchButton.setUnderline(true);
-    switchButton.setBackground(bgHome);
-    switchButton.setFont(Font.font("Verdana", FontWeight.NORMAL, FontPosture.ITALIC, 14));
-    switchButton.setTextFill(Color.LIGHTGRAY);
-    switchButton.setCursor(Cursor.HAND);
-
-    HBox switchButtonHBox=new HBox(switchButton);
-    VBox mainVBox=new VBox(15, imageTextInputHBox, switchButtonHBox);
+    VBox mainVBox=new VBox(imageTextInputHBox);
     mainVBox.setAlignment(Pos.CENTER_LEFT);
 
     /* Chosen layout for the dialog */

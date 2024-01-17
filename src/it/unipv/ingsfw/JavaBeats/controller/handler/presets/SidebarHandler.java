@@ -59,6 +59,10 @@ public class SidebarHandler{
     return instance;
   }
 
+  public static void setInstanceNull(){
+    instance=null;
+  }
+
   private void initComponents(JBProfile activeProfile){
     //HomeButtonHandler
     EventHandler<ActionEvent> homeButtonHandler=new EventHandler<ActionEvent>(){

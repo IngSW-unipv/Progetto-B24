@@ -1,12 +1,16 @@
 package it.unipv.ingsfw.JavaBeats.controller.handler;
+import it.unipv.ingsfw.JavaBeats.controller.factory.ProfileManagerFactory;
 import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.model.profile.User;
 import it.unipv.ingsfw.JavaBeats.view.presets.dialogs.EditProfileDialog;
+import it.unipv.ingsfw.JavaBeats.view.primary.home.HomePageGUI;
 import it.unipv.ingsfw.JavaBeats.view.primary.profile.ProfileViewGUI;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Dimension2D;
 import javafx.scene.Node;
+import javafx.scene.control.ButtonType;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -60,8 +64,32 @@ public class ProfileViewHandler{
         }//end-if
       }
     };
+    EventHandler<ActionEvent> switchToArtisButtonHandler=new EventHandler<>(){
+      @Override
+      public void handle(ActionEvent actionEvent){
+        Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+
+        try{
+          Artist artist=ProfileManagerFactory.getInstance().getProfileManager().switchUser((User)originalProfile);
+          HomePageGUI homePageGUI=new HomePageGUI(artist);
+          HomePageHandler homePageHandler=new HomePageHandler(homePageGUI, artist);
+
+//          ProfileViewGUI profileViewGUI=new ProfileViewGUI(artist, artist);
+//          ProfileViewHandler profileViewHandler=new ProfileViewHandler(profileViewGUI, artist);
+
+          Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
+          stage.setScene(homePageGUI.getScene());
+          stage.setTitle("Profile");
+          stage.setWidth(previousDimension.getWidth());
+          stage.setHeight(previousDimension.getHeight());
+        }catch(ClassCastException c){
+          /* do something */
+        }//end-try
+      }
+    };
     try{
       gui.getProfileHeader().getEditButton().setOnAction(editButtonHandler);
+      gui.getProfileHeader().getSwitchButton().setOnAction(switchToArtisButtonHandler);
     }catch(NullPointerException n){
 
     }//end-try

@@ -20,6 +20,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+
 public class EditProfileDialogController{
   /*---------------------------------------*/
   //Attributi
@@ -64,31 +65,6 @@ public class EditProfileDialogController{
         }//end-try
       }
     };
-    EventHandler<ActionEvent> switchToArtisButtonHandler=new EventHandler<>(){
-      @Override
-      public void handle(ActionEvent actionEvent){
-        Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        profileDialog.getDialogPane().getButtonTypes().addAll(ButtonType.CANCEL);
-        profileDialog.close();
-
-        try{
-          Artist artist=ProfileManagerFactory.getInstance().getProfileManager().switchUser((User)profileDialog.getOriginalProfile());
-          HomePageGUI homePageGUI=new HomePageGUI(artist);
-          HomePageHandler homePageHandler=new HomePageHandler(homePageGUI, artist);
-
-//          ProfileViewGUI profileViewGUI=new ProfileViewGUI(artist, artist);
-//          ProfileViewHandler profileViewHandler=new ProfileViewHandler(profileViewGUI, artist);
-
-          Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
-          stage.setScene(homePageGUI.getScene());
-          stage.setTitle("Profile");
-          stage.setWidth(previousDimension.getWidth());
-          stage.setHeight(previousDimension.getHeight());
-        }catch(ClassCastException c){
-          /* do something */
-        }//end-try
-      }
-    };
     EventHandler<ActionEvent> saveButtonHandler=new EventHandler<>(){
       @Override
       public void handle(ActionEvent actionEvent){
@@ -111,7 +87,6 @@ public class EditProfileDialogController{
       }
     };
     profileDialog.getInputImageButton().setOnAction(inputImageButtonHandler);
-    profileDialog.getSwitchButton().setOnAction(switchToArtisButtonHandler);
     profileDialog.getSaveButton().setOnAction(saveButtonHandler);
     profileDialog.getCancelButton().setOnAction(cancelButtonHandler);
   }

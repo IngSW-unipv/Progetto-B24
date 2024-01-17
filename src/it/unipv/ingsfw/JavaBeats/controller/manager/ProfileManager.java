@@ -1,5 +1,6 @@
 package it.unipv.ingsfw.JavaBeats.controller.manager;
 
+import it.unipv.ingsfw.JavaBeats.controller.handler.presets.SidebarHandler;
 import it.unipv.ingsfw.JavaBeats.dao.playable.AudioDAO;
 import it.unipv.ingsfw.JavaBeats.dao.playable.CollectionDAO;
 import it.unipv.ingsfw.JavaBeats.dao.playable.IAudioDAO;
@@ -65,6 +66,7 @@ public class ProfileManager{
     activeProfile=p.get(profile);
     return activeProfile;
   }
+
   public Artist switchUser(User user) throws ClassCastException{
     ProfileDAO profileDAO=new ProfileDAO();
     Artist artist=new Artist(user.getUsername(), user.getMail(), user.getPassword(), user.getName(), user.getSurname(), user.getBiography(), user.getProfilePicture(), 0, user.getListeningHistory(), user.getFavorites());
@@ -80,7 +82,9 @@ public class ProfileManager{
     activeProfile=profileDAO.get(artist);
 
     Sidebar.setInstanceNull();
+    SidebarHandler.setInstanceNull();
     Songbar.setInstanceNull();
+
 
     return (Artist)activeProfile;
   }
