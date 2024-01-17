@@ -151,7 +151,7 @@ public class CreationGUI{
 
     //Scene
     Sidebar sidebar=Sidebar.getInstance(activeProfile);
-    Songbar songbar=Songbar.getInstance();
+    Songbar songbar=Songbar.getInstance(activeProfile);
     GridPane gp=new GridPane();
     gp.addRow(0, sidebar, creationVBox);
     gp.add(songbar, 0, 1, 2, 1);

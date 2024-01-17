@@ -129,7 +129,7 @@ public class CollectionLibraryGUI{
 
     /* Setup of left Sidebar, bottom songbar and center collection */
     Sidebar sidebar=Sidebar.getInstance(activeProfile);
-    Songbar songbar=Songbar.getInstance();
+    Songbar songbar=Songbar.getInstance(activeProfile);
     GridPane gp=new GridPane();
     gp.addRow(0, sidebar, collectionVBox);
     gp.add(songbar, 0, 1, 2, 1);

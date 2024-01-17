@@ -34,7 +34,7 @@ public class HomePageGUI{
   private void initComponents(JBProfile activeProfile){
     /* Setup of left Sidebar, bottom songbar and center home */
     Sidebar sidebar=Sidebar.getInstance(activeProfile);
-    Songbar songbar=Songbar.getInstance();
+    Songbar songbar=Songbar.getInstance(activeProfile);
     Home home=new Home(activeProfile);
 
     GridPane gp=new GridPane();

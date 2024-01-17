@@ -101,7 +101,7 @@ public abstract class JBProfile implements IJBResearchable{
   public boolean equals(Object obj){
     JBProfile profile=(JBProfile)obj;
     try{
-      if(this.username.equals(profile.getUsername()) && this.mail.equals(profile.getMail()) && this.password.equals(profile.getPassword()) && this.name.equals(profile.getName()) && this.surname.equals(profile.getSurname()) && this.biography.equals(profile.getBiography()) && Arrays.equals(this.profilePicture.getBinaryStream().readAllBytes(), profile.getProfilePicture().getBinaryStream().readAllBytes())){
+      if(this.username.equals(profile.getUsername()) && this.mail.equals(profile.getMail()) && this.password.equals(profile.getPassword()) && this.name.equals(profile.getName()) && this.surname.equals(profile.getSurname()) && this.biography.equals(profile.getBiography()) && Arrays.equals(this.profilePicture.getBinaryStream().readAllBytes(), profile.getProfilePicture().getBinaryStream().readAllBytes()) && this.getClass().equals(profile.getClass())){
         return true;
       }else{
         return false;

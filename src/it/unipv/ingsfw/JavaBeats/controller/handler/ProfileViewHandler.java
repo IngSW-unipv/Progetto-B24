@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 
 import java.sql.SQLException;
 
-public class ProfileViewHandler {
+public class ProfileViewHandler{
   /*---------------------------------------*/
   //Attributi
   /*---------------------------------------*/
@@ -40,14 +40,7 @@ public class ProfileViewHandler {
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
         gui.getGp().setEffect(new BoxBlur(10, 10, 10));
 
-        EditProfileDialog dialog=null;
-        try{
-//          dialog=new EditProfileDialog(stage, originalProfile, (User)originalProfile, (User)originalProfile.getCopy(originalProfile));
-          dialog=new EditProfileDialog(stage, (User)originalProfile, new User("us", "mail", "psw"));
-        }catch(ClassCastException c){
-//          dialog=new EditProfileDialog(stage, originalProfile, (Artist)originalProfile, (Artist)originalProfile.getCopy(originalProfile));
-          dialog=new EditProfileDialog(stage, (Artist)originalProfile, new Artist("us", "mail", "psw"));
-        }//end-try
+        EditProfileDialog dialog=new EditProfileDialog(stage, originalProfile, originalProfile.getCopy());
         EditProfileDialogController editProfileDialogController=new EditProfileDialogController(dialog);
         dialog.showAndWait();
         gui.getGp().setEffect(null); /* Removing blur effect */
@@ -70,7 +63,7 @@ public class ProfileViewHandler {
     try{
       gui.getProfileHeader().getEditButton().setOnAction(editButtonHandler);
     }catch(NullPointerException n){
-      
+
     }//end-try
   }
   /*---------------------------------------*/

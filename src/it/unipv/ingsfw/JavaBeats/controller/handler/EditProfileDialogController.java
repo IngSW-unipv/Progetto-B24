@@ -1,8 +1,15 @@
 package it.unipv.ingsfw.JavaBeats.controller.handler;
+import it.unipv.ingsfw.JavaBeats.controller.factory.ProfileManagerFactory;
+import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
+import it.unipv.ingsfw.JavaBeats.model.profile.User;
 import it.unipv.ingsfw.JavaBeats.view.presets.dialogs.EditProfileDialog;
+import it.unipv.ingsfw.JavaBeats.view.primary.home.HomePageGUI;
+import it.unipv.ingsfw.JavaBeats.view.primary.profile.ProfileViewGUI;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Dimension2D;
 import javafx.scene.Node;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -35,7 +42,7 @@ public class EditProfileDialogController{
   //Metodi
   /*---------------------------------------*/
   private void initComponents(){
-    EventHandler<ActionEvent> inputImageButtonHandler=new EventHandler<ActionEvent>(){
+    EventHandler<ActionEvent> inputImageButtonHandler=new EventHandler<>(){
       @Override
       public void handle(ActionEvent actionEvent){
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
@@ -57,7 +64,32 @@ public class EditProfileDialogController{
         }//end-try
       }
     };
-    EventHandler<ActionEvent> saveButtonHandler=new EventHandler<ActionEvent>(){
+    EventHandler<ActionEvent> switchToArtisButtonHandler=new EventHandler<>(){
+      @Override
+      public void handle(ActionEvent actionEvent){
+        Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+        profileDialog.getDialogPane().getButtonTypes().addAll(ButtonType.CANCEL);
+        profileDialog.close();
+
+        try{
+          Artist artist=ProfileManagerFactory.getInstance().getProfileManager().switchUser((User)profileDialog.getOriginalProfile());
+          HomePageGUI homePageGUI=new HomePageGUI(artist);
+          HomePageHandler homePageHandler=new HomePageHandler(homePageGUI, artist);
+
+//          ProfileViewGUI profileViewGUI=new ProfileViewGUI(artist, artist);
+//          ProfileViewHandler profileViewHandler=new ProfileViewHandler(profileViewGUI, artist);
+
+          Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
+          stage.setScene(homePageGUI.getScene());
+          stage.setTitle("Profile");
+          stage.setWidth(previousDimension.getWidth());
+          stage.setHeight(previousDimension.getHeight());
+        }catch(ClassCastException c){
+          /* do something */
+        }//end-try
+      }
+    };
+    EventHandler<ActionEvent> saveButtonHandler=new EventHandler<>(){
       @Override
       public void handle(ActionEvent actionEvent){
         try{
@@ -68,17 +100,18 @@ public class EditProfileDialogController{
         profileDialog.getNewProfile().setBiography(profileDialog.getBiography().getText());
         profileDialog.getNewProfile().setName(profileDialog.getNameTextField().getText());
         profileDialog.getNewProfile().setSurname(profileDialog.getSurnameTextField().getText());
-        /* Here we need to check whether the username is already present, for we assume is not */
+        /* Here we need to check whether the username is already present, for now we assume is not */
         profileDialog.getNewProfile().setUsername(profileDialog.getUsernameTextField().getText());
       }
     };
     EventHandler<ActionEvent> cancelButtonHandler=new EventHandler<ActionEvent>(){
       @Override
       public void handle(ActionEvent actionEvent){
-
+        System.out.println("Premuto cancel");
       }
     };
     profileDialog.getInputImageButton().setOnAction(inputImageButtonHandler);
+    profileDialog.getSwitchButton().setOnAction(switchToArtisButtonHandler);
     profileDialog.getSaveButton().setOnAction(saveButtonHandler);
     profileDialog.getCancelButton().setOnAction(cancelButtonHandler);
   }

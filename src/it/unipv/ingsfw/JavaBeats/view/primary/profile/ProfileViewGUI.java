@@ -27,7 +27,6 @@ public class ProfileViewGUI{
   public ProfileViewGUI(JBProfile activeProfile, JBProfile searchedProfile){
     initComponents(activeProfile, searchedProfile);
   }
-
   /*---------------------------------------*/
   //Getter/Setter
   /*---------------------------------------*/
@@ -62,7 +61,7 @@ public class ProfileViewGUI{
 
     gp=new GridPane();
     gp.addRow(0, Sidebar.getInstance(activeProfile), mainContent);
-    gp.add(Songbar.getInstance(), 0, 1, 2, 1);
+    gp.add(Songbar.getInstance(activeProfile), 0, 1, 2, 1);
 
     ColumnConstraints ccSidebar=new ColumnConstraints();
     ColumnConstraints ccHome=new ColumnConstraints();
