@@ -223,12 +223,12 @@ public class CollectionDAO implements ICollectionDAO{
 
       rs1=st1.executeQuery();
 
-      ArrayList<Playlist> resultSetAlbums=new ArrayList<>();
+      ArrayList<Playlist> resultSetPlaylists=new ArrayList<>();
       while(rs1.next()){
-        resultSetAlbums.add(new Playlist(rs1.getInt("idPlaylist"), null, null));
+        resultSetPlaylists.add(new Playlist(rs1.getInt("idPlaylist"), null, null));
       }//end-while
 
-      for(Playlist p: resultSetAlbums){
+      for(Playlist p: resultSetPlaylists){
         result.add(getPlaylist(p));
       }//end-foreach
 

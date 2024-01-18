@@ -5,8 +5,12 @@ import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.Blob;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.sql.Time;
 
 public class Episode extends JBAudio {
@@ -28,10 +32,18 @@ public class Episode extends JBAudio {
 
 	@Override
 	public void playFX(){
+		try{
+			File tmp= new File("tmp");
+			tmp.deleteOnExit();
+			FileOutputStream fileOutputStream= new FileOutputStream(tmp);
+			fileOutputStream.write(this.getAudioFileBlob().getBinaryStream().readAllBytes());
+			Media episode = new Media("tmp");
+			MediaPlayer mediaPlayer = new MediaPlayer(episode);
+			mediaPlayer.play();
+			fileOutputStream.close();
 
-		Media episode = new Media(this.getAudioFileBlob().toString());
-		MediaPlayer mediaPlayer = new MediaPlayer(episode);
-		mediaPlayer.play();
-
+		}catch(IOException | SQLException e){
+			throw new RuntimeException(e);
+		}
 	}
 }

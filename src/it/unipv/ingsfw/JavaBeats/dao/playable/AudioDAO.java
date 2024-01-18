@@ -251,8 +251,13 @@ public class AudioDAO implements IAudioDAO {
 
             rs = st.executeQuery();
 
+            ArrayList<JBAudio> resultSetJBaudios= new ArrayList<>();
             while(rs.next())
-                result.add(get(new Song(rs.getInt("idAudio"), null, null, null)));      //get will return either Song or Episode (only cares about the id of the JBAudio input)
+                resultSetJBaudios.add(new Song(rs.getInt("idAudio"), null, null, null));      //get will return either Song or Episode (only cares about the id of the JBAudio input)
+
+            for(JBAudio audio: resultSetJBaudios){
+                result.add(get(audio));
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -278,8 +283,12 @@ public class AudioDAO implements IAudioDAO {
 
             rs = st.executeQuery();
 
-            while (rs.next()) {
-                result.add( (Song) get(new Song(rs.getInt("idSong"), null, null, null) ) );
+            ArrayList<Song> resultSetSong= new ArrayList<>();
+            while(rs.next())
+                resultSetSong.add(new Song(rs.getInt("idAudio"), null, null, null));      //get will return either Song or Episode (only cares about the id of the JBAudio input)
+
+            for(Song song: resultSetSong){
+                result.add(getSong(song));
             }
 
         } catch (Exception e) {
@@ -306,8 +315,12 @@ public class AudioDAO implements IAudioDAO {
 
             rs = st.executeQuery();
 
-            while (rs.next()) {
-                result.add( (Episode) get(new Episode(rs.getInt("idEpisode"), null, null, null) ) );
+            ArrayList<Episode> resultSetJBaudios= new ArrayList<>();
+            while(rs.next())
+                resultSetJBaudios.add(new Episode(rs.getInt("idAudio"), null, null, null));      //get will return either Song or Episode (only cares about the id of the JBAudio input)
+
+            for(Episode episode: resultSetJBaudios){
+                result.add(getEpisode(episode));
             }
 
         } catch (Exception e) {
