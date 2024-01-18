@@ -20,6 +20,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.sql.Time;
 
 public class ProfileManager{
 
@@ -67,20 +68,37 @@ public class ProfileManager{
     return activeProfile;
   }
 
-  public Artist switchUser(User user) throws ClassCastException{
+  public JBProfile switchProfileType(JBProfile jbProfile) throws ClassCastException{
     ProfileDAO profileDAO=new ProfileDAO();
-    Artist artist=new Artist(user.getUsername(), user.getMail(), user.getPassword(), user.getName(), user.getSurname(), user.getBiography(), user.getProfilePicture(), 0, user.getListeningHistory(), user.getFavorites());
-    profileDAO.remove(user);
-    profileDAO.insert(artist);
-
     AudioDAO audioDAO=new AudioDAO();
-    audioDAO.updateIsFavorite(artist);
-    for(JBAudio jbAudio: artist.getListeningHistory()){
-      audioDAO.addToListeningHistory(jbAudio, artist);
-    }//end-foreach
 
-    activeProfile=profileDAO.get(artist);
+    /* If the profile passed is a user then is switched to an artist and vice-versa */
+    try{
+      User user=(User) jbProfile;
+      Artist artist=new Artist(user.getUsername(), user.getMail(), user.getPassword(), user.getName(), user.getSurname(), user.getBiography(), user.getProfilePicture(), 0, user.getListeningHistory(), user.getFavorites());
+      profileDAO.remove(user);
+      profileDAO.insert(artist);
 
-    return (Artist)activeProfile;
+      audioDAO.updateIsFavorite(artist);
+      for(JBAudio jbAudio: artist.getListeningHistory()){
+        audioDAO.addToListeningHistory(jbAudio, artist);
+      }//end-foreach
+
+      activeProfile=profileDAO.get(artist);
+    }catch (ClassCastException c){
+      Artist artist=(Artist)jbProfile;
+      User user=new User(artist.getUsername(), artist.getMail(), artist.getPassword(), artist.getName(), artist.getSurname(), artist.getBiography(), artist.getProfilePicture(), true, new Time(0), artist.getListeningHistory(), artist.getFavorites());
+
+      profileDAO.remove(artist);
+      profileDAO.insert(user);
+
+      audioDAO.updateIsFavorite(user);
+      for(JBAudio jbAudio: user.getListeningHistory()){
+        audioDAO.addToListeningHistory(jbAudio, user);
+      }//end-foreach
+
+      activeProfile=profileDAO.get(user);
+    }//end-try
+    return activeProfile;
   }
 }

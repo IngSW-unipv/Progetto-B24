@@ -103,30 +103,33 @@ public class ProfileDAO implements IProfileDAO{
   public void update(JBProfile profile){
     JBProfile oldProfile=get(profile);        //get profile as it is in DB to check for changes
 
-    if(profile.getUsername()!=null)          //check for null before using .equals to avoid exceptions
-      if(!(profile.getUsername().equals(oldProfile.getUsername())))
-        updateUsername(profile);
+    try {
+      if (profile.getUsername() != null)          //check for null before using .equals to avoid exceptions
+        if (!(profile.getUsername().equals(oldProfile.getUsername())))
+          updateUsername(profile);
 
-    if(profile.getPassword()!=null)
-      if(!(profile.getPassword().equals(oldProfile.getPassword())))
-        updatePassword(profile);
+      if (profile.getPassword() != null)
+        if (!(profile.getPassword().equals(oldProfile.getPassword())))
+          updatePassword(profile);
 
-    if(profile.getName()!=null)
-      if(!(profile.getName().equals(oldProfile.getName())))
-        updateName(profile);
+      if (profile.getName() != null)
+        if (!(profile.getName().equals(oldProfile.getName())))
+          updateName(profile);
 
-    if(profile.getSurname()!=null)
-      if(!(profile.getSurname().equals(oldProfile.getSurname())))
-        updateSurname(profile);
+      if (profile.getSurname() != null)
+        if (!(profile.getSurname().equals(oldProfile.getSurname())))
+          updateSurname(profile);
 
-    if(profile.getBiography()!=null)
-      if(!(profile.getBiography().equals(oldProfile.getBiography())))
-        updateBiography(profile);
+      if (profile.getBiography() != null)
+        if (!(profile.getBiography().equals(oldProfile.getBiography())))
+          updateBiography(profile);
 
-    if(profile.getProfilePicture()!=null)
-      if(!(profile.getProfilePicture().equals(oldProfile.getProfilePicture())))
-        updateProfilePicture(profile);
-
+      if (profile.getProfilePicture() != null)
+        if (!Arrays.equals(profile.getProfilePicture().getBinaryStream().readAllBytes(), profile.getProfilePicture().getBinaryStream().readAllBytes()))
+          updateProfilePicture(profile);
+    }catch(SQLException | IOException s){
+      throw new RuntimeException(s);
+    }
     try{                           //if profile is a User
       User userProfile=(User)profile;
       User oldUserProfile=(User)oldProfile;

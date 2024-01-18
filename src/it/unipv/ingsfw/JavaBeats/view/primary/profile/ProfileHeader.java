@@ -26,6 +26,7 @@ public class ProfileHeader extends VBox{
   //Attributi
   /*---------------------------------------*/
   private static final Font fontLabels=Font.font("Verdana", FontWeight.NORMAL, FontPosture.REGULAR, 14);
+  private static final Background bgHome=new Background(new BackgroundFill(Color.rgb(15, 15, 15), CornerRadii.EMPTY, Insets.EMPTY));
   private ImageView profileImageView;
   private Label usernameLabel;
   private Label nameLabel;
@@ -165,14 +166,15 @@ public class ProfileHeader extends VBox{
         switchButton=new Button("Switch to user");
       }//end-try
       switchButton.setUnderline(true);
-      switchButton.setBackground(super.getBackground());
       switchButton.setFont(Font.font("Verdana", FontWeight.NORMAL, FontPosture.ITALIC, 14));
       switchButton.setTextFill(Color.LIGHTGRAY);
+      switchButton.setStyle("-fx-background-color: rgb(15, 15, 15)");
       switchButton.setCursor(Cursor.HAND);
 
-      HBox editButtonHBox=new HBox(30, editButton, switchButton);
+      HBox editSwitchButtonHBox=new HBox(30, editButton, switchButton);
+      editSwitchButtonHBox.setAlignment(Pos.BOTTOM_LEFT);
 
-      getChildren().addAll(imageLabelsHBox, biographyHBox, editButtonHBox);
+      getChildren().addAll(imageLabelsHBox, biographyHBox, editSwitchButtonHBox);
     }else{
       getChildren().addAll(imageLabelsHBox, biographyHBox);
     }//end-if
