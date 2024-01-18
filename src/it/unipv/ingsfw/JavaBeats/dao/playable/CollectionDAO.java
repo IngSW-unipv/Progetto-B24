@@ -9,7 +9,6 @@ import it.unipv.ingsfw.JavaBeats.model.profile.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -296,7 +295,7 @@ public class CollectionDAO implements ICollectionDAO{
 
       ArrayList<Podcast> resultSetPodcasts=new ArrayList<>();
       while(rs1.next()){
-        resultSetPodcasts.add(new Podcast(rs1.getInt("idAlbum"), null, null, null));
+        resultSetPodcasts.add(new Podcast(rs1.getInt("idPodcast"), null, null, null));
       }//end-while
 
       for(Podcast p: resultSetPodcasts){

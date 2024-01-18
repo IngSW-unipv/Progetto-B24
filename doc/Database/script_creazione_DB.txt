@@ -69,7 +69,7 @@ create table PodcastEpisodes (
 );
 
 create table Profile (
-    username       varchar(30)          					not null,
+    username       varchar(30)          					not null        unique,
     mail           varchar(100)         					not null 		primary key,
     password       varchar(100)         					not null,
     name           varchar(50)          					null,
