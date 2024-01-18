@@ -64,6 +64,7 @@ public class CreationGUI{
     return create;
   }
   public CreationGUI(JBProfile activeProfile, JBCollection jbCollection){
+    this.newCollection=jbCollection;
     initComponents(activeProfile, jbCollection);
   }
 

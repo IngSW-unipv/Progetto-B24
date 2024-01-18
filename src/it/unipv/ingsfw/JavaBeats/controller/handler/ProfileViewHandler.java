@@ -1,8 +1,11 @@
 package it.unipv.ingsfw.JavaBeats.controller.handler;
 import it.unipv.ingsfw.JavaBeats.controller.factory.ProfileManagerFactory;
+import it.unipv.ingsfw.JavaBeats.controller.handler.presets.SidebarHandler;
 import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.model.profile.User;
+import it.unipv.ingsfw.JavaBeats.view.presets.Sidebar;
+import it.unipv.ingsfw.JavaBeats.view.presets.Songbar;
 import it.unipv.ingsfw.JavaBeats.view.presets.dialogs.EditProfileDialog;
 import it.unipv.ingsfw.JavaBeats.view.primary.home.HomePageGUI;
 import it.unipv.ingsfw.JavaBeats.view.primary.profile.ProfileViewGUI;
@@ -71,9 +74,12 @@ public class ProfileViewHandler{
 
         try{
           JBProfile switchedProfile=ProfileManagerFactory.getInstance().getProfileManager().switchProfileType(originalProfile);
-          HomePageGUI homePageGUI=new HomePageGUI(switchedProfile);
-          HomePageHandler homePageHandler=new HomePageHandler(homePageGUI, switchedProfile);
-
+          /* Re-instantiating Sidebar, SidebarHandler, Songbar and SongbarHandler*/
+          Sidebar.getInstance(switchedProfile);
+          SidebarHandler.getInstance(switchedProfile);
+          Songbar.getInstance(switchedProfile);
+//          SongbarHandler.getInstance(switchedProfile);
+          
           ProfileViewGUI profileViewGUI=new ProfileViewGUI(switchedProfile, switchedProfile);
           ProfileViewHandler profileViewHandler=new ProfileViewHandler(profileViewGUI, switchedProfile);
 

@@ -35,14 +35,13 @@ public class LoginHandler{
     EventHandler<ActionEvent> loginButtonHandler=new EventHandler<ActionEvent>(){
       @Override
       public void handle(ActionEvent actionEvent){
-
-        JBProfile profile=new User(gui.getUsername().getText(), null, gui.getPassword().getText());
+        Stage s=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+        JBProfile profile=new User(gui.getUsername().getText(), gui.getUsername().getText(), gui.getPassword().getText());
 
         //Checks if the profile exists or handles the exception
         try{
           activeProfile=ProfileManagerFactory.getInstance().getProfileManager().login(profile);
           //Login
-          Stage s=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
           HomePageGUI homePageGUI=new HomePageGUI(activeProfile);
           HomePageHandler homePageHandler=new HomePageHandler(homePageGUI, activeProfile);
 

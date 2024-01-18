@@ -69,7 +69,8 @@ public class EditProfileDialogController{
       @Override
       public void handle(ActionEvent actionEvent){
         try{
-          profileDialog.getNewProfile().setProfilePicture(new SerialBlob(fileContent));
+          if(fileContent!=null)
+            profileDialog.getNewProfile().setProfilePicture(new SerialBlob(fileContent));
         }catch(SQLException e){
           throw new RuntimeException(e);
         }//end-try

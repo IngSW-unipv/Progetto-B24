@@ -581,28 +581,29 @@ public class AudioDAO implements IAudioDAO{
       ResultSet rs1;
 
       try{
-        String q1="SELECT genre FROM Genre WHERE genre=?;";
-        st1=connection.prepareStatement(q1);
-        String q2="INSERT INTO Genre(genre) VALUE(?);";
-        st2=connection.prepareStatement(q2);
-        String q3="INSERT INTO AudioGenres(idAudio, genre) VALUE(?, ?);";
-        st3=connection.prepareStatement(q3);
-
         for(String s: genreArray){                                //for every genre
+
+          String q1="SELECT genre FROM Genre WHERE genre=?;";
+          st1=connection.prepareStatement(q1);
 
           st1.setString(1, s);                        //check if genre is already in DB
           rs1=st1.executeQuery();
 
-          if(rs1.getString("genre")==null){         //if genre not in DB
+          if(rs1==null){         //if genre not in DB
+            String q2="INSERT INTO Genre(genre) VALUE(?);";
+            st2=connection.prepareStatement(q2);
+
             st2.setString(1, s);                    //insert new genre
             st2.executeUpdate();
           }
 
+          String q3="INSERT INTO AudioGenres(idAudio, genre) VALUE(?, ?);";
+          st3=connection.prepareStatement(q3);
+
           st3.setInt(1, audio.getId());               //link audio to genre
           st3.setString(2, s);
           st3.executeUpdate();
-
-        }
+        }//end-for
       }catch(Exception e){
         e.printStackTrace();
       }
