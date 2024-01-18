@@ -72,7 +72,7 @@ public class CollectionLibraryHandler{
             newCollection=new Album(1, "New album", activeProfile, new ArrayList<JBAudio>());
             newCollection=CollectionManagerFactory.getInstance().getCollectionManager().createJBCollection(newCollection);
             CreationGUI creationGUI=new CreationGUI(activeProfile, newCollection);
-//            CreationGUIHandler CreationGUIHandler=new CreationGUIHandler();
+            CreationGUIHandler CreationGUIHandler=new CreationGUIHandler(creationGUI);
             stage.setScene(creationGUI.getScene());
             stage.setTitle("Create your album");
             break;
@@ -80,7 +80,7 @@ public class CollectionLibraryHandler{
             newCollection=new Podcast(1, "New podcast", activeProfile, new ArrayList<JBAudio>());
             newCollection=CollectionManagerFactory.getInstance().getCollectionManager().createJBCollection(newCollection);
             creationGUI=new CreationGUI(activeProfile, newCollection);
-//            CreationGUIHandler=new CreationGUIHandler();
+            CreationGUIHandler=new CreationGUIHandler(creationGUI);
             stage.setScene(creationGUI.getScene());
             stage.setTitle("Create your podcast");
             break;

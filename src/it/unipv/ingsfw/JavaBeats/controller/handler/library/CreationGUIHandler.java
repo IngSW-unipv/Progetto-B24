@@ -1,6 +1,8 @@
 package it.unipv.ingsfw.JavaBeats.controller.handler.library;
+import it.unipv.ingsfw.JavaBeats.model.playable.audio.Episode;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.Song;
+import it.unipv.ingsfw.JavaBeats.model.playable.collection.Album;
 import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
 import it.unipv.ingsfw.JavaBeats.view.library.CreationGUI;
 import it.unipv.ingsfw.JavaBeats.view.presets.dialogs.EditPlaylistDialog;
@@ -13,6 +15,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import javax.sql.rowset.serial.SerialBlob;
+import javax.sql.rowset.serial.SerialException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -82,9 +85,16 @@ public class CreationGUIHandler{
             fileInputStream=new FileInputStream(f);
             fileInputStream.read(fileContent);
             fileInputStream.close();
-            Media music=new Media(f.toURI().toString());
-//            music.getMetadata().get();
-//            creationGUI.getNewCollection().getTrackList().add(new SerialBlob(fileContent));
+            Media media=new Media(f.toURI().toString());
+//            media.getMetadata().get();
+            JBAudio jbAudio=null;
+            try{
+              Album a=(Album) creationGUI.getNewCollection();
+//              jbAudio=new Song();
+            }catch(ClassCastException c){
+//              jbAudio=new Episode();
+            }//end-try
+            creationGUI.getNewCollection().getTrackList().add(jbAudio);
             creationGUI.getCollectionImageView().setImage(new Image(url.toExternalForm(), true));
           }catch(IOException e){
             throw new RuntimeException(e);

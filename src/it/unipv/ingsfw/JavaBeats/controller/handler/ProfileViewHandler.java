@@ -64,22 +64,22 @@ public class ProfileViewHandler{
         }//end-if
       }
     };
-    EventHandler<ActionEvent> switchToArtisButtonHandler=new EventHandler<>(){
+    EventHandler<ActionEvent> switchProfileTypehandler=new EventHandler<>(){
       @Override
       public void handle(ActionEvent actionEvent){
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
 
         try{
-          Artist artist=ProfileManagerFactory.getInstance().getProfileManager().switchUser((User)originalProfile);
-          HomePageGUI homePageGUI=new HomePageGUI(artist);
-          HomePageHandler homePageHandler=new HomePageHandler(homePageGUI, artist);
+          JBProfile switchedProfile=ProfileManagerFactory.getInstance().getProfileManager().switchProfileType(originalProfile);
+          HomePageGUI homePageGUI=new HomePageGUI(switchedProfile);
+          HomePageHandler homePageHandler=new HomePageHandler(homePageGUI, switchedProfile);
 
-//          ProfileViewGUI profileViewGUI=new ProfileViewGUI(artist, artist);
-//          ProfileViewHandler profileViewHandler=new ProfileViewHandler(profileViewGUI, artist);
+          ProfileViewGUI profileViewGUI=new ProfileViewGUI(switchedProfile, switchedProfile);
+          ProfileViewHandler profileViewHandler=new ProfileViewHandler(profileViewGUI, switchedProfile);
 
           Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
-          stage.setScene(homePageGUI.getScene());
-          stage.setTitle("Profile");
+          stage.setScene(profileViewGUI.getScene());
+          stage.setTitle("Home");
           stage.setWidth(previousDimension.getWidth());
           stage.setHeight(previousDimension.getHeight());
         }catch(ClassCastException c){
@@ -89,7 +89,7 @@ public class ProfileViewHandler{
     };
     try{
       gui.getProfileHeader().getEditButton().setOnAction(editButtonHandler);
-      gui.getProfileHeader().getSwitchButton().setOnAction(switchToArtisButtonHandler);
+      gui.getProfileHeader().getSwitchButton().setOnAction(switchProfileTypehandler);
     }catch(NullPointerException n){
 
     }//end-try
