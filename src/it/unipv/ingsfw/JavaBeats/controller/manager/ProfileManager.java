@@ -81,11 +81,6 @@ public class ProfileManager{
 
     activeProfile=profileDAO.get(artist);
 
-    Sidebar.setInstanceNull();
-    SidebarHandler.setInstanceNull();
-    Songbar.setInstanceNull();
-
-
     return (Artist)activeProfile;
   }
 }

@@ -39,12 +39,14 @@ public class SidebarHandler{
 
   //Attributi
   private static SidebarHandler instance;
+  private static JBProfile activeProfile=null;
 
   /*---------------------------------------*/
   //Costruttore
   /*---------------------------------------*/
   private SidebarHandler(JBProfile activeProfile){
     super();
+    SidebarHandler.activeProfile=activeProfile;
     Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getHomeButton());
     initComponents(activeProfile);
   }
@@ -53,14 +55,12 @@ public class SidebarHandler{
   //Getter/Setter
   /*---------------------------------------*/
   public static SidebarHandler getInstance(JBProfile activeProfile){
-    if(instance==null){
+    if(instance==null || SidebarHandler.activeProfile==null){
       instance=new SidebarHandler(activeProfile);
-    }//end-if
+    }else if(!SidebarHandler.activeProfile.equals(activeProfile)){
+      instance=new SidebarHandler(activeProfile);
+    } //end-if
     return instance;
-  }
-
-  public static void setInstanceNull(){
-    instance=null;
   }
 
   private void initComponents(JBProfile activeProfile){
@@ -208,7 +208,7 @@ public class SidebarHandler{
           //popup
         }
 
-        CollectionLibraryGUI collectionLibraryGUI=new CollectionLibraryGUI(activeProfile, podcasts, EJBPLAYABLE.ALBUM);
+        CollectionLibraryGUI collectionLibraryGUI=new CollectionLibraryGUI(activeProfile, podcasts, EJBPLAYABLE.PODCAST);
         CollectionLibraryHandler collectionLibraryHandler=new CollectionLibraryHandler(activeProfile, collectionLibraryGUI);
         Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getPodcastButton());
 

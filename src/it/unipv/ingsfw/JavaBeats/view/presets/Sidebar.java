@@ -1,4 +1,5 @@
 package it.unipv.ingsfw.JavaBeats.view.presets;
+import it.unipv.ingsfw.JavaBeats.controller.handler.presets.SidebarHandler;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.model.profile.User;
 import javafx.geometry.Insets;
@@ -23,6 +24,7 @@ public class Sidebar extends VBox{
   //Attributi
   /*---------------------------------------*/
   private static Sidebar instance=null;
+  private static JBProfile activeProfile=null;
   private static final int clientWidth=(int)Screen.getPrimary().getBounds().getWidth();
   private static final Background bgSidebar=new Background(new BackgroundFill(Color.rgb(10, 10, 10), CornerRadii.EMPTY, Insets.EMPTY));
   private static final Font fontMenu=Font.font("Verdana", FontWeight.NORMAL, FontPosture.REGULAR, 17);
@@ -42,6 +44,7 @@ public class Sidebar extends VBox{
   /*---------------------------------------*/
   private Sidebar(JBProfile activeProfile){
     super();
+    Sidebar.activeProfile=activeProfile;
     initComponents(activeProfile);
   }
 
@@ -49,14 +52,14 @@ public class Sidebar extends VBox{
   //Getter/Setter
   /*---------------------------------------*/
   public static Sidebar getInstance(JBProfile activeProfile){
-    if(instance==null){
+    if(instance==null || Sidebar.activeProfile==null){
       instance=new Sidebar(activeProfile);
-    }//end-if
+    }else if(!Sidebar.activeProfile.equals(activeProfile)){
+      instance=new Sidebar(activeProfile);
+    } //end-if
     return instance;
   }
-  public static void setInstanceNull(){
-    instance=null;
-  }
+
   public Button getHomeButton(){
     return homeButton;
   }
@@ -184,10 +187,10 @@ public class Sidebar extends VBox{
     try{
       User u=(User)activeProfile;
       Collections.addAll(libraryButtons, favoritesButton, playlistsButton);
-      Collections.addAll(allButtons, homeButton, searchButton, profileButton, favoritesButton, playlistsButton);
+      Collections.addAll(allButtons, homeButton, searchButton, profileButton, queueButton, favoritesButton, playlistsButton);
     }catch(ClassCastException c){
       Collections.addAll(libraryButtons, favoritesButton, playlistsButton, albumButton, podcastButton);
-      Collections.addAll(allButtons, homeButton, searchButton, profileButton, favoritesButton, playlistsButton, albumButton, podcastButton);
+      Collections.addAll(allButtons, homeButton, searchButton, profileButton, queueButton, favoritesButton, playlistsButton, albumButton, podcastButton);
     }//end-try
     VBox libraryVBox=new VBox(libraryHBox);
     for(Button b: libraryButtons){

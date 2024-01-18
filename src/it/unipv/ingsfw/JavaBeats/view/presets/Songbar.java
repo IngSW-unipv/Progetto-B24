@@ -1,6 +1,7 @@
 package it.unipv.ingsfw.JavaBeats.view.presets;
 
 import com.pixelduke.control.skin.FXSkins;
+import it.unipv.ingsfw.JavaBeats.controller.handler.presets.SidebarHandler;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.Song;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import javafx.geometry.Insets;
@@ -24,6 +25,7 @@ public class Songbar extends GridPane{
   //Attributi
   /*---------------------------------------*/
   private static Songbar instance=null;
+  private static JBProfile activeProfile=null;
   private static final Background bgSongbar=new Background(new BackgroundFill(Color.rgb(18, 18, 18), CornerRadii.EMPTY, Insets.EMPTY));
   private static final int clientWidth=(int)Screen.getPrimary().getBounds().getWidth();
   private static final int clientHeight=(int)Screen.getPrimary().getBounds().getHeight();
@@ -32,25 +34,28 @@ public class Songbar extends GridPane{
   double min=00.00;
   double max=3;
   double value=1.30;
+
   /*---------------------------------------*/
   //Costruttore
   /*---------------------------------------*/
   private Songbar(JBProfile activeProfile){
     super();
+    Songbar.activeProfile=activeProfile;
     initComponents(activeProfile);
   }
+
   /*---------------------------------------*/
   //Getter/Setter
   /*---------------------------------------*/
   public static Songbar getInstance(JBProfile activeProfile){
-    if(instance==null){
+    if(instance==null || Songbar.activeProfile==null){
       instance=new Songbar(activeProfile);
-    }//end-if
+    }else if(!Songbar.activeProfile.equals(activeProfile)){
+      instance=new Songbar(activeProfile);
+    } //end-if
     return instance;
   }
-  public static void setInstanceNull(){
-    instance=null;
-  }
+
   /*---------------------------------------*/
   //Metodi
   /*---------------------------------------*/
