@@ -1,6 +1,8 @@
 package it.unipv.ingsfw.JavaBeats.view.presets;
 
 import com.pixelduke.control.skin.FXSkins;
+import it.unipv.ingsfw.JavaBeats.model.playable.audio.Song;
+import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -30,29 +32,29 @@ public class Songbar extends GridPane{
   double min=00.00;
   double max=3;
   double value=1.30;
-
   /*---------------------------------------*/
   //Costruttore
   /*---------------------------------------*/
-  private Songbar(){
+  private Songbar(JBProfile activeProfile){
     super();
-    initComponents();
+    initComponents(activeProfile);
   }
-
   /*---------------------------------------*/
   //Getter/Setter
   /*---------------------------------------*/
-  public static Songbar getInstance(){
+  public static Songbar getInstance(JBProfile activeProfile){
     if(instance==null){
-      instance=new Songbar();
+      instance=new Songbar(activeProfile);
     }//end-if
     return instance;
   }
-
+  public static void setInstanceNull(){
+    instance=null;
+  }
   /*---------------------------------------*/
   //Metodi
   /*---------------------------------------*/
-  private void initComponents(){
+  private void initComponents(JBProfile activeProfile){
     //SongBar: SongBox, PlayBox, VolumeBox
 
     //SongHbox

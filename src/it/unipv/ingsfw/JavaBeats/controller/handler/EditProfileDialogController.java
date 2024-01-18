@@ -1,8 +1,15 @@
 package it.unipv.ingsfw.JavaBeats.controller.handler;
+import it.unipv.ingsfw.JavaBeats.controller.factory.ProfileManagerFactory;
+import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
+import it.unipv.ingsfw.JavaBeats.model.profile.User;
 import it.unipv.ingsfw.JavaBeats.view.presets.dialogs.EditProfileDialog;
+import it.unipv.ingsfw.JavaBeats.view.primary.home.HomePageGUI;
+import it.unipv.ingsfw.JavaBeats.view.primary.profile.ProfileViewGUI;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Dimension2D;
 import javafx.scene.Node;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -13,6 +20,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+
 public class EditProfileDialogController{
   /*---------------------------------------*/
   //Attributi
@@ -35,7 +43,7 @@ public class EditProfileDialogController{
   //Metodi
   /*---------------------------------------*/
   private void initComponents(){
-    EventHandler<ActionEvent> inputImageButtonHandler=new EventHandler<ActionEvent>(){
+    EventHandler<ActionEvent> inputImageButtonHandler=new EventHandler<>(){
       @Override
       public void handle(ActionEvent actionEvent){
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
@@ -57,7 +65,7 @@ public class EditProfileDialogController{
         }//end-try
       }
     };
-    EventHandler<ActionEvent> saveButtonHandler=new EventHandler<ActionEvent>(){
+    EventHandler<ActionEvent> saveButtonHandler=new EventHandler<>(){
       @Override
       public void handle(ActionEvent actionEvent){
         try{
@@ -68,14 +76,14 @@ public class EditProfileDialogController{
         profileDialog.getNewProfile().setBiography(profileDialog.getBiography().getText());
         profileDialog.getNewProfile().setName(profileDialog.getNameTextField().getText());
         profileDialog.getNewProfile().setSurname(profileDialog.getSurnameTextField().getText());
-        /* Here we need to check whether the username is already present, for we assume is not */
+        /* Here we need to check whether the username is already present, for now we assume is not */
         profileDialog.getNewProfile().setUsername(profileDialog.getUsernameTextField().getText());
       }
     };
     EventHandler<ActionEvent> cancelButtonHandler=new EventHandler<ActionEvent>(){
       @Override
       public void handle(ActionEvent actionEvent){
-
+        System.out.println("Premuto cancel");
       }
     };
     profileDialog.getInputImageButton().setOnAction(inputImageButtonHandler);

@@ -22,7 +22,7 @@ public class Sidebar extends VBox{
   /*---------------------------------------*/
   //Attributi
   /*---------------------------------------*/
-  private static Sidebar instance;
+  private static Sidebar instance=null;
   private static final int clientWidth=(int)Screen.getPrimary().getBounds().getWidth();
   private static final Background bgSidebar=new Background(new BackgroundFill(Color.rgb(10, 10, 10), CornerRadii.EMPTY, Insets.EMPTY));
   private static final Font fontMenu=Font.font("Verdana", FontWeight.NORMAL, FontPosture.REGULAR, 17);
@@ -54,7 +54,9 @@ public class Sidebar extends VBox{
     }//end-if
     return instance;
   }
-
+  public static void setInstanceNull(){
+    instance=null;
+  }
   public Button getHomeButton(){
     return homeButton;
   }
@@ -83,7 +85,7 @@ public class Sidebar extends VBox{
     return podcastButton;
   }
 
-  public Button getQueueButton() {
+  public Button getQueueButton(){
     return queueButton;
   }
 

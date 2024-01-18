@@ -1,19 +1,23 @@
 package it.unipv.ingsfw.JavaBeats.controller.handler;
+import it.unipv.ingsfw.JavaBeats.controller.factory.ProfileManagerFactory;
 import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.model.profile.User;
 import it.unipv.ingsfw.JavaBeats.view.presets.dialogs.EditProfileDialog;
+import it.unipv.ingsfw.JavaBeats.view.primary.home.HomePageGUI;
 import it.unipv.ingsfw.JavaBeats.view.primary.profile.ProfileViewGUI;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Dimension2D;
 import javafx.scene.Node;
+import javafx.scene.control.ButtonType;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
 
-public class ProfileViewHandler {
+public class ProfileViewHandler{
   /*---------------------------------------*/
   //Attributi
   /*---------------------------------------*/
@@ -40,14 +44,7 @@ public class ProfileViewHandler {
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
         gui.getGp().setEffect(new BoxBlur(10, 10, 10));
 
-        EditProfileDialog dialog=null;
-        try{
-//          dialog=new EditProfileDialog(stage, originalProfile, (User)originalProfile, (User)originalProfile.getCopy(originalProfile));
-          dialog=new EditProfileDialog(stage, (User)originalProfile, new User("us", "mail", "psw"));
-        }catch(ClassCastException c){
-//          dialog=new EditProfileDialog(stage, originalProfile, (Artist)originalProfile, (Artist)originalProfile.getCopy(originalProfile));
-          dialog=new EditProfileDialog(stage, (Artist)originalProfile, new Artist("us", "mail", "psw"));
-        }//end-try
+        EditProfileDialog dialog=new EditProfileDialog(stage, originalProfile, originalProfile.getCopy());
         EditProfileDialogController editProfileDialogController=new EditProfileDialogController(dialog);
         dialog.showAndWait();
         gui.getGp().setEffect(null); /* Removing blur effect */
@@ -67,10 +64,34 @@ public class ProfileViewHandler {
         }//end-if
       }
     };
+    EventHandler<ActionEvent> switchToArtisButtonHandler=new EventHandler<>(){
+      @Override
+      public void handle(ActionEvent actionEvent){
+        Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+
+        try{
+          Artist artist=ProfileManagerFactory.getInstance().getProfileManager().switchUser((User)originalProfile);
+          HomePageGUI homePageGUI=new HomePageGUI(artist);
+          HomePageHandler homePageHandler=new HomePageHandler(homePageGUI, artist);
+
+//          ProfileViewGUI profileViewGUI=new ProfileViewGUI(artist, artist);
+//          ProfileViewHandler profileViewHandler=new ProfileViewHandler(profileViewGUI, artist);
+
+          Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
+          stage.setScene(homePageGUI.getScene());
+          stage.setTitle("Profile");
+          stage.setWidth(previousDimension.getWidth());
+          stage.setHeight(previousDimension.getHeight());
+        }catch(ClassCastException c){
+          /* do something */
+        }//end-try
+      }
+    };
     try{
       gui.getProfileHeader().getEditButton().setOnAction(editButtonHandler);
+      gui.getProfileHeader().getSwitchButton().setOnAction(switchToArtisButtonHandler);
     }catch(NullPointerException n){
-      
+
     }//end-try
   }
   /*---------------------------------------*/

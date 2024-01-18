@@ -101,7 +101,7 @@ public class SearchPageGUI{
 
     /* Setup of left Sidebar, bottom songbar and center Search */
     Sidebar sidebar=Sidebar.getInstance(activeProfile);
-    Songbar songbar=Songbar.getInstance();
+    Songbar songbar=Songbar.getInstance(activeProfile);
 
     GridPane gp=new GridPane();
     gp.addRow(0, sidebar, searchVBox);

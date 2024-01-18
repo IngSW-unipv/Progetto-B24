@@ -8,25 +8,25 @@ import it.unipv.ingsfw.JavaBeats.view.presets.Songbar;
 import it.unipv.ingsfw.JavaBeats.view.primary.home.HomePageGUI;
 import javafx.geometry.Side;
 
-public class HomePageHandler {
+public class HomePageHandler{
 
-    //Attributi
-    HomePageGUI homePageGUI;
+  //Attributi
+  HomePageGUI homePageGUI;
 
-    //Getters and setters
+  //Getters and setters
 
-    //Costruttore
-    public HomePageHandler(HomePageGUI homePageGUI, JBProfile activeProfile){
-        this.homePageGUI= homePageGUI;
-        initComponents(activeProfile);
+  //Costruttore
+  public HomePageHandler(HomePageGUI homePageGUI, JBProfile activeProfile){
+    this.homePageGUI=homePageGUI;
+    initComponents(activeProfile);
 
-    }
+  }
 
-    private void initComponents(JBProfile activeProfile){
-        Sidebar.getInstance(activeProfile);
-        SidebarHandler.getInstance();
-        Songbar.getInstance();
+  private void initComponents(JBProfile activeProfile){
+    Sidebar.getInstance(activeProfile);
+    SidebarHandler.getInstance(activeProfile);
+    Songbar.getInstance(activeProfile);
 
-    }
+  }
 
 }

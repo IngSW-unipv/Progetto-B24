@@ -7,6 +7,7 @@ import it.unipv.ingsfw.JavaBeats.dao.playable.AudioDAO;
 import it.unipv.ingsfw.JavaBeats.dao.playable.CollectionDAO;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.Song;
+import it.unipv.ingsfw.JavaBeats.model.playable.collection.Playlist;
 import it.unipv.ingsfw.JavaBeats.model.profile.*;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
@@ -20,10 +21,7 @@ import javax.sql.rowset.serial.SerialBlob;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Time;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -57,13 +55,6 @@ public class ProfileDAO implements IProfileDAO{
       st1.setString(4, profile.getName());
       st1.setString(5, profile.getSurname());
       st1.setString(6, profile.getBiography());
-
-      /* Default profile image when inserting */
-      BufferedImage bufferedImage=ImageIO.read(new File("src/it/unipv/ingsfw/JavaBeats/view/resources/icons/DefaultUser.png"));
-      ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
-      ImageIO.write(bufferedImage, "png", byteArrayOutputStream);
-      byte[] image=byteArrayOutputStream.toByteArray();
-      profile.setProfilePicture(new SerialBlob(image));
       st1.setBlob(7, profile.getProfilePicture());
 
       st1.executeUpdate();
@@ -244,6 +235,7 @@ public class ProfileDAO implements IProfileDAO{
       result.setListeningHistory(getListeningHistory(result));        //set listening history
       CollectionDAO cDAO=new CollectionDAO();
       result.setFavorites(cDAO.getFavorites(result));                 //set favorites playlist
+      result.setMinuteListened(new Time(0));
     }
 
     return result;
@@ -255,7 +247,7 @@ public class ProfileDAO implements IProfileDAO{
     connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
     PreparedStatement st;
     ResultSet rs;
-    Time result=null;
+    Time result=new Time(0);
 
     try{
       String query="SELECT (SUM(TIMEDIFF(duration, '00:00:00'))) as 'total' FROM ListeningHistory A "+

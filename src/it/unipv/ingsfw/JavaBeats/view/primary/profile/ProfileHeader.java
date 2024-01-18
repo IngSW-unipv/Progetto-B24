@@ -31,6 +31,7 @@ public class ProfileHeader extends VBox{
   private Label nameLabel;
   private Label surnameLabel;
   private TextArea biographyText;
+  private Button switchButton;
   private Button editButton;
 
   /*---------------------------------------*/
@@ -66,6 +67,10 @@ public class ProfileHeader extends VBox{
 
   public TextArea getBiographyText(){
     return biographyText;
+  }
+
+  public Button getSwitchButton(){
+    return switchButton;
   }
 
   /*---------------------------------------*/
@@ -104,7 +109,6 @@ public class ProfileHeader extends VBox{
     Label listenersLabel=null;
     try{
       User u=(User)searchedProfile;
-      u.setMinuteListened(new Time(4000));
       listenersLabel=new Label(u.getMinuteListened().getTime()+" minutes listened all time");
     }catch(ClassCastException c){
       listenersLabel=new Label(((Artist)searchedProfile).getTotalListeners()+" all time total listeners");
@@ -153,7 +157,20 @@ public class ProfileHeader extends VBox{
       editButton.setPadding(new Insets(20));
       editButton.setTooltip(new Tooltip("Edit"));
 
-      HBox editButtonHBox=new HBox(editButton);
+      /* Adding button to switch from user to artist and vice-versa */
+      try{
+        User u=(User)currentProfile;
+        switchButton=new Button("Switch to artist");
+      }catch(ClassCastException c){
+        switchButton=new Button("Switch to user");
+      }//end-try
+      switchButton.setUnderline(true);
+      switchButton.setBackground(super.getBackground());
+      switchButton.setFont(Font.font("Verdana", FontWeight.NORMAL, FontPosture.ITALIC, 14));
+      switchButton.setTextFill(Color.LIGHTGRAY);
+      switchButton.setCursor(Cursor.HAND);
+
+      HBox editButtonHBox=new HBox(30, editButton, switchButton);
 
       getChildren().addAll(imageLabelsHBox, biographyHBox, editButtonHBox);
     }else{

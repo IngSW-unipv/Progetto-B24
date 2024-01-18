@@ -39,29 +39,31 @@ public class SidebarHandler{
 
   //Attributi
   private static SidebarHandler instance;
-  private JBProfile activeProfile;
 
   /*---------------------------------------*/
   //Costruttore
   /*---------------------------------------*/
-  private SidebarHandler(){
+  private SidebarHandler(JBProfile activeProfile){
     super();
     Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getHomeButton());
-    initComponents();
+    initComponents(activeProfile);
   }
 
   /*---------------------------------------*/
   //Getter/Setter
   /*---------------------------------------*/
-  public static SidebarHandler getInstance(){
+  public static SidebarHandler getInstance(JBProfile activeProfile){
     if(instance==null){
-      instance=new SidebarHandler();
+      instance=new SidebarHandler(activeProfile);
     }//end-if
     return instance;
   }
 
-  private void initComponents(){
-    activeProfile=ProfileManagerFactory.getInstance().getProfileManager().getActiveProfile();
+  public static void setInstanceNull(){
+    instance=null;
+  }
+
+  private void initComponents(JBProfile activeProfile){
     //HomeButtonHandler
     EventHandler<ActionEvent> homeButtonHandler=new EventHandler<ActionEvent>(){
       @Override
@@ -152,7 +154,7 @@ public class SidebarHandler{
       @Override
       public void handle(ActionEvent actionEvent){
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        ArrayList<JBCollection> playlists= CollectionManagerFactory.getInstance().getCollectionManager().getPlaylists(activeProfile);
+        ArrayList<JBCollection> playlists=CollectionManagerFactory.getInstance().getCollectionManager().getPlaylists(activeProfile);
         CollectionLibraryGUI collectionLibraryGUI=new CollectionLibraryGUI(activeProfile, playlists, EJBPLAYABLE.PLAYLIST);
         CollectionLibraryHandler collectionLibraryHandler=new CollectionLibraryHandler(activeProfile, collectionLibraryGUI);
         Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getPlaylistsButton());
@@ -172,9 +174,9 @@ public class SidebarHandler{
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
 
         //Retrieve albums
-        ArrayList<JBCollection> albums= null;
+        ArrayList<JBCollection> albums=null;
         try{
-          albums= CollectionManagerFactory.getInstance().getCollectionManager().getAlbums((Artist) activeProfile);
+          albums=CollectionManagerFactory.getInstance().getCollectionManager().getAlbums((Artist)activeProfile);
         }catch(ClassCastException e){
           //popup
         }
@@ -199,9 +201,9 @@ public class SidebarHandler{
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
 
         //Retrieve podcasts
-        ArrayList<JBCollection> podcasts= null;
+        ArrayList<JBCollection> podcasts=null;
         try{
-          podcasts= CollectionManagerFactory.getInstance().getCollectionManager().getPodcasts((Artist) activeProfile);
+          podcasts=CollectionManagerFactory.getInstance().getCollectionManager().getPodcasts((Artist)activeProfile);
         }catch(ClassCastException e){
           //popup
         }
