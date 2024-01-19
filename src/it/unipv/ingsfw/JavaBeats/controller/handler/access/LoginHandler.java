@@ -13,12 +13,17 @@ import javafx.geometry.Dimension2D;
 import javafx.scene.Node;
 import javafx.stage.Stage;
 
+import java.util.regex.Pattern;
+
 public class LoginHandler{
   /*---------------------------------------*/
   //Attributi
   /*---------------------------------------*/
   private LoginGUI gui;
   private JBProfile activeProfile;
+  private static final String usernameRegex = new String("^[a-zA-Z0-9._+-]{1,30}$");
+  private static final String mailRegex = new String("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,100}$");         //mail-allowed characters according to RFC 5322
+  private static final String passwordRegex = new String("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,100}$");  //at least: 8 char, one uppercase, one lowercase, one number
 
   /*---------------------------------------*/
   //Costruttori
@@ -34,26 +39,36 @@ public class LoginHandler{
   private void initComponents(){
     EventHandler<ActionEvent> loginButtonHandler=new EventHandler<ActionEvent>(){
       @Override
-      public void handle(ActionEvent actionEvent){
-        Stage s=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        JBProfile profile=new User(gui.getUsername().getText(), gui.getUsername().getText(), gui.getPassword().getText());
+      public void handle(ActionEvent actionEvent) {
+        Stage s = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 
-        //Checks if the profile exists or handles the exception
-        try{
-          activeProfile=ProfileManagerFactory.getInstance().getProfileManager().login(profile);
-          //Login
-          HomePageGUI homePageGUI=new HomePageGUI(activeProfile);
-          HomePageHandler homePageHandler=new HomePageHandler(homePageGUI, activeProfile);
+        //Login Regex:
+        if (!(Pattern.matches(mailRegex, gui.getUsername().getText()) || Pattern.matches(usernameRegex, gui.getUsername().getText()))) {
+          gui.getErrorMessage().setText("Please enter valid mail or username.");
+        } else if (!(Pattern.matches(passwordRegex, gui.getPassword().getText()))) {
+          gui.getErrorMessage().setText("Please enter valid password.");
+        } else {
+          gui.getErrorMessage().setText("");
 
-          //Saving previous dimension and using it for the next page
-          Dimension2D previousDimension=new Dimension2D(s.getWidth(), s.getHeight());
-          s.setScene(homePageGUI.getScene());
-          s.setTitle("HomePage");
-          s.setWidth(previousDimension.getWidth());
-          s.setHeight(previousDimension.getHeight());
-        }catch(IllegalArgumentException e){
-          gui.getErrorMessage().setText("Login Error!!");
-        }//end-try
+          JBProfile profile = new User(gui.getUsername().getText(), gui.getUsername().getText(), gui.getPassword().getText());
+
+          //Checks if the profile exists or handles the exception
+          try {
+            activeProfile = ProfileManagerFactory.getInstance().getProfileManager().login(profile);
+            //Login
+            HomePageGUI homePageGUI = new HomePageGUI(activeProfile);
+            HomePageHandler homePageHandler = new HomePageHandler(homePageGUI, activeProfile);
+
+            //Saving previous dimension and using it for the next page
+            Dimension2D previousDimension = new Dimension2D(s.getWidth(), s.getHeight());
+            s.setScene(homePageGUI.getScene());
+            s.setTitle("HomePage");
+            s.setWidth(previousDimension.getWidth());
+            s.setHeight(previousDimension.getHeight());
+          } catch (IllegalArgumentException e) {
+            gui.getErrorMessage().setText("Login Error!");
+          }//end-try
+        }
       }
     };
     EventHandler<ActionEvent> registerButtonHandler=new EventHandler<ActionEvent>(){

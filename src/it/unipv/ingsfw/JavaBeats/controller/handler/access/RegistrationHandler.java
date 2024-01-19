@@ -13,6 +13,7 @@ import javafx.scene.Node;
 import javafx.stage.Stage;
 
 import java.util.StringTokenizer;
+import java.util.regex.Pattern;
 
 public class RegistrationHandler{
   /*---------------------------------------*/
@@ -20,6 +21,10 @@ public class RegistrationHandler{
   /*---------------------------------------*/
   private RegistrationGUI gui;
   private JBProfile activeProfile;
+  private static final String nameRegex = new String("^[A-Z][a-zA-Z0-9_-]{1,50}$");
+  private static final String usernameRegex = new String("^[a-zA-Z0-9._+-]{1,30}$");
+  private static final String mailRegex = new String("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,100}$");         //mail-allowed characters according to RFC 5322
+  private static final String passwordRegex = new String("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,100}$");  //at least: 8 char, one uppercase, one lowercase, one number
 
   /*---------------------------------------*/
   //Costruttori
@@ -52,9 +57,20 @@ public class RegistrationHandler{
       @Override
       public void handle(ActionEvent actionEvent){
 
-        if(!gui.getPassword1().getText().equals(gui.getPassword2().getText())){
-          gui.getErrorMessage().setText("Your passwords don't correspond");
-        }else{
+        //Registration Regex:
+        if (!(Pattern.matches(nameRegex, gui.getName().getText()) || Pattern.matches(nameRegex, gui.getSurname().getText()))) {
+          gui.getErrorMessage().setText("Name and Surname fields must start with capital letter.");
+        } else if (!(Pattern.matches(mailRegex, gui.getMail().getText()))) {
+          gui.getErrorMessage().setText("Please enter valid mail.");
+        } else if (!(Pattern.matches(usernameRegex, gui.getUsername().getText()))) {
+          gui.getErrorMessage().setText("Allowed characters in Username are a-z, A-Z, 0-9, ., _, +, -.");
+        } else if (!gui.getPassword1().getText().equals(gui.getPassword2().getText())) {
+          gui.getErrorMessage().setText("Entered passwords do not match.");
+        } else if (!(Pattern.matches(passwordRegex, gui.getPassword1().getText()))) {
+          gui.getErrorMessage().setText("Password must be at least 8 characters long and contain at least one lowercase letter, one uppercase letter, one number.");
+        } else {
+          gui.getErrorMessage().setText("");
+
           JBProfile profile=new User(gui.getUsername().getText(), gui.getMail().getText(), gui.getPassword2().getText(), gui.getName().getText(), gui.getSurname().getText());
 
           //Register the profile exists or handles the exception
