@@ -1,6 +1,9 @@
 package it.unipv.ingsfw.JavaBeats.controller.manager;
 
+import it.unipv.ingsfw.JavaBeats.dao.playable.AudioDAO;
 import it.unipv.ingsfw.JavaBeats.dao.playable.CollectionDAO;
+import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
+import it.unipv.ingsfw.JavaBeats.model.playable.audio.Song;
 import it.unipv.ingsfw.JavaBeats.model.playable.collection.Album;
 import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
 import it.unipv.ingsfw.JavaBeats.model.playable.collection.Playlist;
@@ -23,6 +26,7 @@ public class CollectionManager{
   public CollectionManager(){
 
   }
+
   //Metodi
   public JBCollection createJBCollection(JBCollection jbCollection){
     CollectionDAO c=new CollectionDAO();
@@ -46,15 +50,16 @@ public class CollectionManager{
     CollectionDAO c=new CollectionDAO();
     return c.selectPlaylistsByProfile(activeProfile);
   }
-  public ArrayList<JBCollection> getAlbums(Artist artist) {
-    CollectionDAO c = new CollectionDAO();
+
+  public ArrayList<JBCollection> getAlbums(Artist artist){
+    CollectionDAO c=new CollectionDAO();
     return c.selectAlbumsByArtist(artist);
   }
 
-    public ArrayList<JBCollection> getPodcasts(Artist artist){
-      CollectionDAO c=new CollectionDAO();
-      return c.selectPodcastsByArtist(artist);
-      }
+  public ArrayList<JBCollection> getPodcasts(Artist artist){
+    CollectionDAO c=new CollectionDAO();
+    return c.selectPodcastsByArtist(artist);
+  }
 
   //GetFavorites
   public Playlist getFavorites(JBProfile activeProfile){
@@ -63,5 +68,23 @@ public class CollectionManager{
     return favorites;
   }
 
+  public ArrayList<JBAudio> getCollectionAudios(JBCollection jbCollection){
+    AudioDAO audioDAO=new AudioDAO();
+    ArrayList<JBAudio> result=new ArrayList<>();
 
+    try{
+      Playlist playlist=(Playlist)jbCollection;
+
+      result=audioDAO.selectByPlaylist(playlist);
+    }catch(ClassCastException c1){
+      try{
+        Album album=(Album)jbCollection;
+
+        result.addAll(audioDAO.selectByAlbum(album));
+      }catch(ClassCastException c2){
+        result.addAll(audioDAO.selectByPodcast((Podcast)jbCollection));
+      }//end-try
+    }//end-try
+    return result;
+  }
 }

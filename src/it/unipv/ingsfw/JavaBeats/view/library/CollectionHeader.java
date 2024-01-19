@@ -32,6 +32,7 @@ public class CollectionHeader extends VBox{
   private static final Font fontTitle=Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 90);
   private static final Font fontCollectionInfo=Font.font("Verdana", FontWeight.NORMAL, FontPosture.REGULAR, 15);
   private Button editButton;
+  private Button buttonPlayPause;
 
   /*---------------------------------------*/
   //Costruttori
@@ -45,6 +46,10 @@ public class CollectionHeader extends VBox{
   /*---------------------------------------*/
   public Button getEditButton(){
     return editButton;
+  }
+
+  public Button getButtonPlayPause(){
+    return buttonPlayPause;
   }
 
   /*---------------------------------------*/
@@ -123,7 +128,7 @@ public class CollectionHeader extends VBox{
     Image playpauseImage=new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Play.png", true);
     ImageView playPauseImageView=new ImageView(playpauseImage);
     playPauseImageView.setPreserveRatio(true);
-    Button buttonPlayPause=new Button();
+    buttonPlayPause=new Button();
     buttonPlayPause.setGraphic(playPauseImageView);
     buttonPlayPause.setStyle("-fx-background-color: #0F0F0FFF;");
     buttonPlayPause.setCursor(Cursor.HAND);

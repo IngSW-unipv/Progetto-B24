@@ -300,7 +300,7 @@ public class AudioDAO implements IAudioDAO{
 
       ArrayList<Song> resultSetSong=new ArrayList<>();
       while(rs.next())
-        resultSetSong.add(new Song(rs.getInt("idAudio"), null, null, null));      //get will return either Song or Episode (only cares about the id of the JBAudio input)
+        resultSetSong.add(new Song(rs.getInt("idSong"), null, null, null));      //get will return either Song or Episode (only cares about the id of the JBAudio input)
 
       for(Song song: resultSetSong){
         result.add(getSong(song));
@@ -332,7 +332,7 @@ public class AudioDAO implements IAudioDAO{
 
       ArrayList<Episode> resultSetJBaudios=new ArrayList<>();
       while(rs.next())
-        resultSetJBaudios.add(new Episode(rs.getInt("idAudio"), null, null, null));      //get will return either Song or Episode (only cares about the id of the JBAudio input)
+        resultSetJBaudios.add(new Episode(rs.getInt("idEpisode"), null, null, null));      //get will return either Song or Episode (only cares about the id of the JBAudio input)
 
       for(Episode episode: resultSetJBaudios){
         result.add(getEpisode(episode));

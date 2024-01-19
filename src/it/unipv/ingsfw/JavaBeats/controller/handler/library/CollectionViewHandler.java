@@ -1,4 +1,5 @@
 package it.unipv.ingsfw.JavaBeats.controller.handler.library;
+import it.unipv.ingsfw.JavaBeats.controller.factory.PlayerManagerFactory;
 import it.unipv.ingsfw.JavaBeats.model.playable.collection.Playlist;
 import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
@@ -42,10 +43,19 @@ public class CollectionViewHandler{
         EditPlaylistDialogController editPlaylistDialogController=new EditPlaylistDialogController(dialog);
         dialog.showAndWait();
         gui.getGp().setEffect(null);
+      }
+    };
+    EventHandler<ActionEvent> playPauseCollectionButtonHandler=new EventHandler<ActionEvent>(){
+      @Override
+      public void handle(ActionEvent actionEvent){
+        Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
 
+        PlayerManagerFactory.getInstance().getPlayerManager().addToQueue(gui.getJbCollection());
+        PlayerManagerFactory.getInstance().getPlayerManager().play();
       }
     };
     gui.getCollectionHeader().getEditButton().setOnAction(editButtonHandler);
+    gui.getCollectionHeader().getButtonPlayPause().setOnAction(playPauseCollectionButtonHandler);
   }
   /*---------------------------------------*/
 }

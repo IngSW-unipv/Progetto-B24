@@ -54,29 +54,34 @@ public class CollectionViewGUI{
   public CollectionHeader getCollectionHeader(){
     return collectionHeader;
   }
+
   public JBCollection getJbCollection(){
     return jbCollection;
   }
+
   public GridPane getGp(){
     return gp;
   }
+
   /*---------------------------------------*/
   //Metodi
   /*---------------------------------------*/
   private void initComponents(JBProfile activeProfile){
+    /* Setup of collectionHeader view */
     collectionHeader=new CollectionHeader(activeProfile, jbCollection);
-    ObservableList<JBAudio> songList=FXCollections.observableArrayList();
-    try{
-      for(int i=0; i<20; i++){
-        songList.add(new Song(2, "Unknown title", new Artist("rob", "rob", "rob"), new Album(1, "nomeAlbum", new Artist("rob", "rob", "rob"), new ArrayList<JBAudio>()), new SerialBlob(new byte[]{0, 1}), new Time(100), new Date(100), new String[]{"rock", "pop"}, true, 20));
-      }//end-for
-    }catch(SQLException e){
-      throw new RuntimeException(e);
-    }
-    TableView<JBAudio> audioTable=new AudioTable(songList, activeProfile, jbCollection);
+
+    /* Setting up the ObservableList of JBAudios as parameter for AudioTable */
+    ObservableList<JBAudio> audioList=FXCollections.observableArrayList();
+    audioList.addAll(jbCollection.getTrackList());
+
+    /* Creation of audioTable containing the list of all the playable audios */
+    TableView<JBAudio> audioTable=new AudioTable(audioList, activeProfile, jbCollection);
+
+    /* VBox containing all the main content */
     VBox mainVBox=new VBox(collectionHeader, audioTable);
     mainVBox.setPadding(new Insets(0, 50, 0, 50));
 
+    /* ScrollPane for scrolling the audioTable */
     ScrollPanePreset ScrollPanePreset=new ScrollPanePreset(mainVBox);
     ScrollPanePreset.setFitToWidth(true);
     ScrollPanePreset.setStyle("-fx-background: #0F0F0FFF; -fx-border-color: #0F0F0FFF");

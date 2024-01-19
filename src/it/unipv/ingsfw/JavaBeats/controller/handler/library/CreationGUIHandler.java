@@ -1,10 +1,12 @@
 package it.unipv.ingsfw.JavaBeats.controller.handler.library;
 import it.unipv.ingsfw.JavaBeats.controller.factory.CollectionManagerFactory;
 import it.unipv.ingsfw.JavaBeats.model.playable.EJBPLAYABLE;
+import it.unipv.ingsfw.JavaBeats.model.playable.audio.Episode;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.Song;
 import it.unipv.ingsfw.JavaBeats.model.playable.collection.Album;
 import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
+import it.unipv.ingsfw.JavaBeats.model.playable.collection.Podcast;
 import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.view.library.CollectionLibraryGUI;
@@ -31,10 +33,12 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import javax.sql.rowset.serial.SerialBlob;
+import javax.sql.rowset.serial.SerialException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Blob;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Time;
@@ -121,18 +125,18 @@ public class CreationGUIHandler{
             System.out.println("----------------------------------------------");
 
             JBAudio jbAudio=null;
+            Blob fileAudio=new SerialBlob(fileContent);
             try{
               Album a=(Album)creationGUI.getNewCollection();
-              jbAudio=new Song(1, metadata.get("dc:title")==null ? FilenameUtils.removeExtension(f.getName()) : metadata.get("dc:title"), (Artist)a.getCreator(), creationGUI.getNewCollection(), new SerialBlob(fileContent), new Time((long)media.getDuration().toMillis()), new Date(System.currentTimeMillis()), new String[] {metadata.get("xmpDM:genre")}, false, 0);
-            }catch(ClassCastException | SQLException c){
-
+              jbAudio=new Song(1, metadata.get("dc:title")==null ? FilenameUtils.removeExtension(f.getName()) : metadata.get("dc:title"), (Artist)a.getCreator(), creationGUI.getNewCollection(), fileAudio, new Time((long)media.getDuration().toMillis()), new Date(System.currentTimeMillis()), new String[] {metadata.get("xmpDM:genre")}, false, 0);
+            }catch(ClassCastException c){
+              Podcast p=(Podcast)creationGUI.getNewCollection();
+              jbAudio=new Episode(1, metadata.get("dc:title")==null ? FilenameUtils.removeExtension(f.getName()) : metadata.get("dc:title"), (Artist)p.getCreator(), creationGUI.getNewCollection(), fileAudio, new Time((long)media.getDuration().toMillis()), new Date(System.currentTimeMillis()), new String[] {metadata.get("xmpDM:genre")}, false, 0);
             }//end-try
             creationGUI.getNewCollection().getTrackList().add(jbAudio);
-          }catch(IOException | TikaException | SAXException e){
+          }catch(IOException | TikaException | SAXException | SQLException e){
             throw new RuntimeException(e);
-          }//end-try
-
-
+          }
         }//end-foreach
       }
     };
@@ -160,6 +164,7 @@ public class CreationGUIHandler{
           Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getAlbumButton());
           stage.setTitle("Albums");
         }catch(ClassCastException c){
+
           //Retrieve podcasts
           ArrayList<JBCollection> podcasts=null;
           try{
@@ -178,7 +183,6 @@ public class CreationGUIHandler{
         stage.setScene(collectionLibraryGUI.getScene());
         stage.setWidth(previousDimension.getWidth());
         stage.setHeight(previousDimension.getHeight());
-
       }
     };
     creationGUI.getCollectionPictureButton().setOnAction(inputImageButtonHandler);
