@@ -19,6 +19,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.ParseContext;
@@ -40,6 +41,7 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 public class CreationGUIHandler{
   /*---------------------------------------*/
   //Attributi
@@ -99,7 +101,7 @@ public class CreationGUIHandler{
           FileInputStream fileInputStream=null;
           URL url=null;
           try{
-            url=f.toURI().toURL();
+            Media media=new Media(f.toURI().toURL().toString());
             fileInputStream=new FileInputStream(f);
             ContentHandler handler=new DefaultHandler();
             Metadata metadata=new Metadata();
@@ -113,15 +115,15 @@ public class CreationGUIHandler{
             fileInputStream.close();
 
             System.out.println("----------------------------------------------");
-            System.out.println("Title: "+metadata.get("dc:title"));
+            System.out.println("Title: "+metadata.get("dc:title")+"  "+FilenameUtils.removeExtension(f.getName()));
             System.out.println("Genre : "+metadata.get("xmpDM:genre"));
-
-            Media media=new Media(f.toURI().toString());
+            System.out.println("Duration: "+metadata.get("xmpDM:duration"));
+            System.out.println("----------------------------------------------");
 
             JBAudio jbAudio=null;
             try{
               Album a=(Album)creationGUI.getNewCollection();
-              jbAudio=new Song(1, metadata.get("dc:title"), (Artist)a.getCreator(), creationGUI.getNewCollection(), new SerialBlob(fileContent), new Time((long)media.getDuration().toMillis()), new Date(System.currentTimeMillis()), new String[]{metadata.get("xmpDM:genre")}, false, 0);
+              jbAudio=new Song(1, metadata.get("dc:title")==null ? FilenameUtils.removeExtension(f.getName()) : metadata.get("dc:title"), (Artist)a.getCreator(), creationGUI.getNewCollection(), new SerialBlob(fileContent), new Time((long)media.getDuration().toMillis()), new Date(System.currentTimeMillis()), new String[] {metadata.get("xmpDM:genre")}, false, 0);
             }catch(ClassCastException | SQLException c){
 
             }//end-try

@@ -16,6 +16,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
+
 public class LoginGUI{
   /*---------------------------------------*/
   //Attributi
@@ -34,54 +35,67 @@ public class LoginGUI{
   private Label errorMessage;
   private Button login;
   private Button register;
+
   /*---------------------------------------*/
   //Costruttore
   /*---------------------------------------*/
   public LoginGUI(){
     initComponents();
   }
+
   /*---------------------------------------*/
   //Getter/Setter
   /*---------------------------------------*/
   public Scene getScene(){
     return scene;
   }
+
   public TextField getUsername(){
     return username;
   }
+
   public void setUsername(TextField username){
     this.username=username;
   }
+
   public PasswordField getPassword(){
     return password;
   }
+
   public void setPassword(PasswordField password){
     this.password=password;
   }
+
   public Label getErrorMessage(){
     return errorMessage;
   }
+
   public void setErrorMessage(Label errorMessage){
     this.errorMessage=errorMessage;
   }
+
   public Button getLogin(){
     return login;
   }
+
   public void setLogin(Button login){
     this.login=login;
   }
+
   public Button getRegister(){
     return register;
   }
+
   public void setRegister(Button register){
     this.register=register;
   }
+
   /*---------------------------------------*/
   //Metodi
   /*---------------------------------------*/
   private void initComponents(){
     /* Setup of Logo, App title in a HBox Layout */
-    Image image = new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Logo.png", true);
+    Image image=new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Logo.png", true);
     ImageView imageView=new ImageView(image);
     imageView.setPreserveRatio(true);
     Label title=new Label("JavaBeats");
@@ -94,7 +108,7 @@ public class LoginGUI{
     username=new TextField();
     password=new PasswordField();
     TextField[] tf={username, password};
-    for(TextField t : tf){
+    for(TextField t: tf){
       t.setPrefSize(300, 50);
       t.setBorder(borderTextField);
       t.setBackground(bgTextField);
@@ -105,7 +119,7 @@ public class LoginGUI{
     username.setPromptText("Username or mail");
     password.setPromptText("Password");
 
-    errorMessage=new Label("Esempio errore!");
+    errorMessage=new Label("");
     errorMessage.setTextFill(Color.RED);
 
     /* Setup of Login or Register Buttons, two different styles: rounded violet for login and clickable link for register */
@@ -140,16 +154,16 @@ public class LoginGUI{
     gp.add(v, 1, 1);
     gp.setBackground(new Background(new BackgroundFill(Color.rgb(15, 15, 15), CornerRadii.EMPTY, Insets.EMPTY)));
 
-    ColumnConstraints columnVBox = new ColumnConstraints();
-    ColumnConstraints columnEmpty = new ColumnConstraints();
+    ColumnConstraints columnVBox=new ColumnConstraints();
+    ColumnConstraints columnEmpty=new ColumnConstraints();
     columnVBox.setPercentWidth((double)(100*vboxWidth)/clientWidth);
     columnEmpty.setPercentWidth((100-(double)(100*vboxWidth)/clientWidth)/2);
     gp.getColumnConstraints().add(columnEmpty);
     gp.getColumnConstraints().add(columnVBox);
     gp.getColumnConstraints().add(columnEmpty);
 
-    RowConstraints rowEmpty = new RowConstraints();
-    RowConstraints rowVBox = new RowConstraints();
+    RowConstraints rowEmpty=new RowConstraints();
+    RowConstraints rowVBox=new RowConstraints();
     rowVBox.setPercentHeight((double)(100*vboxHeight)/clientHeight);
     rowEmpty.setPercentHeight((100-(double)(100*vboxHeight)/clientHeight)/2);
     gp.getRowConstraints().add(rowEmpty);
