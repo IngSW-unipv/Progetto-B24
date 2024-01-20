@@ -1,5 +1,9 @@
 package it.unipv.ingsfw.JavaBeats.model.playable.audio;
 
+import it.unipv.ingsfw.JavaBeats.controller.factory.PlayerManagerFactory;
+import it.unipv.ingsfw.JavaBeats.controller.factory.ProfileManagerFactory;
+import it.unipv.ingsfw.JavaBeats.controller.handler.PlayerHandler;
+import it.unipv.ingsfw.JavaBeats.controller.manager.PlayerManager;
 import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
 import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
 import javafx.scene.media.*;
@@ -43,8 +47,10 @@ public class Song extends JBAudio{
       FileUtils.writeByteArrayToFile(f, this.getAudioFileBlob().getBinaryStream().readAllBytes());
 
       Media song=new Media(f.toURI().toURL().toString());
-      MediaPlayer mediaPlayer=new MediaPlayer(song);
+      MediaPlayer mediaPlayer=PlayerManagerFactory.getInstance().getPlayerManager().CURRENT_MEDIA_PLAYER;
+      mediaPlayer=new MediaPlayer(song);
       mediaPlayer.play();
+      mediaPlayer.setOnEndOfMedia(new PlayerHandler(mediaPlayer));
     }catch(IOException | SQLException e){
       throw new RuntimeException(e);
     }

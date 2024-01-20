@@ -4,11 +4,13 @@ import it.unipv.ingsfw.JavaBeats.controller.factory.FXAdapterFactory;
 import it.unipv.ingsfw.JavaBeats.model.playable.IJBPlayable;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
+import javafx.scene.media.MediaPlayer;
 
 import java.util.LinkedList;
 
 public class PlayerManager{
   //Attributi
+  public static MediaPlayer CURRENT_MEDIA_PLAYER=null;
   private static LinkedList<JBAudio> queue=new LinkedList<>();
   private FXAdapter adapter=FXAdapterFactory.getInstance().getFXAdapter();
 
