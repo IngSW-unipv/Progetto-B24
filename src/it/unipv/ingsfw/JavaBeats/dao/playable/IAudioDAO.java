@@ -17,25 +17,19 @@ public interface IAudioDAO{
 
   JBAudio get(JBAudio audio, JBProfile activeProfile);
 
-  JBAudio get(JBAudio audio);
-
   Song getSong(JBAudio audio, JBProfile activeProfile);
-
-  Song getSong(JBAudio audio);
 
   Episode getEpisode(JBAudio audio, JBProfile activeProfile);
 
-  Episode getEpisode(JBAudio audio);
-
   void updateIsFavorite(JBProfile activeProfile);
 
-  void addToListeningHistory(JBAudio audio, JBProfile profile);
+  void addToListeningHistory(JBAudio audio, JBProfile activeProfile);
 
-  ArrayList<JBAudio> selectByPlaylist(Playlist playlist);
+  ArrayList<JBAudio> selectByPlaylist(Playlist playlist, JBProfile activeProfile);
 
-  ArrayList<Song> selectByAlbum(Album album);
+  ArrayList<Song> selectByAlbum(Album album, JBProfile activeProfile);
 
-  ArrayList<Episode> selectByPodcast(Podcast podcast);
+  ArrayList<Episode> selectByPodcast(Podcast podcast, JBProfile activeProfile);
 
   ArrayList<JBAudio> selectFavorites(JBProfile activeProfile);
 

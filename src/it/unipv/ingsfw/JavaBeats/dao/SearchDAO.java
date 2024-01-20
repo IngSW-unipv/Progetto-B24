@@ -11,6 +11,7 @@ import it.unipv.ingsfw.JavaBeats.model.playable.collection.Album;
 import it.unipv.ingsfw.JavaBeats.model.playable.collection.Playlist;
 import it.unipv.ingsfw.JavaBeats.model.playable.collection.Podcast;
 import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
+import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.model.profile.User;
 
 import java.sql.Connection;
@@ -21,25 +22,24 @@ import java.util.ArrayList;
 public class SearchDAO implements ISearchDAO {
 
     //ATTRIBUTES:
-    private String schema;
+    private static final String schema = "JavaBeats_DB";
     private Connection connection;
 
 
     //CONTRUCTOR:
     public SearchDAO() {
         super();
-        this.schema = "JavaBeats_DB";
     }
 
 
     //PUBLIC METHODS:
     @Override
-    public ArrayList<IJBResearchable> search(String field) {
-        return search(field, null);
+    public ArrayList<IJBResearchable> search(String field, JBProfile activeProfile) {
+        return search(field, activeProfile, null);
     }
 
     @Override
-    public ArrayList<IJBResearchable> search(String field, ERESEARCH mode) {
+    public ArrayList<IJBResearchable> search(String field, JBProfile activeProfile, ERESEARCH mode) {
         ArrayList<IJBResearchable> result = new ArrayList<>();
 
         switch (mode) {
@@ -52,11 +52,11 @@ public class SearchDAO implements ISearchDAO {
                 break;
 
             case SONG:
-                result.addAll(searchSongs(field));
+                result.addAll(searchSongs(field, activeProfile));
                 break;
 
             case EPISODE:
-                result.addAll(searchEpisodes(field));
+                result.addAll(searchEpisodes(field, activeProfile));
                 break;
 
             case PLAYLIST:
@@ -74,8 +74,8 @@ public class SearchDAO implements ISearchDAO {
             default:
                 result.addAll(searchUsers(field));
                 result.addAll(searchArtists(field));
-                result.addAll(searchSongs(field));
-                result.addAll(searchEpisodes(field));
+                result.addAll(searchSongs(field, activeProfile));
+                result.addAll(searchEpisodes(field, activeProfile));
                 result.addAll(searchPlaylists(field));
                 result.addAll(searchAlbums(field));
                 result.addAll(searchPodcasts(field));
@@ -87,26 +87,26 @@ public class SearchDAO implements ISearchDAO {
 
     //PRIVATE METHODS
     private ArrayList<User> searchUsers(String field) {
-        connection= DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
         PreparedStatement st;
         ResultSet rs;
         ArrayList<User> result = new ArrayList<>();
 
-        try{
+        try {
             String query = "SELECT Profile.mail FROM Profile JOIN User ON Profile.mail = User.mail " +
                     "WHERE (name LIKE '%?%' OR surname LIKE '%?%' OR username LIKE '%?%') AND isVisible=true;";
 
-            st=connection.prepareStatement(query);
+            st = connection.prepareStatement(query);
             st.setString(1, field);
             st.setString(2, field);
             st.setString(3, field);
 
-            rs=st.executeQuery();
+            rs = st.executeQuery();
 
-            while(rs.next())
+            while (rs.next())
                 result.add(new User(rs.getString("mail"), null, null));
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -122,26 +122,26 @@ public class SearchDAO implements ISearchDAO {
 
 
     private ArrayList<Artist> searchArtists(String field) {
-        connection= DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
         PreparedStatement st;
         ResultSet rs;
         ArrayList<Artist> result = new ArrayList<>();
 
-        try{
+        try {
             String query = "SELECT Profile.mail FROM Profile JOIN Artist ON Profile.mail = Artist.mail " +
                     "WHERE name LIKE '%?%' OR surname LIKE '%?%' OR username LIKE '%?%';";
 
-            st=connection.prepareStatement(query);
+            st = connection.prepareStatement(query);
             st.setString(1, field);
             st.setString(2, field);
             st.setString(3, field);
 
-            rs=st.executeQuery();
+            rs = st.executeQuery();
 
-            while(rs.next())
+            while (rs.next())
                 result.add(new Artist(rs.getString("mail"), null, null));
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -156,13 +156,13 @@ public class SearchDAO implements ISearchDAO {
     }
 
 
-    private ArrayList<Song> searchSongs(String field) {
-        connection= DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+    private ArrayList<Song> searchSongs(String field, JBProfile activeProfile) {
+        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
         PreparedStatement st;
         ResultSet rs;
         ArrayList<Song> result = new ArrayList<>();
 
-        try{
+        try {
             String query = "SELECT Audio.id FROM Audio " +
                     "JOIN Song ON Audio.id = Song.id " +
                     "JOIN ArtistAudios ON Audio.id = ArtistAudios.idAudio " +
@@ -171,17 +171,17 @@ public class SearchDAO implements ISearchDAO {
                     "JOIN Collection ON AlbumSongs.idAlbum = Collection.id " +
                     "WHERE Audio.title LIKE '%?%' OR Profile.username LIKE '%?%' OR Collection.name LIKE '%?%';";
 
-            st=connection.prepareStatement(query);
+            st = connection.prepareStatement(query);
             st.setString(1, field);
             st.setString(2, field);
             st.setString(3, field);
 
-            rs=st.executeQuery();
+            rs = st.executeQuery();
 
-            while(rs.next())
+            while (rs.next())
                 result.add(new Song(rs.getInt("id"), null, null, null));
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -189,20 +189,20 @@ public class SearchDAO implements ISearchDAO {
 
         AudioDAO aDAO = new AudioDAO();
         for (Song song : result) {
-            song = aDAO.getSong(song);      //get complete info of song
+            song = aDAO.getSong(song, activeProfile);      //get complete info of song
         }
 
         return result;
     }
 
 
-    private ArrayList<Episode> searchEpisodes(String field) {
-        connection= DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+    private ArrayList<Episode> searchEpisodes(String field, JBProfile activeProfile) {
+        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
         PreparedStatement st;
         ResultSet rs;
         ArrayList<Episode> result = new ArrayList<>();
 
-        try{
+        try {
             String query = "SELECT Audio.id FROM Audio " +
                     "JOIN Episode ON Audio.id = Episode.id " +
                     "JOIN ArtistAudios ON Audio.id = ArtistAudios.idAudio " +
@@ -211,17 +211,17 @@ public class SearchDAO implements ISearchDAO {
                     "JOIN Collection ON PodcastEpisodes.idPodcast = Collection.id " +
                     "WHERE Audio.title LIKE '%?%' OR Profile.username LIKE '%?%' OR Collection.name LIKE '%?%';";
 
-            st=connection.prepareStatement(query);
+            st = connection.prepareStatement(query);
             st.setString(1, field);
             st.setString(2, field);
             st.setString(3, field);
 
-            rs=st.executeQuery();
+            rs = st.executeQuery();
 
-            while(rs.next())
+            while (rs.next())
                 result.add(new Episode(rs.getInt("id"), null, null, null));
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -229,7 +229,7 @@ public class SearchDAO implements ISearchDAO {
 
         AudioDAO aDAO = new AudioDAO();
         for (Episode episode : result) {
-            episode = aDAO.getEpisode(episode);      //get complete info of episode
+            episode = aDAO.getEpisode(episode, activeProfile);      //get complete info of episode
         }
 
         return result;
@@ -237,28 +237,28 @@ public class SearchDAO implements ISearchDAO {
 
 
     private ArrayList<Playlist> searchPlaylists(String field) {
-        connection= DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
         PreparedStatement st;
         ResultSet rs;
         ArrayList<Playlist> result = new ArrayList<>();
 
-        try{
+        try {
             String query = "SELECT Collection.id FROM Collection " +
                     "JOIN Playlist ON Collection.id = Playlist.id " +
                     "JOIN ProfilePlaylists ON Collection.id = ProfilePlaylists.idPlaylist " +
                     "JOIN Profile ON ProfilePlaylists.profileMail = Profile.mail " +
                     "WHERE (Collection.name LIKE '%?%' OR Profile.username LIKE '%?%') AND Playlist.isVisible=true;";
 
-            st=connection.prepareStatement(query);
+            st = connection.prepareStatement(query);
             st.setString(1, field);
             st.setString(2, field);
 
-            rs=st.executeQuery();
+            rs = st.executeQuery();
 
-            while(rs.next())
+            while (rs.next())
                 result.add(new Playlist(rs.getInt("id"), null, null));
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -274,28 +274,28 @@ public class SearchDAO implements ISearchDAO {
 
 
     private ArrayList<Album> searchAlbums(String field) {
-        connection= DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
         PreparedStatement st;
         ResultSet rs;
         ArrayList<Album> result = new ArrayList<>();
 
-        try{
+        try {
             String query = "SELECT Collection.id FROM Collection " +
                     "JOIN Album ON Collection.id = Album.id " +
                     "JOIN ArtistAlbums ON Collection.id = ArtistAlbums.idAlbum " +
                     "JOIN Profile ON ArtistAlbums.ArtistMail = Profile.mail " +
                     "WHERE Collection.name LIKE '%?%' OR Profile.username LIKE '%?%';";
 
-            st=connection.prepareStatement(query);
+            st = connection.prepareStatement(query);
             st.setString(1, field);
             st.setString(2, field);
 
-            rs=st.executeQuery();
+            rs = st.executeQuery();
 
-            while(rs.next())
+            while (rs.next())
                 result.add(new Album(rs.getInt("id"), null, null, null));
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -311,28 +311,28 @@ public class SearchDAO implements ISearchDAO {
 
 
     private ArrayList<Podcast> searchPodcasts(String field) {
-        connection= DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
         PreparedStatement st;
         ResultSet rs;
         ArrayList<Podcast> result = new ArrayList<>();
 
-        try{
+        try {
             String query = "SELECT Collection.id FROM Collection " +
                     "JOIN Podcast ON Collection.id = Podcast.id " +
                     "JOIN ArtistPodcasts ON Collection.id = ArtistPodcasts.idPodcast " +
                     "JOIN Profile ON ArtistPodcasts.ArtistMail = Profile.mail " +
                     "WHERE Collection.name LIKE '%?%' OR Profile.username LIKE '%?%';";
 
-            st=connection.prepareStatement(query);
+            st = connection.prepareStatement(query);
             st.setString(1, field);
             st.setString(2, field);
 
-            rs=st.executeQuery();
+            rs = st.executeQuery();
 
-            while(rs.next())
+            while (rs.next())
                 result.add(new Podcast(rs.getInt("id"), null, null, null));
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

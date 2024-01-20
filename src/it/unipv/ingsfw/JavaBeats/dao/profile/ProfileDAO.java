@@ -1,26 +1,13 @@
 package it.unipv.ingsfw.JavaBeats.dao.profile;
 
-import com.mysql.cj.jdbc.Blob;
-
 import it.unipv.ingsfw.JavaBeats.controller.factory.DBManagerFactory;
 import it.unipv.ingsfw.JavaBeats.dao.playable.AudioDAO;
 import it.unipv.ingsfw.JavaBeats.dao.playable.CollectionDAO;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.Song;
-import it.unipv.ingsfw.JavaBeats.model.playable.collection.Playlist;
 import it.unipv.ingsfw.JavaBeats.model.profile.*;
-import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.image.PixelFormat;
-import javafx.scene.image.PixelReader;
 
-import javax.imageio.ImageIO;
-import javax.imageio.stream.ImageInputStream;
-import javax.sql.rowset.serial.SerialBlob;
-import java.awt.image.BufferedImage;
 import java.io.*;
-import java.net.URL;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,7 +15,7 @@ import java.util.Arrays;
 public class ProfileDAO implements IProfileDAO{
 
   //ATTRIBUTES:
-  private final String schema="JavaBeats_DB";
+  private static final String schema = "JavaBeats_DB";
   private Connection connection;
 
 
@@ -253,8 +240,9 @@ public class ProfileDAO implements IProfileDAO{
     Time result=new Time(0);
 
     try{
-      String query="SELECT (SUM(TIMEDIFF(duration, '00:00:00'))) as 'total' FROM ListeningHistory A "+
-              "NATURAL JOIN (SELECT id as 'idAudio', duration FROM Audio) B WHERE profileMail=?;";
+      String query="SELECT (SUM(TIMEDIFF(duration, '00:00:00'))) AS 'total' FROM " +
+              "Audio JOIN ListeningHistory ON Audio.ID=ListeningHistory.idAudio " +
+              "WHERE profileMail=?;";
 
       st=connection.prepareStatement(query);
       st.setString(1, user.getMail());
@@ -326,7 +314,7 @@ public class ProfileDAO implements IProfileDAO{
     if(audioIDs!=null){
       AudioDAO aDAO=new AudioDAO();
       for(int track: audioIDs){
-        result.add(aDAO.get(new Song(track, null, null, null)));      //aDAO.get() will return either Song or Episode (only cares about the id of the JBAudio input, not the type)
+        result.add(aDAO.get(new Song(track, null, null, null), profile));      //aDAO.get() will return either Song or Episode (only cares about the id of the JBAudio input, not the type)
       }
     }
 
