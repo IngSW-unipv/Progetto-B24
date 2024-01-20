@@ -3,7 +3,7 @@ create table Audio (
     duration    	time                                 	not null,
     title       	varchar(50)                          	not null,
     releaseDate 	datetime   	default CURRENT_TIMESTAMP 	not null,
-    audioFile		blob							 		not null
+    audioFile		LONGBLOB							 		not null
 );
 
 create table Collection (

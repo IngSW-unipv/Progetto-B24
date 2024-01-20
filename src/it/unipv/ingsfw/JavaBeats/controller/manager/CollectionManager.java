@@ -68,21 +68,21 @@ public class CollectionManager{
     return favorites;
   }
 
-  public ArrayList<JBAudio> getCollectionAudios(JBCollection jbCollection){
+  public ArrayList<JBAudio> getCollectionAudios(JBCollection jbCollection, JBProfile activeProfile){
     AudioDAO audioDAO=new AudioDAO();
     ArrayList<JBAudio> result=new ArrayList<>();
 
     try{
       Playlist playlist=(Playlist)jbCollection;
 
-      result=audioDAO.selectByPlaylist(playlist);
+      result=audioDAO.selectByPlaylist(playlist, activeProfile);
     }catch(ClassCastException c1){
       try{
         Album album=(Album)jbCollection;
 
-        result.addAll(audioDAO.selectByAlbum(album));
+        result.addAll(audioDAO.selectByAlbum(album, activeProfile));
       }catch(ClassCastException c2){
-        result.addAll(audioDAO.selectByPodcast((Podcast)jbCollection));
+        result.addAll(audioDAO.selectByPodcast((Podcast)jbCollection, activeProfile));
       }//end-try
     }//end-try
     return result;

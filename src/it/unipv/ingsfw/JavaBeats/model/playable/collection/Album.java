@@ -19,6 +19,7 @@ public class Album extends JBCollection{
     super(id, name, creator, picture);
     this.trackList=trackList;
   }
+
   public Album(int id, String name, JBProfile creator, ArrayList<JBAudio> trackList){
     this(id, name, creator, trackList, null);
   }
@@ -51,11 +52,6 @@ public class Album extends JBCollection{
 
   @Override
   public void playFX(){
-    AudioDAO a= new AudioDAO();
-    ArrayList<Song> album=a.selectByAlbum(this);
-    for(Song song: album){
-      song.playFX();
-    }
-  }
 
+  }
 }

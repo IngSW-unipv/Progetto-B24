@@ -20,6 +20,7 @@ public class Podcast extends JBCollection{
     super(id, name, creator, picture);
     this.trackList=trackList;
   }
+
   public Podcast(int id, String name, JBProfile creator, ArrayList<JBAudio> trackList){
     this(id, name, creator, trackList, null);
   }
@@ -52,11 +53,7 @@ public class Podcast extends JBCollection{
 
   @Override
   public void playFX(){
-    AudioDAO a= new AudioDAO();
-    ArrayList<Episode> podcast=a.selectByPodcast(this);
-    for(Episode episode: podcast){
-      episode.playFX();
-    }
+
   }
 
 

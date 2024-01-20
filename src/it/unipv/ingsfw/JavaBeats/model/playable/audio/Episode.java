@@ -40,8 +40,8 @@ public class Episode extends JBAudio{
       f.deleteOnExit();
       FileUtils.writeByteArrayToFile(f, this.getAudioFileBlob().getBinaryStream().readAllBytes());
 
-      Media song=new Media(f.toURI().toURL().toString());
-      MediaPlayer mediaPlayer=new MediaPlayer(song);
+      Media episode=new Media(f.toURI().toURL().toString());
+      MediaPlayer mediaPlayer=new MediaPlayer(episode);
       mediaPlayer.play();
     }catch(IOException | SQLException e){
       throw new RuntimeException(e);

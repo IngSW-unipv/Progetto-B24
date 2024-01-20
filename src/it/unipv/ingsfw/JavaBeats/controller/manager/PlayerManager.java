@@ -5,13 +5,12 @@ import it.unipv.ingsfw.JavaBeats.model.playable.IJBPlayable;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
 
-import java.util.Collections;
 import java.util.LinkedList;
 
 public class PlayerManager{
   //Attributi
   private static LinkedList<JBAudio> queue=new LinkedList<>();
-  FXAdapter adapter=FXAdapterFactory.getInstance().getFXAdapter();
+  private FXAdapter adapter=FXAdapterFactory.getInstance().getFXAdapter();
 
   public PlayerManager(){
   }
@@ -31,5 +30,9 @@ public class PlayerManager{
 
   public void play(){
     adapter.play(queue.pop());
+  }
+
+  public void play(JBAudio jbAudio){
+    adapter.play(jbAudio);
   }
 }

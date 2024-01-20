@@ -49,7 +49,7 @@ public class CollectionLibraryHandler{
         Stage stage=(Stage)((Node)mouseEvent.getSource()).getScene().getWindow();
 
         JBCollection jbCollection=((JBCollection)((AudioCard)mouseEvent.getSource()).getIjbResearchable());
-        jbCollection.setTrackList(CollectionManagerFactory.getInstance().getCollectionManager().getCollectionAudios(jbCollection));
+        jbCollection.setTrackList(CollectionManagerFactory.getInstance().getCollectionManager().getCollectionAudios(jbCollection, activeProfile));
         CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, jbCollection);
         CollectionViewHandler collectionViewHandler=new CollectionViewHandler(collectionViewGUI, activeProfile);
 

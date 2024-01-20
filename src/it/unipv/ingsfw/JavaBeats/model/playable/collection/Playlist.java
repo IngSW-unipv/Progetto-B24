@@ -20,9 +20,11 @@ public class Playlist extends JBCollection{
     this.trackList=trackList;
     this.isVisible=isVisible;
   }
+
   public Playlist(int id, String name, JBProfile creator, ArrayList<JBAudio> trackList){
     this(id, name, creator, trackList, null, true);
   }
+
   public Playlist(int id, String name, JBProfile creator){
     this(id, name, creator, null, null, true);
   }
@@ -49,6 +51,7 @@ public class Playlist extends JBCollection{
   public void setTrackList(ArrayList<JBAudio> trackList){
     this.trackList=trackList;
   }
+
   public void setVisible(boolean Visible){
     isVisible=Visible;
   }
@@ -62,11 +65,7 @@ public class Playlist extends JBCollection{
 
   @Override
   public void playFX(){
-    AudioDAO a= new AudioDAO();
-    ArrayList<JBAudio> playlist=a.selectByPlaylist(this);
-    for(JBAudio audio: playlist){
-      audio.playFX();
-    }
+
   }
 
 }
