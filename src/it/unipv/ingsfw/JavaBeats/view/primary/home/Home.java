@@ -1,5 +1,7 @@
 package it.unipv.ingsfw.JavaBeats.view.primary.home;
+import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.Song;
+import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
 import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.view.presets.AudioCard;
@@ -19,6 +21,9 @@ import javafx.scene.text.FontWeight;
 
 import java.sql.SQLException;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 public class Home extends VBox{
   /*---------------------------------------*/
@@ -29,6 +34,7 @@ public class Home extends VBox{
   private static final Font fontUser=Font.font("Verdana", FontWeight.NORMAL, FontPosture.ITALIC, 15);
   private static final Background bgHome=new Background(new BackgroundFill(Color.rgb(15, 15, 15), CornerRadii.EMPTY, Insets.EMPTY));
   private static final LocalTime time=LocalTime.now();
+  private Button userProfileButton;
 
   /*---------------------------------------*/
   //Costruttori
@@ -40,7 +46,9 @@ public class Home extends VBox{
   /*---------------------------------------*/
   //Getter/Setter
   /*---------------------------------------*/
-
+  public Button getUserProfileButton(){
+    return userProfileButton;
+  }
   /*---------------------------------------*/
   //Metodi
   /*---------------------------------------*/
@@ -73,7 +81,7 @@ public class Home extends VBox{
     }//end-try
     userPicImageView.setPreserveRatio(true);
     userPicImageView.setFitHeight(60);
-    Button userProfileButton=new Button(activeProfile.getUsername());
+    userProfileButton=new Button(activeProfile.getUsername());
     userProfileButton.setBackground(bgHome);
     userProfileButton.setGraphic(userPicImageView);
     userProfileButton.setCursor(Cursor.HAND);
@@ -89,40 +97,85 @@ public class Home extends VBox{
      *   Setup of the Main visual content, all the recent types of listening. Songs, playlists and artists.
      */
     /* Recent songs block, we have a label and a HBox of AudioCards inside a JBScrollPane */
-    Label recentSongsLabel=new Label("Recent songs");
-    recentSongsLabel.setFont(fontRecents);
-    recentSongsLabel.setTextFill(Color.LIGHTGRAY);
-    recentSongsLabel.setPadding(new Insets(30, 0, 40, 0));
-    HBox songsHBox=new HBox(50, new AudioCard(activeProfile), new AudioCard(activeProfile), new AudioCard(activeProfile), new AudioCard(activeProfile), new AudioCard(activeProfile), new AudioCard(activeProfile), new AudioCard(activeProfile), new AudioCard(activeProfile), new AudioCard(activeProfile));
-    ScrollPanePreset songsScroll=new ScrollPanePreset(songsHBox);
-    songsScroll.setStyle("-fx-background: #0F0F0FFF; -fx-border-color: #0F0F0FFF");
-    songsScroll.setVbarPolicy(ScrollPanePreset.ScrollBarPolicy.NEVER);
-    setVgrow(songsScroll, Priority.ALWAYS);
+    Label recentAudiosLabel=new Label("Recent audios");
+    recentAudiosLabel.setFont(fontRecents);
+    recentAudiosLabel.setTextFill(Color.LIGHTGRAY);
+    recentAudiosLabel.setPadding(new Insets(30, 0, 40, 0));
+    HBox songsHBox=new HBox(50);
+    int i=0;
+    int count=0;
+    while(i<activeProfile.getListeningHistory().size() && count<15){
+      songsHBox.getChildren().add(new AudioCard(activeProfile.getListeningHistory().get(i)));
+      i+=1;
+      count+=1;
+    }//end-while
+    ScrollPanePreset audiosScroll=new ScrollPanePreset(songsHBox);
+    audiosScroll.setStyle("-fx-background: #0F0F0FFF; -fx-border-color: #0F0F0FFF");
+    audiosScroll.setVbarPolicy(ScrollPanePreset.ScrollBarPolicy.NEVER);
+    setVgrow(audiosScroll, Priority.ALWAYS);
 
     /* Recent songs block, we have a label and a HBox of AudioCards inside a JBScrollPane */
-    Label recentPlaylistLabel=new Label("Recent playlists");
-    recentPlaylistLabel.setFont(fontRecents);
-    recentPlaylistLabel.setTextFill(Color.LIGHTGRAY);
-    recentPlaylistLabel.setPadding(new Insets(40, 0, 40, 0));
-    HBox playlistsHBox=new HBox(50, new AudioCard(activeProfile), new AudioCard(activeProfile), new AudioCard(activeProfile), new AudioCard(activeProfile), new AudioCard(activeProfile), new AudioCard(activeProfile), new AudioCard(activeProfile), new AudioCard(activeProfile), new AudioCard(activeProfile));
-    ScrollPanePreset playlistScroll=new ScrollPanePreset(playlistsHBox);
-    playlistScroll.setStyle("-fx-background: #0F0F0FFF; -fx-border-color: #0F0F0FFF");
-    playlistScroll.setVbarPolicy(ScrollPanePreset.ScrollBarPolicy.NEVER);
-    setVgrow(playlistScroll, Priority.ALWAYS);
+    Label recentCollectionLabel=new Label("Recent collections");
+    recentCollectionLabel.setFont(fontRecents);
+    recentCollectionLabel.setTextFill(Color.LIGHTGRAY);
+    recentCollectionLabel.setPadding(new Insets(40, 0, 40, 0));
+    HBox collectionsHBox=new HBox(50);
+    /* Extracting all Collections from ListeningHistory  */
+    ArrayList<JBCollection> recentCollections=new ArrayList<>();
+    for(JBAudio jbAudio: activeProfile.getListeningHistory()){
+      recentCollections.add(jbAudio.getMetadata().getCollection());
+    }//end-foreach
+    try{
+      collectionsHBox.getChildren().add(new AudioCard(recentCollections.getFirst()));
+      i=1;
+      count=1;
+      while(i<recentCollections.size() && count<15){
+        if(!recentCollections.subList(0, i-1).contains(recentCollections.get(i))){
+          new AudioCard(recentCollections.get(i));
+          count+=1;
+        }//end-fi
+        i+=1;
+      }//end-while
+    }catch(IndexOutOfBoundsException | NoSuchElementException in){
+      /* No audios */
+    }//end-try
+    ScrollPanePreset collectionScroll=new ScrollPanePreset(collectionsHBox);
+    collectionScroll.setStyle("-fx-background: #0F0F0FFF; -fx-border-color: #0F0F0FFF");
+    collectionScroll.setVbarPolicy(ScrollPanePreset.ScrollBarPolicy.NEVER);
+    setVgrow(collectionScroll, Priority.ALWAYS);
 
     /* Recent songs block, we have a label and a HBox of AudioCards inside a JBScrollPane */
     Label recentArtists=new Label("Recent artists");
     recentArtists.setFont(fontRecents);
     recentArtists.setTextFill(Color.LIGHTGRAY);
     recentArtists.setPadding(new Insets(40, 0, 40, 0));
-    HBox artistsHBox=new HBox(50, new AudioCard(activeProfile), new AudioCard(activeProfile), new AudioCard(activeProfile), new AudioCard(activeProfile), new AudioCard(activeProfile), new AudioCard(activeProfile), new AudioCard(activeProfile), new AudioCard(activeProfile), new AudioCard(activeProfile));
+    HBox artistsHBox=new HBox(50);
+    /* Extracting all Collections from ListeningHistory  */
+    ArrayList<Artist> recentProfiles=new ArrayList<>();
+    for(JBAudio jbAudio: activeProfile.getListeningHistory()){
+      recentProfiles.add((Artist)jbAudio.getMetadata().getCollection().getCreator());
+    }//end-foreach
+    try{
+      artistsHBox.getChildren().add(new AudioCard(recentProfiles.getFirst()));
+      i=1;
+      count=1;
+      while(i<recentProfiles.size() && count<15){
+        if(!recentProfiles.subList(0, i-1).contains(recentProfiles.get(i))){
+          new AudioCard(recentProfiles.get(i));
+          count+=1;
+        }//end-fi
+        i+=1;
+      }//end-while
+    }catch(IndexOutOfBoundsException | NoSuchElementException in){
+      /* No audios */
+    }//end-try
     ScrollPanePreset artistScroll=new ScrollPanePreset(artistsHBox);
     artistScroll.setStyle("-fx-background: #0F0F0FFF; -fx-border-color: #0F0F0FFF");
     artistScroll.setVbarPolicy(ScrollPanePreset.ScrollBarPolicy.NEVER);
     setVgrow(artistScroll, Priority.ALWAYS);
 
     /* VBox with all the above components, inside a JBScrollPane */
-    VBox mainContent=new VBox(recentSongsLabel, songsScroll, recentPlaylistLabel, playlistScroll, recentArtists, artistScroll);
+    VBox mainContent=new VBox(recentAudiosLabel, audiosScroll, recentCollectionLabel, collectionScroll, recentArtists, artistScroll);
     ScrollPanePreset contentScroll=new ScrollPanePreset(mainContent);
     contentScroll.setStyle("-fx-background: #0F0F0FFF; -fx-border-color: #0F0F0FFF");
     contentScroll.setPadding(new Insets(15));

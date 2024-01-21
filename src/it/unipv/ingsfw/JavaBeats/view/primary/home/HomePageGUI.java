@@ -12,6 +12,7 @@ public class HomePageGUI{
   /*---------------------------------------*/
   private static final int clientWidth=(int)Screen.getPrimary().getBounds().getWidth();
   private static final int clientHeight=(int)Screen.getPrimary().getBounds().getHeight();
+  private Home home;
   private Scene scene;
 
   /*---------------------------------------*/
@@ -24,6 +25,9 @@ public class HomePageGUI{
   /*---------------------------------------*/
   //Getter/Setter
   /*---------------------------------------*/
+  public Home getHome(){
+    return home;
+  }
   public Scene getScene(){
     return scene;
   }
@@ -35,7 +39,7 @@ public class HomePageGUI{
     /* Setup of left Sidebar, bottom songbar and center home */
     Sidebar sidebar=Sidebar.getInstance(activeProfile);
     Songbar songbar=Songbar.getInstance(activeProfile);
-    Home home=new Home(activeProfile);
+    home=new Home(activeProfile);
 
     GridPane gp=new GridPane();
     gp.addRow(0, sidebar, home);

@@ -15,7 +15,7 @@ import java.util.Arrays;
 public class ProfileDAO implements IProfileDAO{
 
   //ATTRIBUTES:
-  private static final String schema = "JavaBeats_DB";
+  private static final String schema="JavaBeats_DB";
   private Connection connection;
 
 
@@ -90,29 +90,29 @@ public class ProfileDAO implements IProfileDAO{
   public void update(JBProfile profile){
     JBProfile oldProfile=get(profile);        //get profile as it is in DB to check for changes
 
-    try {
-      if (profile.getUsername() != null)          //check for null before using .equals to avoid exceptions
-        if (!(profile.getUsername().equals(oldProfile.getUsername())))
+    try{
+      if(profile.getUsername()!=null)          //check for null before using .equals to avoid exceptions
+        if(!(profile.getUsername().equals(oldProfile.getUsername())))
           updateUsername(profile);
 
-      if (profile.getPassword() != null)
-        if (!(profile.getPassword().equals(oldProfile.getPassword())))
+      if(profile.getPassword()!=null)
+        if(!(profile.getPassword().equals(oldProfile.getPassword())))
           updatePassword(profile);
 
-      if (profile.getName() != null)
-        if (!(profile.getName().equals(oldProfile.getName())))
+      if(profile.getName()!=null)
+        if(!(profile.getName().equals(oldProfile.getName())))
           updateName(profile);
 
-      if (profile.getSurname() != null)
-        if (!(profile.getSurname().equals(oldProfile.getSurname())))
+      if(profile.getSurname()!=null)
+        if(!(profile.getSurname().equals(oldProfile.getSurname())))
           updateSurname(profile);
 
-      if (profile.getBiography() != null)
-        if (!(profile.getBiography().equals(oldProfile.getBiography())))
+      if(profile.getBiography()!=null)
+        if(!(profile.getBiography().equals(oldProfile.getBiography())))
           updateBiography(profile);
 
-      if (profile.getProfilePicture() != null)
-        if (!Arrays.equals(profile.getProfilePicture().getBinaryStream().readAllBytes(), profile.getProfilePicture().getBinaryStream().readAllBytes()))
+      if(profile.getProfilePicture()!=null)
+        if(!Arrays.equals(profile.getProfilePicture().getBinaryStream().readAllBytes(), profile.getProfilePicture().getBinaryStream().readAllBytes()))
           updateProfilePicture(profile);
     }catch(SQLException | IOException s){
       throw new RuntimeException(s);
@@ -240,8 +240,8 @@ public class ProfileDAO implements IProfileDAO{
     Time result=new Time(0);
 
     try{
-      String query="SELECT (SUM(TIMEDIFF(duration, '00:00:00'))) AS 'total' FROM " +
-              "Audio JOIN ListeningHistory ON Audio.ID=ListeningHistory.idAudio " +
+      String query="SELECT (SUM(TIMEDIFF(duration, '00:00:00'))) AS 'total' FROM "+
+              "Audio JOIN ListeningHistory ON Audio.ID=ListeningHistory.idAudio "+
               "WHERE profileMail=?;";
 
       st=connection.prepareStatement(query);
@@ -291,7 +291,7 @@ public class ProfileDAO implements IProfileDAO{
     connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
     PreparedStatement st;
     ResultSet rs;
-    ArrayList<Integer> audioIDs=null;
+    ArrayList<Integer> audioIDs=new ArrayList<>();
     ArrayList<JBAudio> result=new ArrayList<>();
 
     try{
@@ -310,12 +310,9 @@ public class ProfileDAO implements IProfileDAO{
     }
 
     DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
-
-    if(audioIDs!=null){
-      AudioDAO aDAO=new AudioDAO();
-      for(int track: audioIDs){
-        result.add(aDAO.get(new Song(track, null, null, null), profile));      //aDAO.get() will return either Song or Episode (only cares about the id of the JBAudio input, not the type)
-      }
+    AudioDAO aDAO=new AudioDAO();
+    for(int track: audioIDs){
+      result.add(aDAO.get(new Song(track, null, null, null), profile));      //aDAO.get() will return either Song or Episode (only cares about the id of the JBAudio input, not the type)
     }
 
     return result;
