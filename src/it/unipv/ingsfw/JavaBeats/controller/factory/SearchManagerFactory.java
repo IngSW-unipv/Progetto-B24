@@ -1,6 +1,5 @@
 package it.unipv.ingsfw.JavaBeats.controller.factory;
 
-package it.unipv.ingsfw.JavaBeats.controller.factory;
 
 import java.util.Properties;
 
