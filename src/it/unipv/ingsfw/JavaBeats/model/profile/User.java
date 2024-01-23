@@ -2,7 +2,7 @@ package it.unipv.ingsfw.JavaBeats.model.profile;
 
 
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
-import it.unipv.ingsfw.JavaBeats.model.playable.collection.Playlist;
+import it.unipv.ingsfw.JavaBeats.model.collection.Playlist;
 
 import java.sql.Blob;
 import java.sql.Time;
@@ -21,6 +21,7 @@ public class User extends JBProfile{
     this.isVisible=isVisible;
     this.totalListeningTime=totalListeningTime;
   }
+
   public User(String username, String mail, String password){
     this(username, mail, password, null, null, null, null, true, null, null, null);
   }
@@ -34,9 +35,11 @@ public class User extends JBProfile{
   public boolean isVisible(){
     return isVisible;
   }
+
   public Time getMinuteListened(){
     return totalListeningTime;
   }
+
   public JBProfile getCopy(){
     return new User(this.getUsername(), this.getMail(), this.getPassword(), this.getName(), this.getSurname(), this.getBiography(), this.getProfilePicture(), this.isVisible, this.totalListeningTime, this.getListeningHistory(), this.getFavorites());
   }
@@ -46,6 +49,7 @@ public class User extends JBProfile{
   public void setVisible(boolean visible){
     isVisible=visible;
   }
+
   public void setMinuteListened(Time minuteListened){
     this.totalListeningTime=minuteListened;
   }

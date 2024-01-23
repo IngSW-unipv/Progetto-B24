@@ -2,7 +2,7 @@ package it.unipv.ingsfw.JavaBeats.dao.profile;
 
 import it.unipv.ingsfw.JavaBeats.controller.factory.DBManagerFactory;
 import it.unipv.ingsfw.JavaBeats.dao.playable.AudioDAO;
-import it.unipv.ingsfw.JavaBeats.dao.playable.CollectionDAO;
+import it.unipv.ingsfw.JavaBeats.dao.collection.CollectionDAO;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.Song;
 import it.unipv.ingsfw.JavaBeats.model.profile.*;

@@ -3,7 +3,7 @@ import it.unipv.ingsfw.JavaBeats.controller.adapter.FXAdapter;
 import it.unipv.ingsfw.JavaBeats.controller.factory.FXAdapterFactory;
 import it.unipv.ingsfw.JavaBeats.model.playable.IJBPlayable;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
-import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
+import it.unipv.ingsfw.JavaBeats.model.collection.JBCollection;
 import javafx.scene.media.MediaPlayer;
 
 import java.util.LinkedList;
@@ -18,16 +18,14 @@ public class PlayerManager{
   }
 
   //Metodi
-  public void addToQueue(IJBPlayable ijbPlayable){
-    try{
-      JBCollection jbCollection=(JBCollection)ijbPlayable;
+  public void addToQueue(JBCollection jbCollection){
+    for(JBAudio jbAudio: jbCollection.getTrackList()){
+      queue.push(jbAudio);
+    }//end-foreach
+  }
 
-      for(JBAudio jbAudio: jbCollection.getTrackList()){
-        queue.push(jbAudio);
-      }//end-foreach
-    }catch(ClassCastException c){
-      queue.push((JBAudio)ijbPlayable);
-    }//end-try
+  public void addToQueue(JBAudio ijbPlayable){
+    queue.push(ijbPlayable);
   }
 
   public void play(){

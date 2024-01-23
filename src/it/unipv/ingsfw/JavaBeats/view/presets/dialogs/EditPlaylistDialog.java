@@ -1,6 +1,6 @@
 package it.unipv.ingsfw.JavaBeats.view.presets.dialogs;
-import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
-import it.unipv.ingsfw.JavaBeats.model.playable.collection.Playlist;
+import it.unipv.ingsfw.JavaBeats.model.collection.JBCollection;
+import it.unipv.ingsfw.JavaBeats.model.collection.Playlist;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;

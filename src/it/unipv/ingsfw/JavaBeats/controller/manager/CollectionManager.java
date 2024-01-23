@@ -1,19 +1,17 @@
 package it.unipv.ingsfw.JavaBeats.controller.manager;
 
 import it.unipv.ingsfw.JavaBeats.dao.playable.AudioDAO;
-import it.unipv.ingsfw.JavaBeats.dao.playable.CollectionDAO;
+import it.unipv.ingsfw.JavaBeats.dao.collection.CollectionDAO;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
-import it.unipv.ingsfw.JavaBeats.model.playable.audio.Song;
-import it.unipv.ingsfw.JavaBeats.model.playable.collection.Album;
-import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
-import it.unipv.ingsfw.JavaBeats.model.playable.collection.Playlist;
-import it.unipv.ingsfw.JavaBeats.model.playable.collection.Podcast;
+import it.unipv.ingsfw.JavaBeats.model.collection.Album;
+import it.unipv.ingsfw.JavaBeats.model.collection.JBCollection;
+import it.unipv.ingsfw.JavaBeats.model.collection.Playlist;
+import it.unipv.ingsfw.JavaBeats.model.collection.Podcast;
 import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 
 import javax.imageio.ImageIO;
 import javax.sql.rowset.serial.SerialBlob;
-import javax.sql.rowset.serial.SerialException;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;

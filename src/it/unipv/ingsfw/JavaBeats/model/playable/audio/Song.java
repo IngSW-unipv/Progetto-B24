@@ -1,17 +1,13 @@
 package it.unipv.ingsfw.JavaBeats.model.playable.audio;
 
 import it.unipv.ingsfw.JavaBeats.controller.factory.PlayerManagerFactory;
-import it.unipv.ingsfw.JavaBeats.controller.factory.ProfileManagerFactory;
 import it.unipv.ingsfw.JavaBeats.controller.handler.PlayerHandler;
-import it.unipv.ingsfw.JavaBeats.controller.manager.PlayerManager;
-import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
+import it.unipv.ingsfw.JavaBeats.model.collection.JBCollection;
 import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
 import javafx.scene.media.*;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.Date;

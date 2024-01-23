@@ -1,6 +1,6 @@
 package it.unipv.ingsfw.JavaBeats.view.library;
-import it.unipv.ingsfw.JavaBeats.model.playable.collection.Album;
-import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
+import it.unipv.ingsfw.JavaBeats.model.collection.Album;
+import it.unipv.ingsfw.JavaBeats.model.collection.JBCollection;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.view.presets.Sidebar;
 import it.unipv.ingsfw.JavaBeats.view.presets.Songbar;
@@ -20,10 +20,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.stage.Screen;
 
 import java.sql.SQLException;
+
 public class CreationGUI{
 
   //Attributi
@@ -45,24 +45,31 @@ public class CreationGUI{
   public Scene getScene(){
     return scene;
   }
+
   public JBCollection getNewCollection(){
     return newCollection;
   }
+
   public ImageView getCollectionImageView(){
     return collectionImageView;
   }
+
   public Button getCollectionPictureButton(){
     return collectionPictureButton;
   }
+
   public TextField getNameTextField(){
     return nameTextField;
   }
+
   public Button getAddButton(){
     return addButton;
   }
+
   public Button getCreate(){
     return create;
   }
+
   public CreationGUI(JBProfile activeProfile, JBCollection jbCollection){
     this.newCollection=jbCollection;
     initComponents(activeProfile, jbCollection);

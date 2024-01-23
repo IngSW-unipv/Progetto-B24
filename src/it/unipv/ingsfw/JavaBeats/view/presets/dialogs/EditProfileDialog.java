@@ -1,8 +1,6 @@
 package it.unipv.ingsfw.JavaBeats.view.presets.dialogs;
-import com.pixelduke.control.skin.FXSkins;
-import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
+import it.unipv.ingsfw.JavaBeats.model.collection.JBCollection;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
-import it.unipv.ingsfw.JavaBeats.model.profile.User;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;

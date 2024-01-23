@@ -1,11 +1,7 @@
 package it.unipv.ingsfw.JavaBeats.view.library;
 
-import it.unipv.ingsfw.JavaBeats.model.playable.EJBPLAYABLE;
-import it.unipv.ingsfw.JavaBeats.model.playable.audio.Song;
-import it.unipv.ingsfw.JavaBeats.model.playable.collection.Album;
-import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
-import it.unipv.ingsfw.JavaBeats.model.playable.collection.Playlist;
-import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
+import it.unipv.ingsfw.JavaBeats.model.EJBENTITY;
+import it.unipv.ingsfw.JavaBeats.model.collection.JBCollection;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.view.presets.AudioCard;
 import it.unipv.ingsfw.JavaBeats.view.presets.Sidebar;
@@ -37,41 +33,48 @@ public class CollectionLibraryGUI{
   private static final int clientHeight=(int)Screen.getPrimary().getBounds().getHeight();
   private static final Background bg=new Background(new BackgroundFill(Color.rgb(15, 15, 15), CornerRadii.EMPTY, Insets.EMPTY));
   private static final Font fontCollection=Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 25);
-  private EJBPLAYABLE ejbplayable;
+  private EJBENTITY ejbentity;
   private ArrayList<JBCollection> jbCollectionArrayList;
   private FlowPane collectionFlowPane;
   private Button buttonPlus;
   private Scene scene;
-  public CollectionLibraryGUI(JBProfile activeProfile, ArrayList<JBCollection> jbCollectionArrayList, EJBPLAYABLE ejbplayable){
+
+  public CollectionLibraryGUI(JBProfile activeProfile, ArrayList<JBCollection> jbCollectionArrayList, EJBENTITY ejbentity){
     this.jbCollectionArrayList=jbCollectionArrayList;
-    this.ejbplayable=ejbplayable;
-    initComponents(activeProfile, jbCollectionArrayList, ejbplayable);
+    this.ejbentity=ejbentity;
+    initComponents(activeProfile, jbCollectionArrayList, ejbentity);
   }
+
   /*---------------------------------------*/
   //Getter/Setter
   /*---------------------------------------*/
   public Scene getScene(){
     return scene;
   }
+
   public ArrayList<JBCollection> getJbCollectionArrayList(){
     return jbCollectionArrayList;
   }
+
   public FlowPane getCollectionFlowPane(){
     return collectionFlowPane;
   }
+
   public Button getButtonPlus(){
     return buttonPlus;
   }
-  public EJBPLAYABLE getEjbplayable(){
-    return ejbplayable;
+
+  public EJBENTITY getEjbentity(){
+    return ejbentity;
   }
+
   /*---------------------------------------*/
   //Methods
   /*---------------------------------------*/
-  private void initComponents(JBProfile activeProfile, ArrayList<JBCollection> jbCollectionArrayList, EJBPLAYABLE ejbplayable){
+  private void initComponents(JBProfile activeProfile, ArrayList<JBCollection> jbCollectionArrayList, EJBENTITY ejbentity){
     //Label collection title
     Label collectionLabel=null;
-    switch(ejbplayable){
+    switch(ejbentity){
       case PLAYLIST:
         collectionLabel=new Label("Your playlists");
         break;

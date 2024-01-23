@@ -2,7 +2,7 @@ package it.unipv.ingsfw.JavaBeats.view.presets;
 
 import it.unipv.ingsfw.JavaBeats.model.IJBResearchable;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
-import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
+import it.unipv.ingsfw.JavaBeats.model.collection.JBCollection;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -37,6 +37,7 @@ public class AudioCard extends VBox{
   public IJBResearchable getIjbResearchable(){
     return ijbResearchable;
   }
+
   private void initComponents(){
 
     ImageView cardImageView=null;

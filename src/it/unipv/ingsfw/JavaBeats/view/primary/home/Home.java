@@ -1,7 +1,6 @@
 package it.unipv.ingsfw.JavaBeats.view.primary.home;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
-import it.unipv.ingsfw.JavaBeats.model.playable.audio.Song;
-import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
+import it.unipv.ingsfw.JavaBeats.model.collection.JBCollection;
 import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.view.presets.AudioCard;
@@ -23,7 +22,6 @@ import java.sql.SQLException;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 public class Home extends VBox{
   /*---------------------------------------*/
@@ -43,12 +41,14 @@ public class Home extends VBox{
     super();
     initComponents(activeProfile);
   }
+
   /*---------------------------------------*/
   //Getter/Setter
   /*---------------------------------------*/
   public Button getUserProfileButton(){
     return userProfileButton;
   }
+
   /*---------------------------------------*/
   //Metodi
   /*---------------------------------------*/

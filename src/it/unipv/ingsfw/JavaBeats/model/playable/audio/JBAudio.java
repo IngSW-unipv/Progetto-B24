@@ -1,7 +1,7 @@
 package it.unipv.ingsfw.JavaBeats.model.playable.audio;
 
 import it.unipv.ingsfw.JavaBeats.model.playable.IJBItem;
-import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
+import it.unipv.ingsfw.JavaBeats.model.collection.JBCollection;
 import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
 
 import java.sql.Blob;
@@ -41,36 +41,47 @@ public abstract class JBAudio implements IJBItem{
     public Artist getArtist(){
       return artist;
     }
+
     public void setArtist(Artist artist){
       this.artist=artist;
     }
+
     public String getTitle(){
       return title;
     }
+
     public void setTitle(String title){
       this.title=title;
     }
+
     public Time getDuration(){
       return duration;
     }
+
     public void setDuration(Time duration){
       this.duration=duration;
     }
+
     public Date getReleaseDate(){
       return releaseDate;
     }
+
     public void setReleaseDate(Date releaseDate){
       this.releaseDate=releaseDate;
     }
+
     public String[] getGenres(){
       return genres;
     }
+
     public void setGenres(String[] genres){
       this.genres=genres;
     }
+
     public JBCollection getCollection(){
       return collection;
     }
+
     public void setCollection(JBCollection collection){
       this.collection=collection;
     }
@@ -85,6 +96,7 @@ public abstract class JBAudio implements IJBItem{
     this.isFavorite=isFavorite;
     this.numberOfStreams=numberOfStreams;
   }
+
   public JBAudio(int id, String title, Artist artist, Blob audioFile){
     this(id, title, artist, null, audioFile, Time.valueOf("00:00:00"), new Date(System.currentTimeMillis()), null, false, 0);
   }
@@ -94,15 +106,19 @@ public abstract class JBAudio implements IJBItem{
   public int getId(){
     return id;
   }
+
   public boolean isFavorite(){
     return isFavorite;
   }
+
   public int getNumberOfStreams(){
     return numberOfStreams;
   }
+
   public Metadata getMetadata(){
     return metadata;
   }
+
   public Blob getAudioFileBlob(){
     return audioFile;
   }
@@ -112,15 +128,19 @@ public abstract class JBAudio implements IJBItem{
   public void setId(int id){
     this.id=id;
   }
+
   public void setFavorite(boolean isFavorite){
     this.isFavorite=this.isFavorite;
   }
+
   public void setNumberOfStreams(int numberOfStreams){
     this.numberOfStreams=numberOfStreams;
   }
+
   public void setMetadata(Metadata metadata){
     this.metadata=metadata;
   }
+
   public void setAudioFileBlob(Blob audioFile){
     this.audioFile=audioFile;
   }

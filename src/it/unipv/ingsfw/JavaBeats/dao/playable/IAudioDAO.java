@@ -1,9 +1,9 @@
 package it.unipv.ingsfw.JavaBeats.dao.playable;
 
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.*;
-import it.unipv.ingsfw.JavaBeats.model.playable.collection.Album;
-import it.unipv.ingsfw.JavaBeats.model.playable.collection.Playlist;
-import it.unipv.ingsfw.JavaBeats.model.playable.collection.Podcast;
+import it.unipv.ingsfw.JavaBeats.model.collection.Album;
+import it.unipv.ingsfw.JavaBeats.model.collection.Playlist;
+import it.unipv.ingsfw.JavaBeats.model.collection.Podcast;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 
 import java.util.ArrayList;

@@ -1,9 +1,10 @@
-package it.unipv.ingsfw.JavaBeats.dao.playable;
+package it.unipv.ingsfw.JavaBeats.dao.collection;
 
 import it.unipv.ingsfw.JavaBeats.controller.factory.DBManagerFactory;
+import it.unipv.ingsfw.JavaBeats.dao.playable.AudioDAO;
 import it.unipv.ingsfw.JavaBeats.dao.profile.ProfileDAO;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.*;
-import it.unipv.ingsfw.JavaBeats.model.playable.collection.*;
+import it.unipv.ingsfw.JavaBeats.model.collection.*;
 import it.unipv.ingsfw.JavaBeats.model.profile.*;
 
 import java.sql.Connection;

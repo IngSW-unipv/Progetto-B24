@@ -1,12 +1,11 @@
 package it.unipv.ingsfw.JavaBeats.controller.handler.library;
 
 import it.unipv.ingsfw.JavaBeats.controller.factory.CollectionManagerFactory;
-import it.unipv.ingsfw.JavaBeats.model.playable.EJBPLAYABLE;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
-import it.unipv.ingsfw.JavaBeats.model.playable.collection.Album;
-import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
-import it.unipv.ingsfw.JavaBeats.model.playable.collection.Playlist;
-import it.unipv.ingsfw.JavaBeats.model.playable.collection.Podcast;
+import it.unipv.ingsfw.JavaBeats.model.collection.Album;
+import it.unipv.ingsfw.JavaBeats.model.collection.JBCollection;
+import it.unipv.ingsfw.JavaBeats.model.collection.Playlist;
+import it.unipv.ingsfw.JavaBeats.model.collection.Podcast;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.view.library.CollectionLibraryGUI;
 import it.unipv.ingsfw.JavaBeats.view.library.CollectionViewGUI;
@@ -78,12 +77,12 @@ public class CollectionLibraryHandler{
         }catch(IOException e){
           throw new RuntimeException(e);
         }//end-try
-        switch(collectionLibraryGUI.getEjbplayable()){
+        switch(collectionLibraryGUI.getEjbentity()){
           case PLAYLIST:
             newCollection=new Playlist(1, "New playlist", activeProfile);
             CollectionManagerFactory.getInstance().getCollectionManager().createJBCollection(newCollection);
             ArrayList<JBCollection> jbPlaylistsArraylist=CollectionManagerFactory.getInstance().getCollectionManager().getPlaylists(activeProfile);
-            CollectionLibraryGUI collectionLibraryGUI1=new CollectionLibraryGUI(activeProfile, jbPlaylistsArraylist, collectionLibraryGUI.getEjbplayable());
+            CollectionLibraryGUI collectionLibraryGUI1=new CollectionLibraryGUI(activeProfile, jbPlaylistsArraylist, collectionLibraryGUI.getEjbentity());
             CollectionLibraryHandler collectionLibraryHandler=new CollectionLibraryHandler(activeProfile, collectionLibraryGUI1);
             stage.setScene(collectionLibraryGUI1.getScene());
             break;

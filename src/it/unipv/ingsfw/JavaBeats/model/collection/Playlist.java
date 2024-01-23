@@ -1,6 +1,5 @@
-package it.unipv.ingsfw.JavaBeats.model.playable.collection;
+package it.unipv.ingsfw.JavaBeats.model.collection;
 
-import it.unipv.ingsfw.JavaBeats.dao.playable.AudioDAO;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 
@@ -61,11 +60,6 @@ public class Playlist extends JBCollection{
   @Override
   public String toString(){
     return "PLAYLIST  -  Name: "+this.getName()+";  Creator Mail: "+this.getCreator().getMail()+".";
-  }
-
-  @Override
-  public void playFX(){
-
   }
 
 }

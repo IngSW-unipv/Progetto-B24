@@ -1,6 +1,7 @@
-package it.unipv.ingsfw.JavaBeats.model.playable.collection;
+package it.unipv.ingsfw.JavaBeats.model.collection;
 
 import it.unipv.ingsfw.JavaBeats.model.EJBMODE;
+import it.unipv.ingsfw.JavaBeats.model.IJBResearchable;
 import it.unipv.ingsfw.JavaBeats.model.playable.IJBItem;
 import it.unipv.ingsfw.JavaBeats.model.playable.IJBPlayable;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
@@ -9,7 +10,7 @@ import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import java.sql.Blob;
 import java.util.ArrayList;
 
-public abstract class JBCollection implements IJBPlayable{
+public abstract class JBCollection implements IJBResearchable{
 
   //ATTRIBUTES:
   private int id;
@@ -25,6 +26,7 @@ public abstract class JBCollection implements IJBPlayable{
     this.creator=creator;
     this.picture=picture;
   }
+
   protected JBCollection(int id, String name, JBProfile creator){
     this(id, name, creator, null);
   }
@@ -34,15 +36,19 @@ public abstract class JBCollection implements IJBPlayable{
   public int getId(){
     return id;
   }
+
   public String getName(){
     return name;
   }
+
   public JBProfile getCreator(){
     return creator;
   }
+
   public Blob getPicture(){
     return picture;
   }
+
   public abstract ArrayList<JBAudio> getTrackList();
 
   public abstract JBCollection getCopy();
@@ -52,27 +58,26 @@ public abstract class JBCollection implements IJBPlayable{
   public void setId(int id){
     this.id=id;
   }
+
   public void setName(String name){
     this.name=name;
   }
+
   public void setCreator(JBProfile creator){
     this.creator=creator;
   }
+
   public void setPicture(Blob picture){
     this.picture=picture;
   }
+
   public abstract void setTrackList(ArrayList<JBAudio> trackList);
 
 
   //METHODS:
   public void addItem(JBProfile activeJBProfile, IJBItem item){
   }
+
   public void removeItem(JBProfile activeJBProfile, IJBItem item){
   }
-  public void play(EJBMODE mode){
-  }
-  public void playFX(){
-  }
-
-
 }

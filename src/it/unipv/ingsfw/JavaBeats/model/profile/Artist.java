@@ -1,7 +1,7 @@
 package it.unipv.ingsfw.JavaBeats.model.profile;
 
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
-import it.unipv.ingsfw.JavaBeats.model.playable.collection.Playlist;
+import it.unipv.ingsfw.JavaBeats.model.collection.Playlist;
 
 import java.sql.Blob;
 import java.util.ArrayList;
@@ -17,6 +17,7 @@ public class Artist extends JBProfile{
     super(username, mail, password, name, surname, biography, profilePicture, listeningHistory, favorites);
     this.totalListeners=totalListeners;
   }
+
   public Artist(String username, String mail, String password){
     this(username, mail, password, null, null, null, null, 0, null, null);
   }
@@ -26,6 +27,7 @@ public class Artist extends JBProfile{
   public int getTotalListeners(){
     return totalListeners;
   }
+
   public JBProfile getCopy(){
     return new Artist(this.getUsername(), this.getMail(), this.getPassword(), this.getName(), this.getSurname(), this.getBiography(), this.getProfilePicture(), this.totalListeners, this.getListeningHistory(), this.getFavorites());
   }

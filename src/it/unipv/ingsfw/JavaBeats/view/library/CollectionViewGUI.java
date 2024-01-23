@@ -1,10 +1,6 @@
 package it.unipv.ingsfw.JavaBeats.view.library;
-import it.unipv.ingsfw.JavaBeats.model.playable.*;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
-import it.unipv.ingsfw.JavaBeats.model.playable.audio.Song;
-import it.unipv.ingsfw.JavaBeats.model.playable.collection.Album;
-import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
-import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
+import it.unipv.ingsfw.JavaBeats.model.collection.JBCollection;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.view.presets.AudioTable;
 import it.unipv.ingsfw.JavaBeats.view.presets.Sidebar;
@@ -17,12 +13,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.*;
 import javafx.stage.Screen;
-
-import javax.sql.rowset.serial.SerialBlob;
-import java.sql.Date;
-import java.sql.SQLException;
-import java.sql.Time;
-import java.util.ArrayList;
 
 public class CollectionViewGUI{
   /*---------------------------------------*/

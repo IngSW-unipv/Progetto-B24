@@ -1,8 +1,7 @@
 package it.unipv.ingsfw.JavaBeats.view.presets;
-import it.unipv.ingsfw.JavaBeats.model.playable.EJBPLAYABLE;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
-import it.unipv.ingsfw.JavaBeats.model.playable.collection.Album;
-import it.unipv.ingsfw.JavaBeats.model.playable.collection.JBCollection;
+import it.unipv.ingsfw.JavaBeats.model.collection.Album;
+import it.unipv.ingsfw.JavaBeats.model.collection.JBCollection;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.view.presets.tableColumns.DeleteButtonTableColumn;
 import it.unipv.ingsfw.JavaBeats.view.presets.tableColumns.FavoriteButtonTableColumn;
@@ -11,7 +10,6 @@ import it.unipv.ingsfw.JavaBeats.view.presets.tableColumns.TitleTableColumn;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
 import javafx.stage.Screen;
 
 public class AudioTable extends TableView<JBAudio>{
@@ -72,9 +70,9 @@ public class AudioTable extends TableView<JBAudio>{
       getColumns().addAll(playColumn, titleColumn, collectionColumn, dateColumn, favoriteColumn, durationColumn);
     }else{
       try{
-        Album album=(Album) jbCollection;
+        Album album=(Album)jbCollection;
         getColumns().addAll(playColumn, titleColumn, collectionColumn, dateColumn, favoriteColumn, durationColumn);
-      }catch (ClassCastException e){
+      }catch(ClassCastException e){
         getColumns().addAll(playColumn, titleColumn, collectionColumn, dateColumn, favoriteColumn, durationColumn, deleteColumn);
       }
 
