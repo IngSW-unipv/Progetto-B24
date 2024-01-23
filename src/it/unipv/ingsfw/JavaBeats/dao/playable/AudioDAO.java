@@ -15,6 +15,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class AudioDAO implements IAudioDAO{
 
@@ -39,6 +40,7 @@ public class AudioDAO implements IAudioDAO{
 
     linkAudioToCollection(audio);   //link audio to Album or Podcast (from audio metadata)
 
+    System.out.println("Ci sono");
     linkAudioToGenres(audio);       //link audio to Genres (from audio metadata)
 
   }
@@ -569,6 +571,7 @@ public class AudioDAO implements IAudioDAO{
 
     if(audio.getMetadata().getGenres()!=null){       //sometimes metadata don't specify genres
       String[] genreArray=audio.getMetadata().getGenres();
+      System.out.println(Arrays.toString(genreArray));
 
       connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
       PreparedStatement st1, st2, st3;
@@ -583,7 +586,8 @@ public class AudioDAO implements IAudioDAO{
           st1.setString(1, s);                        //check if genre is already in DB
           rs1=st1.executeQuery();
 
-          if(rs1==null){         //if genre not in DB
+          if(!rs1.isBeforeFirst()){         //if genre not in DB
+            System.out.println("Genere non in DB");
             String q2="INSERT INTO Genre(genre) VALUE(?);";
             st2=connection.prepareStatement(q2);
 
@@ -591,6 +595,7 @@ public class AudioDAO implements IAudioDAO{
             st2.executeUpdate();
           }
 
+          System.out.println("Genere in DB ora linko");
           String q3="INSERT INTO AudioGenres(idAudio, genre) VALUE(?, ?);";
           st3=connection.prepareStatement(q3);
 

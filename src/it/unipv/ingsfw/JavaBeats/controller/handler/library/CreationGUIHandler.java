@@ -81,7 +81,7 @@ public class CreationGUIHandler{
           fileInputStream.read(fileContent);
           fileInputStream.close();
           creationGUI.getNewCollection().setPicture(new SerialBlob(fileContent));
-          creationGUI.getCollectionImageView().setImage(new Image(url.toExternalForm(), true));
+          creationGUI.getCollectionImageView().setImage(new Image(url.toExternalForm(), 250, 250, false, false));
         }catch(IOException | SQLException e){
           throw new RuntimeException(e);
         }//end-try
@@ -124,10 +124,10 @@ public class CreationGUIHandler{
             Blob fileAudio=new SerialBlob(fileContent);
             try{
               Album a=(Album)creationGUI.getNewCollection();
-              jbAudio=new Song(1, metadata.get("dc:title")==null ? FilenameUtils.removeExtension(f.getName()) : metadata.get("dc:title"), (Artist)a.getCreator(), creationGUI.getNewCollection(), fileAudio, new Time((long)media.getDuration().toMillis()), new Date(System.currentTimeMillis()), new String[] {metadata.get("xmpDM:genre")}, false, 0);
+              jbAudio=new Song(0, metadata.get("dc:title")==null ? FilenameUtils.removeExtension(f.getName()) : metadata.get("dc:title"), (Artist)a.getCreator(), creationGUI.getNewCollection(), fileAudio, new Time((long)media.getDuration().toMillis()), new Date(System.currentTimeMillis()), new String[] {metadata.get("xmpDM:genre")}, false, 0);
             }catch(ClassCastException c){
               Podcast p=(Podcast)creationGUI.getNewCollection();
-              jbAudio=new Episode(1, metadata.get("dc:title")==null ? FilenameUtils.removeExtension(f.getName()) : metadata.get("dc:title"), (Artist)p.getCreator(), creationGUI.getNewCollection(), fileAudio, new Time((long)media.getDuration().toMillis()), new Date(System.currentTimeMillis()), new String[] {metadata.get("xmpDM:genre")}, false, 0);
+              jbAudio=new Episode(0, metadata.get("dc:title")==null ? FilenameUtils.removeExtension(f.getName()) : metadata.get("dc:title"), (Artist)p.getCreator(), creationGUI.getNewCollection(), fileAudio, new Time((long)media.getDuration().toMillis()), new Date(System.currentTimeMillis()), new String[] {metadata.get("xmpDM:genre")}, false, 0);
             }//end-try
             creationGUI.getNewCollection().getTrackList().add(jbAudio);
           }catch(IOException | TikaException | SAXException | SQLException e){
@@ -141,6 +141,10 @@ public class CreationGUIHandler{
       public void handle(ActionEvent actionEvent){
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
 
+//        if(regex collection name){
+//
+//        }
+        creationGUI.getNewCollection().setName(creationGUI.getNameTextField().getText());
         JBCollection collection=CollectionManagerFactory.getInstance().getCollectionManager().createJBCollection(creationGUI.getNewCollection());
 
         CollectionLibraryGUI collectionLibraryGUI=null;

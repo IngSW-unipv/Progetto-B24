@@ -144,15 +144,4 @@ public abstract class JBAudio implements IJBItem{
   public void setAudioFileBlob(Blob audioFile){
     this.audioFile=audioFile;
   }
-
-
-  //METHODS:
-  public void playFX(){
-
-  }
-
-  public void pause(){
-
-  }
-
 }

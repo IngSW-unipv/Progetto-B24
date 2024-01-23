@@ -29,17 +29,19 @@ public class CollectionManager{
   public JBCollection createJBCollection(JBCollection jbCollection){
     CollectionDAO c=new CollectionDAO();
 
-    /* Default collection image when inserting */
-    BufferedImage bufferedImage=null;
-    try{
-      bufferedImage=ImageIO.read(new File("src/it/unipv/ingsfw/JavaBeats/view/resources/icons/RecordBig.png"));
-      ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
-      ImageIO.write(bufferedImage, "png", byteArrayOutputStream);
-      byte[] image=byteArrayOutputStream.toByteArray();
-      jbCollection.setPicture(new SerialBlob(image));
-    }catch(IOException | SQLException e){
-      throw new RuntimeException(e);
-    }//end-try
+    if(jbCollection.getPicture()==null){
+      /* Default collection image when inserting */
+      BufferedImage bufferedImage=null;
+      try{
+        bufferedImage=ImageIO.read(new File("src/it/unipv/ingsfw/JavaBeats/view/resources/icons/RecordBig.png"));
+        ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
+        ImageIO.write(bufferedImage, "png", byteArrayOutputStream);
+        byte[] image=byteArrayOutputStream.toByteArray();
+        jbCollection.setPicture(new SerialBlob(image));
+      }catch(IOException | SQLException e){
+        throw new RuntimeException(e);
+      }//end-try
+    }//end-if
     c.insert(jbCollection);
     return jbCollection;
   }

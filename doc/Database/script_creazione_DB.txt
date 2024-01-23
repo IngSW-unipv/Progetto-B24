@@ -9,7 +9,7 @@ create table Audio (
 create table Collection (
 	id        		int			AUTO_INCREMENT         		not null		primary key,
 	name 	  		varchar(100)		   					not null,
-	picture   		blob                 					null
+	picture   		MEDIUMBLOB                 					null
 );
 
 create table Album (
@@ -75,7 +75,7 @@ create table Profile (
     name           varchar(50)          					null,
     surname        varchar(50)          					null,
     biography      text                 					null,
-    profilePicture blob                	 					null
+    profilePicture MEDIUMBLOB                	 					null
 );
 
 create table Artist (

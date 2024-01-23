@@ -75,8 +75,9 @@ public class AudioCard extends VBox{
     }//end-try
 
     //Image
-    cardImageView.setPreserveRatio(true);
+    cardImageView.setPreserveRatio(false);
     cardImageView.setFitHeight(80);
+    cardImageView.setFitWidth(80);
 
     //LabelVbox
 

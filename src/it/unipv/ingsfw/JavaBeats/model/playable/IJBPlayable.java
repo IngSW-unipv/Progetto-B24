@@ -1,7 +1,8 @@
 package it.unipv.ingsfw.JavaBeats.model.playable;
 
 import it.unipv.ingsfw.JavaBeats.model.IJBResearchable;
-public interface IJBPlayable extends IJBResearchable{
+import javafx.scene.media.MediaPlayer;
 
-    public void playFX();
+public interface IJBPlayable extends IJBResearchable{
+  MediaPlayer playFX();
 }

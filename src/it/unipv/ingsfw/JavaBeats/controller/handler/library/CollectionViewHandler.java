@@ -49,8 +49,7 @@ public class CollectionViewHandler{
       public void handle(ActionEvent actionEvent){
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
 
-        PlayerManagerFactory.getInstance().getPlayerManager().addToQueue(gui.getJbCollection());
-        PlayerManagerFactory.getInstance().getPlayerManager().play();
+        PlayerManagerFactory.getInstance().getPlayerManager().play(gui.getJbCollection());
       }
     };
     gui.getCollectionHeader().getEditButton().setOnAction(editButtonHandler);

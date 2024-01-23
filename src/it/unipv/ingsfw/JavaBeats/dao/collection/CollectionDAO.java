@@ -587,7 +587,7 @@ public class CollectionDAO implements ICollectionDAO{
 
     while(trackListIT.hasNext()){
       JBAudio track=trackListIT.next();
-      if(aDAO.get(track, null)==null)        //if song not present in DB
+      if(aDAO.get(track, album.getCreator())==null)        //if song not present in DB
         aDAO.insert(track);             //insert new song
     }
 
