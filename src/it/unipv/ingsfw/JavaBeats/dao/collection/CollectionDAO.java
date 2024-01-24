@@ -591,22 +591,17 @@ public class CollectionDAO implements ICollectionDAO{
         aDAO.insert(track);             //insert new song
     }
 
-    trackListIT=trackList.iterator();     //get a new iterator
-
     connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
     PreparedStatement st;
 
     try{
-      String query="INSERT INTO AlbumSongs(idAlbum, idSong) VALUES(?, ?);";
-      st=connection.prepareStatement(query);
-      st.setInt(1, album.getId());
-
-      while(trackListIT.hasNext()){
-        JBAudio track=trackListIT.next();
+      for(JBAudio track: trackList){
+        String query="INSERT INTO AlbumSongs(idAlbum, idSong) VALUES(?, ?);";
+        st=connection.prepareStatement(query);
+        st.setInt(1, album.getId());
         st.setInt(2, track.getId());
         st.executeUpdate();
-      }
-
+      }//end-foreach
     }catch(Exception e){
       e.printStackTrace();
     }

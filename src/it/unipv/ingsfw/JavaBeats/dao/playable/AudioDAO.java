@@ -40,7 +40,6 @@ public class AudioDAO implements IAudioDAO{
 
     linkAudioToCollection(audio);   //link audio to Album or Podcast (from audio metadata)
 
-    System.out.println("Ci sono");
     linkAudioToGenres(audio);       //link audio to Genres (from audio metadata)
 
   }
@@ -161,9 +160,7 @@ public class AudioDAO implements IAudioDAO{
       ProfileDAO pDAO=new ProfileDAO();
       CollectionDAO cDAO=new CollectionDAO();
       result.getMetadata().setArtist(pDAO.getArtist(result.getMetadata().getArtist()));       //set complete artist profile
-      System.out.println("Prima");
       result.getMetadata().setCollection(cDAO.get(result.getMetadata().getCollection()));     //set complete collection data
-      System.out.println("Dopo");
 
       if(activeProfile!=null)
         result.setFavorite(isFavorite(result, activeProfile));  //set isFavorite (only if profile is specified)
@@ -234,7 +231,8 @@ public class AudioDAO implements IAudioDAO{
     PreparedStatement st;
 
     try{
-      String query="INSERT INTO ListeningHistory(idListeningHistory, profileMail, idAudio) VALUE(default, ?, ?);";
+      String query="INSERT INTO ListeningHistory(idListeningHistory, profileMail, idAudio) VALUES(default, ?, ?);";
+
       st=connection.prepareStatement(query);
       st.setString(1, activeProfile.getMail());
       st.setInt(2, audio.getId());

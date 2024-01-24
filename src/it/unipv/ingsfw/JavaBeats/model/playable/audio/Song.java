@@ -1,6 +1,4 @@
 package it.unipv.ingsfw.JavaBeats.model.playable.audio;
-
-import it.unipv.ingsfw.JavaBeats.controller.factory.PlayerManagerFactory;
 import it.unipv.ingsfw.JavaBeats.controller.handler.PlayerHandler;
 import it.unipv.ingsfw.JavaBeats.model.collection.JBCollection;
 import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
