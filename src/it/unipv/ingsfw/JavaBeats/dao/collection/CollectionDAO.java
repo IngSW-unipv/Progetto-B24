@@ -164,7 +164,7 @@ public class CollectionDAO implements ICollectionDAO{
 
     if(result!=null){
       ProfileDAO pDAO=new ProfileDAO();
-      result.setCreator(pDAO.get(result.getCreator()));
+      result.setCreator(pDAO.getArtist(result.getCreator()));
     }
 
     return result;

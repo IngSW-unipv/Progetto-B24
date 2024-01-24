@@ -132,12 +132,29 @@ public class ProfileDAO implements IProfileDAO{
   public JBProfile get(JBProfile profile) throws IllegalArgumentException{            //retrieve profile from database
 
     JBProfile profileOut=getUser(profile);                 //check if profile is in User table
-    if(profileOut==null)
-      profileOut=getArtist(profile);    //check if profile is in Artist table
 
     if(profileOut==null){
-      throw new IllegalArgumentException();
-    }
+      profileOut=getArtist(profile);    //check if profile is in Artist table
+
+      if(profileOut==null){
+        throw new IllegalArgumentException();
+      }//end-if
+
+      /* Profile is an artist */
+      Artist a=(Artist)profileOut;
+      a.setTotalListeners(getTotalListeners(a));        //set total listeners
+      a.setListeningHistory(getListeningHistory(a));    //set listening history
+      CollectionDAO cDAO=new CollectionDAO();
+      a.setFavorites(cDAO.getFavorites(a));             //set favorites playlist
+    }else{
+      /* profile is a user */
+      User u=(User)profileOut;
+      u.setMinuteListened(getTotalListeningTime(u));        //set minute listened
+      u.setListeningHistory(getListeningHistory(u));        //set listening history
+      CollectionDAO cDAO=new CollectionDAO();
+      u.setFavorites(cDAO.getFavorites(u));                 //set favorites playlist
+      u.setMinuteListened(new Time(0));
+    }//end.if
     return profileOut;
   }
 
@@ -174,14 +191,6 @@ public class ProfileDAO implements IProfileDAO{
     }
 
     DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
-
-    if(result!=null){
-      result.setTotalListeners(getTotalListeners(result));        //set total listeners
-      result.setListeningHistory(getListeningHistory(result));    //set listening history
-      CollectionDAO cDAO=new CollectionDAO();
-      result.setFavorites(cDAO.getFavorites(result));             //set favorites playlist
-    }
-
     return result;
   }
 
@@ -219,15 +228,6 @@ public class ProfileDAO implements IProfileDAO{
     }
 
     DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
-
-    if(result!=null){
-      result.setMinuteListened(getTotalListeningTime(result));        //set minute listened
-      result.setListeningHistory(getListeningHistory(result));        //set listening history
-      CollectionDAO cDAO=new CollectionDAO();
-      result.setFavorites(cDAO.getFavorites(result));                 //set favorites playlist
-      result.setMinuteListened(new Time(0));
-    }
-
     return result;
   }
 
@@ -295,7 +295,7 @@ public class ProfileDAO implements IProfileDAO{
     ArrayList<JBAudio> result=new ArrayList<>();
 
     try{
-      String query="SELECT idAudio FROM ListeningHistory WHERE profileMail=? ORDER BY listeningDate DESC LIMIT 25;";
+      String query="SELECT DISTINCT idAudio, listeningDate FROM ListeningHistory WHERE profileMail=? ORDER BY listeningDate DESC LIMIT 25;";
 
       st=connection.prepareStatement(query);
       st.setString(1, profile.getMail());

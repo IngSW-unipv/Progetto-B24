@@ -3,6 +3,7 @@ package it.unipv.ingsfw.JavaBeats.model.playable.audio;
 import it.unipv.ingsfw.JavaBeats.model.playable.IJBItem;
 import it.unipv.ingsfw.JavaBeats.model.collection.JBCollection;
 import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
+import javafx.scene.media.MediaPlayer;
 
 import java.sql.Blob;
 import java.sql.Date;
@@ -16,6 +17,7 @@ public abstract class JBAudio implements IJBItem{
   private Metadata metadata;
   private Blob audioFile;
   private int numberOfStreams;
+  protected MediaPlayer mediaPlayer;
 
   public class Metadata{
 
@@ -95,6 +97,7 @@ public abstract class JBAudio implements IJBItem{
     this.audioFile=audioFile;
     this.isFavorite=isFavorite;
     this.numberOfStreams=numberOfStreams;
+    mediaPlayer=null;
   }
 
   public JBAudio(int id, String title, Artist artist, Blob audioFile){
@@ -123,6 +126,9 @@ public abstract class JBAudio implements IJBItem{
     return audioFile;
   }
 
+  public MediaPlayer getMediaPlayer(){
+    return mediaPlayer;
+  }
 
   //SETTER:
   public void setId(int id){

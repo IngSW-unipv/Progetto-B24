@@ -35,7 +35,7 @@ public class Song extends JBAudio{
   //PlayFX
 
   @Override
-  public MediaPlayer playFX(){
+  public void playFX(){
     try{
       /* Creating temporary file so that It can be played. It's removed once on exit */
       File f=new File("tmp");
@@ -43,10 +43,9 @@ public class Song extends JBAudio{
       FileUtils.writeByteArrayToFile(f, this.getAudioFileBlob().getBinaryStream().readAllBytes());
 
       Media song=new Media(f.toURI().toURL().toString());
-      MediaPlayer mediaPlayer=new MediaPlayer(song);
+      super.mediaPlayer=new MediaPlayer(song);
       mediaPlayer.play();
       mediaPlayer.setOnEndOfMedia(new PlayerHandler());
-      return mediaPlayer;
     }catch(IOException | SQLException e){
       throw new RuntimeException(e);
     }

@@ -9,8 +9,8 @@ public class FXAdapter implements IAdapter{
   }
 
   @Override
-  public MediaPlayer play(IJBPlayable ijbPlayable){
-    return ijbPlayable.playFX();
+  public void play(IJBPlayable ijbPlayable){
+    ijbPlayable.playFX();
   }
 }
  

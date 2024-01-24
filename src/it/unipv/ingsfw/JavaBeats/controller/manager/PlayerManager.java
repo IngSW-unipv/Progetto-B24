@@ -15,7 +15,7 @@ public class PlayerManager{
   //Attributes
   /*---------------------------------------*/
   private static JBProfile activeProfile=null;
-  private static MediaPlayer CURRENT_MEDIA_PLAYER=null;
+  private static JBAudio CURRENT_AUDIO_PLAYING=null;
   private static final LinkedList<JBAudio> queue=new LinkedList<>();
   private final FXAdapter adapter=FXAdapterFactory.getInstance().getFXAdapter();
 
@@ -44,8 +44,13 @@ public class PlayerManager{
     if(!queue.isEmpty()){
       AudioDAO audioDAO=new AudioDAO();
 
+      if(CURRENT_AUDIO_PLAYING!=null && CURRENT_AUDIO_PLAYING.getMediaPlayer().getStatus().equals(MediaPlayer.Status.PLAYING)){
+        CURRENT_AUDIO_PLAYING.getMediaPlayer().dispose();
+      }//end-if
+
       JBAudio audioToBePlayed=queue.pop();
-      CURRENT_MEDIA_PLAYER=adapter.play(audioToBePlayed);
+      CURRENT_AUDIO_PLAYING=audioToBePlayed;
+      adapter.play(audioToBePlayed);
       audioDAO.addToListeningHistory(audioToBePlayed, activeProfile);
     }//end-if
   }
@@ -54,12 +59,16 @@ public class PlayerManager{
     AudioDAO audioDAO=new AudioDAO();
 
     queue.clear();
-    CURRENT_MEDIA_PLAYER=adapter.play(jbAudio);
+    CURRENT_AUDIO_PLAYING=jbAudio;
+    adapter.play(jbAudio);
     audioDAO.addToListeningHistory(jbAudio, activeProfile);
   }
 
   public void play(JBCollection jbCollection){
     queue.clear();
+    if(CURRENT_AUDIO_PLAYING!=null && CURRENT_AUDIO_PLAYING.getMediaPlayer().getStatus().equals(MediaPlayer.Status.PLAYING)){
+      CURRENT_AUDIO_PLAYING.getMediaPlayer().dispose();
+    }//end-if
     for(JBAudio jbAudio: jbCollection.getTrackList()){
       queue.push(jbAudio);
     }//end-foreach
@@ -67,8 +76,8 @@ public class PlayerManager{
   }
 
   public void Pause(){
-    if(CURRENT_MEDIA_PLAYER!=null){
-      CURRENT_MEDIA_PLAYER.pause();
+    if(CURRENT_AUDIO_PLAYING!=null){
+      CURRENT_AUDIO_PLAYING.getMediaPlayer().pause();
     }//end-if
   }
   /*---------------------------------------*/
