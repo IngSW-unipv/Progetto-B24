@@ -75,8 +75,8 @@ public class SidebarHandler{
       @Override
       public void handle(ActionEvent actionEvent){
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        SearchPageGUI searchPageGUI=new SearchPageGUI(true, activeProfile);
-        SearchPageHandler searchPageHandler=new SearchPageHandler();
+        SearchPageGUI searchPageGUI=new SearchPageGUI(activeProfile, null);
+        SearchPageHandler searchPageHandler=new SearchPageHandler(searchPageGUI, activeProfile);
         Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getSearchButton());
 
         Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());

@@ -1,4 +1,5 @@
 package it.unipv.ingsfw.JavaBeats.view.primary.search;
+import it.unipv.ingsfw.JavaBeats.model.IJBResearchable;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.view.presets.Sidebar;
 import it.unipv.ingsfw.JavaBeats.view.presets.Songbar;
@@ -19,6 +20,7 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class SearchPageGUI{
   /*---------------------------------------*/
@@ -32,11 +34,15 @@ public class SearchPageGUI{
   private static final Font fontSearchBar=Font.font("Verdana", FontWeight.NORMAL, FontPosture.REGULAR, 16);
   private Scene scene;
 
+  private ScrollPanePreset searchScrollPanePreset;
+
+  private TextField searchTextField;
+
   /*---------------------------------------*/
   //Costruttori
   /*---------------------------------------*/
-  public SearchPageGUI(boolean isDefault, JBProfile activeProfile){
-    initComponents(isDefault, activeProfile);
+  public SearchPageGUI(JBProfile activeProfile, ArrayList<ArrayList<IJBResearchable>> searchedList){
+    initComponents(activeProfile, searchedList);
   }
 
   /*---------------------------------------*/
@@ -46,10 +52,18 @@ public class SearchPageGUI{
     return scene;
   }
 
+  public TextField getSearchTextField() {
+    return searchTextField;
+  }
+
+  public ScrollPanePreset getSearchScrollPanePreset() {
+    return searchScrollPanePreset;
+  }
+
   /*---------------------------------------*/
   //Metodi
   /*---------------------------------------*/
-  private void initComponents(boolean isDefault, JBProfile activeProfile){
+  private void initComponents(JBProfile activeProfile, ArrayList<ArrayList<IJBResearchable>> searchedList){
 
     //Search
 
@@ -57,12 +71,14 @@ public class SearchPageGUI{
 
 
     //Search textfield
-    TextField searchTextField=new TextField();
+    searchTextField=new TextField();
     searchTextField.setPrefSize(500, 50);
     searchTextField.setFont(fontSearchBar);
     searchTextField.setBackground(bgSearchBar);
     searchTextField.setStyle("-fx-text-fill: #FFFFFFFF; -fx-prompt-text-fill: #DEDEDEAA;");
     searchTextField.setPromptText("Search here");
+
+
 
     /* Pane for spacing */
     Pane whitePane=new Pane();
@@ -91,7 +107,12 @@ public class SearchPageGUI{
     searchBar.setAlignment(Pos.CENTER_LEFT);
 
     //ScrollPanePreset Search
-    ScrollPanePreset searchScrollPanePreset=isDefault ? new SearchDefault() : new SearchResults();
+    if(searchedList== null){
+      searchScrollPanePreset=new SearchDefault();
+
+    }else{
+      searchScrollPanePreset=new SearchResults(searchedList);
+    }
     searchScrollPanePreset.getStylesheets().add("it/unipv/ingsfw/JavaBeats/view/resources/css/scrollbar.css");
 
     //Vbox Search

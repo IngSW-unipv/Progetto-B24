@@ -1,5 +1,10 @@
 package it.unipv.ingsfw.JavaBeats.view.primary.search;
+import it.unipv.ingsfw.JavaBeats.model.IJBResearchable;
+import it.unipv.ingsfw.JavaBeats.model.playable.audio.Episode;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.Song;
+import it.unipv.ingsfw.JavaBeats.model.collection.Album;
+import it.unipv.ingsfw.JavaBeats.model.collection.Playlist;
+import it.unipv.ingsfw.JavaBeats.model.collection.Podcast;
 import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
 import it.unipv.ingsfw.JavaBeats.view.presets.AudioCard;
 import it.unipv.ingsfw.JavaBeats.view.presets.scrollpanes.ScrollPanePreset;
@@ -16,6 +21,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 public class SearchResults extends ScrollPanePreset{
   /*---------------------------------------*/
   //Attributi
@@ -27,12 +35,21 @@ public class SearchResults extends ScrollPanePreset{
   private static final Font fontAddTo=Font.font("Verdana", FontWeight.LIGHT, FontPosture.ITALIC, 12);
   private static final Font fontFindings=Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 20);
 
+  private ArrayList<Song> songs;
+  private ArrayList<Artist> artists;
+  //private ArrayList<User> users;
+  private ArrayList<Album> albums;
+  private ArrayList<Podcast> podcasts;
+  private ArrayList<Playlist> playlists;
+  private ArrayList<Episode> episodes;
+
+
   /*---------------------------------------*/
   //Costruttori
   /*---------------------------------------*/
-  public SearchResults(){
+  public SearchResults(ArrayList<ArrayList<IJBResearchable>> searchedList) {
     super();
-    initComponents();
+    initComponents(searchedList);
   }
   /*---------------------------------------*/
   //Getter/Setter
@@ -41,24 +58,37 @@ public class SearchResults extends ScrollPanePreset{
   /*---------------------------------------*/
   //Metodi
   /*---------------------------------------*/
-  private void initComponents(){
+  private void initComponents(ArrayList<ArrayList<IJBResearchable>> searchedList) {
     /*
      *   Setup of Top HBox component, containing a VBox with the top result and a VBox with the 4 best song.
      */
+
+    //Top result
+
+    //Top result label
     Label topResultLabel=new Label("Top result");
     topResultLabel.setFont(fontTopResult);
     topResultLabel.setTextFill(Color.LIGHTGRAY);
 
-    Image audioPic=new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Record.png", true);
+    //Top result image
+    Image audioPic=null;
+    try{
+      audioPic=new Image(((Song) searchedList.get(0).get(0)).getMetadata().getCollection().getPicture().getBinaryStream());
+    }catch(SQLException e){
+      e.printStackTrace();
+    }
+
     ImageView audioPicImageView=new ImageView(audioPic);
     audioPicImageView.setPreserveRatio(true);
     audioPicImageView.setFitWidth(150);
 
-    Label topResultTitleLabel=new Label("Really long title");
+    //Top result title
+    Label topResultTitleLabel=new Label(((Song) searchedList.get(0).get(0)).getMetadata().getTitle());
     topResultTitleLabel.setFont(fontTopAudio);
     topResultTitleLabel.setTextFill(Color.LIGHTGRAY);
 
-    Label topResultArtistLabel=new Label("Artist");
+    //Top result artist
+    Label topResultArtistLabel=new Label(((Song) searchedList.get(0).get(0)).getMetadata().getArtist().getUsername());
     topResultArtistLabel.setTextFill(Color.LIGHTGRAY);
 
     VBox imageTitleArtistVBox=new VBox(10, audioPicImageView, topResultTitleLabel, topResultArtistLabel);
@@ -210,7 +240,19 @@ public class SearchResults extends ScrollPanePreset{
     VBox.setVgrow(playlistScroll, Priority.ALWAYS);
 
     /* Episodes found block, we have a label and a HBox of AudioCards inside a ScrollPanePreset */
-    Label foundProfilesLabel=new Label("Profiles");
+    Label foundEpisodesLabel=new Label("Episodes");
+    foundEpisodesLabel.setFont(fontFindings);
+    foundEpisodesLabel.setTextFill(Color.LIGHTGRAY);
+    foundEpisodesLabel.setPadding(new Insets(40, 0, 40, 0));
+    HBox episodesHBox=new HBox(50, new AudioCard(s), new AudioCard(s), new AudioCard(s), new AudioCard(s), new AudioCard(s), new AudioCard(s), new AudioCard(s), new AudioCard(s), new AudioCard(s));
+    ScrollPanePreset episodesScroll=new ScrollPanePreset(episodesHBox);
+    episodesScroll.setStyle("-fx-background: #0F0F0FFF; -fx-border-color: #0F0F0FFF");
+    episodesScroll.setHbarPolicy(ScrollPanePreset.ScrollBarPolicy.NEVER);
+    episodesScroll.setVbarPolicy(ScrollPanePreset.ScrollBarPolicy.NEVER);
+    VBox.setVgrow(episodesScroll, Priority.ALWAYS);
+
+    /* Episodes found block, we have a label and a HBox of AudioCards inside a ScrollPanePreset */
+    Label foundProfilesLabel=new Label("Users");
     foundProfilesLabel.setFont(fontFindings);
     foundProfilesLabel.setTextFill(Color.LIGHTGRAY);
     foundProfilesLabel.setPadding(new Insets(40, 0, 40, 0));
@@ -221,7 +263,7 @@ public class SearchResults extends ScrollPanePreset{
     profilesScroll.setVbarPolicy(ScrollPanePreset.ScrollBarPolicy.NEVER);
     VBox.setVgrow(profilesScroll, Priority.ALWAYS);
 
-    VBox mainVBox=new VBox(bestResultsHBox, foundArtistsLabel, artistScroll, foundAlbumsLabel, albumsScroll, foundPodcastsLabel, podcastScroll, foundPlaylistsLabel, playlistScroll, foundProfilesLabel, profilesScroll);
+    VBox mainVBox=new VBox(bestResultsHBox, foundArtistsLabel, artistScroll, foundAlbumsLabel, albumsScroll, foundPodcastsLabel, podcastScroll, foundPlaylistsLabel, playlistScroll, foundEpisodesLabel, episodesScroll, foundProfilesLabel, profilesScroll);
     mainVBox.setPadding(new Insets(0, 0, 0, 20));
 
     setContent(mainVBox);

@@ -6,6 +6,7 @@ import it.unipv.ingsfw.JavaBeats.dao.collection.CollectionDAO;
 import it.unipv.ingsfw.JavaBeats.dao.profile.ProfileDAO;
 import it.unipv.ingsfw.JavaBeats.model.IJBResearchable;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.Episode;
+import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.Song;
 import it.unipv.ingsfw.JavaBeats.model.collection.Album;
 import it.unipv.ingsfw.JavaBeats.model.collection.Playlist;
@@ -13,11 +14,13 @@ import it.unipv.ingsfw.JavaBeats.model.collection.Podcast;
 import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.model.profile.User;
+import org.bouncycastle.util.Arrays;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class SearchDAO implements ISearchDAO{
 
@@ -94,12 +97,12 @@ public class SearchDAO implements ISearchDAO{
 
     try{
       String query="SELECT Profile.mail FROM Profile JOIN User ON Profile.mail = User.mail "+
-              "WHERE (name LIKE '%?%' OR surname LIKE '%?%' OR username LIKE '%?%') AND isVisible=true;";
+              "WHERE (name LIKE ? OR surname LIKE ? OR username LIKE ?) AND isVisible=true;";
 
       st=connection.prepareStatement(query);
-      st.setString(1, field);
-      st.setString(2, field);
-      st.setString(3, field);
+      st.setString(1, "%"+field+"%");
+      st.setString(2, "%"+field+"%");
+      st.setString(3, "%"+field+"%");
 
       rs=st.executeQuery();
 
@@ -129,12 +132,12 @@ public class SearchDAO implements ISearchDAO{
 
     try{
       String query="SELECT Profile.mail FROM Profile JOIN Artist ON Profile.mail = Artist.mail "+
-              "WHERE name LIKE '%?%' OR surname LIKE '%?%' OR username LIKE '%?%';";
+              "WHERE name LIKE ? OR surname LIKE ? OR username LIKE ?;";
 
       st=connection.prepareStatement(query);
-      st.setString(1, field);
-      st.setString(2, field);
-      st.setString(3, field);
+      st.setString(1, "%"+field+"%");
+      st.setString(2, "%"+field+"%");
+      st.setString(3, "%"+field+"%");
 
       rs=st.executeQuery();
 
@@ -161,6 +164,8 @@ public class SearchDAO implements ISearchDAO{
     PreparedStatement st;
     ResultSet rs;
     ArrayList<Song> result=new ArrayList<>();
+    ArrayList<Song> tmp=new ArrayList<>();
+
 
     try{
       String query="SELECT Audio.id FROM Audio "+
@@ -169,17 +174,17 @@ public class SearchDAO implements ISearchDAO{
               "JOIN Profile ON ArtistAudios.artistMail = Profile.mail "+
               "JOIN AlbumSongs ON Audio.id = AlbumSongs.idSong "+
               "JOIN Collection ON AlbumSongs.idAlbum = Collection.id "+
-              "WHERE Audio.title LIKE '%?%' OR Profile.username LIKE '%?%' OR Collection.name LIKE '%?%';";
+              "WHERE Audio.title LIKE ? OR Profile.username LIKE ? OR Collection.name LIKE ?;";
 
       st=connection.prepareStatement(query);
-      st.setString(1, field);
-      st.setString(2, field);
-      st.setString(3, field);
+      st.setString(1, "%"+field+"%");
+      st.setString(2, "%"+field+"%");
+      st.setString(3, "%"+field+"%");
 
       rs=st.executeQuery();
 
       while(rs.next())
-        result.add(new Song(rs.getInt("id"), null, null, null));
+        tmp.add(new Song(rs.getInt("id"), null, null, null));
 
     }catch(Exception e){
       e.printStackTrace();
@@ -188,8 +193,9 @@ public class SearchDAO implements ISearchDAO{
     DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
 
     AudioDAO aDAO=new AudioDAO();
-    for(Song song: result){
-      song=aDAO.getSong(song, activeProfile);      //get complete info of song
+
+    for(Song song: tmp){
+      result.add(aDAO.getSong(song, activeProfile));      //get complete info of song
     }
 
     return result;
@@ -209,12 +215,12 @@ public class SearchDAO implements ISearchDAO{
               "JOIN Profile ON ArtistAudios.artistMail = Profile.mail "+
               "JOIN PodcastEpisodes ON Audio.id = PodcastEpisodes.idEpisode "+
               "JOIN Collection ON PodcastEpisodes.idPodcast = Collection.id "+
-              "WHERE Audio.title LIKE '%?%' OR Profile.username LIKE '%?%' OR Collection.name LIKE '%?%';";
+              "WHERE Audio.title LIKE ? OR Profile.username LIKE ? OR Collection.name LIKE ?;";
 
       st=connection.prepareStatement(query);
-      st.setString(1, field);
-      st.setString(2, field);
-      st.setString(3, field);
+      st.setString(1, "%"+field+"%");
+      st.setString(2, "%"+field+"%");
+      st.setString(3, "%"+field+"%");
 
       rs=st.executeQuery();
 
@@ -247,11 +253,11 @@ public class SearchDAO implements ISearchDAO{
               "JOIN Playlist ON Collection.id = Playlist.id "+
               "JOIN ProfilePlaylists ON Collection.id = ProfilePlaylists.idPlaylist "+
               "JOIN Profile ON ProfilePlaylists.profileMail = Profile.mail "+
-              "WHERE (Collection.name LIKE '%?%' OR Profile.username LIKE '%?%') AND Playlist.isVisible=true;";
+              "WHERE (Collection.name LIKE ? OR Profile.username LIKE ?) AND Playlist.isVisible=true;";
 
       st=connection.prepareStatement(query);
-      st.setString(1, field);
-      st.setString(2, field);
+      st.setString(1, "%"+field+"%");
+      st.setString(2, "%"+field+"%");
 
       rs=st.executeQuery();
 
@@ -284,11 +290,11 @@ public class SearchDAO implements ISearchDAO{
               "JOIN Album ON Collection.id = Album.id "+
               "JOIN ArtistAlbums ON Collection.id = ArtistAlbums.idAlbum "+
               "JOIN Profile ON ArtistAlbums.ArtistMail = Profile.mail "+
-              "WHERE Collection.name LIKE '%?%' OR Profile.username LIKE '%?%';";
+              "WHERE Collection.name LIKE ? OR Profile.username LIKE ?;";
 
       st=connection.prepareStatement(query);
-      st.setString(1, field);
-      st.setString(2, field);
+      st.setString(1, "%"+field+"%");
+      st.setString(2, "%"+field+"%");
 
       rs=st.executeQuery();
 
@@ -321,11 +327,11 @@ public class SearchDAO implements ISearchDAO{
               "JOIN Podcast ON Collection.id = Podcast.id "+
               "JOIN ArtistPodcasts ON Collection.id = ArtistPodcasts.idPodcast "+
               "JOIN Profile ON ArtistPodcasts.ArtistMail = Profile.mail "+
-              "WHERE Collection.name LIKE '%?%' OR Profile.username LIKE '%?%';";
+              "WHERE Collection.name LIKE ? OR Profile.username LIKE ?;";
 
       st=connection.prepareStatement(query);
-      st.setString(1, field);
-      st.setString(2, field);
+      st.setString(1, "%"+field+"%");
+      st.setString(2, "%"+field+"%");
 
       rs=st.executeQuery();
 
