@@ -34,7 +34,7 @@ public class AudioTable extends TableView<JBAudio>{
     double tableWidth=((double)80/100*clientWidth)-125;
 
     /* PlayButton column, contains the button to play the audio */
-    PlayButtonTableColumn playColumn=new PlayButtonTableColumn("");
+    PlayButtonTableColumn playColumn=new PlayButtonTableColumn("#");
     playColumn.setPrefWidth((double)5/100*tableWidth);
 
     /* Title column, with audio picture, title and artist */

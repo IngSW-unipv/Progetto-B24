@@ -103,12 +103,9 @@ public class CreationGUI{
     nameTextField.setStyle("-fx-text-fill: #FFFFFFFF; -fx-prompt-text-fill: #DEDEDEAA;");
     nameTextField.setPromptText("Insert title");
 
-    HBox textFieldHBox=new HBox(nameTextField);
-    textFieldHBox.setPadding(new Insets(100, 0, 0, 10));
-
-    HBox titleHbox=new HBox(collectionPictureButton, textFieldHBox);
-    titleHbox.setAlignment(Pos.TOP_LEFT);
-    titleHbox.setPadding(new Insets(0, 0, 0, 10));
+    HBox titleHbox=new HBox(collectionPictureButton, nameTextField);
+    titleHbox.setAlignment(Pos.BOTTOM_LEFT);
+    titleHbox.setPadding(new Insets(20, 0, 0, 20));
 
     //Add button
     Image plusImage=new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Plus.png", true);

@@ -22,6 +22,7 @@ public class CollectionViewGUI{
   private static final int clientHeight=(int)Screen.getPrimary().getBounds().getHeight();
   private CollectionHeader collectionHeader;
   private JBCollection jbCollection;
+  private TableView<JBAudio> audioTable;
   private GridPane gp;
   private Scene scene;
 
@@ -48,7 +49,9 @@ public class CollectionViewGUI{
   public JBCollection getJbCollection(){
     return jbCollection;
   }
-
+  public TableView<JBAudio> getAudioTable(){
+    return audioTable;
+  }
   public GridPane getGp(){
     return gp;
   }
@@ -65,7 +68,7 @@ public class CollectionViewGUI{
     audioList.addAll(jbCollection.getTrackList());
 
     /* Creation of audioTable containing the list of all the playable audios */
-    TableView<JBAudio> audioTable=new AudioTable(audioList, activeProfile, jbCollection);
+    audioTable=new AudioTable(audioList, activeProfile, jbCollection);
 
     /* VBox containing all the main content */
     VBox mainVBox=new VBox(collectionHeader, audioTable);

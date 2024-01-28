@@ -55,17 +55,18 @@ public class CollectionHeader extends VBox{
   //Metodi
   /*---------------------------------------*/
   private void initComponents(JBProfile activeProfile, JBCollection jbCollection){
-    Image collectionImage=new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/RecordBig.png", true);
-    ImageView collectionImageView=new ImageView(collectionImage);
-    collectionImageView.setPreserveRatio(true);
-    collectionImageView.setFitHeight(250);
 
-    //Con case switch
+    ImageView collectionImageView=null;
+    try{
+      collectionImageView=new ImageView(new Image(jbCollection.getPicture().getBinaryStream()));
+    }catch(SQLException s){
+    }//end-try
+
+    //Dynamically chooses the label
     Label collectionLabel=null;
     try{
       Playlist playlist=(Playlist)jbCollection;
       collectionLabel=new Label("Playlist");
-
     }catch(ClassCastException e){
       try{
         Album album=(Album)jbCollection;

@@ -1,10 +1,12 @@
 package it.unipv.ingsfw.JavaBeats.view.presets.tableColumns;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 public class PlayButtonTableColumn extends TableColumn<JBAudio, JBAudio>{
   /*-----------------------------------------------*/
   //Constructor
@@ -13,6 +15,7 @@ public class PlayButtonTableColumn extends TableColumn<JBAudio, JBAudio>{
     super(s);
     super.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(cellData.getValue()));
     super.setCellFactory(column -> new TableCell<>(){
+      private final HBox mainHBox;
       private final Button playButton;
 
       /* Anonymous constructor: */{
@@ -22,7 +25,11 @@ public class PlayButtonTableColumn extends TableColumn<JBAudio, JBAudio>{
         playImage.setFitHeight(15);
         playButton.setGraphic(playImage);
         playButton.setStyle("-fx-background-color: transparent");
-        playButton.setCursor(Cursor.HAND);
+        //playButton.setCursor(Cursor.HAND);
+
+        mainHBox=new HBox(playButton);
+        mainHBox.setAlignment(Pos.CENTER);
+        mainHBox.setCursor(Cursor.HAND);
         setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
       }
 
@@ -31,7 +38,7 @@ public class PlayButtonTableColumn extends TableColumn<JBAudio, JBAudio>{
         if(audio==null){
           setGraphic(null);
         }else{
-          setGraphic(playButton);
+          setGraphic(mainHBox);
         }//end-if
       }
     });

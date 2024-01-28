@@ -14,6 +14,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.sql.SQLException;
 public class TitleTableColumn extends TableColumn<JBAudio, JBAudio>{
   /*-----------------------------------------------*/
   //Constructor
@@ -41,8 +48,7 @@ public class TitleTableColumn extends TableColumn<JBAudio, JBAudio>{
         titleArtistVBox.setAlignment(Pos.CENTER_LEFT);
 
         collectionImageView=new ImageView();
-        collectionImageView.setPreserveRatio(true);
-        collectionImageView.setFitHeight(35);
+
         mainHBox=new HBox(10, collectionImageView, titleArtistVBox);
         mainHBox.setAlignment(Pos.CENTER_LEFT);
         setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
@@ -55,13 +61,26 @@ public class TitleTableColumn extends TableColumn<JBAudio, JBAudio>{
         }else{
           titleLabel.setText(audio.getMetadata().getTitle());
           artistLabel.setText(audio.getMetadata().getArtist().getUsername());
-          /* Once the DB is up and running we can do this like this, for now we'll use default image */
-//          try{
-//            collectionImageView=new ImageView(new Image(audio.getMetadata().getCollection().getPicture().getBinaryStream()));
-//          }catch(SQLException e){
-//            throw new RuntimeException(e);
-//          }//end-try
-          collectionImageView.setImage(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Record.png", true));
+          try{
+            /*
+            Downscaling the collection image to a 35xp square so that it fits
+            * */
+            //Creating a buffered image from collection picture
+            BufferedImage bufferedImage=ImageIO.read(new ByteArrayInputStream(audio.getMetadata().getCollection().getPicture().getBinaryStream().readAllBytes()));
+
+            //Downscaling
+            BufferedImage outputImage=new BufferedImage(35, 35, BufferedImage.TYPE_INT_RGB);
+            outputImage.getGraphics().drawImage(bufferedImage.getScaledInstance(35, 35, java.awt.Image.SCALE_DEFAULT), 0, 0, null);
+
+            //Creating an output stream for reading the byte[]
+            ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
+            ImageIO.write(outputImage, "png", byteArrayOutputStream);
+
+            collectionImageView.setImage(new Image(new ByteArrayInputStream(byteArrayOutputStream.toByteArray())));
+          }catch(SQLException | IOException e){
+            throw new RuntimeException(e);
+          }//end-try
+
           setGraphic(mainHBox);
         }//end-if
       }

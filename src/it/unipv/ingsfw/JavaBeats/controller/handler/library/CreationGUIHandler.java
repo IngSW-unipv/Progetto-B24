@@ -30,7 +30,10 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import javax.imageio.ImageIO;
 import javax.sql.rowset.serial.SerialBlob;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -63,7 +66,7 @@ public class CreationGUIHandler{
   //Metodi
   /*---------------------------------------*/
   private void initComponents(JBProfile activeProfile){
-    EventHandler<ActionEvent> inputImageButtonHandler=new EventHandler<ActionEvent>(){
+    EventHandler<ActionEvent> inputImageButtonHandler=new EventHandler<>(){
       @Override
       public void handle(ActionEvent actionEvent){
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
@@ -80,8 +83,19 @@ public class CreationGUIHandler{
           fileInputStream=new FileInputStream(f);
           fileInputStream.read(fileContent);
           fileInputStream.close();
-          creationGUI.getNewCollection().setPicture(new SerialBlob(fileContent));
-          creationGUI.getCollectionImageView().setImage(new Image(url.toExternalForm(), 250, 250, false, false));
+
+          BufferedImage bufferedImage=ImageIO.read(url);
+          java.awt.Image resultingImage=bufferedImage.getScaledInstance(250, 250, java.awt.Image.SCALE_DEFAULT);
+          BufferedImage outputImage=new BufferedImage(250, 250, BufferedImage.TYPE_INT_RGB);
+          outputImage.getGraphics().drawImage(resultingImage, 0, 0, null);
+
+          ByteArrayOutputStream baos=new ByteArrayOutputStream();
+          ImageIO.write(outputImage, "png", baos);
+          byte[] bytes=baos.toByteArray();
+
+          creationGUI.getNewCollection().setPicture(new SerialBlob(bytes));
+          creationGUI.getCollectionImageView().setImage(new Image(creationGUI.getNewCollection().getPicture().getBinaryStream()));
+          creationGUI.getCollectionImageView().setEffect(null);
         }catch(IOException | SQLException e){
           throw new RuntimeException(e);
         }//end-try
@@ -124,10 +138,10 @@ public class CreationGUIHandler{
             Blob fileAudio=new SerialBlob(fileContent);
             try{
               Album a=(Album)creationGUI.getNewCollection();
-              jbAudio=new Song(0, metadata.get("dc:title")==null ? FilenameUtils.removeExtension(f.getName()) : metadata.get("dc:title"), (Artist)a.getCreator(), creationGUI.getNewCollection(), fileAudio, new Time((long)media.getDuration().toMillis()), new Date(System.currentTimeMillis()), new String[] {metadata.get("xmpDM:genre")}, false, 0);
+              jbAudio=new Song(0, metadata.get("dc:title")==null ? FilenameUtils.removeExtension(f.getName()) : metadata.get("dc:title"), (Artist)a.getCreator(), creationGUI.getNewCollection(), fileAudio, new Time((long)media.getDuration().toMillis()), new Date(System.currentTimeMillis()), new String[]{metadata.get("xmpDM:genre")}, false, 0);
             }catch(ClassCastException c){
               Podcast p=(Podcast)creationGUI.getNewCollection();
-              jbAudio=new Episode(0, metadata.get("dc:title")==null ? FilenameUtils.removeExtension(f.getName()) : metadata.get("dc:title"), (Artist)p.getCreator(), creationGUI.getNewCollection(), fileAudio, new Time((long)media.getDuration().toMillis()), new Date(System.currentTimeMillis()), new String[] {metadata.get("xmpDM:genre")}, false, 0);
+              jbAudio=new Episode(0, metadata.get("dc:title")==null ? FilenameUtils.removeExtension(f.getName()) : metadata.get("dc:title"), (Artist)p.getCreator(), creationGUI.getNewCollection(), fileAudio, new Time((long)media.getDuration().toMillis()), new Date(System.currentTimeMillis()), new String[]{metadata.get("xmpDM:genre")}, false, 0);
             }//end-try
             creationGUI.getNewCollection().getTrackList().add(jbAudio);
           }catch(IOException | TikaException | SAXException | SQLException e){

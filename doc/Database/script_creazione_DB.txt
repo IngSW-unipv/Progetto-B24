@@ -1,220 +1,220 @@
-create table Audio
+create table audio
 (
-    id          int auto_increment
-        primary key,
-    duration    time                               not null,
-    title       varchar(50)                        not null,
-    releaseDate datetime default CURRENT_TIMESTAMP not null,
-    audioFile   longblob                           not null
+	id int auto_increment
+		primary key,
+	duration time not null,
+	title varchar(50) not null,
+	releaseDate datetime default current_timestamp() not null,
+	audioFile longblob not null
 );
 
-create table Collection
+create table collection
 (
-    id      int auto_increment
-        primary key,
-    name    varchar(100) not null,
-    picture mediumblob   null
+	id int auto_increment
+		primary key,
+	name varchar(100) not null,
+	picture mediumblob null
 );
 
-create table Album
+create table album
 (
-    id int not null,
-    constraint idAlbum___fk
-        foreign key (id) references Collection (id)
-            on update cascade on delete cascade
+	id int not null,
+	constraint idAlbum___fk
+		foreign key (id) references collection (id)
+			on update cascade on delete cascade
 );
 
-create table Episode
+create table episode
 (
-    id int not null,
-    constraint idEpisode___fk
-        foreign key (id) references Audio (id)
-            on update cascade on delete cascade
+	id int not null,
+	constraint idEpisode___fk
+		foreign key (id) references audio (id)
+			on update cascade on delete cascade
 );
 
-create table Genre
+create table genre
 (
-    genre varchar(50) not null
-        primary key
+	genre varchar(50) not null
+		primary key
 );
 
-create table AudioGenres
+create table audiogenres
 (
-    idAudio int         not null,
-    genre   varchar(50) not null,
-    constraint AudioGenres_Audio_id_fk
-        foreign key (idAudio) references Audio (id)
-            on update cascade on delete cascade,
-    constraint AudioGenres_Genre_genre_fk
-        foreign key (genre) references Genre (genre)
-            on update cascade on delete cascade
+	idAudio int not null,
+	genre varchar(50) not null,
+	constraint AudioGenres_Audio_id_fk
+		foreign key (idAudio) references audio (id)
+			on update cascade on delete cascade,
+	constraint AudioGenres_Genre_genre_fk
+		foreign key (genre) references genre (genre)
+			on update cascade on delete cascade
 );
 
-create table Playlist
+create table playlist
 (
-    id        int                  not null,
-    isVisible tinyint(1) default 1 not null,
-    constraint idPlaylist___fk
-        foreign key (id) references Collection (id)
-            on update cascade on delete cascade
+	id int not null,
+	isVisible tinyint(1) default 1 not null,
+	constraint idPlaylist___fk
+		foreign key (id) references collection (id)
+			on update cascade on delete cascade
 );
 
-create table PlaylistAudios
+create table playlistaudios
 (
-    idPlaylist int not null,
-    idAudio    int not null,
-    constraint PlaylistAudios_Audio_id_fk
-        foreign key (idAudio) references Audio (id)
-            on update cascade on delete cascade,
-    constraint PlaylistAudios_Playlist_id_fk
-        foreign key (idPlaylist) references Playlist (id)
-            on update cascade on delete cascade
+	idPlaylist int not null,
+	idAudio int not null,
+	constraint PlaylistAudios_Audio_id_fk
+		foreign key (idAudio) references audio (id)
+			on update cascade on delete cascade,
+	constraint PlaylistAudios_Playlist_id_fk
+		foreign key (idPlaylist) references playlist (id)
+			on update cascade on delete cascade
 );
 
-create table Podcast
+create table podcast
 (
-    id int not null,
-    constraint idPodcast_fk
-        foreign key (id) references Collection (id)
-            on update cascade on delete cascade
+	id int not null,
+	constraint idPodcast_fk
+		foreign key (id) references collection (id)
+			on update cascade on delete cascade
 );
 
-create table PodcastEpisodes
+create table podcastepisodes
 (
-    idPodcast int not null,
-    idEpisode int not null,
-    constraint PodcastEpisodes_Episode_id_fk
-        foreign key (idEpisode) references Episode (id)
-            on update cascade on delete cascade,
-    constraint PodcastEpisodes_Podcast_id_fk
-        foreign key (idPodcast) references Podcast (id)
-            on update cascade on delete cascade
+	idPodcast int not null,
+	idEpisode int not null,
+	constraint PodcastEpisodes_Episode_id_fk
+		foreign key (idEpisode) references episode (id)
+			on update cascade on delete cascade,
+	constraint PodcastEpisodes_Podcast_id_fk
+		foreign key (idPodcast) references podcast (id)
+			on update cascade on delete cascade
 );
 
-create table Profile
+create table profile
 (
-    username       varchar(30)  not null,
-    mail           varchar(100) not null
-        primary key,
-    password       varchar(100) not null,
-    name           varchar(50)  null,
-    surname        varchar(50)  null,
-    biography      text         null,
-    profilePicture mediumblob   null,
-    constraint username
-        unique (username)
+	username varchar(30) not null,
+	mail varchar(100) not null
+		primary key,
+	password varchar(100) not null,
+	name varchar(50) null,
+	surname varchar(50) null,
+	biography text null,
+	profilePicture mediumblob null,
+	constraint username
+		unique (username)
 );
 
-create table Artist
+create table artist
 (
-    mail varchar(100) not null,
-    constraint Artist_mail_fk
-        foreign key (mail) references Profile (mail)
-            on update cascade on delete cascade
+	mail varchar(100) not null,
+	constraint Artist_mail_fk
+		foreign key (mail) references profile (mail)
+			on update cascade on delete cascade
 );
 
-create table ArtistAlbums
+create table artistalbums
 (
-    artistMail varchar(100) not null,
-    idAlbum    int          not null,
-    constraint ArtistAlbums_Album_id_fk
-        foreign key (idAlbum) references Album (id)
-            on update cascade on delete cascade,
-    constraint ArtistAlbums_Artist_mail_fk
-        foreign key (artistMail) references Artist (mail)
-            on update cascade on delete cascade
+	artistMail varchar(100) not null,
+	idAlbum int not null,
+	constraint ArtistAlbums_Album_id_fk
+		foreign key (idAlbum) references album (id)
+			on update cascade on delete cascade,
+	constraint ArtistAlbums_Artist_mail_fk
+		foreign key (artistMail) references artist (mail)
+			on update cascade on delete cascade
 );
 
-create table ArtistAudios
+create table artistaudios
 (
-    idAudio    int          not null,
-    artistMail varchar(100) not null,
-    constraint ArtistAudios_Artist_mail_fk
-        foreign key (artistMail) references Artist (mail)
-            on update cascade on delete cascade,
-    constraint ArtistAudios_Audio_id_fk
-        foreign key (idAudio) references Audio (id)
-            on update cascade on delete cascade
+	idAudio int not null,
+	artistMail varchar(100) not null,
+	constraint ArtistAudios_Artist_mail_fk
+		foreign key (artistMail) references artist (mail)
+			on update cascade on delete cascade,
+	constraint ArtistAudios_Audio_id_fk
+		foreign key (idAudio) references audio (id)
+			on update cascade on delete cascade
 );
 
-create table ArtistPodcasts
+create table artistpodcasts
 (
-    idPodcast  int          null,
-    artistMail varchar(100) not null,
-    constraint ArtistPodcasts_Artist_mail_fk
-        foreign key (artistMail) references Artist (mail)
-            on update cascade on delete cascade,
-    constraint ArtistPodcasts_Podcast_id_fk
-        foreign key (idPodcast) references Podcast (id)
-            on update cascade on delete cascade
+	idPodcast int null,
+	artistMail varchar(100) not null,
+	constraint ArtistPodcasts_Artist_mail_fk
+		foreign key (artistMail) references artist (mail)
+			on update cascade on delete cascade,
+	constraint ArtistPodcasts_Podcast_id_fk
+		foreign key (idPodcast) references podcast (id)
+			on update cascade on delete cascade
 );
 
-create table Favorites
+create table favorites
 (
-    profileMail varchar(100) not null,
-    idAudio     int          not null,
-    constraint Favorites_Audio_id_fk
-        foreign key (idAudio) references Audio (id)
-            on update cascade on delete cascade,
-    constraint Favorites_Profile_mail_fk
-        foreign key (profileMail) references Profile (mail)
-            on update cascade on delete cascade
+	profileMail varchar(100) not null,
+	idAudio int not null,
+	constraint Favorites_Audio_id_fk
+		foreign key (idAudio) references audio (id)
+			on update cascade on delete cascade,
+	constraint Favorites_Profile_mail_fk
+		foreign key (profileMail) references profile (mail)
+			on update cascade on delete cascade
 );
 
-create table ListeningHistory
+create table listeninghistory
 (
-    profileMail        varchar(100)                       not null,
-    idAudio            int                                not null,
-    listeningDate      datetime default CURRENT_TIMESTAMP not null,
-    idListeningHistory int auto_increment
-        primary key,
-    constraint ListeningHistory_Audio_id_fk
-        foreign key (idAudio) references Audio (id)
-            on update cascade on delete cascade,
-    constraint ListeningHistory_Profile_mail_fk
-        foreign key (profileMail) references Profile (mail)
-            on update cascade on delete cascade
+	profileMail varchar(100) not null,
+	idAudio int not null,
+	listeningDate datetime default current_timestamp() not null,
+	idListeningHistory int auto_increment
+		primary key,
+	constraint ListeningHistory_Audio_id_fk
+		foreign key (idAudio) references audio (id)
+			on update cascade on delete cascade,
+	constraint ListeningHistory_Profile_mail_fk
+		foreign key (profileMail) references profile (mail)
+			on update cascade on delete cascade
 );
 
-create table ProfilePlaylists
+create table profileplaylists
 (
-    idPlaylist  int          not null,
-    profileMail varchar(100) not null,
-    constraint ProfilePlaylists_Playlist_id_fk
-        foreign key (idPlaylist) references Playlist (id)
-            on update cascade on delete cascade,
-    constraint ProfilePlaylists_Profile_mail_fk
-        foreign key (profileMail) references Profile (mail)
-            on update cascade on delete cascade
+	idPlaylist int not null,
+	profileMail varchar(100) not null,
+	constraint ProfilePlaylists_Playlist_id_fk
+		foreign key (idPlaylist) references playlist (id)
+			on update cascade on delete cascade,
+	constraint ProfilePlaylists_Profile_mail_fk
+		foreign key (profileMail) references profile (mail)
+			on update cascade on delete cascade
 );
 
-create table Song
+create table song
 (
-    id int not null,
-    constraint idSong___fk
-        foreign key (id) references Audio (id)
-            on update cascade on delete cascade
+	id int not null,
+	constraint idSong___fk
+		foreign key (id) references audio (id)
+			on update cascade on delete cascade
 );
 
-create table AlbumSongs
+create table albumsongs
 (
-    idAlbum int not null,
-    idSong  int not null,
-    primary key (idSong, idAlbum),
-    constraint AlbumSongs_Album_id_fk
-        foreign key (idAlbum) references Album (id)
-            on update cascade on delete cascade,
-    constraint AlbumSongs_Song_id_fk
-        foreign key (idSong) references Song (id)
-            on update cascade on delete cascade
+	idAlbum int not null,
+	idSong int not null,
+	primary key (idSong, idAlbum),
+	constraint AlbumSongs_Album_id_fk
+		foreign key (idAlbum) references album (id)
+			on update cascade on delete cascade,
+	constraint AlbumSongs_Song_id_fk
+		foreign key (idSong) references song (id)
+			on update cascade on delete cascade
 );
 
-create table User
+create table user
 (
-    mail      varchar(100)         not null,
-    isVisible tinyint(1) default 1 not null,
-    constraint User_mail_fk
-        foreign key (mail) references Profile (mail)
-            on update cascade on delete cascade
+	mail varchar(100) not null,
+	isVisible tinyint(1) default 1 not null,
+	constraint User_mail_fk
+		foreign key (mail) references profile (mail)
+			on update cascade on delete cascade
 );
 
