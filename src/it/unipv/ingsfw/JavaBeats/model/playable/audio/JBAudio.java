@@ -150,4 +150,14 @@ public abstract class JBAudio implements IJBItem{
   public void setAudioFileBlob(Blob audioFile){
     this.audioFile=audioFile;
   }
+
+  @Override
+  public boolean equals(Object obj){
+    JBAudio jbAudio=(JBAudio)obj;
+
+    if(this.id==jbAudio.getId()){
+      return true;
+    }//end-if
+    return false;
+  }
 }

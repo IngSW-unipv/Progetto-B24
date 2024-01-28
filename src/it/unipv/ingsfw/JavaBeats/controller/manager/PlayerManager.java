@@ -59,6 +59,9 @@ public class PlayerManager{
     AudioDAO audioDAO=new AudioDAO();
 
     queue.clear();
+    if(CURRENT_AUDIO_PLAYING!=null && CURRENT_AUDIO_PLAYING.getMediaPlayer().getStatus().equals(MediaPlayer.Status.PLAYING)){
+      CURRENT_AUDIO_PLAYING.getMediaPlayer().dispose();
+    }//end-if
     CURRENT_AUDIO_PLAYING=jbAudio;
     adapter.play(jbAudio);
     audioDAO.addToListeningHistory(jbAudio, activeProfile);

@@ -64,34 +64,28 @@ public class CollectionViewHandler{
       @Override
       public void handle(MouseEvent mouseEvent){
         if(mouseEvent.getButton()==MouseButton.PRIMARY){
-          JBAudio audioClicked=gui.getAudioTable().getItems().get(gui.getAudioTable().getSelectionModel().getSelectedIndex());
-          System.out.println(audioClicked);
           Node node=mouseEvent.getPickResult().getIntersectedNode();
+          JBAudio audioClicked=gui.getAudioTable().getItems().get(gui.getAudioTable().getSelectionModel().getSelectedIndex());
 
           // go up in node hierarchy until a cell is found, or we can be sure no cell was clicked
-          boolean found=false;
-          while(node!=gui.getAudioTable() && !found){
-            try{
-              TableCell tableCell=(TableCell)node;
-            }catch(ClassCastException c){
-              found=true;
-            }//end-try
+          boolean foundPlayButton=false;
+          boolean fuondIsFavoriteButton=false;
+          while(node!=gui.getAudioTable() && !foundPlayButton && !fuondIsFavoriteButton){
+            String id=node.getId();
+            if(id!=null && id.equals("PlayButton")){
+              foundPlayButton=true;
+              System.out.println("ButtonClicked");
+            }//end-if
 
             node=node.getParent();
           }//end-while
 
-          try{
-            HBox b=(HBox)node;
-            System.out.println("hbox clicked");
-          }catch(ClassCastException c){
-            System.out.println("non hbox clicked");
-          }//end-try
+          if(foundPlayButton){
+            PlayerManagerFactory.getInstance().getPlayerManager().play(audioClicked);
+          }else if(fuondIsFavoriteButton){
 
-          TableCell<JBAudio, ?> cell=(TableCell<JBAudio, ?>)node;
-          if(cell!=null && !cell.isEmpty()){
-            System.out.println(cell.getText());
-            mouseEvent.consume();
           }//end-if
+
         }//end-if
       }
     };

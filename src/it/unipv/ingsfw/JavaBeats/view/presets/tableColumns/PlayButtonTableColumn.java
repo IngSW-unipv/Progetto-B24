@@ -16,18 +16,13 @@ public class PlayButtonTableColumn extends TableColumn<JBAudio, JBAudio>{
     super.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(cellData.getValue()));
     super.setCellFactory(column -> new TableCell<>(){
       private final HBox mainHBox;
-      private final Button playButton;
 
       /* Anonymous constructor: */{
-        playButton=new Button();
-        ImageView playImage=new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Play.png", true));
-        playImage.setPreserveRatio(true);
-        playImage.setFitHeight(15);
-        playButton.setGraphic(playImage);
-        playButton.setStyle("-fx-background-color: transparent");
-        //playButton.setCursor(Cursor.HAND);
+        ImageView imageView=new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Play.png", true));
+        imageView.setPreserveRatio(true);
+        imageView.setFitHeight(20);
 
-        mainHBox=new HBox(playButton);
+        mainHBox=new HBox(imageView);
         mainHBox.setAlignment(Pos.CENTER);
         mainHBox.setCursor(Cursor.HAND);
         setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
@@ -43,6 +38,7 @@ public class PlayButtonTableColumn extends TableColumn<JBAudio, JBAudio>{
       }
     });
     getStyleClass().add("playColumn");
+    setId("PlayButton");
   }
   /*-----------------------------------------------*/
 }

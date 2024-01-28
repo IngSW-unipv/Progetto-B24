@@ -101,13 +101,18 @@ public class Home extends VBox{
     recentAudiosLabel.setFont(fontRecents);
     recentAudiosLabel.setTextFill(Color.LIGHTGRAY);
     recentAudiosLabel.setPadding(new Insets(30, 0, 40, 0));
+    /* songsHBox contains distinct values of audios recently listened with a maximum of 15 elements */
     HBox songsHBox=new HBox(50);
-    int i=0;
-    int count=0;
+
+    songsHBox.getChildren().add(new AudioCard(activeProfile.getListeningHistory().getFirst()));
+    int i=1;
+    int count=1;
     while(i<activeProfile.getListeningHistory().size() && count<15){
-      songsHBox.getChildren().add(new AudioCard(activeProfile.getListeningHistory().get(i)));
+      if(!activeProfile.getListeningHistory().subList(0, i).contains(activeProfile.getListeningHistory().get(i))){
+        songsHBox.getChildren().add(new AudioCard(activeProfile.getListeningHistory().get(i)));
+        count+=1;
+      }//end-if
       i+=1;
-      count+=1;
     }//end-while
     ScrollPanePreset audiosScroll=new ScrollPanePreset(songsHBox);
     audiosScroll.setStyle("-fx-background: #0F0F0FFF; -fx-border-color: #0F0F0FFF");
@@ -130,10 +135,10 @@ public class Home extends VBox{
       i=1;
       count=1;
       while(i<recentCollections.size() && count<15){
-        if(!recentCollections.subList(0, i-1).contains(recentCollections.get(i))){
-          new AudioCard(recentCollections.get(i));
+        if(!recentCollections.subList(0, i).contains(recentCollections.get(i))){
+          collectionsHBox.getChildren().add(new AudioCard(recentCollections.get(i)));
           count+=1;
-        }//end-fi
+        }//end-if
         i+=1;
       }//end-while
     }catch(IndexOutOfBoundsException | NoSuchElementException in){
@@ -150,18 +155,18 @@ public class Home extends VBox{
     recentArtists.setTextFill(Color.LIGHTGRAY);
     recentArtists.setPadding(new Insets(40, 0, 40, 0));
     HBox artistsHBox=new HBox(50);
-    /* Extracting all Collections from ListeningHistory  */
-    ArrayList<Artist> recentProfiles=new ArrayList<>();
+    /* Extracting all Artist from ListeningHistory  */
+    ArrayList<JBProfile> recentProfiles=new ArrayList<>();
     for(JBAudio jbAudio: activeProfile.getListeningHistory()){
-      recentProfiles.add((Artist)jbAudio.getMetadata().getCollection().getCreator());
+      recentProfiles.add(jbAudio.getMetadata().getCollection().getCreator());
     }//end-foreach
     try{
       artistsHBox.getChildren().add(new AudioCard(recentProfiles.getFirst()));
       i=1;
       count=1;
       while(i<recentProfiles.size() && count<15){
-        if(!recentProfiles.subList(0, i-1).contains(recentProfiles.get(i))){
-          new AudioCard(recentProfiles.get(i));
+        if(!recentProfiles.subList(0, i).contains(recentProfiles.get(i))){
+          artistsHBox.getChildren().add(new AudioCard(recentProfiles.get(i)));
           count+=1;
         }//end-fi
         i+=1;

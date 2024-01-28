@@ -80,4 +80,14 @@ public abstract class JBCollection implements IJBResearchable{
 
   public void removeItem(JBProfile activeJBProfile, IJBItem item){
   }
+
+  @Override
+  public boolean equals(Object obj){
+    JBCollection jbCollection=(JBCollection)obj;
+
+    if(this.id==jbCollection.getId()){
+      return true;
+    }//end-if
+    return false;
+  }
 }
