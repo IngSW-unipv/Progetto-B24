@@ -21,6 +21,8 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
 
+import java.sql.SQLException;
+
 public class Songbar extends GridPane{
   /*---------------------------------------*/
   //Attributi
@@ -66,8 +68,12 @@ public class Songbar extends GridPane{
     //SongHbox
 
     //RecordImage
-    Image recordImage=new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Record.png", true);
-    ImageView recordImageView=new ImageView(recordImage);
+    ImageView recordImageView=null;
+    try{
+      recordImageView=audio==null ? new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Record.png", true)) : new ImageView(new Image(audio.getMetadata().getCollection().getPicture().getBinaryStream()));
+    }catch(SQLException e){
+      throw new RuntimeException(e);
+    }
     recordImageView.setPreserveRatio(true);
 
 

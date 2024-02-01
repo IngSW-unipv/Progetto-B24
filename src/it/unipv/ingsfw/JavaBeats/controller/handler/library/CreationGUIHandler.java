@@ -138,10 +138,10 @@ public class CreationGUIHandler{
             Blob fileAudio=new SerialBlob(fileContent);
             try{
               Album a=(Album)creationGUI.getNewCollection();
-              jbAudio=new Song(0, metadata.get("dc:title")==null ? FilenameUtils.removeExtension(f.getName()) : metadata.get("dc:title"), (Artist)a.getCreator(), creationGUI.getNewCollection(), fileAudio, media.getDuration().toMillis(), new Date(System.currentTimeMillis()), new String[]{metadata.get("xmpDM:genre")}, false, 0);
+              jbAudio=new Song(0, metadata.get("dc:title")==null ? FilenameUtils.removeExtension(f.getName()) : metadata.get("dc:title"), (Artist)a.getCreator(), creationGUI.getNewCollection(), fileAudio, Double.parseDouble(metadata.get("xmpDM:duration"))*1000, new Date(System.currentTimeMillis()), new String[]{metadata.get("xmpDM:genre")}, false, 0);
             }catch(ClassCastException c){
               Podcast p=(Podcast)creationGUI.getNewCollection();
-              jbAudio=new Episode(0, metadata.get("dc:title")==null ? FilenameUtils.removeExtension(f.getName()) : metadata.get("dc:title"), (Artist)p.getCreator(), creationGUI.getNewCollection(), fileAudio, media.getDuration().toMillis(), new Date(System.currentTimeMillis()), new String[]{metadata.get("xmpDM:genre")}, false, 0);
+              jbAudio=new Episode(0, metadata.get("dc:title")==null ? FilenameUtils.removeExtension(f.getName()) : metadata.get("dc:title"), (Artist)p.getCreator(), creationGUI.getNewCollection(), fileAudio, Double.parseDouble(metadata.get("xmpDM:duration"))*1000, new Date(System.currentTimeMillis()), new String[]{metadata.get("xmpDM:genre")}, false, 0);
             }//end-try
             creationGUI.getNewCollection().getTrackList().add(jbAudio);
           }catch(IOException | TikaException | SAXException | SQLException e){
@@ -158,20 +158,20 @@ public class CreationGUIHandler{
 //        if(regex collection name){
 //
 //        }
-                creationGUI.getNewCollection().setName(creationGUI.getNameTextField().getText());
-                JBCollection collection = CollectionManagerFactory.getInstance().getCollectionManager().createJBCollection(creationGUI.getNewCollection());
+        creationGUI.getNewCollection().setName(creationGUI.getNameTextField().getText());
+        JBCollection collection=CollectionManagerFactory.getInstance().getCollectionManager().createJBCollection(creationGUI.getNewCollection());
 
-                CollectionLibraryGUI collectionLibraryGUI = null;
-                try {
-                    Album a = (Album) collection;
+        CollectionLibraryGUI collectionLibraryGUI=null;
+        try{
+          Album a=(Album)collection;
 
-                    //Retrieve albums
-                    ArrayList<JBCollection> albums = null;
-                    try {
-                        albums = CollectionManagerFactory.getInstance().getCollectionManager().getAlbums((Artist) activeProfile);
-                    } catch (ClassCastException e) {
-                        //popup
-                    }
+          //Retrieve albums
+          ArrayList<JBCollection> albums=null;
+          try{
+            albums=CollectionManagerFactory.getInstance().getCollectionManager().getAlbums((Artist)activeProfile);
+          }catch(ClassCastException e){
+            //popup
+          }
 
           collectionLibraryGUI=new CollectionLibraryGUI(activeProfile, currentAudio, albums, EJBENTITY.ALBUM);
           CollectionLibraryHandler collectionLibraryHandler=new CollectionLibraryHandler(activeProfile, currentAudio, collectionLibraryGUI);
