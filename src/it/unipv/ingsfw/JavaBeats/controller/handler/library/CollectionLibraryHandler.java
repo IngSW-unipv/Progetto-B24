@@ -34,14 +34,14 @@ public class CollectionLibraryHandler{
 
 
   //Costruttore
-  public CollectionLibraryHandler(JBProfile activeProfile, CollectionLibraryGUI collectionLibraryGUI){
+  public CollectionLibraryHandler(JBProfile activeProfile, JBAudio currentAudio, CollectionLibraryGUI collectionLibraryGUI){
     this.collectionLibraryGUI=collectionLibraryGUI;
-    initComponents(activeProfile);
+    initComponents(activeProfile, currentAudio);
   }
 
 
   //Metodi
-  private void initComponents(JBProfile activeProfile){
+  private void initComponents(JBProfile activeProfile, JBAudio currentAudio){
     EventHandler<MouseEvent> collectionClickHandler=new EventHandler<MouseEvent>(){
       @Override
       public void handle(MouseEvent mouseEvent){
@@ -49,7 +49,7 @@ public class CollectionLibraryHandler{
 
         JBCollection jbCollection=((JBCollection)((AudioCard)mouseEvent.getSource()).getIjbResearchable());
         jbCollection.setTrackList(CollectionManagerFactory.getInstance().getCollectionManager().getCollectionAudios(jbCollection, activeProfile));
-        CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, jbCollection);
+        CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, currentAudio, jbCollection);
         CollectionViewHandler collectionViewHandler=new CollectionViewHandler(collectionViewGUI, activeProfile);
 
         Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
@@ -82,8 +82,8 @@ public class CollectionLibraryHandler{
             newCollection=new Playlist(1, "New playlist", activeProfile);
             CollectionManagerFactory.getInstance().getCollectionManager().createJBCollection(newCollection);
             ArrayList<JBCollection> jbPlaylistsArraylist=CollectionManagerFactory.getInstance().getCollectionManager().getPlaylists(activeProfile);
-            CollectionLibraryGUI collectionLibraryGUI1=new CollectionLibraryGUI(activeProfile, jbPlaylistsArraylist, collectionLibraryGUI.getEjbentity());
-            CollectionLibraryHandler collectionLibraryHandler=new CollectionLibraryHandler(activeProfile, collectionLibraryGUI1);
+            CollectionLibraryGUI collectionLibraryGUI1=new CollectionLibraryGUI(activeProfile, currentAudio, jbPlaylistsArraylist, collectionLibraryGUI.getEjbentity());
+            CollectionLibraryHandler collectionLibraryHandler=new CollectionLibraryHandler(activeProfile, currentAudio, collectionLibraryGUI1);
             stage.setScene(collectionLibraryGUI1.getScene());
             break;
           case ALBUM:
@@ -92,8 +92,8 @@ public class CollectionLibraryHandler{
             }catch(SQLException e){
               throw new RuntimeException(e);
             }//end-try
-            CreationGUI creationGUI=new CreationGUI(activeProfile, newCollection);
-            CreationGUIHandler CreationGUIHandler=new CreationGUIHandler(creationGUI, activeProfile);
+            CreationGUI creationGUI=new CreationGUI(activeProfile, currentAudio, newCollection);
+            CreationGUIHandler CreationGUIHandler=new CreationGUIHandler(creationGUI, activeProfile, currentAudio);
             stage.setScene(creationGUI.getScene());
             stage.setTitle("Create your album");
             break;
@@ -104,8 +104,8 @@ public class CollectionLibraryHandler{
               throw new RuntimeException(e);
             }//end-try
             newCollection=CollectionManagerFactory.getInstance().getCollectionManager().createJBCollection(newCollection);
-            creationGUI=new CreationGUI(activeProfile, newCollection);
-            CreationGUIHandler=new CreationGUIHandler(creationGUI, activeProfile);
+            creationGUI=new CreationGUI(activeProfile, currentAudio, newCollection);
+            CreationGUIHandler=new CreationGUIHandler(creationGUI, activeProfile, currentAudio);
             stage.setScene(creationGUI.getScene());
             stage.setTitle("Create your podcast");
             break;

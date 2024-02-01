@@ -1,7 +1,9 @@
 package it.unipv.ingsfw.JavaBeats.controller.handler.access;
+import it.unipv.ingsfw.JavaBeats.controller.factory.PlayerManagerFactory;
 import it.unipv.ingsfw.JavaBeats.controller.factory.ProfileManagerFactory;
 import it.unipv.ingsfw.JavaBeats.controller.handler.HomePageHandler;
 import it.unipv.ingsfw.JavaBeats.controller.manager.ProfileManager;
+import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.model.profile.User;
 import it.unipv.ingsfw.JavaBeats.view.access.LoginGUI;
@@ -21,6 +23,7 @@ public class LoginHandler{
   /*---------------------------------------*/
   private LoginGUI gui;
   private JBProfile activeProfile;
+  private JBAudio currentAudio;
   private static final String usernameRegex=new String("^[a-zA-Z0-9._+-]{1,30}$");
   private static final String mailRegex=new String("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,100}$");         //mail-allowed characters according to RFC 5322
   private static final String passwordRegex=new String("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,100}$");  //at least: 8 char, one uppercase, one lowercase, one number
@@ -55,9 +58,10 @@ public class LoginHandler{
           //Checks if the profile exists or handles the exception
           try{
             activeProfile=ProfileManagerFactory.getInstance().getProfileManager().login(profile);
+            currentAudio=PlayerManagerFactory.getInstance().getPlayerManager().getCurrentAudioPlaying();
             //Login
-            HomePageGUI homePageGUI=new HomePageGUI(activeProfile);
-            HomePageHandler homePageHandler=new HomePageHandler(homePageGUI, activeProfile);
+            HomePageGUI homePageGUI=new HomePageGUI(activeProfile, currentAudio);
+            HomePageHandler homePageHandler=new HomePageHandler(homePageGUI, activeProfile, currentAudio);
 
             //Saving previous dimension and using it for the next page
             Dimension2D previousDimension=new Dimension2D(s.getWidth(), s.getHeight());

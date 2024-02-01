@@ -1,6 +1,7 @@
 package it.unipv.ingsfw.JavaBeats.controller.handler;
 import it.unipv.ingsfw.JavaBeats.controller.factory.ProfileManagerFactory;
 import it.unipv.ingsfw.JavaBeats.controller.handler.presets.SidebarHandler;
+import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.model.profile.User;
@@ -29,9 +30,9 @@ public class ProfileViewHandler{
   /*---------------------------------------*/
   //Costruttori
   /*---------------------------------------*/
-  public ProfileViewHandler(ProfileViewGUI gui, JBProfile originalProfile){
+  public ProfileViewHandler(ProfileViewGUI gui, JBProfile originalProfile, JBAudio currentAudio){
     this.gui=gui;
-    initComponents(originalProfile);
+    initComponents(originalProfile, currentAudio);
   }
   /*---------------------------------------*/
   //Getter/Setter
@@ -40,7 +41,7 @@ public class ProfileViewHandler{
   /*---------------------------------------*/
   //Metodi
   /*---------------------------------------*/
-  private void initComponents(JBProfile originalProfile){
+  private void initComponents(JBProfile originalProfile, JBAudio currentAudio){
     EventHandler<ActionEvent> editButtonHandler=new EventHandler<ActionEvent>(){
       @Override
       public void handle(ActionEvent actionEvent){
@@ -76,12 +77,12 @@ public class ProfileViewHandler{
           JBProfile switchedProfile=ProfileManagerFactory.getInstance().getProfileManager().switchProfileType(originalProfile);
           /* Re-instantiating Sidebar, SidebarHandler, Songbar and SongbarHandler*/
           Sidebar.getInstance(switchedProfile);
-          SidebarHandler.getInstance(switchedProfile);
-          Songbar.getInstance(switchedProfile);
+          SidebarHandler.getInstance(switchedProfile, currentAudio);
+          Songbar.getInstance(switchedProfile, currentAudio);
 //          SongbarHandler.getInstance(switchedProfile);
-          
-          ProfileViewGUI profileViewGUI=new ProfileViewGUI(switchedProfile, switchedProfile);
-          ProfileViewHandler profileViewHandler=new ProfileViewHandler(profileViewGUI, switchedProfile);
+
+          ProfileViewGUI profileViewGUI=new ProfileViewGUI(switchedProfile, currentAudio, switchedProfile);
+          ProfileViewHandler profileViewHandler=new ProfileViewHandler(profileViewGUI, switchedProfile, currentAudio);
 
           Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
           stage.setScene(profileViewGUI.getScene());

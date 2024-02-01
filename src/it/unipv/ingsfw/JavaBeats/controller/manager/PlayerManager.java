@@ -32,7 +32,9 @@ public class PlayerManager{
   public static LinkedList<JBAudio> getQueue(){
     return queue;
   }
-
+  public static JBAudio getCurrentAudioPlaying(){
+    return CURRENT_AUDIO_PLAYING;
+  }
   /*---------------------------------------*/
   //Methods
   /*---------------------------------------*/

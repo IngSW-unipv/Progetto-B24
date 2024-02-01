@@ -2,6 +2,7 @@ package it.unipv.ingsfw.JavaBeats.view.library;
 
 import it.unipv.ingsfw.JavaBeats.model.EJBENTITY;
 import it.unipv.ingsfw.JavaBeats.model.collection.JBCollection;
+import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.view.presets.AudioCard;
 import it.unipv.ingsfw.JavaBeats.view.presets.Sidebar;
@@ -39,10 +40,10 @@ public class CollectionLibraryGUI{
   private Button buttonPlus;
   private Scene scene;
 
-  public CollectionLibraryGUI(JBProfile activeProfile, ArrayList<JBCollection> jbCollectionArrayList, EJBENTITY ejbentity){
+  public CollectionLibraryGUI(JBProfile activeProfile, JBAudio currentAudio, ArrayList<JBCollection> jbCollectionArrayList, EJBENTITY ejbentity){
     this.jbCollectionArrayList=jbCollectionArrayList;
     this.ejbentity=ejbentity;
-    initComponents(activeProfile, jbCollectionArrayList, ejbentity);
+    initComponents(activeProfile, currentAudio, jbCollectionArrayList, ejbentity);
   }
 
   /*---------------------------------------*/
@@ -71,7 +72,7 @@ public class CollectionLibraryGUI{
   /*---------------------------------------*/
   //Methods
   /*---------------------------------------*/
-  private void initComponents(JBProfile activeProfile, ArrayList<JBCollection> jbCollectionArrayList, EJBENTITY ejbentity){
+  private void initComponents(JBProfile activeProfile, JBAudio currentAudio, ArrayList<JBCollection> jbCollectionArrayList, EJBENTITY ejbentity){
     //Label collection title
     Label collectionLabel=null;
     switch(ejbentity){
@@ -132,7 +133,7 @@ public class CollectionLibraryGUI{
 
     /* Setup of left Sidebar, bottom songbar and center collection */
     Sidebar sidebar=Sidebar.getInstance(activeProfile);
-    Songbar songbar=Songbar.getInstance(activeProfile);
+    Songbar songbar=Songbar.getInstance(activeProfile, currentAudio);
     GridPane gp=new GridPane();
     gp.addRow(0, sidebar, collectionVBox);
     gp.add(songbar, 0, 1, 2, 1);

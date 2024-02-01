@@ -1,6 +1,7 @@
 package it.unipv.ingsfw.JavaBeats.controller.handler;
 
 import it.unipv.ingsfw.JavaBeats.controller.handler.presets.SidebarHandler;
+import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.Song;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.view.presets.Sidebar;
@@ -22,19 +23,19 @@ public class HomePageHandler{
   //Getters and setters
 
   //Costruttore
-  public HomePageHandler(HomePageGUI homePageGUI, JBProfile activeProfile){
+  public HomePageHandler(HomePageGUI homePageGUI, JBProfile activeProfile, JBAudio currentAudio){
     this.homePageGUI=homePageGUI;
-    initComponents(activeProfile);
+    initComponents(activeProfile, currentAudio);
 
   }
 
-  private void initComponents(JBProfile activeProfile){
+  private void initComponents(JBProfile activeProfile, JBAudio currentAudio){
     EventHandler<ActionEvent> profileButtonHandler=new EventHandler<ActionEvent>(){
       @Override
       public void handle(ActionEvent actionEvent){
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        ProfileViewGUI profileViewGUI=new ProfileViewGUI(activeProfile, activeProfile);
-        ProfileViewHandler profileViewHandler=new ProfileViewHandler(profileViewGUI, activeProfile);
+        ProfileViewGUI profileViewGUI=new ProfileViewGUI(activeProfile, currentAudio, activeProfile);
+        ProfileViewHandler profileViewHandler=new ProfileViewHandler(profileViewGUI, activeProfile, currentAudio);
         Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getProfileButton());
 
         Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
@@ -46,8 +47,8 @@ public class HomePageHandler{
     };
     homePageGUI.getHome().getUserProfileButton().setOnAction(profileButtonHandler);
     Sidebar.getInstance(activeProfile);
-    SidebarHandler.getInstance(activeProfile);
-    Songbar.getInstance(activeProfile);
+    SidebarHandler.getInstance(activeProfile, currentAudio);
+    Songbar.getInstance(activeProfile, currentAudio);
   }
 
 }

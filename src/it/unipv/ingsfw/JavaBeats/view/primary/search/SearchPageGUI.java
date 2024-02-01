@@ -1,5 +1,6 @@
 package it.unipv.ingsfw.JavaBeats.view.primary.search;
 import it.unipv.ingsfw.JavaBeats.model.IJBResearchable;
+import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.collection.JBCollection;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.view.presets.Sidebar;
@@ -42,8 +43,8 @@ public class SearchPageGUI{
   /*---------------------------------------*/
   //Costruttori
   /*---------------------------------------*/
-  public SearchPageGUI(JBProfile activeProfile, ArrayList<ArrayList<IJBResearchable>> searchedList, ArrayList<JBCollection> profilePlaylists){
-    initComponents(activeProfile, searchedList, profilePlaylists);
+  public SearchPageGUI(JBProfile activeProfile, JBAudio currentAudio, ArrayList<ArrayList<IJBResearchable>> searchedList, ArrayList<JBCollection> profilePlaylists){
+    initComponents(activeProfile, currentAudio, searchedList, profilePlaylists);
   }
 
   /*---------------------------------------*/
@@ -53,18 +54,18 @@ public class SearchPageGUI{
     return scene;
   }
 
-  public TextField getSearchTextField() {
+  public TextField getSearchTextField(){
     return searchTextField;
   }
 
-  public ScrollPanePreset getSearchScrollPanePreset() {
+  public ScrollPanePreset getSearchScrollPanePreset(){
     return searchScrollPanePreset;
   }
 
   /*---------------------------------------*/
   //Metodi
   /*---------------------------------------*/
-  private void initComponents(JBProfile activeProfile, ArrayList<ArrayList<IJBResearchable>> searchedList, ArrayList<JBCollection> profilePlaylists){
+  private void initComponents(JBProfile activeProfile, JBAudio currentAudio,ArrayList<ArrayList<IJBResearchable>> searchedList, ArrayList<JBCollection> profilePlaylists){
 
     //Search
 
@@ -108,7 +109,7 @@ public class SearchPageGUI{
     searchBar.setAlignment(Pos.CENTER_LEFT);
 
     //ScrollPanePreset Search
-    if(searchedList== null){
+    if(searchedList==null){
       searchScrollPanePreset=new SearchDefault();
 
     }else{
@@ -123,7 +124,7 @@ public class SearchPageGUI{
 
     /* Setup of left Sidebar, bottom songbar and center Search */
     Sidebar sidebar=Sidebar.getInstance(activeProfile);
-    Songbar songbar=Songbar.getInstance(activeProfile);
+    Songbar songbar=Songbar.getInstance(activeProfile, currentAudio);
 
     GridPane gp=new GridPane();
     gp.addRow(0, sidebar, searchVBox);

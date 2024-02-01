@@ -29,10 +29,10 @@ public class CollectionViewGUI{
   /*---------------------------------------*/
   //Costruttori
   /*---------------------------------------*/
-  public CollectionViewGUI(JBProfile jbProfile, JBCollection jbCollection){
+  public CollectionViewGUI(JBProfile jbProfile, JBAudio currentAudio, JBCollection jbCollection){
     super();
     this.jbCollection=jbCollection;
-    initComponents(jbProfile);
+    initComponents(jbProfile, currentAudio);
   }
 
   /*---------------------------------------*/
@@ -59,7 +59,7 @@ public class CollectionViewGUI{
   /*---------------------------------------*/
   //Metodi
   /*---------------------------------------*/
-  private void initComponents(JBProfile activeProfile){
+  private void initComponents(JBProfile activeProfile, JBAudio currentAudio){
     /* Setup of collectionHeader view */
     collectionHeader=new CollectionHeader(activeProfile, jbCollection);
 
@@ -85,7 +85,7 @@ public class CollectionViewGUI{
     /* Setup of left Sidebar, bottom songbar and center mainVBox */
     gp=new GridPane();
     gp.addRow(0, Sidebar.getInstance(activeProfile), scrollableScrollPanePreset);
-    gp.add(Songbar.getInstance(activeProfile), 0, 1, 2, 1);
+    gp.add(Songbar.getInstance(activeProfile, currentAudio), 0, 1, 2, 1);
 
     ColumnConstraints ccSidebar=new ColumnConstraints();
     ColumnConstraints ccHome=new ColumnConstraints();

@@ -1,4 +1,5 @@
 package it.unipv.ingsfw.JavaBeats.view.primary.profile;
+import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.view.presets.Sidebar;
 import it.unipv.ingsfw.JavaBeats.view.presets.Songbar;
@@ -23,8 +24,8 @@ public class ProfileViewGUI{
   /*---------------------------------------*/
   //Costruttori
   /*---------------------------------------*/
-  public ProfileViewGUI(JBProfile activeProfile, JBProfile searchedProfile){
-    initComponents(activeProfile, searchedProfile);
+  public ProfileViewGUI(JBProfile activeProfile, JBAudio currentAudio, JBProfile searchedProfile){
+    initComponents(activeProfile, currentAudio, searchedProfile);
   }
   /*---------------------------------------*/
   //Getter/Setter
@@ -48,7 +49,7 @@ public class ProfileViewGUI{
   /*---------------------------------------*/
   //Metodi
   /*---------------------------------------*/
-  private void initComponents(JBProfile activeProfile, JBProfile searchedProfile){
+  private void initComponents(JBProfile activeProfile, JBAudio currentAudio, JBProfile searchedProfile){
     /* Header and main components */
     profileHeader=new ProfileHeader(activeProfile, searchedProfile);
     profileDefault=new ProfileDefault(activeProfile, searchedProfile);
@@ -60,7 +61,7 @@ public class ProfileViewGUI{
 
     gp=new GridPane();
     gp.addRow(0, Sidebar.getInstance(activeProfile), mainContent);
-    gp.add(Songbar.getInstance(activeProfile), 0, 1, 2, 1);
+    gp.add(Songbar.getInstance(activeProfile, currentAudio), 0, 1, 2, 1);
 
     ColumnConstraints ccSidebar=new ColumnConstraints();
     ColumnConstraints ccHome=new ColumnConstraints();

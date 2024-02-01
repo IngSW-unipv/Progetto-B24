@@ -1,4 +1,5 @@
 package it.unipv.ingsfw.JavaBeats.view.primary.home;
+import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.view.presets.Sidebar;
 import it.unipv.ingsfw.JavaBeats.view.presets.Songbar;
@@ -18,8 +19,8 @@ public class HomePageGUI{
   /*---------------------------------------*/
   //Costruttori
   /*---------------------------------------*/
-  public HomePageGUI(JBProfile activeProfile){
-    initComponents(activeProfile);
+  public HomePageGUI(JBProfile activeProfile, JBAudio currentAudio){
+    initComponents(activeProfile, currentAudio);
   }
 
   /*---------------------------------------*/
@@ -35,10 +36,10 @@ public class HomePageGUI{
   /*---------------------------------------*/
   //Metodi
   /*---------------------------------------*/
-  private void initComponents(JBProfile activeProfile){
+  private void initComponents(JBProfile activeProfile, JBAudio currentAudio){
     /* Setup of left Sidebar, bottom songbar and center home */
     Sidebar sidebar=Sidebar.getInstance(activeProfile);
-    Songbar songbar=Songbar.getInstance(activeProfile);
+    Songbar songbar=Songbar.getInstance(activeProfile, currentAudio);
     home=new Home(activeProfile);
 
     GridPane gp=new GridPane();

@@ -2,6 +2,7 @@ package it.unipv.ingsfw.JavaBeats.view.presets;
 
 import com.pixelduke.control.skin.FXSkins;
 import it.unipv.ingsfw.JavaBeats.controller.handler.presets.SidebarHandler;
+import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.Song;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import javafx.geometry.Insets;
@@ -29,8 +30,8 @@ public class Songbar extends GridPane{
   private static final Background bgSongbar=new Background(new BackgroundFill(Color.rgb(18, 18, 18), CornerRadii.EMPTY, Insets.EMPTY));
   private static final int clientWidth=(int)Screen.getPrimary().getBounds().getWidth();
   private static final int clientHeight=(int)Screen.getPrimary().getBounds().getHeight();
-  private String minutePassed=new String("00:00");
-  private String songLength=new String("03:00");
+  private String minutePassed="00:00";
+  private String songLength="03:00";
   double min=00.00;
   double max=3;
   double value=1.30;
@@ -38,20 +39,20 @@ public class Songbar extends GridPane{
   /*---------------------------------------*/
   //Costruttore
   /*---------------------------------------*/
-  private Songbar(JBProfile activeProfile){
+  private Songbar(JBProfile activeProfile, JBAudio audio){
     super();
     Songbar.activeProfile=activeProfile;
-    initComponents(activeProfile);
+    initComponents(activeProfile, audio);
   }
 
   /*---------------------------------------*/
   //Getter/Setter
   /*---------------------------------------*/
-  public static Songbar getInstance(JBProfile activeProfile){
+  public static Songbar getInstance(JBProfile activeProfile, JBAudio audio){
     if(instance==null || Songbar.activeProfile==null){
-      instance=new Songbar(activeProfile);
+      instance=new Songbar(activeProfile, audio);
     }else if(!Songbar.activeProfile.equals(activeProfile)){
-      instance=new Songbar(activeProfile);
+      instance=new Songbar(activeProfile, audio);
     } //end-if
     return instance;
   }
@@ -59,7 +60,7 @@ public class Songbar extends GridPane{
   /*---------------------------------------*/
   //Metodi
   /*---------------------------------------*/
-  private void initComponents(JBProfile activeProfile){
+  private void initComponents(JBProfile activeProfile, JBAudio audio){
     //SongBar: SongBox, PlayBox, VolumeBox
 
     //SongHbox

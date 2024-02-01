@@ -1,6 +1,7 @@
 package it.unipv.ingsfw.JavaBeats.view.library;
 import it.unipv.ingsfw.JavaBeats.model.collection.Album;
 import it.unipv.ingsfw.JavaBeats.model.collection.JBCollection;
+import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.view.presets.Sidebar;
 import it.unipv.ingsfw.JavaBeats.view.presets.Songbar;
@@ -70,13 +71,13 @@ public class CreationGUI{
     return create;
   }
 
-  public CreationGUI(JBProfile activeProfile, JBCollection jbCollection){
+  public CreationGUI(JBProfile activeProfile, JBAudio currentAudio, JBCollection jbCollection){
     this.newCollection=jbCollection;
-    initComponents(activeProfile, jbCollection);
+    initComponents(activeProfile, currentAudio, jbCollection);
   }
 
   //Methods
-  private void initComponents(JBProfile activeProfile, JBCollection jbCollection){
+  private void initComponents(JBProfile activeProfile, JBAudio currentAudio, JBCollection jbCollection){
 
     //HBox Title
 
@@ -156,7 +157,7 @@ public class CreationGUI{
 
     //Scene
     Sidebar sidebar=Sidebar.getInstance(activeProfile);
-    Songbar songbar=Songbar.getInstance(activeProfile);
+    Songbar songbar=Songbar.getInstance(activeProfile, currentAudio);
     GridPane gp=new GridPane();
     gp.addRow(0, sidebar, creationVBox);
     gp.add(songbar, 0, 1, 2, 1);
