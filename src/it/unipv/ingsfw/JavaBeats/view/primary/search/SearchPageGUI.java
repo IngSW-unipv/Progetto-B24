@@ -1,5 +1,6 @@
 package it.unipv.ingsfw.JavaBeats.view.primary.search;
 import it.unipv.ingsfw.JavaBeats.model.IJBResearchable;
+import it.unipv.ingsfw.JavaBeats.model.collection.JBCollection;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.view.presets.Sidebar;
 import it.unipv.ingsfw.JavaBeats.view.presets.Songbar;
@@ -41,8 +42,8 @@ public class SearchPageGUI{
   /*---------------------------------------*/
   //Costruttori
   /*---------------------------------------*/
-  public SearchPageGUI(JBProfile activeProfile, ArrayList<ArrayList<IJBResearchable>> searchedList){
-    initComponents(activeProfile, searchedList);
+  public SearchPageGUI(JBProfile activeProfile, ArrayList<ArrayList<IJBResearchable>> searchedList, ArrayList<JBCollection> profilePlaylists){
+    initComponents(activeProfile, searchedList, profilePlaylists);
   }
 
   /*---------------------------------------*/
@@ -63,7 +64,7 @@ public class SearchPageGUI{
   /*---------------------------------------*/
   //Metodi
   /*---------------------------------------*/
-  private void initComponents(JBProfile activeProfile, ArrayList<ArrayList<IJBResearchable>> searchedList){
+  private void initComponents(JBProfile activeProfile, ArrayList<ArrayList<IJBResearchable>> searchedList, ArrayList<JBCollection> profilePlaylists){
 
     //Search
 
@@ -111,7 +112,7 @@ public class SearchPageGUI{
       searchScrollPanePreset=new SearchDefault();
 
     }else{
-      searchScrollPanePreset=new SearchResults(searchedList);
+      searchScrollPanePreset=new SearchResults(searchedList, activeProfile, profilePlaylists);
     }
     searchScrollPanePreset.getStylesheets().add("it/unipv/ingsfw/JavaBeats/view/resources/css/scrollbar.css");
 

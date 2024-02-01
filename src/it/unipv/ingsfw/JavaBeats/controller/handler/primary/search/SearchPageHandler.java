@@ -1,8 +1,10 @@
 package it.unipv.ingsfw.JavaBeats.controller.handler.primary.search;
 
+import it.unipv.ingsfw.JavaBeats.controller.factory.CollectionManagerFactory;
 import it.unipv.ingsfw.JavaBeats.controller.factory.SearchManagerFactory;
 import it.unipv.ingsfw.JavaBeats.controller.handler.HomePageHandler;
 import it.unipv.ingsfw.JavaBeats.model.IJBResearchable;
+import it.unipv.ingsfw.JavaBeats.model.collection.JBCollection;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.view.presets.Sidebar;
 import it.unipv.ingsfw.JavaBeats.view.presets.scrollpanes.ScrollPanePreset;
@@ -49,7 +51,8 @@ public class SearchPageHandler {
 
                     //PlayerManager returns array of searched arrays
                     ArrayList<ArrayList<IJBResearchable>> searchedList= SearchManagerFactory.getInstance().getSearchManager().search(searchPageGUI.getSearchTextField().getText(), activeProfile);
-                    SearchPageGUI searchPageGUI= new SearchPageGUI(activeProfile, searchedList);
+                    ArrayList<JBCollection> profilePlaylists= CollectionManagerFactory.getInstance().getCollectionManager().getPlaylists(activeProfile);
+                    SearchPageGUI searchPageGUI= new SearchPageGUI(activeProfile, searchedList, profilePlaylists);
 
 
                     Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());

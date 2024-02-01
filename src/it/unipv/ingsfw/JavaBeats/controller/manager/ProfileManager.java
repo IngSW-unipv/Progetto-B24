@@ -68,6 +68,7 @@ public class ProfileManager{
     return activeProfile;
   }
 
+
   public JBProfile switchProfileType(JBProfile jbProfile) throws ClassCastException{
     ProfileDAO profileDAO=new ProfileDAO();
     AudioDAO audioDAO=new AudioDAO();

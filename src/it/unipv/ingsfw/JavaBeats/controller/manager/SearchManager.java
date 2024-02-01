@@ -11,17 +11,22 @@ import java.util.ArrayList;
 
 public class SearchManager {
 
+    //Costruttore
+    public SearchManager() {
+
+    }
+
 
     //Metodi
 
-    public ArrayList<ArrayList<IJBResearchable>> search(String searchText,JBProfile activeProfile){
-        SearchDAO s= new SearchDAO();
+    public ArrayList<ArrayList<IJBResearchable>> search(String searchText, JBProfile activeProfile) {
+        SearchDAO s = new SearchDAO();
 
-        ERESEARCH[] eResearch= new ERESEARCH[]{ERESEARCH.SONG, ERESEARCH.ARTIST, ERESEARCH.ALBUM, ERESEARCH.PODCAST, ERESEARCH.PLAYLIST, ERESEARCH.USER};
+        ERESEARCH[] eResearch = new ERESEARCH[]{ERESEARCH.SONG, ERESEARCH.ARTIST, ERESEARCH.ALBUM, ERESEARCH.PODCAST, ERESEARCH.PLAYLIST, ERESEARCH.EPISODE, ERESEARCH.USER};
 
         //Filling in the array
-        ArrayList<ArrayList<IJBResearchable>> searchedList= new ArrayList<>();
-        for(ERESEARCH eresearch: eResearch){
+        ArrayList<ArrayList<IJBResearchable>> searchedList = new ArrayList<>();
+        for (ERESEARCH eresearch : eResearch) {
             searchedList.add(s.search(searchText, activeProfile, eresearch));
         }
 
