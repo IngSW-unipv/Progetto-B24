@@ -52,6 +52,20 @@ public class CollectionManager {
 
     }
 
+    public void addToCollection(JBCollection jbCollection, JBAudio jbAudio) {
+        CollectionDAO c = new CollectionDAO();
+        jbCollection.getTrackList().add(jbAudio);
+        c.update(jbCollection);
+
+    }
+
+    public void removeFromPlaylist(JBCollection jbCollection, JBAudio jbAudio) {
+        CollectionDAO c = new CollectionDAO();
+        jbCollection.getTrackList().remove(jbAudio);
+        c.update(jbCollection);
+
+    }
+
     public ArrayList<JBCollection> getPlaylists(JBProfile activeProfile) {
         CollectionDAO c = new CollectionDAO();
         return c.selectPlaylistsByProfile(activeProfile);

@@ -46,6 +46,7 @@ public class SearchResults extends ScrollPanePreset {
     private ArrayList<Podcast> podcasts;
     private ArrayList<Playlist> playlists;
     private ArrayList<Episode> episodes;
+    private ArrayList<ChoiceBox<String>> choiceBoxArrayList = new ArrayList<>();
 
 
     /*---------------------------------------*/
@@ -53,11 +54,16 @@ public class SearchResults extends ScrollPanePreset {
     /*---------------------------------------*/
     public SearchResults(ArrayList<ArrayList<IJBResearchable>> searchedList, JBProfile activeProfile, ArrayList<JBCollection> profilePlaylists) {
         super();
+
         initComponents(searchedList, activeProfile, profilePlaylists);
     }
     /*---------------------------------------*/
     //Getter/Setter
     /*---------------------------------------*/
+
+    public ArrayList<ChoiceBox<String>> getChoiceBoxArrayList() {
+        return choiceBoxArrayList;
+    }
 
     /*---------------------------------------*/
     //Metodi
@@ -112,6 +118,7 @@ public class SearchResults extends ScrollPanePreset {
             cb.getItems().add(collection.getName());
         }//end-foreach
 
+        choiceBoxArrayList.add(cb);
         cb.getStylesheets().add("it/unipv/ingsfw/JavaBeats/view/resources/css/choicebox.css");
 
         Button cbButton = new Button();
@@ -175,6 +182,7 @@ public class SearchResults extends ScrollPanePreset {
             for (JBCollection collection : profilePlaylists) {
                 c.getItems().add(collection.getName());
             }
+            choiceBoxArrayList.add(c);
 
             c.getStylesheets().add("it/unipv/ingsfw/JavaBeats/view/resources/css/choicebox.css");
 
