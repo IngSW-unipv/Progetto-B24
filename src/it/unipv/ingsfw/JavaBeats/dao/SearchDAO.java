@@ -20,351 +20,351 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class SearchDAO implements ISearchDAO {
+public class SearchDAO implements ISearchDAO{
 
-    //ATTRIBUTES:
-    private static final String schema = "JavaBeats_DB";
-    private Connection connection;
+  //ATTRIBUTES:
+  private static final String schema="JavaBeats_DB";
+  private Connection connection;
 
 
-    //CONTRUCTOR:
-    public SearchDAO() {
-        super();
+  //CONTRUCTOR:
+  public SearchDAO(){
+    super();
+  }
+
+
+  //PUBLIC METHODS:
+  @Override
+  public ArrayList<IJBResearchable> search(String field, JBProfile activeProfile){
+    return search(field, activeProfile, null);
+  }
+
+  @Override
+  public ArrayList<IJBResearchable> search(String field, JBProfile activeProfile, ERESEARCH mode){
+    ArrayList<IJBResearchable> result=new ArrayList<>();
+
+    switch(mode){
+      case USER:
+        result.addAll(searchUsers(field));
+        break;
+
+      case ARTIST:
+        result.addAll(searchArtists(field));
+        break;
+
+      case SONG:
+        result.addAll(searchSongs(field, activeProfile));
+        break;
+
+      case EPISODE:
+        result.addAll(searchEpisodes(field, activeProfile));
+        break;
+
+      case PLAYLIST:
+        result.addAll(searchPlaylists(field));
+        break;
+
+      case ALBUM:
+        result.addAll(searchAlbums(field));
+        break;
+
+      case PODCAST:
+        result.addAll(searchPodcasts(field));
+        break;
+
+      default:
+        result.addAll(searchUsers(field));
+        result.addAll(searchArtists(field));
+        result.addAll(searchSongs(field, activeProfile));
+        result.addAll(searchEpisodes(field, activeProfile));
+        result.addAll(searchPlaylists(field));
+        result.addAll(searchAlbums(field));
+        result.addAll(searchPodcasts(field));
     }
 
+    return result;
+  }
 
-    //PUBLIC METHODS:
-    @Override
-    public ArrayList<IJBResearchable> search(String field, JBProfile activeProfile) {
-        return search(field, activeProfile, null);
+
+  //PRIVATE METHODS
+  private ArrayList<User> searchUsers(String field){
+    connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+    PreparedStatement st;
+    ResultSet rs;
+    ArrayList<User> result=new ArrayList<>();
+
+    try{
+      String query="SELECT Profile.mail FROM Profile JOIN User ON Profile.mail = User.mail "+
+              "WHERE (name LIKE ? OR surname LIKE ? OR username LIKE ?) AND isVisible=true;";
+
+      st=connection.prepareStatement(query);
+      st.setString(1, "%"+field+"%");
+      st.setString(2, "%"+field+"%");
+      st.setString(3, "%"+field+"%");
+
+      rs=st.executeQuery();
+
+      while(rs.next()){
+        result.add(new User(null, rs.getString("mail"), null));
+      }
+
+    }catch(Exception e){
+      e.printStackTrace();
     }
 
-    @Override
-    public ArrayList<IJBResearchable> search(String field, JBProfile activeProfile, ERESEARCH mode) {
-        ArrayList<IJBResearchable> result = new ArrayList<>();
+    DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
 
-        switch (mode) {
-            case USER:
-                result.addAll(searchUsers(field));
-                break;
-
-            case ARTIST:
-                result.addAll(searchArtists(field));
-                break;
-
-            case SONG:
-                result.addAll(searchSongs(field, activeProfile));
-                break;
-
-            case EPISODE:
-                result.addAll(searchEpisodes(field, activeProfile));
-                break;
-
-            case PLAYLIST:
-                result.addAll(searchPlaylists(field));
-                break;
-
-            case ALBUM:
-                result.addAll(searchAlbums(field));
-                break;
-
-            case PODCAST:
-                result.addAll(searchPodcasts(field));
-                break;
-
-            default:
-                result.addAll(searchUsers(field));
-                result.addAll(searchArtists(field));
-                result.addAll(searchSongs(field, activeProfile));
-                result.addAll(searchEpisodes(field, activeProfile));
-                result.addAll(searchPlaylists(field));
-                result.addAll(searchAlbums(field));
-                result.addAll(searchPodcasts(field));
-        }
-
-        return result;
+    ProfileDAO pDAO=new ProfileDAO();
+    ArrayList<User> userList=new ArrayList<>();
+    Iterator<User> resultIT=result.iterator();
+    while(resultIT.hasNext()){
+      userList.add(pDAO.getUser(resultIT.next()));
     }
 
+    return userList;
+  }
 
-    //PRIVATE METHODS
-    private ArrayList<User> searchUsers(String field) {
-        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
-        PreparedStatement st;
-        ResultSet rs;
-        ArrayList<User> result = new ArrayList<>();
 
-        try {
-            String query = "SELECT Profile.mail FROM Profile JOIN User ON Profile.mail = User.mail " +
-                    "WHERE (name LIKE ? OR surname LIKE ? OR username LIKE ?) AND isVisible=true;";
+  private ArrayList<Artist> searchArtists(String field){
+    connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+    PreparedStatement st;
+    ResultSet rs;
+    ArrayList<Artist> result=new ArrayList<>();
 
-            st = connection.prepareStatement(query);
-            st.setString(1, "%" + field + "%");
-            st.setString(2, "%" + field + "%");
-            st.setString(3, "%" + field + "%");
+    try{
+      String query="SELECT Profile.mail AS mail FROM Profile JOIN Artist ON Profile.mail = Artist.mail "+
+              "WHERE name LIKE ? OR surname LIKE ? OR username LIKE ?;";
 
-            rs = st.executeQuery();
+      st=connection.prepareStatement(query);
+      st.setString(1, "%"+field+"%");
+      st.setString(2, "%"+field+"%");
+      st.setString(3, "%"+field+"%");
 
-            while (rs.next()) {
-                result.add(new User(rs.getString("mail"), null, null));
-            }
+      rs=st.executeQuery();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+      while(rs.next()){
+        result.add(new Artist(null, rs.getString("mail"), null));
+      }
 
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
-
-        ProfileDAO pDAO = new ProfileDAO();
-        ArrayList<User> userList = new ArrayList<>();
-        Iterator<User> resultIT = result.iterator();
-        while (resultIT.hasNext()) {
-            userList.add(pDAO.getUser(resultIT.next()));
-        }
-
-        return userList;
+    }catch(Exception e){
+      e.printStackTrace();
     }
 
+    DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
 
-    private ArrayList<Artist> searchArtists(String field) {
-        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
-        PreparedStatement st;
-        ResultSet rs;
-        ArrayList<Artist> result = new ArrayList<>();
-
-        try {
-            String query = "SELECT Profile.mail FROM Profile JOIN Artist ON Profile.mail = Artist.mail " +
-                    "WHERE name LIKE ? OR surname LIKE ? OR username LIKE ?;";
-
-            st = connection.prepareStatement(query);
-            st.setString(1, "%" + field + "%");
-            st.setString(2, "%" + field + "%");
-            st.setString(3, "%" + field + "%");
-
-            rs = st.executeQuery();
-
-            while (rs.next()) {
-                result.add(new Artist(rs.getString("mail"), null, null));
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
-
-        ProfileDAO pDAO = new ProfileDAO();
-        ArrayList<Artist> artistList = new ArrayList<>();
-        Iterator<Artist> resultIT = result.iterator();
-        while (resultIT.hasNext()) {
-            artistList.add(pDAO.getArtist(resultIT.next()));
-        }
-
-        return artistList;
+    ProfileDAO pDAO=new ProfileDAO();
+    ArrayList<Artist> artistList=new ArrayList<>();
+    Iterator<Artist> resultIT=result.iterator();
+    while(resultIT.hasNext()){
+      artistList.add(pDAO.getArtist(resultIT.next()));
     }
 
-
-    private ArrayList<Song> searchSongs(String field, JBProfile activeProfile) {
-        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
-        PreparedStatement st;
-        ResultSet rs;
-        ArrayList<Song> result = new ArrayList<>();
-        ArrayList<Song> tmp = new ArrayList<>();
+    return artistList;
+  }
 
 
-        try {
-            String query = "SELECT Audio.id FROM Audio " +
-                    "JOIN Song ON Audio.id = Song.id " +
-                    "JOIN ArtistAudios ON Audio.id = ArtistAudios.idAudio " +
-                    "JOIN Profile ON ArtistAudios.artistMail = Profile.mail " +
-                    "JOIN AlbumSongs ON Audio.id = AlbumSongs.idSong " +
-                    "JOIN Collection ON AlbumSongs.idAlbum = Collection.id " +
-                    "WHERE Audio.title LIKE ? OR Profile.username LIKE ? OR Collection.name LIKE ?;";
+  private ArrayList<Song> searchSongs(String field, JBProfile activeProfile){
+    connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+    PreparedStatement st;
+    ResultSet rs;
+    ArrayList<Song> result=new ArrayList<>();
+    ArrayList<Song> tmp=new ArrayList<>();
 
-            st = connection.prepareStatement(query);
-            st.setString(1, "%" + field + "%");
-            st.setString(2, "%" + field + "%");
-            st.setString(3, "%" + field + "%");
 
-            rs = st.executeQuery();
+    try{
+      String query="SELECT Audio.id FROM Audio "+
+              "JOIN Song ON Audio.id = Song.id "+
+              "JOIN ArtistAudios ON Audio.id = ArtistAudios.idAudio "+
+              "JOIN Profile ON ArtistAudios.artistMail = Profile.mail "+
+              "JOIN AlbumSongs ON Audio.id = AlbumSongs.idSong "+
+              "JOIN Collection ON AlbumSongs.idAlbum = Collection.id "+
+              "WHERE Audio.title LIKE ? OR Profile.username LIKE ? OR Collection.name LIKE ?;";
 
-            while (rs.next()) {
-                tmp.add(new Song(rs.getInt("id"), null, null, null));
-            }
+      st=connection.prepareStatement(query);
+      st.setString(1, "%"+field+"%");
+      st.setString(2, "%"+field+"%");
+      st.setString(3, "%"+field+"%");
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+      rs=st.executeQuery();
 
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+      while(rs.next()){
+        tmp.add(new Song(rs.getInt("id"), null, null, null));
+      }
 
-        AudioDAO aDAO = new AudioDAO();
-
-        for (Song song : tmp) {
-            result.add(aDAO.getSong(song, activeProfile));      //get complete info of song
-        }
-
-        return result;
+    }catch(Exception e){
+      e.printStackTrace();
     }
 
+    DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
 
-    private ArrayList<Episode> searchEpisodes(String field, JBProfile activeProfile) {
-        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
-        PreparedStatement st;
-        ResultSet rs;
-        ArrayList<Episode> result = new ArrayList<>();
+    AudioDAO aDAO=new AudioDAO();
 
-        try {
-            String query = "SELECT Audio.id FROM Audio " +
-                    "JOIN Episode ON Audio.id = Episode.id " +
-                    "JOIN ArtistAudios ON Audio.id = ArtistAudios.idAudio " +
-                    "JOIN Profile ON ArtistAudios.artistMail = Profile.mail " +
-                    "JOIN PodcastEpisodes ON Audio.id = PodcastEpisodes.idEpisode " +
-                    "JOIN Collection ON PodcastEpisodes.idPodcast = Collection.id " +
-                    "WHERE Audio.title LIKE ? OR Profile.username LIKE ? OR Collection.name LIKE ?;";
-
-            st = connection.prepareStatement(query);
-            st.setString(1, "%" + field + "%");
-            st.setString(2, "%" + field + "%");
-            st.setString(3, "%" + field + "%");
-
-            rs = st.executeQuery();
-
-            while (rs.next()) {
-                result.add(new Episode(rs.getInt("id"), null, null, null));
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
-
-        AudioDAO aDAO = new AudioDAO();
-        for (Episode episode : result) {
-            episode = aDAO.getEpisode(episode, activeProfile);      //get complete info of episode
-        }
-
-        return result;
+    for(Song song: tmp){
+      result.add(aDAO.getSong(song, activeProfile));      //get complete info of song
     }
 
+    return result;
+  }
 
-    private ArrayList<Playlist> searchPlaylists(String field) {
-        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
-        PreparedStatement st;
-        ResultSet rs;
-        ArrayList<Playlist> result = new ArrayList<>();
 
-        try {
-            String query = "SELECT Collection.id FROM Collection " +
-                    "JOIN Playlist ON Collection.id = Playlist.id " +
-                    "JOIN ProfilePlaylists ON Collection.id = ProfilePlaylists.idPlaylist " +
-                    "JOIN Profile ON ProfilePlaylists.profileMail = Profile.mail " +
-                    "WHERE (Collection.name LIKE ? OR Profile.username LIKE ?) AND Playlist.isVisible=true;";
+  private ArrayList<Episode> searchEpisodes(String field, JBProfile activeProfile){
+    connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+    PreparedStatement st;
+    ResultSet rs;
+    ArrayList<Episode> result=new ArrayList<>();
 
-            st = connection.prepareStatement(query);
-            st.setString(1, "%" + field + "%");
-            st.setString(2, "%" + field + "%");
+    try{
+      String query="SELECT Audio.id FROM Audio "+
+              "JOIN Episode ON Audio.id = Episode.id "+
+              "JOIN ArtistAudios ON Audio.id = ArtistAudios.idAudio "+
+              "JOIN Profile ON ArtistAudios.artistMail = Profile.mail "+
+              "JOIN PodcastEpisodes ON Audio.id = PodcastEpisodes.idEpisode "+
+              "JOIN Collection ON PodcastEpisodes.idPodcast = Collection.id "+
+              "WHERE Audio.title LIKE ? OR Profile.username LIKE ? OR Collection.name LIKE ?;";
 
-            rs = st.executeQuery();
+      st=connection.prepareStatement(query);
+      st.setString(1, "%"+field+"%");
+      st.setString(2, "%"+field+"%");
+      st.setString(3, "%"+field+"%");
 
-            while (rs.next()) {
-                result.add(new Playlist(rs.getInt("id"), null, null));
-            }
+      rs=st.executeQuery();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+      while(rs.next()){
+        result.add(new Episode(rs.getInt("id"), null, null, null));
+      }
 
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
-
-        CollectionDAO cDAO = new CollectionDAO();
-        ArrayList<Playlist> playlistList = new ArrayList<>();
-        Iterator<Playlist> resultIT = result.iterator();
-        while (resultIT.hasNext()) {
-            playlistList.add(cDAO.getPlaylist(resultIT.next()));
-        }
-
-        return playlistList;
+    }catch(Exception e){
+      e.printStackTrace();
     }
 
+    DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
 
-    private ArrayList<Album> searchAlbums(String field) {
-        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
-        PreparedStatement st;
-        ResultSet rs;
-        ArrayList<Album> result = new ArrayList<>();
-
-        try {
-            String query = "SELECT Collection.id FROM Collection " +
-                    "JOIN Album ON Collection.id = Album.id " +
-                    "JOIN ArtistAlbums ON Collection.id = ArtistAlbums.idAlbum " +
-                    "JOIN Profile ON ArtistAlbums.ArtistMail = Profile.mail " +
-                    "WHERE Collection.name LIKE ? OR Profile.username LIKE ?;";
-
-            st = connection.prepareStatement(query);
-            st.setString(1, "%" + field + "%");
-            st.setString(2, "%" + field + "%");
-
-            rs = st.executeQuery();
-
-            while (rs.next()) {
-                result.add(new Album(rs.getInt("id"), null, null, null));
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
-
-        CollectionDAO cDAO = new CollectionDAO();
-        ArrayList<Album> albumList = new ArrayList<>();
-        Iterator<Album> resultIT = result.iterator();
-        while (resultIT.hasNext()) {
-            albumList.add(cDAO.getAlbum(resultIT.next()));
-        }
-
-        return albumList;
+    AudioDAO aDAO=new AudioDAO();
+    for(Episode episode: result){
+      episode=aDAO.getEpisode(episode, activeProfile);      //get complete info of episode
     }
 
+    return result;
+  }
 
-    private ArrayList<Podcast> searchPodcasts(String field) {
-        connection = DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
-        PreparedStatement st;
-        ResultSet rs;
-        ArrayList<Podcast> result = new ArrayList<>();
 
-        try {
-            String query = "SELECT Collection.id FROM Collection " +
-                    "JOIN Podcast ON Collection.id = Podcast.id " +
-                    "JOIN ArtistPodcasts ON Collection.id = ArtistPodcasts.idPodcast " +
-                    "JOIN Profile ON ArtistPodcasts.ArtistMail = Profile.mail " +
-                    "WHERE Collection.name LIKE ? OR Profile.username LIKE ?;";
+  private ArrayList<Playlist> searchPlaylists(String field){
+    connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+    PreparedStatement st;
+    ResultSet rs;
+    ArrayList<Playlist> result=new ArrayList<>();
 
-            st = connection.prepareStatement(query);
-            st.setString(1, "%" + field + "%");
-            st.setString(2, "%" + field + "%");
+    try{
+      String query="SELECT Collection.id FROM Collection "+
+              "JOIN Playlist ON Collection.id = Playlist.id "+
+              "JOIN ProfilePlaylists ON Collection.id = ProfilePlaylists.idPlaylist "+
+              "JOIN Profile ON ProfilePlaylists.profileMail = Profile.mail "+
+              "WHERE (Collection.name LIKE ? OR Profile.username LIKE ?) AND Playlist.isVisible=true;";
 
-            rs = st.executeQuery();
+      st=connection.prepareStatement(query);
+      st.setString(1, "%"+field+"%");
+      st.setString(2, "%"+field+"%");
 
-            while (rs.next()) {
-                result.add(new Podcast(rs.getInt("id"), null, null, null));
-            }
+      rs=st.executeQuery();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+      while(rs.next()){
+        result.add(new Playlist(rs.getInt("id"), null, null));
+      }
 
-        DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
-
-        CollectionDAO cDAO = new CollectionDAO();
-        ArrayList<Podcast> podcastList = new ArrayList<>();
-        Iterator<Podcast> resultIT = result.iterator();
-        while (resultIT.hasNext()) {
-            podcastList.add(cDAO.getPodcast(resultIT.next()));
-        }
-
-        return podcastList;
+    }catch(Exception e){
+      e.printStackTrace();
     }
+
+    DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+
+    CollectionDAO cDAO=new CollectionDAO();
+    ArrayList<Playlist> playlistList=new ArrayList<>();
+    Iterator<Playlist> resultIT=result.iterator();
+    while(resultIT.hasNext()){
+      playlistList.add(cDAO.getPlaylist(resultIT.next()));
+    }
+
+    return playlistList;
+  }
+
+
+  private ArrayList<Album> searchAlbums(String field){
+    connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+    PreparedStatement st;
+    ResultSet rs;
+    ArrayList<Album> result=new ArrayList<>();
+
+    try{
+      String query="SELECT Collection.id FROM Collection "+
+              "JOIN Album ON Collection.id = Album.id "+
+              "JOIN ArtistAlbums ON Collection.id = ArtistAlbums.idAlbum "+
+              "JOIN Profile ON ArtistAlbums.ArtistMail = Profile.mail "+
+              "WHERE Collection.name LIKE ? OR Profile.username LIKE ?;";
+
+      st=connection.prepareStatement(query);
+      st.setString(1, "%"+field+"%");
+      st.setString(2, "%"+field+"%");
+
+      rs=st.executeQuery();
+
+      while(rs.next()){
+        result.add(new Album(rs.getInt("id"), null, null, null));
+      }
+
+    }catch(Exception e){
+      e.printStackTrace();
+    }
+
+    DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+
+    CollectionDAO cDAO=new CollectionDAO();
+    ArrayList<Album> albumList=new ArrayList<>();
+    Iterator<Album> resultIT=result.iterator();
+    while(resultIT.hasNext()){
+      albumList.add(cDAO.getAlbum(resultIT.next()));
+    }
+
+    return albumList;
+  }
+
+
+  private ArrayList<Podcast> searchPodcasts(String field){
+    connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
+    PreparedStatement st;
+    ResultSet rs;
+    ArrayList<Podcast> result=new ArrayList<>();
+
+    try{
+      String query="SELECT Collection.id FROM Collection "+
+              "JOIN Podcast ON Collection.id = Podcast.id "+
+              "JOIN ArtistPodcasts ON Collection.id = ArtistPodcasts.idPodcast "+
+              "JOIN Profile ON ArtistPodcasts.ArtistMail = Profile.mail "+
+              "WHERE Collection.name LIKE ? OR Profile.username LIKE ?;";
+
+      st=connection.prepareStatement(query);
+      st.setString(1, "%"+field+"%");
+      st.setString(2, "%"+field+"%");
+
+      rs=st.executeQuery();
+
+      while(rs.next()){
+        result.add(new Podcast(rs.getInt("id"), null, null, null));
+      }
+
+    }catch(Exception e){
+      e.printStackTrace();
+    }
+
+    DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+
+    CollectionDAO cDAO=new CollectionDAO();
+    ArrayList<Podcast> podcastList=new ArrayList<>();
+    Iterator<Podcast> resultIT=result.iterator();
+    while(resultIT.hasNext()){
+      podcastList.add(cDAO.getPodcast(resultIT.next()));
+    }
+
+    return podcastList;
+  }
 
 }
