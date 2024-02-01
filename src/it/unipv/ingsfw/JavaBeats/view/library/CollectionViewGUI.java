@@ -23,6 +23,7 @@ public class CollectionViewGUI{
   private CollectionHeader collectionHeader;
   private JBCollection jbCollection;
   private TableView<JBAudio> audioTable;
+  private VBox scrollVBox;
   private GridPane gp;
   private Scene scene;
 
@@ -79,12 +80,12 @@ public class CollectionViewGUI{
     ScrollPanePreset.setFitToWidth(true);
     ScrollPanePreset.setStyle("-fx-background: #0F0F0FFF; -fx-border-color: #0F0F0FFF");
     ScrollPanePreset.getStylesheets().add("it/unipv/ingsfw/JavaBeats/view/resources/css/scrollbar.css");
-    VBox scrollableScrollPanePreset=new VBox(ScrollPanePreset);
+    scrollVBox=new VBox(ScrollPanePreset);
     VBox.setVgrow(ScrollPanePreset, Priority.ALWAYS);
 
     /* Setup of left Sidebar, bottom songbar and center mainVBox */
     gp=new GridPane();
-    gp.addRow(0, Sidebar.getInstance(activeProfile), scrollableScrollPanePreset);
+    gp.addRow(0, Sidebar.getInstance(activeProfile), scrollVBox);
     gp.add(Songbar.getInstance(activeProfile, currentAudio), 0, 1, 2, 1);
 
     ColumnConstraints ccSidebar=new ColumnConstraints();
@@ -100,6 +101,27 @@ public class CollectionViewGUI{
     gp.getRowConstraints().addAll(rcSideHome, rcSongbar);
 
     scene=new Scene(gp, clientWidth, clientHeight);
+  }
+
+  public Scene update(JBProfile activeProfile, JBAudio currentAudio){
+    /* Setup of left Sidebar, bottom songbar and center mainVBox */
+    gp=new GridPane();
+    gp.addRow(0, Sidebar.getInstance(activeProfile), scrollVBox);
+    gp.add(Songbar.getInstance(activeProfile, currentAudio), 0, 1, 2, 1);
+
+    ColumnConstraints ccSidebar=new ColumnConstraints();
+    ColumnConstraints ccHome=new ColumnConstraints();
+    ccSidebar.setPercentWidth(20);
+    ccHome.setPercentWidth(80);
+    gp.getColumnConstraints().addAll(ccSidebar, ccHome);
+
+    RowConstraints rcSongbar=new RowConstraints();
+    RowConstraints rcSideHome=new RowConstraints();
+    rcSongbar.setPercentHeight(12);
+    rcSideHome.setPercentHeight(88);
+    gp.getRowConstraints().addAll(rcSideHome, rcSongbar);
+
+    return new Scene(gp, clientWidth, clientHeight);
   }
   /*---------------------------------------*/
 }

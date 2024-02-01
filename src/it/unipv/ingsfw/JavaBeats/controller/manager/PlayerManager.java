@@ -1,11 +1,15 @@
 package it.unipv.ingsfw.JavaBeats.controller.manager;
 import it.unipv.ingsfw.JavaBeats.controller.adapter.FXAdapter;
 import it.unipv.ingsfw.JavaBeats.controller.factory.FXAdapterFactory;
+import it.unipv.ingsfw.JavaBeats.controller.factory.PlayerManagerFactory;
 import it.unipv.ingsfw.JavaBeats.controller.factory.ProfileManagerFactory;
+import it.unipv.ingsfw.JavaBeats.controller.handler.presets.SidebarHandler;
+import it.unipv.ingsfw.JavaBeats.controller.handler.presets.SongbarHandler;
 import it.unipv.ingsfw.JavaBeats.dao.playable.AudioDAO;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.collection.JBCollection;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
+import it.unipv.ingsfw.JavaBeats.view.presets.Songbar;
 import javafx.scene.media.MediaPlayer;
 
 import java.util.LinkedList;
@@ -46,7 +50,7 @@ public class PlayerManager{
     if(!queue.isEmpty()){
       AudioDAO audioDAO=new AudioDAO();
 
-      if(CURRENT_AUDIO_PLAYING!=null && CURRENT_AUDIO_PLAYING.getMediaPlayer().getStatus().equals(MediaPlayer.Status.PLAYING)){
+      if(CURRENT_AUDIO_PLAYING!=null){
         CURRENT_AUDIO_PLAYING.getMediaPlayer().dispose();
       }//end-if
 
@@ -55,13 +59,16 @@ public class PlayerManager{
       adapter.play(audioToBePlayed);
       audioDAO.addToListeningHistory(audioToBePlayed, activeProfile);
     }//end-if
+
+    SongbarHandler.getInstance(activeProfile, CURRENT_AUDIO_PLAYING);
+    SidebarHandler.getInstance(activeProfile, CURRENT_AUDIO_PLAYING);
   }
 
   public void play(JBAudio jbAudio){
     AudioDAO audioDAO=new AudioDAO();
 
     queue.clear();
-    if(CURRENT_AUDIO_PLAYING!=null && CURRENT_AUDIO_PLAYING.getMediaPlayer().getStatus().equals(MediaPlayer.Status.PLAYING)){
+    if(CURRENT_AUDIO_PLAYING!=null){
       CURRENT_AUDIO_PLAYING.getMediaPlayer().dispose();
     }//end-if
     CURRENT_AUDIO_PLAYING=jbAudio;
@@ -71,7 +78,7 @@ public class PlayerManager{
 
   public void play(JBCollection jbCollection){
     queue.clear();
-    if(CURRENT_AUDIO_PLAYING!=null && CURRENT_AUDIO_PLAYING.getMediaPlayer().getStatus().equals(MediaPlayer.Status.PLAYING)){
+    if(CURRENT_AUDIO_PLAYING!=null){
       CURRENT_AUDIO_PLAYING.getMediaPlayer().dispose();
     }//end-if
     for(JBAudio jbAudio: jbCollection.getTrackList()){

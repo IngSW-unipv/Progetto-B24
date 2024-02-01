@@ -1,9 +1,6 @@
 package it.unipv.ingsfw.JavaBeats.view.presets;
-
 import com.pixelduke.control.skin.FXSkins;
-import it.unipv.ingsfw.JavaBeats.controller.handler.presets.SidebarHandler;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
-import it.unipv.ingsfw.JavaBeats.model.playable.audio.Song;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -15,13 +12,15 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
+import javafx.util.Duration;
 
-import java.sql.SQLException;
+import java.util.Arrays;
 
 public class Songbar extends GridPane{
   /*---------------------------------------*/
@@ -29,21 +28,18 @@ public class Songbar extends GridPane{
   /*---------------------------------------*/
   private static Songbar instance=null;
   private static JBProfile activeProfile=null;
+  private static JBAudio currentAudio=null;
   private static final Background bgSongbar=new Background(new BackgroundFill(Color.rgb(18, 18, 18), CornerRadii.EMPTY, Insets.EMPTY));
   private static final int clientWidth=(int)Screen.getPrimary().getBounds().getWidth();
   private static final int clientHeight=(int)Screen.getPrimary().getBounds().getHeight();
-  private String minutePassed="00:00";
-  private String songLength="03:00";
-  double min=00.00;
-  double max=3;
-  double value=1.30;
-
+  private Slider playSlider;
   /*---------------------------------------*/
   //Costruttore
   /*---------------------------------------*/
   private Songbar(JBProfile activeProfile, JBAudio audio){
     super();
     Songbar.activeProfile=activeProfile;
+    Songbar.currentAudio=audio;
     initComponents(activeProfile, audio);
   }
 
@@ -51,42 +47,39 @@ public class Songbar extends GridPane{
   //Getter/Setter
   /*---------------------------------------*/
   public static Songbar getInstance(JBProfile activeProfile, JBAudio audio){
-    if(instance==null || Songbar.activeProfile==null){
+    if(instance==null || Songbar.activeProfile==null || Songbar.currentAudio==null){
       instance=new Songbar(activeProfile, audio);
-    }else if(!Songbar.activeProfile.equals(activeProfile)){
+    }else if(!Songbar.activeProfile.equals(activeProfile) || !Songbar.currentAudio.equals(audio)){
       instance=new Songbar(activeProfile, audio);
     } //end-if
     return instance;
   }
 
+  public Slider getPlaySlider(){
+    return playSlider;
+  }
   /*---------------------------------------*/
   //Metodi
   /*---------------------------------------*/
   private void initComponents(JBProfile activeProfile, JBAudio audio){
     //SongBar: SongBox, PlayBox, VolumeBox
-
+    System.out.println(audio);
     //SongHbox
 
     //RecordImage
-    ImageView recordImageView=null;
-    try{
-      recordImageView=audio==null ? new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Record.png", true)) : new ImageView(new Image(audio.getMetadata().getCollection().getPicture().getBinaryStream()));
-    }catch(SQLException e){
-      throw new RuntimeException(e);
-    }
+    ImageView recordImageView=audio==null ? new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Record.png", true)) : new ImageView(audio.getMetadata().getCollection().scalePicture(80));
     recordImageView.setPreserveRatio(true);
 
-
     //Vbox
-    Label songTitle=new Label("Unknown Title");
+    Label songTitle=audio==null ? new Label("Unknown Title") : new Label(audio.getMetadata().getTitle());
     songTitle.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 16));
     songTitle.setTextFill(Color.LIGHTGRAY);
 
-    Label songArtist=new Label("Unknown Artist");
+    Label songArtist=audio==null ? new Label("Unknown Artist") : new Label(audio.getMetadata().getArtist().getUsername());
     songArtist.setFont(Font.font("Verdana", FontWeight.NORMAL, FontPosture.REGULAR, 14));
     songArtist.setTextFill(Color.LIGHTGRAY);
 
-    Label songGenre=new Label("Unknown Genre");
+    Label songGenre=audio==null ? new Label("Unknown Genre") : new Label(Arrays.toString(audio.getMetadata().getGenres()));
     songArtist.setFont(Font.font("Verdana", FontWeight.NORMAL, FontPosture.REGULAR, 12));
     songArtist.setTextFill(Color.LIGHTGRAY);
 
@@ -94,7 +87,12 @@ public class Songbar extends GridPane{
     songLabelVbox.setAlignment(Pos.CENTER_LEFT);
 
     //Heart
-    Image heartImage=new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/EmptyHeart.png", true);
+    Image heartImage=null;
+    if(activeProfile.getFavorites().getTrackList().contains(audio)){
+      heartImage=new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/FullHeart.png", true);
+    }else{
+      heartImage=new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/EmptyHeart.png", true);
+    }//end-if
     ImageView heartImageView=new ImageView(heartImage);
     heartImageView.setPreserveRatio(true);
     Button buttonHeart=new Button();
@@ -132,7 +130,13 @@ public class Songbar extends GridPane{
     buttonSkipBack.setTooltip(new Tooltip("Previous"));
 
     //PlayPause
-    Image playpauseImage=new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Play.png", true);
+    Image playpauseImage=null;
+
+    if(audio!=null && audio.getMediaPlayer().getStatus().equals(MediaPlayer.Status.PLAYING)){
+      playpauseImage=new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Pause.png", true);
+    }else{
+      playpauseImage=new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Play.png", true);
+    }//end-if
     ImageView playPauseImageView=new ImageView(playpauseImage);
     playPauseImageView.setPreserveRatio(true);
     Button buttonPlayPause=new Button();
@@ -169,16 +173,16 @@ public class Songbar extends GridPane{
 
 
     //Slider
-    Slider playSlider=new Slider(min, max, value);
+    playSlider=new Slider(0, audio==null ? 0 : Duration.millis(audio.getMetadata().getDuration()).toSeconds(), 00.00);
     playSlider.setCursor(Cursor.HAND);
     playSlider.getStylesheets().add(FXSkins.getStylesheetURL());
     playSlider.getStylesheets().add("it/unipv/ingsfw/JavaBeats/view/resources/css/playslider.css");
 
     //Label
-    Label minutePassedLabel=new Label(minutePassed);
+    Label minutePassedLabel=new Label("00.00");
     minutePassedLabel.setTextFill(Color.LIGHTGRAY);
     minutePassedLabel.setFont(Font.font("Verdana", FontWeight.NORMAL, FontPosture.REGULAR, 14));
-    Label songLengthLabel=new Label(songLength);
+    Label songLengthLabel=audio==null ? new Label("00.00") : new Label(JBAudio.convertToMinutesAndSeconds(audio.getMetadata().getDuration()));
     songLengthLabel.setTextFill(Color.LIGHTGRAY);
     songLengthLabel.setFont(Font.font("Verdana", FontWeight.NORMAL, FontPosture.REGULAR, 14));
 

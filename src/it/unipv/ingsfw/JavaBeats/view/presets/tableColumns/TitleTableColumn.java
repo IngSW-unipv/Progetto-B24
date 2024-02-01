@@ -61,25 +61,7 @@ public class TitleTableColumn extends TableColumn<JBAudio, JBAudio>{
         }else{
           titleLabel.setText(audio.getMetadata().getTitle());
           artistLabel.setText(audio.getMetadata().getArtist().getUsername());
-          try{
-            /*
-            Downscaling the collection image to a 35xp square so that it fits
-            * */
-            //Creating a buffered image from collection picture
-            BufferedImage bufferedImage=ImageIO.read(new ByteArrayInputStream(audio.getMetadata().getCollection().getPicture().getBinaryStream().readAllBytes()));
-
-            //Downscaling
-            BufferedImage outputImage=new BufferedImage(35, 35, BufferedImage.TYPE_INT_RGB);
-            outputImage.getGraphics().drawImage(bufferedImage.getScaledInstance(35, 35, java.awt.Image.SCALE_DEFAULT), 0, 0, null);
-
-            //Creating an output stream for reading the byte[]
-            ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
-            ImageIO.write(outputImage, "png", byteArrayOutputStream);
-
-            collectionImageView.setImage(new Image(new ByteArrayInputStream(byteArrayOutputStream.toByteArray())));
-          }catch(SQLException | IOException e){
-            throw new RuntimeException(e);
-          }//end-try
+          collectionImageView.setImage(audio.getMetadata().getCollection().scalePicture(35));
 
           setGraphic(mainHBox);
         }//end-if

@@ -59,7 +59,7 @@ public class AudioTable extends TableView<JBAudio>{
 
     /* Duration column */
     TableColumn<JBAudio, String> durationColumn=new TableColumn<>("Duration");
-    durationColumn.setCellValueFactory(cellData -> new SimpleStringProperty(Double.toString(Duration.millis(cellData.getValue().getMetadata().getDuration()).toMinutes())));
+    durationColumn.setCellValueFactory(cellData -> new SimpleStringProperty(JBAudio.convertToMinutesAndSeconds(cellData.getValue().getMetadata().getDuration())));
     durationColumn.setPrefWidth((double)10/100*tableWidth);
     durationColumn.getStyleClass().add("durationColumn");
 
@@ -77,7 +77,6 @@ public class AudioTable extends TableView<JBAudio>{
       }catch(ClassCastException e){
         getColumns().addAll(playColumn, titleColumn, collectionColumn, dateColumn, favoriteColumn, durationColumn, deleteColumn);
       }
-
     }
 
     /* Adding the list of audios in the table and adding all the columns */
@@ -92,6 +91,5 @@ public class AudioTable extends TableView<JBAudio>{
     /* css file */
     getStylesheets().add("it/unipv/ingsfw/JavaBeats/view/resources/css/tableview.css");
   }
-
 
 }

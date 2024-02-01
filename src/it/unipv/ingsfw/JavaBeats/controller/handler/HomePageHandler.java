@@ -1,6 +1,7 @@
 package it.unipv.ingsfw.JavaBeats.controller.handler;
 
 import it.unipv.ingsfw.JavaBeats.controller.handler.presets.SidebarHandler;
+import it.unipv.ingsfw.JavaBeats.controller.handler.presets.SongbarHandler;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.Song;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
@@ -30,7 +31,7 @@ public class HomePageHandler{
   }
 
   private void initComponents(JBProfile activeProfile, JBAudio currentAudio){
-    EventHandler<ActionEvent> profileButtonHandler=new EventHandler<ActionEvent>(){
+    EventHandler<ActionEvent> profileButtonHandler=new EventHandler<>(){
       @Override
       public void handle(ActionEvent actionEvent){
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
@@ -46,9 +47,8 @@ public class HomePageHandler{
       }
     };
     homePageGUI.getHome().getUserProfileButton().setOnAction(profileButtonHandler);
-    Sidebar.getInstance(activeProfile);
     SidebarHandler.getInstance(activeProfile, currentAudio);
-    Songbar.getInstance(activeProfile, currentAudio);
+    SongbarHandler.getInstance(activeProfile, currentAudio);
   }
 
 }

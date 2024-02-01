@@ -6,8 +6,15 @@ import it.unipv.ingsfw.JavaBeats.model.playable.IJBItem;
 import it.unipv.ingsfw.JavaBeats.model.playable.IJBPlayable;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
+import javafx.scene.image.Image;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public abstract class JBCollection implements IJBResearchable{
@@ -89,5 +96,26 @@ public abstract class JBCollection implements IJBResearchable{
       return true;
     }//end-if
     return false;
+  }
+  public Image scalePicture(int size){
+    /*
+    Downscaling the collection image to a size square so that it fits
+    * */
+    //Creating a buffered image from collection picture
+    BufferedImage bufferedImage=null;
+    try{
+      bufferedImage=ImageIO.read(new ByteArrayInputStream(this.picture.getBinaryStream().readAllBytes()));
+      //Downscaling
+      BufferedImage outputImage=new BufferedImage(size, size, BufferedImage.TYPE_INT_RGB);
+      outputImage.getGraphics().drawImage(bufferedImage.getScaledInstance(size, size, java.awt.Image.SCALE_DEFAULT), 0, 0, null);
+
+      //Creating an output stream for reading the byte[]
+      ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
+      ImageIO.write(outputImage, "png", byteArrayOutputStream);
+
+      return new Image(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()));
+    }catch(IOException | SQLException e){
+      throw new RuntimeException(e);
+    }//end-try
   }
 }
