@@ -35,6 +35,8 @@ public class CollectionHeader extends VBox {
     private Button editButton;
     private Button buttonPlayPause;
 
+    private Button buttonBin;
+
     /*---------------------------------------*/
     //Costruttori
     /*---------------------------------------*/
@@ -51,6 +53,10 @@ public class CollectionHeader extends VBox {
 
     public Button getButtonPlayPause() {
         return buttonPlayPause;
+    }
+
+    public Button getButtonBin() {
+        return buttonBin;
     }
 
     /*---------------------------------------*/
@@ -170,7 +176,7 @@ public class CollectionHeader extends VBox {
         Image binImage = new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Bin.png", true);
         ImageView binImageView = new ImageView(binImage);
         binImageView.setPreserveRatio(true);
-        Button buttonBin = new Button();
+        buttonBin = new Button();
         buttonBin.setGraphic(binImageView);
         buttonBin.setStyle("-fx-background-color: #0F0F0FFF;");
         buttonBin.setCursor(Cursor.HAND);

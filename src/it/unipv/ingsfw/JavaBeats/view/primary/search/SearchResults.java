@@ -134,11 +134,12 @@ public class SearchResults extends ScrollPanePreset {
 
         //HBox with topSongs
         HBox[] topSongs = {new HBox(), new HBox(), new HBox(), new HBox()};
-        for (int i = 0; i < topSongs.length; i += 1) {
+        int i = 1;
+        while (i < topSongs.length && i < searchedList.get(0).size()) {
             Image songPic = null;
             try {
-                songPic = new Image(((Song) searchedList.get(0).get(i + 1)).getMetadata().getCollection().getPicture().getBinaryStream());
-            } catch (SQLException e) {
+                songPic = new Image(((Song) searchedList.get(0).get(i)).getMetadata().getCollection().getPicture().getBinaryStream());
+            } catch (SQLException | IndexOutOfBoundsException e) {
                 e.printStackTrace();
             }
 
@@ -146,11 +147,11 @@ public class SearchResults extends ScrollPanePreset {
             songPicImageView.setPreserveRatio(true);
             songPicImageView.setFitHeight(55);
 
-            Label songTitle = new Label(((Song) searchedList.get(0).get(i + 1)).getMetadata().getTitle());
+            Label songTitle = new Label(((Song) searchedList.get(0).get(i)).getMetadata().getTitle());
             songTitle.setFont(fontTitles);
             songTitle.setTextFill(Color.LIGHTGRAY);
 
-            Label songArtist = new Label(((Song) searchedList.get(0).get(i + 1)).getMetadata().getArtist().getUsername());
+            Label songArtist = new Label(((Song) searchedList.get(0).get(i)).getMetadata().getArtist().getUsername());
             songArtist.setFont(fontArtists);
             songArtist.setTextFill(Color.LIGHTGRAY);
 
@@ -186,11 +187,12 @@ public class SearchResults extends ScrollPanePreset {
             Label songDuration = new Label(Duration.minutes(((Song) searchedList.get(0).get(i)).getMetadata().getDuration()).toString());
             songDuration.setTextFill(Color.LIGHTGRAY);
 
-            topSongs[i].getChildren().addAll(songPicImageView, songTitleArtistVBox, whitePane, addToLabel, choiceButton, songDuration);
-            topSongs[i].setAlignment(Pos.CENTER_LEFT);
-            topSongs[i].getStyleClass().add("HBox");
-            topSongs[i].setPadding(new Insets(5));
-            topSongs[i].getStylesheets().add("it/unipv/ingsfw/JavaBeats/view/resources/css/topSongsHbox.css");
+            topSongs[i - 1].getChildren().addAll(songPicImageView, songTitleArtistVBox, whitePane, addToLabel, choiceButton, songDuration);
+            topSongs[i - 1].setAlignment(Pos.CENTER_LEFT);
+            topSongs[i - 1].getStyleClass().add("HBox");
+            topSongs[i - 1].setPadding(new Insets(5));
+            topSongs[i - 1].getStylesheets().add("it/unipv/ingsfw/JavaBeats/view/resources/css/topSongsHbox.css");
+            i += 1;
         }//end-for
 
         /* VBox with the best 4 songs */

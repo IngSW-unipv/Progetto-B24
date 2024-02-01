@@ -1,12 +1,21 @@
 package it.unipv.ingsfw.JavaBeats.controller.handler.library;
+
+import it.unipv.ingsfw.JavaBeats.controller.factory.CollectionManagerFactory;
 import it.unipv.ingsfw.JavaBeats.controller.factory.PlayerManagerFactory;
+import it.unipv.ingsfw.JavaBeats.controller.handler.HomePageHandler;
+import it.unipv.ingsfw.JavaBeats.controller.handler.primary.search.SearchPageHandler;
 import it.unipv.ingsfw.JavaBeats.model.collection.Playlist;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
+import it.unipv.ingsfw.JavaBeats.view.library.CollectionLibraryGUI;
 import it.unipv.ingsfw.JavaBeats.view.library.CollectionViewGUI;
+import it.unipv.ingsfw.JavaBeats.view.presets.Sidebar;
 import it.unipv.ingsfw.JavaBeats.view.presets.dialogs.EditPlaylistDialog;
+import it.unipv.ingsfw.JavaBeats.view.primary.home.HomePageGUI;
+import it.unipv.ingsfw.JavaBeats.view.primary.search.SearchPageGUI;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Dimension2D;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
@@ -18,80 +27,100 @@ import javafx.stage.Stage;
 
 import java.util.List;
 
-public class CollectionViewHandler{
-  /*---------------------------------------*/
-  //Attributi
-  /*---------------------------------------*/
-  private CollectionViewGUI gui;
+public class CollectionViewHandler {
+    /*---------------------------------------*/
+    //Attributi
+    /*---------------------------------------*/
+    private CollectionViewGUI gui;
 
-  /*---------------------------------------*/
-  //Costruttori
-  /*---------------------------------------*/
-  public CollectionViewHandler(CollectionViewGUI gui, JBProfile activeProfile){
-    this.gui=gui;
-    initComponents(activeProfile);
-  }
-  /*---------------------------------------*/
-  //Getter/Setter
-  /*---------------------------------------*/
+    /*---------------------------------------*/
+    //Costruttori
+    /*---------------------------------------*/
+    public CollectionViewHandler(CollectionViewGUI gui, JBProfile activeProfile, JBAudio currentAudio) {
+        this.gui = gui;
+        initComponents(activeProfile, currentAudio);
+    }
+    /*---------------------------------------*/
+    //Getter/Setter
+    /*---------------------------------------*/
 
-  /*---------------------------------------*/
-  //Metodi
-  /*---------------------------------------*/
-  private void initComponents(JBProfile activeProfile){
-    EventHandler<ActionEvent> editButtonHandler=new EventHandler<ActionEvent>(){
-      @Override
-      public void handle(ActionEvent actionEvent){
-        Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        gui.getGp().setEffect(new BoxBlur(10, 10, 10));
+    /*---------------------------------------*/
+    //Metodi
+    /*---------------------------------------*/
+    private void initComponents(JBProfile activeProfile, JBAudio currentAudio) {
+        EventHandler<ActionEvent> editButtonHandler = new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+                gui.getGp().setEffect(new BoxBlur(10, 10, 10));
 
-        Playlist p=(Playlist)gui.getJbCollection();
-        EditPlaylistDialog dialog=new EditPlaylistDialog(stage, p, (Playlist)p.getCopy());
-        EditPlaylistDialogController editPlaylistDialogController=new EditPlaylistDialogController(dialog);
-        dialog.showAndWait();
-        gui.getGp().setEffect(null);
-      }
-    };
-    EventHandler<ActionEvent> playPauseCollectionButtonHandler=new EventHandler<ActionEvent>(){
-      @Override
-      public void handle(ActionEvent actionEvent){
-        Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+                Playlist p = (Playlist) gui.getJbCollection();
+                EditPlaylistDialog dialog = new EditPlaylistDialog(stage, p, (Playlist) p.getCopy());
+                EditPlaylistDialogController editPlaylistDialogController = new EditPlaylistDialogController(dialog);
+                dialog.showAndWait();
+                gui.getGp().setEffect(null);
+            }
+        };
+        EventHandler<ActionEvent> playPauseCollectionButtonHandler = new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 
-        PlayerManagerFactory.getInstance().getPlayerManager().play(gui.getJbCollection());
-      }
-    };
-    EventHandler<MouseEvent> tableViewClickHandler=new EventHandler<MouseEvent>(){
-      @Override
-      public void handle(MouseEvent mouseEvent){
-        if(mouseEvent.getButton()==MouseButton.PRIMARY){
-          Node node=mouseEvent.getPickResult().getIntersectedNode();
-          JBAudio audioClicked=gui.getAudioTable().getItems().get(gui.getAudioTable().getSelectionModel().getSelectedIndex());
+                PlayerManagerFactory.getInstance().getPlayerManager().play(gui.getJbCollection());
+            }
+        };
 
-          // go up in node hierarchy until a cell is found, or we can be sure no cell was clicked
-          boolean foundPlayButton=false;
-          boolean fuondIsFavoriteButton=false;
-          while(node!=gui.getAudioTable() && !foundPlayButton && !fuondIsFavoriteButton){
-            String id=node.getId();
-            if(id!=null && id.equals("PlayButton")){
-              foundPlayButton=true;
-              System.out.println("ButtonClicked");
-            }//end-if
+        EventHandler<ActionEvent> binButtonHandler = new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 
-            node=node.getParent();
-          }//end-while
+                CollectionManagerFactory.getInstance().getCollectionManager().removeCollection(gui.getJbCollection());
+                HomePageGUI homePageGUI = new HomePageGUI(activeProfile, currentAudio);
+                HomePageHandler homePageHandler = new HomePageHandler(homePageGUI, activeProfile, currentAudio);
+                Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getHomeButton());
 
-          if(foundPlayButton){
-            PlayerManagerFactory.getInstance().getPlayerManager().play(audioClicked);
-          }else if(fuondIsFavoriteButton){
+                Dimension2D previousDimension = new Dimension2D(stage.getWidth(), stage.getHeight());
+                stage.setScene(homePageGUI.getScene());
+                stage.setTitle("HomePage");
+                stage.setWidth(previousDimension.getWidth());
+                stage.setHeight(previousDimension.getHeight());
 
-          }//end-if
+            }
+        };
+        EventHandler<MouseEvent> tableViewClickHandler = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+                    Node node = mouseEvent.getPickResult().getIntersectedNode();
+                    JBAudio audioClicked = gui.getAudioTable().getItems().get(gui.getAudioTable().getSelectionModel().getSelectedIndex());
 
-        }//end-if
-      }
-    };
-    gui.getCollectionHeader().getEditButton().setOnAction(editButtonHandler);
-    gui.getCollectionHeader().getButtonPlayPause().setOnAction(playPauseCollectionButtonHandler);
-    gui.getAudioTable().setOnMouseClicked(tableViewClickHandler);
-  }
-  /*---------------------------------------*/
+                    // go up in node hierarchy until a cell is found, or we can be sure no cell was clicked
+                    boolean foundPlayButton = false;
+                    boolean fuondIsFavoriteButton = false;
+                    while (node != gui.getAudioTable() && !foundPlayButton && !fuondIsFavoriteButton) {
+                        String id = node.getId();
+                        if (id != null && id.equals("PlayButton")) {
+                            foundPlayButton = true;
+                            System.out.println("ButtonClicked");
+                        }//end-if
+
+                        node = node.getParent();
+                    }//end-while
+
+                    if (foundPlayButton) {
+                        PlayerManagerFactory.getInstance().getPlayerManager().play(audioClicked);
+                    } else if (fuondIsFavoriteButton) {
+
+                    }//end-if
+
+                }//end-if
+            }
+        };
+        gui.getCollectionHeader().getEditButton().setOnAction(editButtonHandler);
+        gui.getCollectionHeader().getButtonPlayPause().setOnAction(playPauseCollectionButtonHandler);
+        gui.getAudioTable().setOnMouseClicked(tableViewClickHandler);
+        gui.getCollectionHeader().getButtonBin().setOnAction(binButtonHandler);
+    }
+    /*---------------------------------------*/
 }

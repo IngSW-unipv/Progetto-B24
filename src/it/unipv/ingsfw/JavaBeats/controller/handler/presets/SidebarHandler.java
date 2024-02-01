@@ -26,205 +26,205 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 
-public class SidebarHandler{
+public class SidebarHandler {
 
-  //Attributi
-  private static SidebarHandler instance;
-  private static JBProfile activeProfile=null;
-  private static JBAudio currentAudio=null;
+    //Attributi
+    private static SidebarHandler instance;
+    private static JBProfile activeProfile = null;
+    private static JBAudio currentAudio = null;
 
-  /*---------------------------------------*/
-  //Costruttore
-  /*---------------------------------------*/
-  private SidebarHandler(JBProfile activeProfile, JBAudio currentAudio){
-    super();
-    SidebarHandler.activeProfile=activeProfile;
-    SidebarHandler.currentAudio=currentAudio;
-    Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getHomeButton());
-    initComponents(activeProfile, currentAudio);
-  }
-
-  /*---------------------------------------*/
-  //Getter/Setter
-  /*---------------------------------------*/
-  public static SidebarHandler getInstance(JBProfile activeProfile, JBAudio currentAudio){
-    if(instance==null || SidebarHandler.activeProfile==null || SidebarHandler.currentAudio==null){
-      instance=new SidebarHandler(activeProfile, currentAudio);
-    }else if(!SidebarHandler.activeProfile.equals(activeProfile) || !SidebarHandler.currentAudio.equals(currentAudio)){
-      instance=new SidebarHandler(activeProfile, currentAudio);
-    }//end-if
-    return instance;
-  }
-
-  private void initComponents(JBProfile activeProfile, JBAudio currentAudio){
-    //HomeButtonHandler
-    EventHandler<ActionEvent> homeButtonHandler=new EventHandler<ActionEvent>(){
-      @Override
-      public void handle(ActionEvent actionEvent){
-        Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        HomePageGUI homePageGUI=new HomePageGUI(activeProfile, currentAudio);
-        HomePageHandler homePageHandler=new HomePageHandler(homePageGUI, activeProfile, currentAudio);
+    /*---------------------------------------*/
+    //Costruttore
+    /*---------------------------------------*/
+    private SidebarHandler(JBProfile activeProfile, JBAudio currentAudio) {
+        super();
+        SidebarHandler.activeProfile = activeProfile;
+        SidebarHandler.currentAudio = currentAudio;
         Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getHomeButton());
+        initComponents(activeProfile, currentAudio);
+    }
 
-        Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
-        stage.setScene(homePageGUI.getScene());
-        stage.setTitle("HomePage");
-        stage.setWidth(previousDimension.getWidth());
-        stage.setHeight(previousDimension.getHeight());
-      }
-    };
-    //SearchButtonHandler
-    EventHandler<ActionEvent> searchButtonHandler=new EventHandler<ActionEvent>(){
-      @Override
-      public void handle(ActionEvent actionEvent){
-        Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        SearchPageGUI searchPageGUI=new SearchPageGUI(activeProfile, currentAudio, null, null);
-        SearchPageHandler searchPageHandler=new SearchPageHandler(searchPageGUI, activeProfile, currentAudio);
-        Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getSearchButton());
+    /*---------------------------------------*/
+    //Getter/Setter
+    /*---------------------------------------*/
+    public static SidebarHandler getInstance(JBProfile activeProfile, JBAudio currentAudio) {
+        if (instance == null || SidebarHandler.activeProfile == null || SidebarHandler.currentAudio == null) {
+            instance = new SidebarHandler(activeProfile, currentAudio);
+        } else if (!SidebarHandler.activeProfile.equals(activeProfile) || !SidebarHandler.currentAudio.equals(currentAudio)) {
+            instance = new SidebarHandler(activeProfile, currentAudio);
+        }//end-if
+        return instance;
+    }
 
-        Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
-        stage.setScene(searchPageGUI.getScene());
-        stage.setTitle("SearchPage");
-        stage.setWidth(previousDimension.getWidth());
-        stage.setHeight(previousDimension.getHeight());
-      }
-    };
-    //ProfileButtonHandler
-    EventHandler<ActionEvent> profileButtonHandler=new EventHandler<ActionEvent>(){
-      @Override
-      public void handle(ActionEvent actionEvent){
-        Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        ProfileViewGUI profileViewGUI=new ProfileViewGUI(activeProfile, currentAudio, activeProfile);
-        ProfileViewHandler profileViewHandler=new ProfileViewHandler(profileViewGUI, activeProfile, currentAudio);
-        Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getProfileButton());
+    private void initComponents(JBProfile activeProfile, JBAudio currentAudio) {
+        //HomeButtonHandler
+        EventHandler<ActionEvent> homeButtonHandler = new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+                HomePageGUI homePageGUI = new HomePageGUI(activeProfile, currentAudio);
+                HomePageHandler homePageHandler = new HomePageHandler(homePageGUI, activeProfile, currentAudio);
+                Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getHomeButton());
 
-        Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
-        stage.setScene(profileViewGUI.getScene());
-        stage.setTitle("Profile");
-        stage.setWidth(previousDimension.getWidth());
-        stage.setHeight(previousDimension.getHeight());
-      }
-    };
+                Dimension2D previousDimension = new Dimension2D(stage.getWidth(), stage.getHeight());
+                stage.setScene(homePageGUI.getScene());
+                stage.setTitle("HomePage");
+                stage.setWidth(previousDimension.getWidth());
+                stage.setHeight(previousDimension.getHeight());
+            }
+        };
+        //SearchButtonHandler
+        EventHandler<ActionEvent> searchButtonHandler = new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+                SearchPageGUI searchPageGUI = new SearchPageGUI(activeProfile, currentAudio, null, null);
+                SearchPageHandler searchPageHandler = new SearchPageHandler(searchPageGUI, activeProfile, currentAudio);
+                Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getSearchButton());
 
-    //QueueButtonHandler
-    EventHandler<ActionEvent> queueButtonHandler=new EventHandler<ActionEvent>(){
-      @Override
-      public void handle(ActionEvent actionEvent){
-        Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        Playlist favorites=CollectionManagerFactory.getInstance().getCollectionManager().getFavorites(activeProfile);
-        CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, currentAudio, favorites);
-        CollectionViewHandler collectionViewHandler=new CollectionViewHandler(collectionViewGUI, activeProfile);
-        Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getQueueButton());
+                Dimension2D previousDimension = new Dimension2D(stage.getWidth(), stage.getHeight());
+                stage.setScene(searchPageGUI.getScene());
+                stage.setTitle("SearchPage");
+                stage.setWidth(previousDimension.getWidth());
+                stage.setHeight(previousDimension.getHeight());
+            }
+        };
+        //ProfileButtonHandler
+        EventHandler<ActionEvent> profileButtonHandler = new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+                ProfileViewGUI profileViewGUI = new ProfileViewGUI(activeProfile, currentAudio, activeProfile);
+                ProfileViewHandler profileViewHandler = new ProfileViewHandler(profileViewGUI, activeProfile, currentAudio);
+                Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getProfileButton());
 
-        Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
-        stage.setScene(collectionViewGUI.getScene());
-        stage.setTitle("Favorites");
-        stage.setWidth(previousDimension.getWidth());
-        stage.setHeight(previousDimension.getHeight());
-      }
-    };
+                Dimension2D previousDimension = new Dimension2D(stage.getWidth(), stage.getHeight());
+                stage.setScene(profileViewGUI.getScene());
+                stage.setTitle("Profile");
+                stage.setWidth(previousDimension.getWidth());
+                stage.setHeight(previousDimension.getHeight());
+            }
+        };
 
-    //FavoritesButtonHandler
-    EventHandler<ActionEvent> favoritesButtonHandler=new EventHandler<ActionEvent>(){
-      @Override
-      public void handle(ActionEvent actionEvent){
-        Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        Playlist favorites=CollectionManagerFactory.getInstance().getCollectionManager().getFavorites(activeProfile);
-        CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, currentAudio, favorites);
-        CollectionViewHandler collectionViewHandler=new CollectionViewHandler(collectionViewGUI, activeProfile);
-        Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getFavoritesButton());
+        //QueueButtonHandler
+        EventHandler<ActionEvent> queueButtonHandler = new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+                Playlist favorites = CollectionManagerFactory.getInstance().getCollectionManager().getFavorites(activeProfile);
+                CollectionViewGUI collectionViewGUI = new CollectionViewGUI(activeProfile, currentAudio, favorites);
+                CollectionViewHandler collectionViewHandler = new CollectionViewHandler(collectionViewGUI, activeProfile, currentAudio);
+                Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getQueueButton());
 
-        Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
-        stage.setScene(collectionViewGUI.getScene());
-        stage.setTitle("Favorites");
-        stage.setWidth(previousDimension.getWidth());
-        stage.setHeight(previousDimension.getHeight());
-      }
-    };
+                Dimension2D previousDimension = new Dimension2D(stage.getWidth(), stage.getHeight());
+                stage.setScene(collectionViewGUI.getScene());
+                stage.setTitle("Favorites");
+                stage.setWidth(previousDimension.getWidth());
+                stage.setHeight(previousDimension.getHeight());
+            }
+        };
 
-    //PlaylistButtonHandler
-    EventHandler<ActionEvent> playlistsButtonHandler=new EventHandler<ActionEvent>(){
-      @Override
-      public void handle(ActionEvent actionEvent){
-        Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        ArrayList<JBCollection> playlists=CollectionManagerFactory.getInstance().getCollectionManager().getPlaylists(activeProfile);
-        CollectionLibraryGUI collectionLibraryGUI=new CollectionLibraryGUI(activeProfile, currentAudio, playlists, EJBENTITY.PLAYLIST);
-        CollectionLibraryHandler collectionLibraryHandler=new CollectionLibraryHandler(activeProfile, currentAudio, collectionLibraryGUI);
-        Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getPlaylistsButton());
+        //FavoritesButtonHandler
+        EventHandler<ActionEvent> favoritesButtonHandler = new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+                Playlist favorites = CollectionManagerFactory.getInstance().getCollectionManager().getFavorites(activeProfile);
+                CollectionViewGUI collectionViewGUI = new CollectionViewGUI(activeProfile, currentAudio, favorites);
+                CollectionViewHandler collectionViewHandler = new CollectionViewHandler(collectionViewGUI, activeProfile, currentAudio);
+                Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getFavoritesButton());
 
-        Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
-        stage.setScene(collectionLibraryGUI.getScene());
-        stage.setTitle("Playlists");
-        stage.setWidth(previousDimension.getWidth());
-        stage.setHeight(previousDimension.getHeight());
-      }
-    };
+                Dimension2D previousDimension = new Dimension2D(stage.getWidth(), stage.getHeight());
+                stage.setScene(collectionViewGUI.getScene());
+                stage.setTitle("Favorites");
+                stage.setWidth(previousDimension.getWidth());
+                stage.setHeight(previousDimension.getHeight());
+            }
+        };
 
-    //AlbumButtonHandler
-    EventHandler<ActionEvent> albumsButtonHandler=new EventHandler<ActionEvent>(){
-      @Override
-      public void handle(ActionEvent actionEvent){
-        Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+        //PlaylistButtonHandler
+        EventHandler<ActionEvent> playlistsButtonHandler = new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+                ArrayList<JBCollection> playlists = CollectionManagerFactory.getInstance().getCollectionManager().getPlaylists(activeProfile);
+                CollectionLibraryGUI collectionLibraryGUI = new CollectionLibraryGUI(activeProfile, currentAudio, playlists, EJBENTITY.PLAYLIST);
+                CollectionLibraryHandler collectionLibraryHandler = new CollectionLibraryHandler(activeProfile, currentAudio, collectionLibraryGUI);
+                Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getPlaylistsButton());
 
-        //Retrieve albums
-        ArrayList<JBCollection> albums=null;
-        try{
-          albums=CollectionManagerFactory.getInstance().getCollectionManager().getAlbums((Artist)activeProfile);
-        }catch(ClassCastException e){
-          //popup
-        }
+                Dimension2D previousDimension = new Dimension2D(stage.getWidth(), stage.getHeight());
+                stage.setScene(collectionLibraryGUI.getScene());
+                stage.setTitle("Playlists");
+                stage.setWidth(previousDimension.getWidth());
+                stage.setHeight(previousDimension.getHeight());
+            }
+        };
 
-        CollectionLibraryGUI collectionLibraryGUI=new CollectionLibraryGUI(activeProfile, currentAudio, albums, EJBENTITY.ALBUM);
-        CollectionLibraryHandler collectionLibraryHandler=new CollectionLibraryHandler(activeProfile, currentAudio, collectionLibraryGUI);
-        Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getAlbumButton());
+        //AlbumButtonHandler
+        EventHandler<ActionEvent> albumsButtonHandler = new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 
+                //Retrieve albums
+                ArrayList<JBCollection> albums = null;
+                try {
+                    albums = CollectionManagerFactory.getInstance().getCollectionManager().getAlbums((Artist) activeProfile);
+                } catch (ClassCastException e) {
+                    //popup
+                }
 
-        Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
-        stage.setScene(collectionLibraryGUI.getScene());
-        stage.setTitle("Albums");
-        stage.setWidth(previousDimension.getWidth());
-        stage.setHeight(previousDimension.getHeight());
-      }
-    };
-
-    //PodcastButtonHandler
-    EventHandler<ActionEvent> podcastsButtonHandler=new EventHandler<ActionEvent>(){
-      @Override
-      public void handle(ActionEvent actionEvent){
-        Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-
-        //Retrieve podcasts
-        ArrayList<JBCollection> podcasts=null;
-        try{
-          podcasts=CollectionManagerFactory.getInstance().getCollectionManager().getPodcasts((Artist)activeProfile);
-        }catch(ClassCastException e){
-          //popup
-        }
-
-        CollectionLibraryGUI collectionLibraryGUI=new CollectionLibraryGUI(activeProfile, currentAudio, podcasts, EJBENTITY.PODCAST);
-        CollectionLibraryHandler collectionLibraryHandler=new CollectionLibraryHandler(activeProfile, currentAudio, collectionLibraryGUI);
-        Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getPodcastButton());
+                CollectionLibraryGUI collectionLibraryGUI = new CollectionLibraryGUI(activeProfile, currentAudio, albums, EJBENTITY.ALBUM);
+                CollectionLibraryHandler collectionLibraryHandler = new CollectionLibraryHandler(activeProfile, currentAudio, collectionLibraryGUI);
+                Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getAlbumButton());
 
 
-        Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
-        stage.setScene(collectionLibraryGUI.getScene());
-        stage.setTitle("Podcasts");
-        stage.setWidth(previousDimension.getWidth());
-        stage.setHeight(previousDimension.getHeight());
-      }
-    };
+                Dimension2D previousDimension = new Dimension2D(stage.getWidth(), stage.getHeight());
+                stage.setScene(collectionLibraryGUI.getScene());
+                stage.setTitle("Albums");
+                stage.setWidth(previousDimension.getWidth());
+                stage.setHeight(previousDimension.getHeight());
+            }
+        };
 
-    Sidebar.getInstance(activeProfile).getHomeButton().setOnAction(homeButtonHandler);
-    Sidebar.getInstance(activeProfile).getSearchButton().setOnAction(searchButtonHandler);
-    Sidebar.getInstance(activeProfile).getProfileButton().setOnAction(profileButtonHandler);
-    Sidebar.getInstance(activeProfile).getQueueButton().setOnAction(queueButtonHandler);
-    Sidebar.getInstance(activeProfile).getFavoritesButton().setOnAction(favoritesButtonHandler);
-    Sidebar.getInstance(activeProfile).getPlaylistsButton().setOnAction(playlistsButtonHandler);
-    Sidebar.getInstance(activeProfile).getAlbumButton().setOnAction(albumsButtonHandler);
-    Sidebar.getInstance(activeProfile).getPodcastButton().setOnAction(podcastsButtonHandler);
+        //PodcastButtonHandler
+        EventHandler<ActionEvent> podcastsButtonHandler = new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+
+                //Retrieve podcasts
+                ArrayList<JBCollection> podcasts = null;
+                try {
+                    podcasts = CollectionManagerFactory.getInstance().getCollectionManager().getPodcasts((Artist) activeProfile);
+                } catch (ClassCastException e) {
+                    //popup
+                }
+
+                CollectionLibraryGUI collectionLibraryGUI = new CollectionLibraryGUI(activeProfile, currentAudio, podcasts, EJBENTITY.PODCAST);
+                CollectionLibraryHandler collectionLibraryHandler = new CollectionLibraryHandler(activeProfile, currentAudio, collectionLibraryGUI);
+                Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getPodcastButton());
 
 
-  }
+                Dimension2D previousDimension = new Dimension2D(stage.getWidth(), stage.getHeight());
+                stage.setScene(collectionLibraryGUI.getScene());
+                stage.setTitle("Podcasts");
+                stage.setWidth(previousDimension.getWidth());
+                stage.setHeight(previousDimension.getHeight());
+            }
+        };
+
+        Sidebar.getInstance(activeProfile).getHomeButton().setOnAction(homeButtonHandler);
+        Sidebar.getInstance(activeProfile).getSearchButton().setOnAction(searchButtonHandler);
+        Sidebar.getInstance(activeProfile).getProfileButton().setOnAction(profileButtonHandler);
+        Sidebar.getInstance(activeProfile).getQueueButton().setOnAction(queueButtonHandler);
+        Sidebar.getInstance(activeProfile).getFavoritesButton().setOnAction(favoritesButtonHandler);
+        Sidebar.getInstance(activeProfile).getPlaylistsButton().setOnAction(playlistsButtonHandler);
+        Sidebar.getInstance(activeProfile).getAlbumButton().setOnAction(albumsButtonHandler);
+        Sidebar.getInstance(activeProfile).getPodcastButton().setOnAction(podcastsButtonHandler);
+
+
+    }
 
 
 }
