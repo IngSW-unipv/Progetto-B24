@@ -139,7 +139,12 @@ public class CollectionHeader extends VBox {
 
         ImageView collectionImageView = null;
         try {
-            collectionImageView = new ImageView(new Image(jbCollection.getPicture().getBinaryStream()));
+            if (jbCollection.equals(activeProfile.getFavorites())) {
+                collectionImageView = new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/RecordBig.png", true));
+            } else {
+                collectionImageView = new ImageView(new Image(jbCollection.getPicture().getBinaryStream()));
+
+            }
         } catch (SQLException s) {
         }//end-try
 
@@ -147,7 +152,12 @@ public class CollectionHeader extends VBox {
         Label collectionLabel = null;
         try {
             Playlist playlist = (Playlist) jbCollection;
-            collectionLabel = new Label("Playlist");
+            if (playlist.equals(activeProfile.getFavorites())) {
+                collectionLabel = new Label("Favorites");
+            } else {
+                collectionLabel = new Label("Playlist");
+            }
+
         } catch (ClassCastException e) {
             try {
                 Album album = (Album) jbCollection;
@@ -208,18 +218,21 @@ public class CollectionHeader extends VBox {
         HBox buttonsHBbox = null;
         if (!activeProfile.equals(jbCollection.getCreator())) {
             buttonsHBbox = new HBox(buttonPlayPause, buttonRandom, buttonLoop);
-            getChildren().addAll(topViewHBox, buttonsHBbox);
         } else {
             try {
                 Playlist playlist = (Playlist) jbCollection;
-                buttonsHBbox = new HBox(buttonPlayPause, buttonRandom, buttonLoop, editButton, buttonBin);
-                getChildren().addAll(topViewHBox, buttonsHBbox);
+                if (playlist.equals(activeProfile.getFavorites())) {
+                    buttonsHBbox = new HBox(buttonPlayPause, buttonRandom, buttonLoop);
+                } else {
+                    buttonsHBbox = new HBox(buttonPlayPause, buttonRandom, buttonLoop, editButton, buttonBin);
+                }
+
             } catch (ClassCastException e) {
                 buttonsHBbox = new HBox(buttonPlayPause, buttonRandom, buttonLoop, buttonBin);
-                getChildren().addAll(topViewHBox, buttonsHBbox);
             }//end-try
-        }//end-try
+        }//end-if
 
+        getChildren().addAll(topViewHBox, buttonsHBbox);
         buttonsHBbox.setPadding(new Insets(40, 0, 0, 0));
 
         setPadding(new Insets(50, 0, 30, 0));

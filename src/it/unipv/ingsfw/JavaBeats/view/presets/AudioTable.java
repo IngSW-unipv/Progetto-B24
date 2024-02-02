@@ -95,7 +95,12 @@ public class AudioTable extends TableView<JBAudio> {
                 Album album = (Album) jbCollection;
                 getColumns().addAll(playColumn, titleColumn, collectionColumn, dateColumn, favoriteColumn, durationColumn);
             } catch (ClassCastException e) {
-                getColumns().addAll(playColumn, titleColumn, collectionColumn, dateColumn, favoriteColumn, durationColumn, deleteColumn);
+                if (jbCollection.equals(jbProfile.getFavorites())) {
+                    getColumns().addAll(playColumn, titleColumn, collectionColumn, dateColumn, favoriteColumn, durationColumn);
+                } else {
+                    getColumns().addAll(playColumn, titleColumn, collectionColumn, dateColumn, favoriteColumn, durationColumn, deleteColumn);
+
+                }
             }
 
         }
