@@ -127,11 +127,7 @@ public class SongbarHandler{
     EventHandler<ActionEvent> buttonPlayPauseHandler=new EventHandler<>(){
       @Override
       public void handle(ActionEvent actionEvent){
-        if(currentAudio.getMediaPlayer().getStatus().equals(MediaPlayer.Status.PLAYING)){
-          currentAudio.getMediaPlayer().pause();
-        }else{
-          currentAudio.getMediaPlayer().play();
-        }//end-if
+        PlayerManagerFactory.getInstance().getPlayerManager().playPause();
       }
     };
     EventHandler<MouseEvent> volumeSliderChangeHandler=new EventHandler<MouseEvent>(){
