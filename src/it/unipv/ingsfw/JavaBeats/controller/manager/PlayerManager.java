@@ -12,7 +12,6 @@ import javafx.scene.media.MediaPlayer;
 
 import java.util.Collections;
 import java.util.LinkedList;
-import java.util.Queue;
 
 public class PlayerManager{
   /*---------------------------------------*/
@@ -21,7 +20,7 @@ public class PlayerManager{
   private static JBProfile activeProfile=null;
   private static JBAudio CURRENT_AUDIO_PLAYING=null;
   private static JBCollection CURRENT_COLLECTION_PLAYING=null;
-  private static boolean isRandomized=false;
+  private static boolean randomized=false;
   private static final LinkedList<JBAudio> queue=new LinkedList<>();
   private final FXAdapter adapter=FXAdapterFactory.getInstance().getFXAdapter();
 
@@ -43,12 +42,12 @@ public class PlayerManager{
     return CURRENT_AUDIO_PLAYING;
   }
 
-  public static boolean isIsRandomized(){
-    return isRandomized;
+  public static boolean isRandomized(){
+    return randomized;
   }
 
-  public static void setIsRandomized(boolean isRandomized){
-    PlayerManager.isRandomized=isRandomized;
+  public static void setRandomized(boolean randomized){
+    PlayerManager.randomized=randomized;
   }
 
   /*---------------------------------------*/
@@ -86,7 +85,7 @@ public class PlayerManager{
     if(CURRENT_AUDIO_PLAYING!=null){
       CURRENT_AUDIO_PLAYING.getMediaPlayer().dispose();
     }//end-if
-    isRandomized=false;
+    randomized=false;
     CURRENT_COLLECTION_PLAYING=null;
     CURRENT_AUDIO_PLAYING=jbAudio;
     adapter.play(jbAudio);
@@ -124,7 +123,7 @@ public class PlayerManager{
       queue.clear();
       Collections.shuffle(CURRENT_COLLECTION_PLAYING.getTrackList());
 
-      isRandomized=true;
+      randomized=true;
       play(CURRENT_COLLECTION_PLAYING);
     }
   }
@@ -134,7 +133,7 @@ public class PlayerManager{
     queue.clear();
     Collections.shuffle(jbCollection.getTrackList());
 
-    isRandomized=true;
+    randomized=true;
     play(jbCollection);
   }
 
@@ -143,7 +142,7 @@ public class PlayerManager{
     queue.clear();
     Collections.shuffle(queueToRandomize);
 
-    isRandomized=true;
+    randomized=true;
     play();
   }
   /*---------------------------------------*/
