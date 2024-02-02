@@ -49,7 +49,7 @@ public class CollectionLibraryHandler {
 
                 JBCollection jbCollection = ((JBCollection) ((AudioCard) mouseEvent.getSource()).getIjbResearchable());
                 jbCollection.setTrackList(CollectionManagerFactory.getInstance().getCollectionManager().getCollectionAudios(jbCollection, activeProfile));
-                CollectionViewGUI collectionViewGUI = new CollectionViewGUI(activeProfile, currentAudio, jbCollection);
+                CollectionViewGUI collectionViewGUI = new CollectionViewGUI(activeProfile, jbCollection);
                 CollectionViewHandler collectionViewHandler = new CollectionViewHandler(collectionViewGUI, activeProfile, currentAudio);
 
                 Dimension2D previousDimension = new Dimension2D(stage.getWidth(), stage.getHeight());

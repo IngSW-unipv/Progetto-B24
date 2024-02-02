@@ -14,82 +14,120 @@ import javafx.scene.control.*;
 import javafx.stage.Screen;
 import javafx.util.Duration;
 
-public class AudioTable extends TableView<JBAudio>{
-  /*---------------------------------------*/
-  //Attributes
-  /*---------------------------------------*/
-  private static final int clientWidth=(int)Screen.getPrimary().getBounds().getWidth();
-
-  /*---------------------------------------*/
-  //Constructor
-  /*---------------------------------------*/
-  public AudioTable(ObservableList<JBAudio> jbAudios, JBProfile jbProfile, JBCollection jbCollection){
-    super();
-    initComponents(jbAudios, jbProfile, jbCollection);
-  }
-
-  /*---------------------------------------*/
-  //Methods
-  /*---------------------------------------*/
-  private void initComponents(ObservableList<JBAudio> jbAudios, JBProfile jbProfile, JBCollection jbCollection){
-    /* 80% of clientWidth and 125 is the padding */
-    double tableWidth=((double)80/100*clientWidth)-125;
-
-    /* PlayButton column, contains the button to play the audio */
-    PlayButtonTableColumn playColumn=new PlayButtonTableColumn("#");
-    playColumn.setPrefWidth((double)5/100*tableWidth);
-
-    /* Title column, with audio picture, title and artist */
-    TitleTableColumn titleColumn=new TitleTableColumn("Title");
-    titleColumn.setPrefWidth((double)30/100*tableWidth);
-
-    /* Collection column */
-    TableColumn<JBAudio, String> collectionColumn=new TableColumn<>("Collection");
-    collectionColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMetadata().getCollection().getName()));
-    collectionColumn.setPrefWidth((double)30/100*tableWidth);
-
-    /* Release date column */
-    TableColumn<JBAudio, String> dateColumn=new TableColumn<>("Release date");
-    dateColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMetadata().getReleaseDate().toString()));
-    dateColumn.setPrefWidth((double)20/100*tableWidth);
-
-    /* Favorite Button column, contains the button to "like" the audio */
-    FavoriteButtonTableColumn favoriteColumn=new FavoriteButtonTableColumn("", jbProfile);
-    favoriteColumn.setPrefWidth((double)5/100*tableWidth);
-
-    /* Duration column */
-    TableColumn<JBAudio, String> durationColumn=new TableColumn<>("Duration");
-    durationColumn.setCellValueFactory(cellData -> new SimpleStringProperty(JBAudio.convertToMinutesAndSeconds(cellData.getValue().getMetadata().getDuration())));
-    durationColumn.setPrefWidth((double)10/100*tableWidth);
-    durationColumn.getStyleClass().add("durationColumn");
-
-    /* Delete Button column, contains the button to delete the audio */
-    DeleteButtonTableColumn deleteColumn=new DeleteButtonTableColumn("");
-    deleteColumn.setPrefWidth((double)5/100*tableWidth);
+public class AudioTable extends TableView<JBAudio> {
+    /*---------------------------------------*/
+    //Attributes
+    /*---------------------------------------*/
+    private static final int clientWidth = (int) Screen.getPrimary().getBounds().getWidth();
+    private PlayButtonTableColumn playColumn;
+    private TitleTableColumn titleColumn;
+    private TableColumn<JBAudio, String> collectionColumn;
+    private TableColumn<JBAudio, String> dateColumn;
+    private FavoriteButtonTableColumn favoriteColumn;
+    private TableColumn<JBAudio, String> durationColumn;
+    private DeleteButtonTableColumn deleteColumn;
 
 
-    if(!jbProfile.equals(jbCollection.getCreator())){
-      getColumns().addAll(playColumn, titleColumn, collectionColumn, dateColumn, favoriteColumn, durationColumn);
-    }else{
-      try{
-        Album album=(Album)jbCollection;
-        getColumns().addAll(playColumn, titleColumn, collectionColumn, dateColumn, favoriteColumn, durationColumn);
-      }catch(ClassCastException e){
-        getColumns().addAll(playColumn, titleColumn, collectionColumn, dateColumn, favoriteColumn, durationColumn, deleteColumn);
-      }
+    /*---------------------------------------*/
+    //Constructor
+    /*---------------------------------------*/
+    public AudioTable(ObservableList<JBAudio> jbAudios, JBProfile jbProfile, JBCollection jbCollection) {
+        super();
+        initComponents(jbAudios, jbProfile);
+        getCollectionColumns(jbAudios, jbProfile, jbCollection);
+
     }
 
-    /* Adding the list of audios in the table and adding all the columns */
-    setItems(jbAudios);
-    setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
+    public AudioTable(ObservableList<JBAudio> jbAudios, JBProfile jbProfile) {
+        super();
+        initComponents(jbAudios, jbProfile);
+        getQueueColumns(jbAudios);
+    }
 
-    /* Block of code to lock the table height given the number of rows, maxHeight=N_Of_Rows * Rows_Size +29. The 29 is given for the header row which is 55px */
-    setFixedCellSize(55);
-    setMaxHeight(getItems().size()*getFixedCellSize()+35);
-    setPrefHeight(getMaxHeight());
-    setMinHeight(getMaxHeight());
-    /* css file */
-    getStylesheets().add("it/unipv/ingsfw/JavaBeats/view/resources/css/tableview.css");
-  }
+
+    /*---------------------------------------*/
+    //Methods
+    /*---------------------------------------*/
+    private void initComponents(ObservableList<JBAudio> jbAudios, JBProfile jbProfile) {
+        /* 80% of clientWidth and 125 is the padding */
+        double tableWidth = ((double) 80 / 100 * clientWidth) - 125;
+
+        /* PlayButton column, contains the button to play the audio */
+        playColumn = new PlayButtonTableColumn("#");
+        playColumn.setPrefWidth((double) 5 / 100 * tableWidth);
+
+        /* Title column, with audio picture, title and artist */
+        titleColumn = new TitleTableColumn("Title");
+        titleColumn.setPrefWidth((double) 30 / 100 * tableWidth);
+
+        /* Collection column */
+        collectionColumn = new TableColumn<>("Collection");
+        collectionColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMetadata().getCollection().getName()));
+        collectionColumn.setPrefWidth((double) 30 / 100 * tableWidth);
+
+        /* Release date column */
+        dateColumn = new TableColumn<>("Release date");
+        dateColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMetadata().getReleaseDate().toString()));
+        dateColumn.setPrefWidth((double) 20 / 100 * tableWidth);
+
+        /* Favorite Button column, contains the button to "like" the audio */
+        favoriteColumn = new FavoriteButtonTableColumn("", jbProfile);
+        favoriteColumn.setPrefWidth((double) 5 / 100 * tableWidth);
+
+        /* Duration column */
+        durationColumn = new TableColumn<>("Duration");
+        durationColumn.setCellValueFactory(cellData -> new SimpleStringProperty(JBAudio.convertToMinutesAndSeconds(cellData.getValue().getMetadata().getDuration())));
+        durationColumn.setPrefWidth((double) 10 / 100 * tableWidth);
+        durationColumn.getStyleClass().add("durationColumn");
+
+        /* Delete Button column, contains the button to delete the audio */
+        deleteColumn = new DeleteButtonTableColumn("");
+        deleteColumn.setPrefWidth((double) 5 / 100 * tableWidth);
+
+
+    }
+
+    private void getCollectionColumns(ObservableList<JBAudio> jbAudios, JBProfile jbProfile, JBCollection jbCollection) {
+        if (!jbProfile.equals(jbCollection.getCreator())) {
+            getColumns().addAll(playColumn, titleColumn, collectionColumn, dateColumn, favoriteColumn, durationColumn);
+        } else {
+            try {
+                Album album = (Album) jbCollection;
+                getColumns().addAll(playColumn, titleColumn, collectionColumn, dateColumn, favoriteColumn, durationColumn);
+            } catch (ClassCastException e) {
+                getColumns().addAll(playColumn, titleColumn, collectionColumn, dateColumn, favoriteColumn, durationColumn, deleteColumn);
+            }
+
+        }
+
+        /* Adding the list of audios in the table and adding all the columns */
+        setItems(jbAudios);
+        setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
+
+        /* Block of code to lock the table height given the number of rows, maxHeight=N_Of_Rows * Rows_Size +29. The 29 is given for the header row which is 55px */
+        setFixedCellSize(55);
+        setMaxHeight(getItems().size() * getFixedCellSize() + 35);
+        setPrefHeight(getMaxHeight());
+        setMinHeight(getMaxHeight());
+        /* css file */
+        getStylesheets().add("it/unipv/ingsfw/JavaBeats/view/resources/css/tableview.css");
+    }
+
+    private void getQueueColumns(ObservableList<JBAudio> jbAudios) {
+        getColumns().addAll(playColumn, titleColumn, dateColumn, favoriteColumn, durationColumn, deleteColumn);
+
+        /* Adding the list of audios in the table and adding all the columns */
+        setItems(jbAudios);
+        setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
+
+        /* Block of code to lock the table height given the number of rows, maxHeight=N_Of_Rows * Rows_Size +29. The 29 is given for the header row which is 55px */
+        setFixedCellSize(55);
+        setMaxHeight(getItems().size() * getFixedCellSize() + 35);
+        setPrefHeight(getMaxHeight());
+        setMinHeight(getMaxHeight());
+        /* css file */
+        getStylesheets().add("it/unipv/ingsfw/JavaBeats/view/resources/css/tableview.css");
+    }
+
 
 }
