@@ -96,7 +96,7 @@ public class CollectionViewGUI {
 
 
 
-        /* VBox containing all the main content */
+        /* VBox containing all the it.unipv.ingsfw.JavaBeats.main content */
         VBox mainVBox = new VBox(collectionHeader, audioTable);
         mainVBox.setPadding(new Insets(0, 50, 0, 50));
 

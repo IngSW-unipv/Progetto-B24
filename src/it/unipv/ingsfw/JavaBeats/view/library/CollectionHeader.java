@@ -1,5 +1,6 @@
 package it.unipv.ingsfw.JavaBeats.view.library;
 
+import it.unipv.ingsfw.JavaBeats.model.collection.Podcast;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.collection.Album;
 import it.unipv.ingsfw.JavaBeats.model.collection.JBCollection;
@@ -39,6 +40,7 @@ public class CollectionHeader extends VBox {
     private Button buttonRandom;
 
     private Button buttonBin;
+    private Button addEpisodeButton;
 
     /*---------------------------------------*/
     //Costruttori
@@ -74,6 +76,11 @@ public class CollectionHeader extends VBox {
     public Button getButtonLoop() {
         return buttonLoop;
     }
+
+    public Button getAddEpisodeButton() {
+        return addEpisodeButton;
+    }
+
     /*---------------------------------------*/
     //Metodi
     /*---------------------------------------*/
@@ -132,6 +139,17 @@ public class CollectionHeader extends VBox {
         buttonBin.setStyle("-fx-background-color: #0F0F0FFF;");
         buttonBin.setCursor(Cursor.HAND);
         buttonBin.setTooltip(new Tooltip("Delete"));
+
+        //Add episode
+        Image addEpisodeImage = new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Plus.png", true);
+        ImageView addEpisodeImageView = new ImageView(addEpisodeImage);
+        addEpisodeImageView.setPreserveRatio(true);
+        addEpisodeImageView.setFitHeight(30);
+        addEpisodeButton = new Button();
+        addEpisodeButton.setGraphic(addEpisodeImageView);
+        addEpisodeButton.setStyle("-fx-background-color: #8A2BE2;");
+        addEpisodeButton.setCursor(Cursor.HAND);
+        addEpisodeButton.setTooltip(new Tooltip("Add episode"));
 
     }
 
@@ -228,7 +246,14 @@ public class CollectionHeader extends VBox {
                 }
 
             } catch (ClassCastException e) {
-                buttonsHBbox = new HBox(buttonPlayPause, buttonRandom, buttonLoop, buttonBin);
+                try {
+                    Podcast podcast = (Podcast) jbCollection;
+                    buttonsHBbox = new HBox(buttonPlayPause, buttonRandom, buttonLoop, buttonBin, addEpisodeButton);
+
+                } catch (ClassCastException c) {
+                    buttonsHBbox = new HBox(buttonPlayPause, buttonRandom, buttonLoop, buttonBin);
+
+                }
             }//end-try
         }//end-if
 
