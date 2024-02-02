@@ -62,7 +62,7 @@ public class SongbarHandler{
     Songbar.getInstance().getSongArtist().setText(currentAudio==null ? "Unknown artist" : currentAudio.getMetadata().getArtist().getUsername());
     Songbar.getInstance().getSongGenre().setText(currentAudio==null ? "Unknown genre" : Arrays.toString(currentAudio.getMetadata().getGenres()));
     Songbar.getInstance().getButtonHeart().setGraphic(new ImageView(activeProfile.getFavorites().getTrackList().contains(currentAudio) ? new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/FullHeart.png", true) : new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/EmptyHeart.png", true)));
-    Songbar.getInstance().getButtonRandom().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/EmptyRandom.png", true)));
+    Songbar.getInstance().getButtonRandom().setGraphic(PlayerManagerFactory.getInstance().getPlayerManager().isRandomized() ? new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/FullRandom.png", true)) : new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/EmptyRandom.png", true)));
     Songbar.getInstance().getButtonSkipBack().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/SkipBack.png", true)));
 
     Songbar.getInstance().getButtonPlayPause().setGraphic(new ImageView(currentAudio==null ? new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Play.png", true) : new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/Pause.png", true)));
@@ -127,11 +127,7 @@ public class SongbarHandler{
     EventHandler<ActionEvent> buttonPlayPauseHandler=new EventHandler<>(){
       @Override
       public void handle(ActionEvent actionEvent){
-        if(currentAudio.getMediaPlayer().getStatus().equals(MediaPlayer.Status.PLAYING)){
-          currentAudio.getMediaPlayer().pause();
-        }else{
-          currentAudio.getMediaPlayer().play();
-        }//end-if
+        PlayerManagerFactory.getInstance().getPlayerManager().playPause();
       }
     };
     EventHandler<MouseEvent> volumeSliderChangeHandler=new EventHandler<MouseEvent>(){
