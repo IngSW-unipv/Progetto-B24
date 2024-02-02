@@ -1,5 +1,6 @@
 package it.unipv.ingsfw.JavaBeats.dao;
 
+import it.unipv.ingsfw.JavaBeats.model.EJBENTITY;
 import it.unipv.ingsfw.JavaBeats.model.IJBResearchable;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 
@@ -10,5 +11,5 @@ public interface ISearchDAO {
     //METHODS:
     ArrayList<IJBResearchable> search(String field, JBProfile activeProfile);
 
-    ArrayList<IJBResearchable> search(String field, JBProfile activeProfile, ERESEARCH mode);
+    ArrayList<IJBResearchable> search(String field, JBProfile activeProfile, EJBENTITY mode);
 }
