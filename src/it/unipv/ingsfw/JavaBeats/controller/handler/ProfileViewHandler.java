@@ -78,7 +78,7 @@ public class ProfileViewHandler{
           /* Re-instantiating Sidebar, SidebarHandler, Songbar and SongbarHandler*/
           Sidebar.getInstance(switchedProfile);
           SidebarHandler.getInstance(switchedProfile, currentAudio);
-          Songbar.getInstance(switchedProfile, currentAudio);
+          Songbar.getInstance();
 //          SongbarHandler.getInstance(switchedProfile);
 
           ProfileViewGUI profileViewGUI=new ProfileViewGUI(switchedProfile, currentAudio, switchedProfile);

@@ -50,9 +50,11 @@ public class CollectionViewGUI{
   public JBCollection getJbCollection(){
     return jbCollection;
   }
+
   public TableView<JBAudio> getAudioTable(){
     return audioTable;
   }
+
   public GridPane getGp(){
     return gp;
   }
@@ -86,7 +88,7 @@ public class CollectionViewGUI{
     /* Setup of left Sidebar, bottom songbar and center mainVBox */
     gp=new GridPane();
     gp.addRow(0, Sidebar.getInstance(activeProfile), scrollVBox);
-    gp.add(Songbar.getInstance(activeProfile, currentAudio), 0, 1, 2, 1);
+    gp.add(Songbar.getInstance(), 0, 1, 2, 1);
 
     ColumnConstraints ccSidebar=new ColumnConstraints();
     ColumnConstraints ccHome=new ColumnConstraints();
@@ -107,7 +109,7 @@ public class CollectionViewGUI{
     /* Setup of left Sidebar, bottom songbar and center mainVBox */
     gp=new GridPane();
     gp.addRow(0, Sidebar.getInstance(activeProfile), scrollVBox);
-    gp.add(Songbar.getInstance(activeProfile, currentAudio), 0, 1, 2, 1);
+    gp.add(Songbar.getInstance(), 0, 1, 2, 1);
 
     ColumnConstraints ccSidebar=new ColumnConstraints();
     ColumnConstraints ccHome=new ColumnConstraints();

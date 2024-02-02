@@ -116,7 +116,7 @@ public class CollectionViewHandler{
             JBAudio audioClicked=gui.getAudioTable().getItems().get(gui.getAudioTable().getSelectionModel().getSelectedIndex());
 
             PlayerManagerFactory.getInstance().getPlayerManager().play(audioClicked);
-            stage.setScene(gui.update(activeProfile, PlayerManagerFactory.getInstance().getPlayerManager().getCurrentAudioPlaying()));
+//            stage.setScene(gui.update(activeProfile, PlayerManagerFactory.getInstance().getPlayerManager().getCurrentAudioPlaying()));
 
 //            SongbarHandler.getInstance(activeProfile, PlayerManagerFactory.getInstance().getPlayerManager().getCurrentAudioPlaying());
 //            SidebarHandler.getInstance(activeProfile, PlayerManagerFactory.getInstance().getPlayerManager().getCurrentAudioPlaying());

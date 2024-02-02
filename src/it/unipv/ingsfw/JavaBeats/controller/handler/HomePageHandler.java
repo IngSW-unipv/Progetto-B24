@@ -48,6 +48,7 @@ public class HomePageHandler{
     };
     homePageGUI.getHome().getUserProfileButton().setOnAction(profileButtonHandler);
     SidebarHandler.getInstance(activeProfile, currentAudio);
+    Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getHomeButton());
     SongbarHandler.getInstance(activeProfile, currentAudio);
   }
 

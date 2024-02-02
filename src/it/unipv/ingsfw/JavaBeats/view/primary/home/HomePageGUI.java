@@ -29,6 +29,7 @@ public class HomePageGUI{
   public Home getHome(){
     return home;
   }
+
   public Scene getScene(){
     return scene;
   }
@@ -39,7 +40,7 @@ public class HomePageGUI{
   private void initComponents(JBProfile activeProfile, JBAudio currentAudio){
     /* Setup of left Sidebar, bottom songbar and center home */
     Sidebar sidebar=Sidebar.getInstance(activeProfile);
-    Songbar songbar=Songbar.getInstance(activeProfile, currentAudio);
+    Songbar songbar=Songbar.getInstance();
     home=new Home(activeProfile);
 
     GridPane gp=new GridPane();

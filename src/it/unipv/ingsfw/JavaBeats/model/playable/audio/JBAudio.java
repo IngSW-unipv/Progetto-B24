@@ -153,6 +153,10 @@ public abstract class JBAudio implements IJBItem{
 
   @Override
   public boolean equals(Object obj){
+    if(obj==null){
+      return false;
+    }//end-if
+    
     JBAudio jbAudio=(JBAudio)obj;
 
     if(this.id==jbAudio.getId()){
@@ -163,9 +167,9 @@ public abstract class JBAudio implements IJBItem{
 
   public static String convertToMinutesAndSeconds(double milliSeconds){
     long totalSeconds=(long)(milliSeconds/1000);
-    long minutes=totalSeconds/60;
-    long seconds=totalSeconds%60;
+    int minutes=(int)(totalSeconds/60);
+    int seconds=(int)(totalSeconds%60);
 
-    return minutes+":"+seconds;
+    return String.format("%02d", minutes)+":"+String.format("%02d", seconds);
   }
 }

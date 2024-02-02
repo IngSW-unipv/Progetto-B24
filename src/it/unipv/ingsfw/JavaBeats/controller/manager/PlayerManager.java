@@ -36,9 +36,11 @@ public class PlayerManager{
   public static LinkedList<JBAudio> getQueue(){
     return queue;
   }
+
   public static JBAudio getCurrentAudioPlaying(){
     return CURRENT_AUDIO_PLAYING;
   }
+
   /*---------------------------------------*/
   //Methods
   /*---------------------------------------*/
@@ -58,10 +60,12 @@ public class PlayerManager{
       CURRENT_AUDIO_PLAYING=audioToBePlayed;
       adapter.play(audioToBePlayed);
       audioDAO.addToListeningHistory(audioToBePlayed, activeProfile);
+    }else{
+      CURRENT_AUDIO_PLAYING=null;
     }//end-if
 
-    SongbarHandler.getInstance(activeProfile, CURRENT_AUDIO_PLAYING);
     SidebarHandler.getInstance(activeProfile, CURRENT_AUDIO_PLAYING);
+    SongbarHandler.getInstance(activeProfile, CURRENT_AUDIO_PLAYING);
   }
 
   public void play(JBAudio jbAudio){
@@ -74,6 +78,9 @@ public class PlayerManager{
     CURRENT_AUDIO_PLAYING=jbAudio;
     adapter.play(jbAudio);
     audioDAO.addToListeningHistory(jbAudio, activeProfile);
+
+    SidebarHandler.getInstance(activeProfile, CURRENT_AUDIO_PLAYING);
+    SongbarHandler.getInstance(activeProfile, CURRENT_AUDIO_PLAYING);
   }
 
   public void play(JBCollection jbCollection){
