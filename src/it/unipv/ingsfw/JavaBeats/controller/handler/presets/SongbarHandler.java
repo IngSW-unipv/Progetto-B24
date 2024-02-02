@@ -149,14 +149,16 @@ public class SongbarHandler{
         if(currentAudio!=null){
           if(activeProfile.getFavorites().getTrackList().contains(currentAudio)){
             activeProfile.getFavorites().getTrackList().remove(currentAudio);
-            CollectionManagerFactory.getInstance().getCollectionManager().setFavorites(activeProfile);
 
             Songbar.getInstance().getButtonHeart().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/EmptyHeart.png", true)));
           }else{
             activeProfile.getFavorites().getTrackList().add(currentAudio);
-            CollectionManagerFactory.getInstance().getCollectionManager().setFavorites(activeProfile);
 
             Songbar.getInstance().getButtonHeart().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/FullHeart.png", true)));
+          }//end-if
+          CollectionManagerFactory.getInstance().getCollectionManager().setFavorites(activeProfile);
+          if(AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING!=null){
+            AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.refresh();
           }//end-if
         }//end-if
       }

@@ -3,6 +3,7 @@ package it.unipv.ingsfw.JavaBeats.controller.handler.library;
 import it.unipv.ingsfw.JavaBeats.controller.factory.CollectionManagerFactory;
 import it.unipv.ingsfw.JavaBeats.controller.factory.PlayerManagerFactory;
 import it.unipv.ingsfw.JavaBeats.controller.handler.HomePageHandler;
+import it.unipv.ingsfw.JavaBeats.controller.handler.presets.AudioTableHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.presets.SidebarHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.presets.SongbarHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.primary.search.SearchPageHandler;
@@ -15,6 +16,8 @@ import it.unipv.ingsfw.JavaBeats.view.presets.Sidebar;
 import it.unipv.ingsfw.JavaBeats.view.presets.dialogs.EditPlaylistDialog;
 import it.unipv.ingsfw.JavaBeats.view.primary.home.HomePageGUI;
 import it.unipv.ingsfw.JavaBeats.view.primary.search.SearchPageGUI;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Dimension2D;
@@ -70,7 +73,6 @@ public class CollectionViewHandler{
 
         PlayerManagerFactory.getInstance().getPlayerManager().play(gui.getJbCollection());
         stage.setScene(gui.update(activeProfile, PlayerManagerFactory.getInstance().getPlayerManager().getCurrentAudioPlaying()));
-
       }
     };
 
@@ -104,9 +106,10 @@ public class CollectionViewHandler{
           boolean foundIsFavoriteButton=false;
           while(node!=gui.getAudioTable() && !foundPlayButton && !foundIsFavoriteButton){
             String id=node.getId();
-            if(id!=null && id.equals("PlayButton")){
+            if(id!=null && id.equals("playButton")){
               foundPlayButton=true;
-              System.out.println("ButtonClicked");
+            }else if(id!=null && id.equals("favoriteButton")){
+              foundIsFavoriteButton=true;
             }//end-if
 
             node=node.getParent();
@@ -116,12 +119,18 @@ public class CollectionViewHandler{
             JBAudio audioClicked=gui.getAudioTable().getItems().get(gui.getAudioTable().getSelectionModel().getSelectedIndex());
 
             PlayerManagerFactory.getInstance().getPlayerManager().play(audioClicked);
-//            stage.setScene(gui.update(activeProfile, PlayerManagerFactory.getInstance().getPlayerManager().getCurrentAudioPlaying()));
-
-//            SongbarHandler.getInstance(activeProfile, PlayerManagerFactory.getInstance().getPlayerManager().getCurrentAudioPlaying());
-//            SidebarHandler.getInstance(activeProfile, PlayerManagerFactory.getInstance().getPlayerManager().getCurrentAudioPlaying());
           }else if(foundIsFavoriteButton){
+            JBAudio audioClicked=gui.getAudioTable().getItems().get(gui.getAudioTable().getSelectionModel().getSelectedIndex());
 
+            if(activeProfile.getFavorites().getTrackList().contains(audioClicked)){
+              activeProfile.getFavorites().getTrackList().remove(audioClicked);
+            }else{
+              activeProfile.getFavorites().getTrackList().add(audioClicked);
+            }//end-if
+            CollectionManagerFactory.getInstance().getCollectionManager().setFavorites(activeProfile);
+            if(AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING!=null){
+              AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.refresh();
+            }
           }//end-if
 
         }//end-if

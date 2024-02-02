@@ -7,6 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+
 public class PlayButtonTableColumn extends TableColumn<JBAudio, JBAudio>{
   /*-----------------------------------------------*/
   //Constructor
@@ -38,7 +39,7 @@ public class PlayButtonTableColumn extends TableColumn<JBAudio, JBAudio>{
       }
     });
     getStyleClass().add("playColumn");
-    setId("PlayButton");
+    setId("playButton");
   }
   /*-----------------------------------------------*/
 }
