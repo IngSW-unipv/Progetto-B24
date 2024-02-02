@@ -1,4 +1,5 @@
 package it.unipv.ingsfw.JavaBeats.controller.handler.presets;
+import it.unipv.ingsfw.JavaBeats.controller.factory.CollectionManagerFactory;
 import it.unipv.ingsfw.JavaBeats.controller.factory.PlayerManagerFactory;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.Song;
@@ -141,6 +142,25 @@ public class SongbarHandler{
         }//end-if
       }
     };
+    EventHandler<ActionEvent> addToFavoriteButtonHandler=new EventHandler<>(){
+      @Override
+      public void handle(ActionEvent actionEvent){
+        /* If is already a favorite I have to remove it, otherwise add it */
+        if(currentAudio!=null){
+          if(activeProfile.getFavorites().getTrackList().contains(currentAudio)){
+            activeProfile.getFavorites().getTrackList().remove(currentAudio);
+            CollectionManagerFactory.getInstance().getCollectionManager().setFavorites(activeProfile);
+
+            Songbar.getInstance().getButtonHeart().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/EmptyHeart.png", true)));
+          }else{
+            activeProfile.getFavorites().getTrackList().add(currentAudio);
+            CollectionManagerFactory.getInstance().getCollectionManager().setFavorites(activeProfile);
+
+            Songbar.getInstance().getButtonHeart().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/FullHeart.png", true)));
+          }//end-if
+        }//end-if
+      }
+    };
     try{
       currentAudio.getMediaPlayer().setOnPlaying(mediaPlayingRunnable);
       currentAudio.getMediaPlayer().setOnPaused(mediaPausedRunnable);
@@ -150,6 +170,7 @@ public class SongbarHandler{
       Songbar.getInstance().getPlaySlider().setOnMouseReleased(sliderDragHandler);
       Songbar.getInstance().getButtonPlayPause().setOnAction(buttonPlayPauseHandler);
       Songbar.getInstance().getVolumeSlider().setOnMouseReleased(volumeSliderChangeHandler);
+      Songbar.getInstance().getButtonHeart().setOnAction(addToFavoriteButtonHandler);
     }catch(NullPointerException n){
 
     }

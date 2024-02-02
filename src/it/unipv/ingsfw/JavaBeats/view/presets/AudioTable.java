@@ -54,7 +54,7 @@ public class AudioTable extends TableView<JBAudio>{
     dateColumn.setPrefWidth((double)20/100*tableWidth);
 
     /* Favorite Button column, contains the button to "like" the audio */
-    FavoriteButtonTableColumn favoriteColumn=new FavoriteButtonTableColumn("");
+    FavoriteButtonTableColumn favoriteColumn=new FavoriteButtonTableColumn("", jbProfile);
     favoriteColumn.setPrefWidth((double)5/100*tableWidth);
 
     /* Duration column */
