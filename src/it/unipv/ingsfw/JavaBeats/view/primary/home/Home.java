@@ -69,6 +69,7 @@ public class Home extends VBox {
     //Metodi
     /*---------------------------------------*/
     private void initComponents(JBProfile activeProfile) {
+        System.out.println(activeProfile.getListeningHistory());
         /*
          *  Setup of top HBox component containing Logo, a warm welcome for the user and the profile image with its username
          */
