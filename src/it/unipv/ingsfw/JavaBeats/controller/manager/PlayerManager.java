@@ -33,31 +33,31 @@ public class PlayerManager {
         activeProfile = ProfileManagerFactory.getInstance().getProfileManager().getActiveProfile();
     }
 
-    /*---------------------------------------*/
-    //Getter/Setter
-    /*---------------------------------------*/
-    public static LinkedList<JBAudio> getQueue() {
-        return queue;
-    }
+  /*---------------------------------------*/
+  //Getter/Setter
+  /*---------------------------------------*/
+  public static LinkedList<JBAudio> getQueue(){
+    return queue;
+  }
 
-    public static JBAudio getCurrentAudioPlaying() {
-        return CURRENT_AUDIO_PLAYING;
-    }
+  public static JBAudio getCurrentAudioPlaying(){
+    return CURRENT_AUDIO_PLAYING;
+  }
 
-    public static boolean isRandomized() {
-        return randomized;
-    }
+  public static boolean isRandomized(){
+    return randomized;
+  }
 
-    public static void setRandomized(boolean randomized) {
-        PlayerManager.randomized = randomized;
-    }
+  public static void setRandomized(boolean randomized){
+    PlayerManager.randomized=randomized;
+  }
 
-    /*---------------------------------------*/
-    //Methods
-    /*---------------------------------------*/
-    public void addToQueue(JBAudio ijbPlayable) {
-        queue.push(ijbPlayable);
-    }
+  /*---------------------------------------*/
+  //Methods
+  /*---------------------------------------*/
+  public void addToQueue(JBAudio ijbPlayable){
+    queue.push(ijbPlayable);
+  }
 
     public void deleteQueue() {
 
@@ -68,89 +68,80 @@ public class PlayerManager {
         if (!queue.isEmpty()) {
             AudioDAO audioDAO = new AudioDAO();
 
-            if (CURRENT_AUDIO_PLAYING != null) {
-                CURRENT_AUDIO_PLAYING.getMediaPlayer().dispose();
-            }//end-if
+      if(CURRENT_AUDIO_PLAYING!=null){
+        CURRENT_AUDIO_PLAYING.getMediaPlayer().dispose();
+      }//end-if
 
-            JBAudio audioToBePlayed = queue.pop();
-            CURRENT_AUDIO_PLAYING = audioToBePlayed;
-            adapter.play(audioToBePlayed);
-            audioDAO.addToListeningHistory(audioToBePlayed, activeProfile);
-        } else {
-            CURRENT_AUDIO_PLAYING = null;
-            CURRENT_COLLECTION_PLAYING = null;
-        }//end-if
+      JBAudio audioToBePlayed=queue.pop();
+      CURRENT_AUDIO_PLAYING=audioToBePlayed;
+      adapter.play(audioToBePlayed);
+      audioDAO.addToListeningHistory(audioToBePlayed, activeProfile);
+    }else{
+      CURRENT_AUDIO_PLAYING=null;
+      CURRENT_COLLECTION_PLAYING=null;
+    }//end-if
 
-        SidebarHandler.getInstance(activeProfile, CURRENT_AUDIO_PLAYING);
-        SongbarHandler.getInstance(activeProfile, CURRENT_AUDIO_PLAYING);
-    }
+    SidebarHandler.getInstance(activeProfile, CURRENT_AUDIO_PLAYING);
+    SongbarHandler.getInstance(activeProfile, CURRENT_AUDIO_PLAYING);
+  }
 
-    public void play(JBAudio jbAudio) {
-        AudioDAO audioDAO = new AudioDAO();
+  public void play(JBAudio jbAudio){
+    AudioDAO audioDAO=new AudioDAO();
 
-        queue.clear();
-        if (CURRENT_AUDIO_PLAYING != null) {
-            CURRENT_AUDIO_PLAYING.getMediaPlayer().dispose();
-        }//end-if
-        randomized = false;
-        CURRENT_COLLECTION_PLAYING = null;
-        CURRENT_AUDIO_PLAYING = jbAudio;
-        adapter.play(jbAudio);
-        audioDAO.addToListeningHistory(jbAudio, activeProfile);
+    queue.clear();
+    if(CURRENT_AUDIO_PLAYING!=null){
+      CURRENT_AUDIO_PLAYING.getMediaPlayer().dispose();
+    }//end-if
+    randomized=false;
+    CURRENT_COLLECTION_PLAYING=null;
+    CURRENT_AUDIO_PLAYING=jbAudio;
+    adapter.play(jbAudio);
+    audioDAO.addToListeningHistory(jbAudio, activeProfile);
 
-        SidebarHandler.getInstance(activeProfile, CURRENT_AUDIO_PLAYING);
-        SongbarHandler.getInstance(activeProfile, CURRENT_AUDIO_PLAYING);
-    }
+    SidebarHandler.getInstance(activeProfile, CURRENT_AUDIO_PLAYING);
+    SongbarHandler.getInstance(activeProfile, CURRENT_AUDIO_PLAYING);
+  }
 
-    public void play(JBCollection jbCollection) {
-        queue.clear();
-        if (CURRENT_AUDIO_PLAYING != null) {
-            CURRENT_AUDIO_PLAYING.getMediaPlayer().dispose();
-        }//end-if
-        CURRENT_COLLECTION_PLAYING = jbCollection;
-        for (JBAudio jbAudio : CURRENT_COLLECTION_PLAYING.getTrackList()) {
-            queue.push(jbAudio);
-        }//end-foreach
-        play();
-    }
+  public void play(JBCollection jbCollection){
+    queue.clear();
+    if(CURRENT_AUDIO_PLAYING!=null){
+      CURRENT_AUDIO_PLAYING.getMediaPlayer().dispose();
+    }//end-if
+    CURRENT_COLLECTION_PLAYING=jbCollection;
+    for(JBAudio jbAudio: CURRENT_COLLECTION_PLAYING.getTrackList()){
+      queue.push(jbAudio);
+    }//end-foreach
+    play();
+  }
 
-    public void playPause() {
-        if (CURRENT_AUDIO_PLAYING != null) {
-            if (CURRENT_AUDIO_PLAYING.getMediaPlayer().getStatus().equals(MediaPlayer.Status.PLAYING)) {
-                CURRENT_AUDIO_PLAYING.getMediaPlayer().pause();
-            } else {
-                CURRENT_AUDIO_PLAYING.getMediaPlayer().play();
-            }//end-if
-        }//end-if
-    }
+  public void playPause(){
+    if(CURRENT_AUDIO_PLAYING!=null){
+      if(CURRENT_AUDIO_PLAYING.getMediaPlayer().getStatus().equals(MediaPlayer.Status.PLAYING)){
+        CURRENT_AUDIO_PLAYING.getMediaPlayer().pause();
+      }else{
+        CURRENT_AUDIO_PLAYING.getMediaPlayer().play();
+      }//end-if
+    }//end-if
+  }
 
-    /* Handles SongBar random button */
-    public void randomize() {
-        if (CURRENT_COLLECTION_PLAYING != null) {
-            queue.clear();
-            Collections.shuffle(CURRENT_COLLECTION_PLAYING.getTrackList());
+  /* Handles SongBar random button */
+  public void randomize(){
+    if(CURRENT_COLLECTION_PLAYING!=null){
+      queue.clear();
+      Collections.shuffle(CURRENT_COLLECTION_PLAYING.getTrackList());
 
-            randomized = true;
-            play(CURRENT_COLLECTION_PLAYING);
-        }
-    }
+      randomized=true;
+      play(CURRENT_COLLECTION_PLAYING);
+    }//end-if
+  }
 
-    /* Handles CollectionViewGUI random button */
-    public void randomize(JBCollection jbCollection) {
-        queue.clear();
-        Collections.shuffle(jbCollection.getTrackList());
+  /* Handles CollectionViewGUI random button */
+  public void randomize(JBCollection jbCollection){
+    queue.clear();
+    Collections.shuffle(jbCollection.getTrackList());
 
-        randomized = true;
-        play(jbCollection);
-    }
-
-    /* CollectionViewGUI random button if it's queue */
-    public void randomize(LinkedList<JBAudio> queueToRandomize) {
-        queue.clear();
-        Collections.shuffle(queueToRandomize);
-
-        randomized = true;
-        play();
-    }
-    /*---------------------------------------*/
+    randomized=true;
+    play(jbCollection);
+  }
+  /*---------------------------------------*/
 }

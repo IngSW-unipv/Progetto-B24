@@ -159,6 +159,18 @@ public class SongbarHandler{
         }//end-if
       }
     };
+    EventHandler<ActionEvent> randomButtonHandler=new EventHandler<ActionEvent>(){
+      @Override
+      public void handle(ActionEvent actionEvent){
+        PlayerManagerFactory.getInstance().getPlayerManager().randomize();
+        if(PlayerManagerFactory.getInstance().getPlayerManager().isRandomized()){
+          Songbar.getInstance().getButtonRandom().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/FullRandom.png", true)));
+          if(AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING!=null){
+            AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.refresh();
+          }//end-if
+        }//end-if
+      }
+    };
     try{
       currentAudio.getMediaPlayer().setOnPlaying(mediaPlayingRunnable);
       currentAudio.getMediaPlayer().setOnPaused(mediaPausedRunnable);
@@ -169,6 +181,7 @@ public class SongbarHandler{
       Songbar.getInstance().getButtonPlayPause().setOnAction(buttonPlayPauseHandler);
       Songbar.getInstance().getVolumeSlider().setOnMouseReleased(volumeSliderChangeHandler);
       Songbar.getInstance().getButtonHeart().setOnAction(addToFavoriteButtonHandler);
+      Songbar.getInstance().getButtonRandom().setOnAction(randomButtonHandler);
     }catch(NullPointerException n){
 
     }
