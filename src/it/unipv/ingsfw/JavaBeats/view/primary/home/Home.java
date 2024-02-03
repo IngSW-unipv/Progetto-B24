@@ -34,6 +34,9 @@ public class Home extends VBox {
     private static final Background bgHome = new Background(new BackgroundFill(Color.rgb(15, 15, 15), CornerRadii.EMPTY, Insets.EMPTY));
     private static final LocalTime time = LocalTime.now();
     private Button userProfileButton;
+    private HBox songsHBox;
+    private HBox collectionsHBox;
+    private HBox artistsHBox;
 
     /*---------------------------------------*/
     //Costruttori
@@ -48,6 +51,18 @@ public class Home extends VBox {
     /*---------------------------------------*/
     public Button getUserProfileButton() {
         return userProfileButton;
+    }
+
+    public HBox getSongsHBox() {
+        return songsHBox;
+    }
+
+    public HBox getCollectionsHBox() {
+        return collectionsHBox;
+    }
+
+    public HBox getArtistsHBox() {
+        return artistsHBox;
     }
 
     /*---------------------------------------*/
@@ -103,7 +118,7 @@ public class Home extends VBox {
         recentAudiosLabel.setTextFill(Color.LIGHTGRAY);
         recentAudiosLabel.setPadding(new Insets(30, 0, 40, 0));
         /* songsHBox contains distinct values of audios recently listened with a maximum of 15 elements */
-        HBox songsHBox = new HBox(50);
+        songsHBox = new HBox(50);
 
         int i;
         int count;
@@ -131,7 +146,7 @@ public class Home extends VBox {
         recentCollectionLabel.setFont(fontRecents);
         recentCollectionLabel.setTextFill(Color.LIGHTGRAY);
         recentCollectionLabel.setPadding(new Insets(40, 0, 40, 0));
-        HBox collectionsHBox = new HBox(50);
+        collectionsHBox = new HBox(50);
         /* Extracting all Collections from ListeningHistory  */
         ArrayList<JBCollection> recentCollections = new ArrayList<>();
         for (JBAudio jbAudio : activeProfile.getListeningHistory()) {
@@ -161,7 +176,7 @@ public class Home extends VBox {
         recentArtists.setFont(fontRecents);
         recentArtists.setTextFill(Color.LIGHTGRAY);
         recentArtists.setPadding(new Insets(40, 0, 40, 0));
-        HBox artistsHBox = new HBox(50);
+        artistsHBox = new HBox(50);
         /* Extracting all Artist from ListeningHistory  */
         ArrayList<JBProfile> recentProfiles = new ArrayList<>();
         for (JBAudio jbAudio : activeProfile.getListeningHistory()) {

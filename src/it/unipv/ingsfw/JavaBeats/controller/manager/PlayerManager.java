@@ -1,4 +1,5 @@
 package it.unipv.ingsfw.JavaBeats.controller.manager;
+
 import it.unipv.ingsfw.JavaBeats.controller.adapter.FXAdapter;
 import it.unipv.ingsfw.JavaBeats.controller.factory.FXAdapterFactory;
 import it.unipv.ingsfw.JavaBeats.controller.factory.ProfileManagerFactory;
@@ -12,24 +13,25 @@ import javafx.scene.media.MediaPlayer;
 
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.Queue;
 
-public class PlayerManager{
-  /*---------------------------------------*/
-  //Attributes
-  /*---------------------------------------*/
-  private static JBProfile activeProfile=null;
-  private static JBAudio CURRENT_AUDIO_PLAYING=null;
-  private static JBCollection CURRENT_COLLECTION_PLAYING=null;
-  private static boolean randomized=false;
-  private static final LinkedList<JBAudio> queue=new LinkedList<>();
-  private final FXAdapter adapter=FXAdapterFactory.getInstance().getFXAdapter();
+public class PlayerManager {
+    /*---------------------------------------*/
+    //Attributes
+    /*---------------------------------------*/
+    private static JBProfile activeProfile = null;
+    private static JBAudio CURRENT_AUDIO_PLAYING = null;
+    private static JBCollection CURRENT_COLLECTION_PLAYING = null;
+    private static boolean randomized = false;
+    private static final LinkedList<JBAudio> queue = new LinkedList<>();
+    private final FXAdapter adapter = FXAdapterFactory.getInstance().getFXAdapter();
 
-  /*---------------------------------------*/
-  //Constructors
-  /*---------------------------------------*/
-  public PlayerManager(){
-    activeProfile=ProfileManagerFactory.getInstance().getProfileManager().getActiveProfile();
-  }
+    /*---------------------------------------*/
+    //Constructors
+    /*---------------------------------------*/
+    public PlayerManager() {
+        activeProfile = ProfileManagerFactory.getInstance().getProfileManager().getActiveProfile();
+    }
 
   /*---------------------------------------*/
   //Getter/Setter
@@ -57,9 +59,14 @@ public class PlayerManager{
     queue.push(ijbPlayable);
   }
 
-  public void play(){
-    if(!queue.isEmpty()){
-      AudioDAO audioDAO=new AudioDAO();
+    public void deleteQueue() {
+
+        queue.clear();
+    }
+
+    public void play() {
+        if (!queue.isEmpty()) {
+            AudioDAO audioDAO = new AudioDAO();
 
       if(CURRENT_AUDIO_PLAYING!=null){
         CURRENT_AUDIO_PLAYING.getMediaPlayer().dispose();
@@ -125,7 +132,7 @@ public class PlayerManager{
 
       randomized=true;
       play(CURRENT_COLLECTION_PLAYING);
-    }
+    }//end-if
   }
 
   /* Handles CollectionViewGUI random button */
@@ -135,15 +142,6 @@ public class PlayerManager{
 
     randomized=true;
     play(jbCollection);
-  }
-
-  /* CollectionViewGUI random button if it's queue */
-  public void randomize(LinkedList<JBAudio> queueToRandomize){
-    queue.clear();
-    Collections.shuffle(queueToRandomize);
-
-    randomized=true;
-    play();
   }
   /*---------------------------------------*/
 }

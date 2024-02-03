@@ -2,8 +2,10 @@ package it.unipv.ingsfw.JavaBeats.controller.handler.library;
 
 import it.unipv.ingsfw.JavaBeats.controller.factory.CollectionManagerFactory;
 import it.unipv.ingsfw.JavaBeats.controller.factory.PlayerManagerFactory;
-import it.unipv.ingsfw.JavaBeats.controller.handler.HomePageHandler;
+import it.unipv.ingsfw.JavaBeats.controller.factory.ProfileManagerFactory;
+import it.unipv.ingsfw.JavaBeats.controller.handler.primary.home.HomePageHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.presets.AudioTableHandler;
+import it.unipv.ingsfw.JavaBeats.controller.handler.primary.home.HomePageHandler;
 import it.unipv.ingsfw.JavaBeats.model.collection.Playlist;
 import it.unipv.ingsfw.JavaBeats.model.collection.Podcast;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.Episode;
@@ -15,6 +17,7 @@ import it.unipv.ingsfw.JavaBeats.view.presets.Sidebar;
 import it.unipv.ingsfw.JavaBeats.view.presets.Songbar;
 import it.unipv.ingsfw.JavaBeats.view.presets.dialogs.EditPlaylistDialog;
 import it.unipv.ingsfw.JavaBeats.view.primary.home.HomePageGUI;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Dimension2D;
@@ -110,16 +113,26 @@ public class CollectionViewHandler{
       public void handle(ActionEvent actionEvent){
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
 
-        CollectionManagerFactory.getInstance().getCollectionManager().removeCollection(gui.getJbCollection());
-        HomePageGUI homePageGUI=new HomePageGUI(activeProfile, currentAudio);
-        HomePageHandler homePageHandler=new HomePageHandler(homePageGUI, activeProfile, currentAudio);
-        Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getHomeButton());
+        if(gui.getJbCollection()==null){
 
-        Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
-        stage.setScene(homePageGUI.getScene());
-        stage.setTitle("HomePage");
-        stage.setWidth(previousDimension.getWidth());
-        stage.setHeight(previousDimension.getHeight());
+          PlayerManagerFactory.getInstance().getPlayerManager().deleteQueue();
+          AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.setItems(FXCollections.observableArrayList(PlayerManagerFactory.getInstance().getPlayerManager().getQueue()));
+          AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.refresh();
+
+
+        }else{
+
+          CollectionManagerFactory.getInstance().getCollectionManager().removeCollection(gui.getJbCollection());
+          HomePageGUI homePageGUI=new HomePageGUI(activeProfile, currentAudio);
+          HomePageHandler homePageHandler=new HomePageHandler(homePageGUI, activeProfile, currentAudio);
+          Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getHomeButton());
+
+          Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
+          stage.setScene(homePageGUI.getScene());
+          stage.setTitle("HomePage");
+          stage.setWidth(previousDimension.getWidth());
+          stage.setHeight(previousDimension.getHeight());
+        }
       }
     };
     EventHandler<ActionEvent> addEpisodeHandler=new EventHandler<ActionEvent>(){

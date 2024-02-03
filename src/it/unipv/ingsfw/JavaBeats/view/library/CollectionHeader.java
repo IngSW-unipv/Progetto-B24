@@ -320,7 +320,7 @@ public class CollectionHeader extends VBox {
 
         getButtons();
 
-        HBox buttonsHBbox = new HBox(buttonRandom, buttonLoop, buttonBin);
+        HBox buttonsHBbox = new HBox(buttonLoop, buttonBin);
 
         buttonsHBbox.setPadding(new Insets(40, 0, 0, 0));
         getChildren().addAll(topViewHBox, buttonsHBbox);
