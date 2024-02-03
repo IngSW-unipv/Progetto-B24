@@ -1,15 +1,14 @@
 package it.unipv.ingsfw.JavaBeats.model.playable.audio;
 
-import it.unipv.ingsfw.JavaBeats.model.playable.IJBItem;
 import it.unipv.ingsfw.JavaBeats.model.collection.JBCollection;
+import it.unipv.ingsfw.JavaBeats.model.playable.IJBPlayable;
 import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
 import javafx.scene.media.MediaPlayer;
 
 import java.sql.Blob;
 import java.sql.Date;
-import java.sql.Time;
 
-public abstract class JBAudio implements IJBItem{
+public abstract class JBAudio implements IJBPlayable {
 
   //ATTRIBUTES:
   private int id;

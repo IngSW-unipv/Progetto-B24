@@ -1,9 +1,6 @@
 package it.unipv.ingsfw.JavaBeats.model.collection;
 
-import it.unipv.ingsfw.JavaBeats.model.EJBMODE;
 import it.unipv.ingsfw.JavaBeats.model.IJBResearchable;
-import it.unipv.ingsfw.JavaBeats.model.playable.IJBItem;
-import it.unipv.ingsfw.JavaBeats.model.playable.IJBPlayable;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import javafx.scene.image.Image;
@@ -82,12 +79,6 @@ public abstract class JBCollection implements IJBResearchable{
 
 
   //METHODS:
-  public void addItem(JBProfile activeJBProfile, IJBItem item){
-  }
-
-  public void removeItem(JBProfile activeJBProfile, IJBItem item){
-  }
-
   @Override
   public boolean equals(Object obj){
     JBCollection jbCollection=(JBCollection)obj;

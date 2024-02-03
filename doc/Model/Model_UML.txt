@@ -1,116 +1,169 @@
 @startuml
 !theme carbon-gray
 
-title JavaBeats 1.6 - Domain Diagram
+title  <color:grey>JavaBeats - Domain Diagram</color>
 
 !true = 1
 !false = 0
-!nesteds = true
-!compositions = false
+!showNesteds = true
+!showCompositions = false
+!showAttributes = true
+!showMethods = true
 
 package model{
-  interface IJBResearchable{
-  }
-  
-  enum EJBMODE{
-    + SEQUENTIAL
-    + RANDOM
-    + LOOP
-  }  
-
-  package playable{
-    interface IJBPlayable extends model.IJBResearchable{
+    interface IJBResearchable{
     }
 
-    interface IJBItem extends IJBPlayable{
+    enum EJBMODE{
+        + SEQUENTIAL
+        + RANDOM
+        + LOOP
     }
 
-    abstract class JBAudio implements IJBItem{
-      - id: String
-      - isFavorite: boolean
-      + playFX(): void
-      + pause(): void
-      + getters() & setters();
-    }
-    
-    class Song extends JBAudio{
-    }
-
-    class Episode extends JBAudio{
+    enum EJENTITY{
+        + SONG
+        + EPISODE
+        + PLAYLIST
+        + ALBUM
+        + PODCAST
+        + USER
+        + ARTIST
     }
 
-    class MetaData << (N, #DDEBE0) Nested >> {
-      - artist: Artist
-      - title: String
-      - duration: Time
-      - releaseDate: Date
-      - genres: String[]
-      + getters() & setters();
+    package playable{
+
+        interface IJBPlayable extends model.IJBResearchable{
+            !if (showMethods)
+                + playFX()
+            !endif
+        }
+
+        package audio{
+
+            abstract class JBAudio implements model.playable.IJBPlayable{
+                !if (showAttributes)
+                    - id : int
+                    - isFavorite : boolean
+                    - metadata : Metadata
+                    - audioFile : Blob
+                    - int numberOfStreams : int
+                    # mediaPlayer : MediaPlayer
+                !endif
+                !if (showMethods)
+                    + getters() & setters()
+                !endif
+            }
+                class MetaData << (N, #DDEBE0) Nested >> {
+                    !if (showAttributes)
+                        - artist : Artist
+                        - title : String
+                        - collection : JBCollection
+                        - duration : double
+                        - releaseDate : Date
+                        - genres : String[]
+                    !endif
+                }
+
+            class Song extends JBAudio{
+            }
+
+            class Episode extends JBAudio{
+            }
+        }
     }
 
-    abstract class JBCollection implements IJBPlayable{
-      - id: String
-      - name: String
-      - creator: JBProfile
-      - itemAmount: int
-      - picture: SerialBlob
-      + addItem(activeJBProfile: JBProfile, item: IJBItem): void
-      + removeItem(activeJBProfile: JBProfile, item: IJBItem): void
-      + play(mode: EJBMODE): void
-      + pause(): void
-      + getters() & setters();
+    package collection{
+
+        abstract class JBCollection implements model.IJBResearchable{
+            !if (showAttributes)
+                - id : int
+                - name : String
+                - creator : JBProfile
+                - picture : Blob
+            !endif
+            !if (showMethods)
+                + scalePicture(size : int) : Image
+                + getters() & setters()
+            !endif
+        }
+
+        class Album extends JBCollection{
+            !if (showAttributes)
+                - trackList : ArrayList<JBAudio>
+            !endif
+            !if (showMethods)
+                + getters() & setters()
+            !endif
+        }
+
+        class Playlist extends JBCollection{
+            !if (showAttributes)
+                - trackList : ArrayList<JBAudio>
+                - isVisible : boolean;
+            !endif
+            !if (showMethods)
+                + getters() & setters()
+            !endif
+        }
+
+        class Podcast extends JBCollection{
+            !if (showAttributes)
+                - trackList : ArrayList<JBAudio>
+            !endif
+            !if (showMethods)
+                + getters() & setters()
+            !endif
+        }
     }
 
-    class Album extends JBCollection{
-      - trackArray: Song[]
-      + getters() & setters();
-    }
+    package profile{
 
-    class Playlist extends JBCollection{
-      - isVisible : boolean;
-      - trackList: List<JBAudio>
-      + getters() & setters();
-    }
+        abstract class JBProfile implements model.IJBResearchable{
+            !if (showAttributes)
+                - username, mail, password, name, surname, biography : String
+                - Blob profilePicture : Blob
+                - listeningHistory : ArrayList<JBAudio>
+                - favorites : Playlist
+            !endif
+            !if (showMethods)
+                + getters() & setters()
+            !endif
+        }
 
-    class Podcast extends JBCollection{
-      - trackList: List<Episode>
-      + getters() & setters();
-    }
-  }
+        class User extends JBProfile{
+            !if (showAttributes)
+                - isVisible : Boolean
+                - totalListeningTime : Time
+            !endif
+            !if (showMethods)
+                + getters() & setters()
+            !endif
+        }
 
-  package user{
-    abstract class JBProfile implements model.IJBResearchable{
-      - username: String
-      - mail: String
-      - password: String
-      - name: String
-      - surname: String
-      - biography: String
-      - profilePicture: SerialBlob
-      + getters() & setters();
-    }
+        class Artist extends JBProfile{
+            !if (showAttributes)
+                - totalListeners : int
+            !endif
+            !if (showMethods)
+                + getters() & setters()
+            !endif
+        }
 
-    class User extends JBProfile{
-      - isVisible : boolean;
-      - minuteListened: Time
-      + getters() & setters();
     }
-
-    class Artist extends JBProfile{
-      - totalListeners: int
-      + getters() & setters();
-    }
-    
-  }
 }
 
-!if (compositions)
-  Album *-- Song
+!if (showCompositions)
+  Album *-- JBAudio
   Playlist *-- JBAudio
-  Podcast *-- Episode
+  Podcast *-- JBAudio
+  JBProfile *-- JBAudio
+  JBProfile *-- Playlist
+  JBCollection *-- JBProfile
+  MetaData *-- Artist
+  MetaData *-- JBCollection
 !endif
 
-!if (nesteds)
+!if (showNesteds)
   JBAudio +-- MetaData
 !endif
 
