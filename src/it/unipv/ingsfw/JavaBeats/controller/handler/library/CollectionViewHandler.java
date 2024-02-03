@@ -110,16 +110,23 @@ public class CollectionViewHandler {
             public void handle(ActionEvent actionEvent) {
                 Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 
-                CollectionManagerFactory.getInstance().getCollectionManager().removeCollection(gui.getJbCollection());
-                HomePageGUI homePageGUI = new HomePageGUI(activeProfile, currentAudio);
-                HomePageHandler homePageHandler = new HomePageHandler(homePageGUI, activeProfile, currentAudio);
-                Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getHomeButton());
+                if (gui.getJbCollection() == null) {
 
-                Dimension2D previousDimension = new Dimension2D(stage.getWidth(), stage.getHeight());
-                stage.setScene(homePageGUI.getScene());
-                stage.setTitle("HomePage");
-                stage.setWidth(previousDimension.getWidth());
-                stage.setHeight(previousDimension.getHeight());
+                    PlayerManagerFactory.getInstance().getPlayerManager().deleteQueue();
+
+                } else {
+                    
+                    CollectionManagerFactory.getInstance().getCollectionManager().removeCollection(gui.getJbCollection());
+                    HomePageGUI homePageGUI = new HomePageGUI(activeProfile, currentAudio);
+                    HomePageHandler homePageHandler = new HomePageHandler(homePageGUI, activeProfile, currentAudio);
+                    Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getHomeButton());
+
+                    Dimension2D previousDimension = new Dimension2D(stage.getWidth(), stage.getHeight());
+                    stage.setScene(homePageGUI.getScene());
+                    stage.setTitle("HomePage");
+                    stage.setWidth(previousDimension.getWidth());
+                    stage.setHeight(previousDimension.getHeight());
+                }
             }
         };
         EventHandler<ActionEvent> addEpisodeHandler = new EventHandler<ActionEvent>() {
