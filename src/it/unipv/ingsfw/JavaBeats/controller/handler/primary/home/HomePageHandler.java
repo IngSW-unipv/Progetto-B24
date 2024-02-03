@@ -1,6 +1,7 @@
 package it.unipv.ingsfw.JavaBeats.controller.handler.primary.home;
 
 import it.unipv.ingsfw.JavaBeats.controller.factory.CollectionManagerFactory;
+import it.unipv.ingsfw.JavaBeats.controller.factory.PlayerManagerFactory;
 import it.unipv.ingsfw.JavaBeats.controller.handler.ProfileViewHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.library.CollectionViewHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.presets.AudioTableHandler;
@@ -68,6 +69,8 @@ public class HomePageHandler {
 
                 try {
                     JBAudio jbAudio = (JBAudio) ijbResearchable;
+
+                    PlayerManagerFactory.getInstance().getPlayerManager().play(jbAudio);
 
 
                 } catch (ClassCastException e) {
