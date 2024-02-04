@@ -2,20 +2,62 @@ package it.unipv.ingsfw.JavaBeats.dao.profile;
 
 import it.unipv.ingsfw.JavaBeats.model.profile.*;
 
-public interface IProfileDAO{
+/**
+ * Data Access Object (DAO) interface for managing operations related to the {@link JBProfile} entity in the database.
+ * This interface provides methods to perform Insert, Remove, Update, Get operations on {@link User} and {@link Artist} records.
+ *
+ * @author Giorgio Giacomotti
+ * @see JBProfile
+ * @see User
+ * @see Artist
+ */
+public interface IProfileDAO {
 
-  //METHODS:
-  void insert(JBProfile profile);
+    //METHODS:
 
-  void remove(JBProfile profile);
+    /**
+     * Inserts a new {@link JBProfile} record in the database.
+     *
+     * @param profile profile to add
+     */
+    void insert(JBProfile profile);
 
-  void update(JBProfile profile);
+    /**
+     * Removes a {@link JBProfile} record from the database.
+     *
+     * @param profile profile to delete
+     */
+    void remove(JBProfile profile);
 
+    /**
+     * Updates a {@link JBProfile} record in the database.
+     *
+     * @param profile profile to update
+     */
+    void update(JBProfile profile);
 
-  JBProfile get(JBProfile profile);
+    /**
+     * Retrieves the complete information regarding a specific {@link JBProfile} record from the database.
+     *
+     * @param profile profile to get
+     * @return profile with complete and updated info
+     */
+    JBProfile get(JBProfile profile);
 
-  Artist getArtist(JBProfile profile);
+    /**
+     * Retrieves the complete information regarding a specific {@link Artist} record from the database.
+     *
+     * @param profile user to get
+     * @return profile with complete and updated info
+     */
+    Artist getArtist(JBProfile profile);
 
-  User getUser(JBProfile profile);
+    /**
+     * Retrieves the complete information regarding a specific {@link User} record from the database.
+     *
+     * @param profile user to get
+     * @return profile with complete and updated info
+     */
+    User getUser(JBProfile profile);
 
 }

@@ -2,6 +2,7 @@ package it.unipv.ingsfw.JavaBeats.dao.playable;
 
 import it.unipv.ingsfw.JavaBeats.controller.factory.DBManagerFactory;
 import it.unipv.ingsfw.JavaBeats.dao.collection.CollectionDAO;
+import it.unipv.ingsfw.JavaBeats.dao.profile.IProfileDAO;
 import it.unipv.ingsfw.JavaBeats.dao.profile.ProfileDAO;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.*;
 import it.unipv.ingsfw.JavaBeats.model.collection.Album;
@@ -9,6 +10,7 @@ import it.unipv.ingsfw.JavaBeats.model.collection.Playlist;
 import it.unipv.ingsfw.JavaBeats.model.collection.Podcast;
 import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
+import it.unipv.ingsfw.JavaBeats.model.profile.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,6 +20,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 
+/**
+ * Implementation of the methods declared in {@link IAudioDAO}.
+ * It encapsulates database interactions, providing a clean and reusable interface for accessing {@link JBAudio} data.
+ *
+ * @author Giorgio Giacomotti
+ * @see JBAudio
+ * @see Song
+ * @see Episode
+ * @see it.unipv.ingsfw.JavaBeats.model.collection.JBCollection
+ */
 public class AudioDAO implements IAudioDAO {
 
     //ATTRIBUTES:

@@ -3,6 +3,8 @@ package it.unipv.ingsfw.JavaBeats.dao.collection;
 import it.unipv.ingsfw.JavaBeats.controller.factory.DBManagerFactory;
 import it.unipv.ingsfw.JavaBeats.dao.playable.AudioDAO;
 import it.unipv.ingsfw.JavaBeats.dao.profile.ProfileDAO;
+import it.unipv.ingsfw.JavaBeats.model.EJBENTITY;
+import it.unipv.ingsfw.JavaBeats.model.IJBResearchable;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.*;
 import it.unipv.ingsfw.JavaBeats.model.collection.*;
 import it.unipv.ingsfw.JavaBeats.model.profile.*;
@@ -14,6 +16,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/**
+ * Implementation of the methods declared in {@link it.unipv.ingsfw.JavaBeats.dao.ISearchDAO}.
+ * It encapsulates database interactions, providing a clean and reusable interface for accessing {@link IJBResearchable} items.
+ *
+ * @author Giorgio Giacomotti
+ * @see IJBResearchable
+ * @see EJBENTITY
+ */
 public class CollectionDAO implements ICollectionDAO {
 
     //ATTRIBUTES:
