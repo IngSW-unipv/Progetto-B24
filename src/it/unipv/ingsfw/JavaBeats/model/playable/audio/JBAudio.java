@@ -99,7 +99,7 @@ public abstract class JBAudio implements IJBPlayable {
     }
 
     /**
-     * Returns the duration of the audio as a {@link double}.
+     * Returns the duration of the audio as a double.
      *
      * @return duration
      */
@@ -108,7 +108,7 @@ public abstract class JBAudio implements IJBPlayable {
     }
 
     /**
-     * Sets {@link double} as the new audio duration.
+     * Sets double as the new audio duration.
      *
      * @param duration new duration
      */
@@ -191,7 +191,7 @@ public abstract class JBAudio implements IJBPlayable {
   //GETTERS:
 
   /**
-   * Returns profile id as an {@link int}.
+   * Returns profile id as an int.
    *
    * @return id
    */
@@ -209,7 +209,7 @@ public abstract class JBAudio implements IJBPlayable {
   }
 
   /**
-   * Returns total number of streams as an {@link int}.
+   * Returns total number of streams as an int.
    *
    * @return total number of streams
    */
@@ -247,7 +247,7 @@ public abstract class JBAudio implements IJBPlayable {
   //SETTER:
 
   /**
-   * Sets {@link int} as the new id.
+   * Sets int as the new id.
    *
    * @param id new id
    */
@@ -265,7 +265,7 @@ public abstract class JBAudio implements IJBPlayable {
   }
 
   /**
-   * Sets {@link int} as the new total number of streams.
+   * Sets int as the new total number of streams.
    *
    * @param numberOfStreams new total number of streams
    */
@@ -309,7 +309,7 @@ public abstract class JBAudio implements IJBPlayable {
   }
 
   /**
-   * Converts milliseconds passed as {@link double} into minutes and seconds as a {@link String} formatted as MM:SS.
+   * Converts milliseconds passed as double into minutes and seconds as a {@link String} formatted as MM:SS.
    *
    * @param milliSeconds milliseconds to convert
    * @return equivalent time in minutes and second

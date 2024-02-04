@@ -49,7 +49,7 @@ public class Artist extends JBProfile {
   //GETTERS:
 
   /**
-   * Returns number of total listeners as an {@link int}.
+   * Returns number of total listeners as an int.
    *
    * @return totalListeners
    */
@@ -69,7 +69,7 @@ public class Artist extends JBProfile {
 
   //SETTER:
   /**
-   * Sets {@link int} as the new total listeners count.
+   * Sets int as the new total listeners count.
    *
    * @param totalListeners new total listeners count
    */

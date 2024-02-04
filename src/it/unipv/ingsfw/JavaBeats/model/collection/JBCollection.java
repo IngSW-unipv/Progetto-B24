@@ -49,7 +49,7 @@ public abstract class JBCollection implements IJBResearchable {
   //GETTERS:
 
   /**
-   * Returns collection id as an {@link int}.
+   * Returns collection id as an int.
    *
    * @return id
    */
@@ -104,7 +104,7 @@ public abstract class JBCollection implements IJBResearchable {
   //SETTERS:
 
   /**
-   * Sets {@link int} as the new collection id.
+   * Sets int as the new collection id.
    *
    * @param id new id
    */
@@ -164,7 +164,7 @@ public abstract class JBCollection implements IJBResearchable {
   }
 
   /**
-   * Returns the collection picture as an {@link Image} of the required size expressed as an {@link int}.
+   * Returns the collection picture as an {@link Image} of the required size expressed as an int.
    *
    * @param size desired picture size
    * @return scaled collection picture
