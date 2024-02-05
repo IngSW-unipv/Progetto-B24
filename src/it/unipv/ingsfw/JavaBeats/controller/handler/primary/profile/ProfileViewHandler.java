@@ -1,7 +1,7 @@
 package it.unipv.ingsfw.JavaBeats.controller.handler.primary.profile;
 
 import it.unipv.ingsfw.JavaBeats.controller.factory.ProfileManagerFactory;
-import it.unipv.ingsfw.JavaBeats.controller.handler.presets.dialogs.EditProfileDialogController;
+import it.unipv.ingsfw.JavaBeats.controller.handler.presets.dialogs.EditProfileDialogHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.presets.SidebarHandler;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
@@ -47,7 +47,7 @@ public class ProfileViewHandler {
                 gui.getGp().setEffect(new BoxBlur(10, 10, 10));
 
                 EditProfileDialog dialog = new EditProfileDialog(stage, originalProfile, originalProfile.getCopy());
-                EditProfileDialogController editProfileDialogController = new EditProfileDialogController(dialog);
+                EditProfileDialogHandler editProfileDialogHandler = new EditProfileDialogHandler(dialog);
                 dialog.showAndWait();
                 gui.getGp().setEffect(null); /* Removing blur effect */
 

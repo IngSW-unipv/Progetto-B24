@@ -1,16 +1,9 @@
 package it.unipv.ingsfw.JavaBeats.controller.handler.presets.dialogs;
 
-import it.unipv.ingsfw.JavaBeats.controller.factory.ProfileManagerFactory;
-import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
-import it.unipv.ingsfw.JavaBeats.model.profile.User;
 import it.unipv.ingsfw.JavaBeats.view.presets.dialogs.EditProfileDialog;
-import it.unipv.ingsfw.JavaBeats.view.primary.home.HomePageGUI;
-import it.unipv.ingsfw.JavaBeats.view.primary.profile.ProfileViewGUI;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Dimension2D;
 import javafx.scene.Node;
-import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -22,7 +15,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 
-public class EditProfileDialogController {
+public class EditProfileDialogHandler {
     /*---------------------------------------*/
     //Attributi
     /*---------------------------------------*/
@@ -32,7 +25,7 @@ public class EditProfileDialogController {
     /*---------------------------------------*/
     //Costruttori
     /*---------------------------------------*/
-    public EditProfileDialogController(EditProfileDialog profileDialog) {
+    public EditProfileDialogHandler(EditProfileDialog profileDialog) {
         this.profileDialog = profileDialog;
         initComponents();
     }
