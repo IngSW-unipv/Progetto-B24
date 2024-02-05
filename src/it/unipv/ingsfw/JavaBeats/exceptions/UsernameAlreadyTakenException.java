@@ -1,41 +1,48 @@
 package it.unipv.ingsfw.JavaBeats.exceptions;
 
-import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
-
 import java.util.Random;
 
+/**
+ * Exception to report that a {@link it.unipv.ingsfw.JavaBeats.model.profile.JBProfile} with the desired username already exists in the database.
+ * Is expected to be thrown when registering a new profile or editing the username.
+ *
+ * @author Giorgio Giacomotti
+ * @see Exception
+ * @see it.unipv.ingsfw.JavaBeats.model.profile.JBProfile
+ */
 public class UsernameAlreadyTakenException extends Exception {
 
-    private String username;
-
     //CONSTRUCTORS:
+
+    /**
+     * Constructor to create an instance of the custom exception.
+     */
     public UsernameAlreadyTakenException() {
         super("Inserted username is already taken.");
     }
 
-    public UsernameAlreadyTakenException(JBProfile profile) {
-        super(profile.getUsername() + " is already taken.");
-        this.username = profile.getUsername();
+    /**
+     * Constructor to create an instance of the custom exception with a specific message.
+     *
+     * @param takenUsername username that is already taken as a {@link String}
+     */
+    public UsernameAlreadyTakenException(String takenUsername) {
+        super(takenUsername + " is already taken.");
     }
 
 
     //METHODS:
-    public String suggestAlternativeUsername() {
+
+    /**
+     * Method that returns an alternative username created adding a two digit random number at the unavailable username.
+     * Note that it will not check if the suggested username is available.
+     *
+     * @param takenUsername username that is already taken as a {@link String}
+     * @return suggested alternative username as a{@link String}
+     */
+    public String suggestAlternativeUsername(String takenUsername) {
         Random random = new Random();
-        String result;
-
-        if (username != null) {
-            result = "Try with: " + username + random.nextInt(100) + " or " + username + "_" + random.nextInt(100);
-        } else {
-            try {
-                throw new IllegalArgumentException("Original username is necessary to suggest an alternative username.");
-            } catch (IllegalArgumentException e) {
-                System.out.println(e.toString());
-                result = null;
-            }
-        }
-
-        return result;
+        return "Try with: " + takenUsername + random.nextInt(100) + " or " + takenUsername + "_" + random.nextInt(100);
     }
 
 }
