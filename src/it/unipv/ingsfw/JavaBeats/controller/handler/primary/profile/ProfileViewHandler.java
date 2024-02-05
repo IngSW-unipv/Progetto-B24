@@ -48,16 +48,21 @@ public class ProfileViewHandler {
 
                 EditProfileDialog dialog = new EditProfileDialog(stage, originalProfile, originalProfile.getCopy());
                 EditProfileDialogHandler editProfileDialogHandler = new EditProfileDialogHandler(dialog);
-                dialog.showAndWait();
+                dialog.showAndWait(); //Apro dialog e quando viene chiuso continuo
                 gui.getGp().setEffect(null); /* Removing blur effect */
 
                 /* Checking if an edit has been made */
                 if (!dialog.getOriginalProfile().equals(dialog.getNewProfile())) {
+
+                    //Profile manager updates DB
+                    ProfileManagerFactory.getInstance().getProfileManager().edit(dialog.getNewProfile());
+
                     try {
                         gui.getProfileHeader().getProfileImageView().setImage(new Image(dialog.getNewProfile().getProfilePicture().getBinaryStream()));
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
                     }//end-try
+
                     gui.getProfileHeader().getNameLabel().setText(dialog.getNewProfile().getName());
                     gui.getProfileHeader().getSurnameLabel().setText(dialog.getNewProfile().getSurname());
                     gui.getProfileHeader().getBiographyText().setText(dialog.getNewProfile().getBiography());
