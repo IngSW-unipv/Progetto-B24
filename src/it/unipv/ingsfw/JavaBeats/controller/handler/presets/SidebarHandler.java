@@ -59,7 +59,7 @@ public class SidebarHandler{
 
   private void initComponents(JBProfile activeProfile){
     //HomeButtonHandler
-    EventHandler<ActionEvent> homeButtonHandler=new EventHandler<ActionEvent>(){
+    EventHandler<ActionEvent> homeButtonHandler=new EventHandler<>(){
       @Override
       public void handle(ActionEvent actionEvent){
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
@@ -75,7 +75,7 @@ public class SidebarHandler{
       }
     };
     //SearchButtonHandler
-    EventHandler<ActionEvent> searchButtonHandler=new EventHandler<ActionEvent>(){
+    EventHandler<ActionEvent> searchButtonHandler=new EventHandler<>(){
       @Override
       public void handle(ActionEvent actionEvent){
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
@@ -91,7 +91,7 @@ public class SidebarHandler{
       }
     };
     //ProfileButtonHandler
-    EventHandler<ActionEvent> profileButtonHandler=new EventHandler<ActionEvent>(){
+    EventHandler<ActionEvent> profileButtonHandler=new EventHandler<>(){
       @Override
       public void handle(ActionEvent actionEvent){
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
@@ -108,7 +108,7 @@ public class SidebarHandler{
     };
 
     //QueueButtonHandler
-    EventHandler<ActionEvent> queueButtonHandler=new EventHandler<ActionEvent>(){
+    EventHandler<ActionEvent> queueButtonHandler=new EventHandler<>(){
       @Override
       public void handle(ActionEvent actionEvent){
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
@@ -129,15 +129,14 @@ public class SidebarHandler{
     };
 
     //FavoritesButtonHandler
-    EventHandler<ActionEvent> favoritesButtonHandler=new EventHandler<ActionEvent>(){
+    EventHandler<ActionEvent> favoritesButtonHandler=new EventHandler<>(){
       @Override
       public void handle(ActionEvent actionEvent){
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        Playlist favorites=CollectionManagerFactory.getInstance().getCollectionManager().getFavorites(activeProfile);
-        CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, favorites);
+        CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, CollectionManagerFactory.getInstance().getCollectionManager().getFavorites(activeProfile));
         CollectionViewHandler collectionViewHandler=new CollectionViewHandler(collectionViewGUI, activeProfile);
         AudioTableHandler.getInstance((AudioTable)collectionViewGUI.getAudioTable());
-
+        AudioTableHandler.setQueue(false);
         Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getFavoritesButton());
 
         Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
@@ -149,7 +148,7 @@ public class SidebarHandler{
     };
 
     //PlaylistButtonHandler
-    EventHandler<ActionEvent> playlistsButtonHandler=new EventHandler<ActionEvent>(){
+    EventHandler<ActionEvent> playlistsButtonHandler=new EventHandler<>(){
       @Override
       public void handle(ActionEvent actionEvent){
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
@@ -167,7 +166,7 @@ public class SidebarHandler{
     };
 
     //AlbumButtonHandler
-    EventHandler<ActionEvent> albumsButtonHandler=new EventHandler<ActionEvent>(){
+    EventHandler<ActionEvent> albumsButtonHandler=new EventHandler<>(){
       @Override
       public void handle(ActionEvent actionEvent){
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
@@ -194,7 +193,7 @@ public class SidebarHandler{
     };
 
     //PodcastButtonHandler
-    EventHandler<ActionEvent> podcastsButtonHandler=new EventHandler<ActionEvent>(){
+    EventHandler<ActionEvent> podcastsButtonHandler=new EventHandler<>(){
       @Override
       public void handle(ActionEvent actionEvent){
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();

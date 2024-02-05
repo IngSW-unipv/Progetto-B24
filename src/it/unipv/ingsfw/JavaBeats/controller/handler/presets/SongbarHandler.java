@@ -7,6 +7,7 @@ import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.Song;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.view.library.CollectionViewGUI;
+import it.unipv.ingsfw.JavaBeats.view.presets.AudioTable;
 import it.unipv.ingsfw.JavaBeats.view.presets.Songbar;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -107,9 +108,14 @@ public class SongbarHandler{
         JBAudio tmpAudio=currentAudio;
         PlayerManagerFactory.getInstance().getPlayerManager().play();
 
+        /* If I'm displaying the Queue, when I pass to the next song I update the GUI by obtaining the Queue from the player manager.
+         *  In addition, I check if this is the last song of a randomized collection then I change the random button color by reloading the GUI.
+         *  */
         if(AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING!=null && AudioTableHandler.isQueue()){
-          AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.setItems(FXCollections.observableArrayList(PlayerManagerFactory.getInstance().getPlayerManager().getQueue()));
-          AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.refresh();
+          CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, PlayerManagerFactory.getInstance().getPlayerManager().getQueue());
+          CollectionViewHandler collectionViewHandler=new CollectionViewHandler(collectionViewGUI, activeProfile);
+          ((Stage)AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.getScene().getWindow()).setScene(collectionViewGUI.getScene());
+          AudioTableHandler.getInstance((AudioTable)collectionViewGUI.getAudioTable());
         }else if(PlayerManagerFactory.getInstance().getPlayerManager().getCurrentCollectionPlaying()==null && PlayerManagerFactory.getInstance().getPlayerManager().isRandomized()){
           PlayerManagerFactory.getInstance().getPlayerManager().setRandomized(false);
 
@@ -117,6 +123,7 @@ public class SongbarHandler{
           CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, tmpAudio.getMetadata().getCollection());
           CollectionViewHandler collectionViewHandler=new CollectionViewHandler(collectionViewGUI, activeProfile);
           ((Stage)AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.getScene().getWindow()).setScene(collectionViewGUI.getScene());
+          AudioTableHandler.getInstance((AudioTable)collectionViewGUI.getAudioTable());
         }//end-if
       }
     };

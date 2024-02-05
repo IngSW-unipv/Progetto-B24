@@ -24,6 +24,8 @@ public class PlayerManager{
   private static JBAudio CURRENT_AUDIO_PLAYING=null;
   private static JBCollection CURRENT_COLLECTION_PLAYING=null;
   private static boolean randomized=false;
+  private static boolean collectionLooping=false;
+  private static boolean audioLooping=false;
   private static final LinkedList<JBAudio> queue=new LinkedList<>();
   private final FXAdapter adapter=FXAdapterFactory.getInstance().getFXAdapter();
 
@@ -82,6 +84,7 @@ public class PlayerManager{
     }else{
       CURRENT_AUDIO_PLAYING=null;
       CURRENT_COLLECTION_PLAYING=null;
+      randomized=false;
     }//end-if
 
     SidebarHandler.getInstance(activeProfile);
@@ -106,6 +109,8 @@ public class PlayerManager{
   }
 
   public void play(JBCollection jbCollection){
+    Collections.reverse(jbCollection.getTrackList());
+
     queue.clear();
     if(CURRENT_AUDIO_PLAYING!=null){
       CURRENT_AUDIO_PLAYING.getMediaPlayer().dispose();
@@ -127,8 +132,12 @@ public class PlayerManager{
     }//end-if
   }
 
-  public void playFromQueue(){
-    
+  public void playFromQueue(JBAudio jbAudio){
+    LinkedList<JBAudio> newQueue=new LinkedList<>(queue.subList(queue.indexOf(jbAudio), queue.size()));
+    queue.clear();
+    queue.addAll(newQueue);
+
+    play();
   }
 
   /* Handles SongBar random button */
