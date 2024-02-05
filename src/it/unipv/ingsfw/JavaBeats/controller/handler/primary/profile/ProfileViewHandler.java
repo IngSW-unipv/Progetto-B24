@@ -28,9 +28,9 @@ public class ProfileViewHandler {
     /*---------------------------------------*/
     //Costruttori
     /*---------------------------------------*/
-    public ProfileViewHandler(ProfileViewGUI gui, JBProfile originalProfile, JBAudio currentAudio) {
+    public ProfileViewHandler(ProfileViewGUI gui, JBProfile originalProfile) {
         this.gui = gui;
-        initComponents(originalProfile, currentAudio);
+        initComponents(originalProfile);
     }
     /*---------------------------------------*/
     //Getter/Setter
@@ -39,7 +39,7 @@ public class ProfileViewHandler {
     /*---------------------------------------*/
     //Metodi
     /*---------------------------------------*/
-    private void initComponents(JBProfile originalProfile, JBAudio currentAudio) {
+    private void initComponents(JBProfile originalProfile) {
         EventHandler<ActionEvent> editButtonHandler = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -75,12 +75,12 @@ public class ProfileViewHandler {
                     JBProfile switchedProfile = ProfileManagerFactory.getInstance().getProfileManager().switchProfileType(originalProfile);
                     /* Re-instantiating Sidebar, SidebarHandler, Songbar and SongbarHandler*/
                     Sidebar.getInstance(switchedProfile);
-                    SidebarHandler.getInstance(switchedProfile, currentAudio);
+                    SidebarHandler.getInstance(switchedProfile);
                     Songbar.getInstance();
 //          SongbarHandler.getInstance(switchedProfile);
 
-                    ProfileViewGUI profileViewGUI = new ProfileViewGUI(switchedProfile, currentAudio, switchedProfile);
-                    ProfileViewHandler profileViewHandler = new ProfileViewHandler(profileViewGUI, switchedProfile, currentAudio);
+                    ProfileViewGUI profileViewGUI = new ProfileViewGUI(switchedProfile, switchedProfile);
+                    ProfileViewHandler profileViewHandler = new ProfileViewHandler(profileViewGUI, switchedProfile);
 
                     Dimension2D previousDimension = new Dimension2D(stage.getWidth(), stage.getHeight());
                     stage.setScene(profileViewGUI.getScene());

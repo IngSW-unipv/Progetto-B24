@@ -32,19 +32,19 @@ public class HomePageHandler {
     //Getters and setters
 
     //Costruttore
-    public HomePageHandler(HomePageGUI homePageGUI, JBProfile activeProfile, JBAudio currentAudio) {
+    public HomePageHandler(HomePageGUI homePageGUI, JBProfile activeProfile) {
         this.homePageGUI = homePageGUI;
-        initComponents(activeProfile, currentAudio);
+        initComponents(activeProfile);
 
     }
 
-    private void initComponents(JBProfile activeProfile, JBAudio currentAudio) {
+    private void initComponents(JBProfile activeProfile) {
         EventHandler<ActionEvent> profileButtonHandler = new EventHandler<>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-                ProfileViewGUI profileViewGUI = new ProfileViewGUI(activeProfile, currentAudio, activeProfile);
-                ProfileViewHandler profileViewHandler = new ProfileViewHandler(profileViewGUI, activeProfile, currentAudio);
+                ProfileViewGUI profileViewGUI = new ProfileViewGUI(activeProfile, activeProfile);
+                ProfileViewHandler profileViewHandler = new ProfileViewHandler(profileViewGUI, activeProfile);
                 Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getProfileButton());
 
                 Dimension2D previousDimension = new Dimension2D(stage.getWidth(), stage.getHeight());
@@ -75,7 +75,7 @@ public class HomePageHandler {
                         JBCollection jbCollection = (JBCollection) ijbResearchable;
                         jbCollection.setTrackList(CollectionManagerFactory.getInstance().getCollectionManager().getCollectionAudios(jbCollection, activeProfile));
                         CollectionViewGUI collectionViewGUI = new CollectionViewGUI(activeProfile, jbCollection);
-                        CollectionViewHandler collectionViewHandler = new CollectionViewHandler(collectionViewGUI, activeProfile, currentAudio);
+                        CollectionViewHandler collectionViewHandler = new CollectionViewHandler(collectionViewGUI, activeProfile);
                         AudioTableHandler.getInstance((AudioTable) collectionViewGUI.getAudioTable());
 
                         Dimension2D previousDimension = new Dimension2D(stage.getWidth(), stage.getHeight());
@@ -87,8 +87,8 @@ public class HomePageHandler {
                     } catch (ClassCastException c) {
 
                         JBProfile jbProfile = (JBProfile) ijbResearchable;
-                        ProfileViewGUI profileViewGUI = new ProfileViewGUI(activeProfile, currentAudio, activeProfile);
-                        ProfileViewHandler profileViewHandler = new ProfileViewHandler(profileViewGUI, activeProfile, currentAudio);
+                        ProfileViewGUI profileViewGUI = new ProfileViewGUI(activeProfile, activeProfile);
+                        ProfileViewHandler profileViewHandler = new ProfileViewHandler(profileViewGUI, activeProfile);
                         Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getProfileButton());
 
                         Dimension2D previousDimension = new Dimension2D(stage.getWidth(), stage.getHeight());
@@ -113,9 +113,10 @@ public class HomePageHandler {
         homePageGUI.getHome().getCollectionsHBox().getChildren().forEach(a -> a.setOnMouseClicked(audioCardClickHandler));
         homePageGUI.getHome().getArtistsHBox().getChildren().forEach(a -> a.setOnMouseClicked(audioCardClickHandler));
 
-        SidebarHandler.getInstance(activeProfile, currentAudio);
+        SidebarHandler.getInstance(activeProfile);
         Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getHomeButton());
-        SongbarHandler.getInstance(activeProfile, currentAudio);
+
+        SongbarHandler.getInstance(activeProfile, PlayerManagerFactory.getInstance().getPlayerManager().getCurrentAudioPlaying());
     }
 
 }

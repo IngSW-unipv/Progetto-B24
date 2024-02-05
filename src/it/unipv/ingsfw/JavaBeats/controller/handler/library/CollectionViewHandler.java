@@ -59,9 +59,9 @@ public class CollectionViewHandler {
     /*---------------------------------------*/
     //Costruttori
     /*---------------------------------------*/
-    public CollectionViewHandler(CollectionViewGUI gui, JBProfile activeProfile, JBAudio currentAudio) {
+    public CollectionViewHandler(CollectionViewGUI gui, JBProfile activeProfile) {
         this.gui = gui;
-        initComponents(activeProfile, currentAudio);
+        initComponents(activeProfile);
     }
     /*---------------------------------------*/
     //Getter/Setter
@@ -70,7 +70,7 @@ public class CollectionViewHandler {
     /*---------------------------------------*/
     //Metodi
     /*---------------------------------------*/
-    private void initComponents(JBProfile activeProfile, JBAudio currentAudio) {
+    private void initComponents(JBProfile activeProfile) {
         EventHandler<ActionEvent> editButtonHandler = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -94,7 +94,6 @@ public class CollectionViewHandler {
                 gui.getCollectionHeader().getButtonRandom().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/EmptyRandom.png", true)));
                 Songbar.getInstance().getButtonRandom().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/EmptyRandom.png", true)));
 
-                stage.setScene(gui.update(activeProfile, PlayerManagerFactory.getInstance().getPlayerManager().getCurrentAudioPlaying()));
             }
         };
         EventHandler<ActionEvent> randomButtonHandler = new EventHandler<ActionEvent>() {
@@ -123,8 +122,8 @@ public class CollectionViewHandler {
                 } else {
 
                     CollectionManagerFactory.getInstance().getCollectionManager().removeCollection(gui.getJbCollection());
-                    HomePageGUI homePageGUI = new HomePageGUI(activeProfile, currentAudio);
-                    HomePageHandler homePageHandler = new HomePageHandler(homePageGUI, activeProfile, currentAudio);
+                    HomePageGUI homePageGUI = new HomePageGUI(activeProfile);
+                    HomePageHandler homePageHandler = new HomePageHandler(homePageGUI, activeProfile);
                     Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getHomeButton());
 
                     Dimension2D previousDimension = new Dimension2D(stage.getWidth(), stage.getHeight());
@@ -179,7 +178,7 @@ public class CollectionViewHandler {
                 }//end-foreach
 
                 CollectionViewGUI collectionViewGUI = new CollectionViewGUI(activeProfile, gui.getJbCollection());
-                CollectionViewHandler collectionViewHandler = new CollectionViewHandler(collectionViewGUI, activeProfile, currentAudio);
+                CollectionViewHandler collectionViewHandler = new CollectionViewHandler(collectionViewGUI, activeProfile);
                 AudioTableHandler.getInstance((AudioTable) collectionViewGUI.getAudioTable());
 
             }
