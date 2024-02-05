@@ -2,7 +2,7 @@ package it.unipv.ingsfw.JavaBeats.controller.handler.primary.home;
 
 import it.unipv.ingsfw.JavaBeats.controller.factory.CollectionManagerFactory;
 import it.unipv.ingsfw.JavaBeats.controller.factory.PlayerManagerFactory;
-import it.unipv.ingsfw.JavaBeats.controller.handler.ProfileViewHandler;
+import it.unipv.ingsfw.JavaBeats.controller.handler.primary.profile.ProfileViewHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.library.CollectionViewHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.presets.AudioTableHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.presets.SidebarHandler;
@@ -10,22 +10,18 @@ import it.unipv.ingsfw.JavaBeats.controller.handler.presets.SongbarHandler;
 import it.unipv.ingsfw.JavaBeats.model.IJBResearchable;
 import it.unipv.ingsfw.JavaBeats.model.collection.JBCollection;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
-import it.unipv.ingsfw.JavaBeats.model.playable.audio.Song;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.view.library.CollectionViewGUI;
 import it.unipv.ingsfw.JavaBeats.view.presets.AudioCard;
 import it.unipv.ingsfw.JavaBeats.view.presets.AudioTable;
 import it.unipv.ingsfw.JavaBeats.view.presets.Sidebar;
-import it.unipv.ingsfw.JavaBeats.view.presets.Songbar;
 import it.unipv.ingsfw.JavaBeats.view.primary.home.HomePageGUI;
 import it.unipv.ingsfw.JavaBeats.view.primary.profile.ProfileViewGUI;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Dimension2D;
-import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 public class HomePageHandler {

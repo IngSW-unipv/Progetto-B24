@@ -5,7 +5,7 @@ import it.unipv.ingsfw.JavaBeats.controller.factory.PlayerManagerFactory;
 import it.unipv.ingsfw.JavaBeats.controller.handler.library.CollectionLibraryHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.library.CollectionViewHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.primary.home.HomePageHandler;
-import it.unipv.ingsfw.JavaBeats.controller.handler.ProfileViewHandler;
+import it.unipv.ingsfw.JavaBeats.controller.handler.primary.profile.ProfileViewHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.primary.search.SearchPageHandler;
 import it.unipv.ingsfw.JavaBeats.model.EJBENTITY;
 import it.unipv.ingsfw.JavaBeats.model.collection.JBCollection;

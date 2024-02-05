@@ -2,11 +2,9 @@ package it.unipv.ingsfw.JavaBeats.controller.handler.library;
 
 import it.unipv.ingsfw.JavaBeats.controller.factory.CollectionManagerFactory;
 import it.unipv.ingsfw.JavaBeats.controller.factory.PlayerManagerFactory;
-import it.unipv.ingsfw.JavaBeats.controller.factory.ProfileManagerFactory;
+import it.unipv.ingsfw.JavaBeats.controller.handler.presets.dialogs.EditPlaylistDialogHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.primary.home.HomePageHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.presets.AudioTableHandler;
-import it.unipv.ingsfw.JavaBeats.controller.handler.primary.home.HomePageHandler;
-import it.unipv.ingsfw.JavaBeats.controller.manager.CollectionManager;
 import it.unipv.ingsfw.JavaBeats.model.collection.Playlist;
 import it.unipv.ingsfw.JavaBeats.model.collection.Podcast;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.Episode;
@@ -81,7 +79,7 @@ public class CollectionViewHandler {
 
                 Playlist p = (Playlist) gui.getJbCollection();
                 EditPlaylistDialog dialog = new EditPlaylistDialog(stage, p, (Playlist) p.getCopy());
-                EditPlaylistDialogController editPlaylistDialogController = new EditPlaylistDialogController(dialog);
+                EditPlaylistDialogHandler editPlaylistDialogHandler = new EditPlaylistDialogHandler(dialog);
                 dialog.showAndWait();
                 gui.getGp().setEffect(null);
             }
