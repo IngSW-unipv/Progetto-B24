@@ -1,13 +1,17 @@
 package it.unipv.ingsfw.JavaBeats.controller.handler.presets;
 import it.unipv.ingsfw.JavaBeats.controller.factory.CollectionManagerFactory;
 import it.unipv.ingsfw.JavaBeats.controller.factory.PlayerManagerFactory;
+import it.unipv.ingsfw.JavaBeats.controller.handler.library.CollectionViewHandler;
+import it.unipv.ingsfw.JavaBeats.controller.manager.CollectionManager;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.Song;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
+import it.unipv.ingsfw.JavaBeats.view.library.CollectionViewGUI;
 import it.unipv.ingsfw.JavaBeats.view.presets.Songbar;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Slider;
@@ -16,6 +20,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.media.MediaPlayer;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.util.Arrays;
@@ -99,7 +104,20 @@ public class SongbarHandler{
       @Override
       public void run(){
         /* I let the playerManager figure what to do next */
+        JBAudio tmpAudio=currentAudio;
         PlayerManagerFactory.getInstance().getPlayerManager().play();
+
+        if(AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING!=null && AudioTableHandler.isQueue()){
+          AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.setItems(FXCollections.observableArrayList(PlayerManagerFactory.getInstance().getPlayerManager().getQueue()));
+          AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.refresh();
+        }else if(PlayerManagerFactory.getInstance().getPlayerManager().getCurrentCollectionPlaying()==null && PlayerManagerFactory.getInstance().getPlayerManager().isRandomized()){
+          PlayerManagerFactory.getInstance().getPlayerManager().setRandomized(false);
+
+          tmpAudio.getMetadata().getCollection().setTrackList(CollectionManagerFactory.getInstance().getCollectionManager().getCollectionAudios(tmpAudio.getMetadata().getCollection(), activeProfile));
+          CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, tmpAudio.getMetadata().getCollection());
+          CollectionViewHandler collectionViewHandler=new CollectionViewHandler(collectionViewGUI, activeProfile);
+          ((Stage)AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.getScene().getWindow()).setScene(collectionViewGUI.getScene());
+        }//end-if
       }
     };
     InvalidationListener mediaPlayerDurationListener=new InvalidationListener(){
@@ -166,6 +184,9 @@ public class SongbarHandler{
         if(PlayerManagerFactory.getInstance().getPlayerManager().isRandomized()){
           Songbar.getInstance().getButtonRandom().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/FullRandom.png", true)));
           if(AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING!=null){
+            if(AudioTableHandler.isQueue()){
+              AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.setItems(FXCollections.observableArrayList(PlayerManagerFactory.getInstance().getPlayerManager().getQueue()));
+            }//end-if
             AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.refresh();
           }//end-if
         }//end-if

@@ -7,6 +7,7 @@ public class AudioTableHandler{
   /*---------------------------------------*/
   private static AudioTableHandler instance=null;
   public static AudioTable CURRENT_AUDIOTABLE_SHOWING=null;
+  public static boolean queue=false;
 
   /*---------------------------------------*/
   //Costruttori
@@ -26,6 +27,12 @@ public class AudioTableHandler{
       instance=new AudioTableHandler(currentAudioTable);
     }//end-if
     return instance;
+  }
+  public static void setQueue(boolean queue){
+    AudioTableHandler.queue=queue;
+  }
+  public static boolean isQueue(){
+    return queue;
   }
   /*---------------------------------------*/
   //Metodi
