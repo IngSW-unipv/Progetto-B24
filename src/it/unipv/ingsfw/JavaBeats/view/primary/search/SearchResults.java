@@ -45,6 +45,7 @@ public class SearchResults extends ScrollPanePreset {
 
     private EnumMap<EJBENTITY, ArrayList<IJBResearchable>> searchedMap;
     private ArrayList<ChoiceBox<Playlist>> choiceBoxArrayList = new ArrayList<>();
+    private ArrayList<ChoiceBox<Playlist>> episodesChoiceBoxArrayList = new ArrayList<>();
 
 
     /*---------------------------------------*/
@@ -65,6 +66,10 @@ public class SearchResults extends ScrollPanePreset {
 
     public ArrayList<ChoiceBox<Playlist>> getChoiceBoxArrayList() {
         return choiceBoxArrayList;
+    }
+
+    public ArrayList<ChoiceBox<Playlist>> getEpisodesChoiceBoxArrayList() {
+        return episodesChoiceBoxArrayList;
     }
 
     /*---------------------------------------*/
@@ -303,8 +308,33 @@ public class SearchResults extends ScrollPanePreset {
 
         HBox episodesHBox = new HBox(50);
 
+        //Choicebox for episodes
         for (IJBResearchable ijbResearchable : searchedMap.get(EJBENTITY.EPISODE)) {
-            episodesHBox.getChildren().add(new AudioCard(ijbResearchable));
+
+            Label chAddToLabel = new Label("Add to");
+            chAddToLabel.setFont(fontAddTo);
+            chAddToLabel.setTextFill(Color.LIGHTGRAY);
+
+            ChoiceBox<Playlist> ch = new ChoiceBox<Playlist>();
+            ch.getItems().add(activeProfile.getFavorites());
+            ch.getItems().add(new Playlist(-1, "Queue", activeProfile));
+
+            for (JBCollection collection : profilePlaylists) {
+                ch.getItems().add((Playlist) collection);
+            }
+            episodesChoiceBoxArrayList.add(ch);
+
+            ch.getStylesheets().add("it/unipv/ingsfw/JavaBeats/view/resources/css/choicebox.css");
+
+            Button choiceButton = new Button();
+            choiceButton.setGraphic(ch);
+            choiceButton.setStyle("-fx-background-color: transparent");
+            HBox.setMargin(choiceButton, new Insets(0, 20, 0, 0));
+
+            HBox chHbox = new HBox(ch);
+            chHbox.setAlignment(Pos.CENTER);
+
+            episodesHBox.getChildren().add(new VBox(10, new AudioCard(ijbResearchable), chHbox));
         }
 
         ScrollPanePreset episodesScroll = new ScrollPanePreset(episodesHBox);
