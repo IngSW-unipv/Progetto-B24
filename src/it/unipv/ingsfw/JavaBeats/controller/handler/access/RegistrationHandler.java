@@ -3,6 +3,7 @@ package it.unipv.ingsfw.JavaBeats.controller.handler.access;
 import it.unipv.ingsfw.JavaBeats.controller.factory.PlayerManagerFactory;
 import it.unipv.ingsfw.JavaBeats.controller.factory.ProfileManagerFactory;
 import it.unipv.ingsfw.JavaBeats.controller.handler.primary.home.HomePageHandler;
+import it.unipv.ingsfw.JavaBeats.exceptions.UsernameAlreadyTakenException;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.model.profile.User;
@@ -76,22 +77,34 @@ public class RegistrationHandler {
                 } else {
                     gui.getErrorMessage().setText("");
 
-                    JBProfile profile = new User(gui.getUsername().getText(), gui.getMail().getText(), gui.getPassword2().getText(), gui.getName().getText(), gui.getSurname().getText());
 
-                    //Register the profile exists or handles the exception
-                    activeProfile = ProfileManagerFactory.getInstance().getProfileManager().registration(profile);
+                    JBProfile profile = new User(gui.getUsername().getText(), null, null);
 
-                    //Goes to HomePage
-                    Stage s = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-                    HomePageGUI homePageGUI = new HomePageGUI(activeProfile);
-                    HomePageHandler homePageHandler = new HomePageHandler(homePageGUI, activeProfile);
+                    try {
 
-                    //Saving previous dimension and using it for the next page
-                    Dimension2D previousDimension = new Dimension2D(s.getWidth(), s.getHeight());
-                    s.setScene(homePageGUI.getScene());
-                    s.setTitle("HomePage");
-                    s.setWidth(previousDimension.getWidth());
-                    s.setHeight(previousDimension.getHeight());
+                        ProfileManagerFactory.getInstance().getProfileManager().checkIfUsernameAlreadyExists(profile);
+
+                        //Register the profile exists or handles the exception
+                        JBProfile jbprofile = new User(gui.getUsername().getText(), gui.getMail().getText(), gui.getPassword2().getText(), gui.getName().getText(), gui.getSurname().getText());
+                        activeProfile = ProfileManagerFactory.getInstance().getProfileManager().registration(jbprofile);
+
+                        //Goes to HomePage
+                        Stage s = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+                        HomePageGUI homePageGUI = new HomePageGUI(activeProfile);
+                        HomePageHandler homePageHandler = new HomePageHandler(homePageGUI, activeProfile);
+
+                        //Saving previous dimension and using it for the next page
+                        Dimension2D previousDimension = new Dimension2D(s.getWidth(), s.getHeight());
+                        s.setScene(homePageGUI.getScene());
+                        s.setTitle("HomePage");
+                        s.setWidth(previousDimension.getWidth());
+                        s.setHeight(previousDimension.getHeight());
+
+                    } catch (UsernameAlreadyTakenException e) {
+                        gui.getErrorMessage().setText(e.getMessage() + "\n" + e.suggestAlternativeUsername(profile));
+                    }
+
+
                 }
             }
         };

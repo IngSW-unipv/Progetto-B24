@@ -54,6 +54,7 @@ public class LoginHandler {
                 } else {
                     gui.getErrorMessage().setText("");
 
+
                     JBProfile profile = new User(gui.getUsername().getText(), gui.getUsername().getText(), gui.getPassword().getText());
 
                     //Checks if the profile exists or handles the exception

@@ -55,7 +55,7 @@ public class UsernameAlreadyTakenDialog extends Dialog<JBCollection> {
         messageLabel.setPadding(new Insets(0, 0, 10, 0));
 
         //Label alternative username
-        Label alternativeUsernameLabel = new Label(exception.suggestAlternativeUsername(jbProfile.getUsername()));
+        Label alternativeUsernameLabel = new Label(exception.suggestAlternativeUsername(jbProfile));
         alternativeUsernameLabel.setFont(Font.font("Verdana", FontWeight.NORMAL, FontPosture.ITALIC, 20));
         alternativeUsernameLabel.setTextFill(Color.LIGHTGRAY);
         alternativeUsernameLabel.setPadding(new Insets(0, 0, 10, 0));

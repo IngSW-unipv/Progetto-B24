@@ -42,9 +42,9 @@ public class UsernameAlreadyTakenException extends Exception {
      * @param takenUsername username that is already taken as a {@link String}
      * @return suggested alternative username as a{@link String}
      */
-    public String suggestAlternativeUsername(String takenUsername) {
+    public String suggestAlternativeUsername(JBProfile jbProfile) {
         Random random = new Random();
-        return "Try with: " + takenUsername + random.nextInt(100) + " or " + takenUsername + "_" + random.nextInt(100);
+        return "Try with: " + jbProfile.getUsername() + random.nextInt(100) + " or " + jbProfile.getUsername() + "_" + random.nextInt(100);
     }
 
 }
