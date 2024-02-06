@@ -1,9 +1,15 @@
 package it.unipv.ingsfw.JavaBeats.controller.handler.presets.dialogs;
 
+import it.unipv.ingsfw.JavaBeats.controller.factory.ProfileManagerFactory;
+import it.unipv.ingsfw.JavaBeats.exceptions.UsernameAlreadyTakenException;
+import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
+import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.view.presets.dialogs.EditPlaylistDialog;
+import it.unipv.ingsfw.JavaBeats.view.presets.dialogs.UsernameAlreadyTakenDialog;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
+import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -19,13 +25,15 @@ public class EditPlaylistDialogHandler {
     /*---------------------------------------*/
     //Attributi
     /*---------------------------------------*/
-    private EditPlaylistDialog gui;
+    private EditPlaylistDialog playlistDialog;
+    private byte[] fileContent;
+
 
     /*---------------------------------------*/
     //Costruttori
     /*---------------------------------------*/
-    public EditPlaylistDialogHandler(EditPlaylistDialog gui) {
-        this.gui = gui;
+    public EditPlaylistDialogHandler(EditPlaylistDialog playlistDialog) {
+        this.playlistDialog = playlistDialog;
         initComponents();
     }
     /*---------------------------------------*/
@@ -45,22 +53,52 @@ public class EditPlaylistDialogHandler {
                 fileChooser.setTitle("Select playlist image");
                 fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("PNG file", "*png"));
                 File f = fileChooser.showOpenDialog(stage);
-                byte[] fileContent = new byte[(int) f.length()];
-                FileInputStream fileInputStream = null;
-                URL url = null;
-                try {
-                    url = f.toURI().toURL();
-                    fileInputStream = new FileInputStream(f);
-                    fileInputStream.read(fileContent);
-                    fileInputStream.close();
-                    gui.getNewPlaylist().setPicture(new SerialBlob(fileContent));
-                    gui.getCollectionImageView().setImage(new Image(url.toExternalForm(), true));
-                } catch (IOException | SQLException e) {
-                    throw new RuntimeException(e);
-                }//end-try
+                if (f != null) {
+                    byte[] fileContent = new byte[(int) f.length()];
+                    FileInputStream fileInputStream = null;
+                    URL url = null;
+                    try {
+                        url = f.toURI().toURL();
+                        fileInputStream = new FileInputStream(f);
+                        fileInputStream.read(fileContent);
+                        fileInputStream.close();
+                        playlistDialog.getNewPlaylist().setPicture(new SerialBlob(fileContent));
+                        playlistDialog.getCollectionImageView().setImage(new Image(url.toExternalForm(), true));
+                    } catch (IOException | SQLException e) {
+                        throw new RuntimeException(e);
+                    }//end-try
+                }
             }
         };
-        gui.getInputImageButton().setOnAction(inputImageButtonHandler);
+
+        EventHandler<ActionEvent> saveButtonHandler = new EventHandler<>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+
+
+                try {
+                    if (fileContent != null)
+                        playlistDialog.getNewPlaylist().setPicture(new SerialBlob(fileContent));
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }//end-try
+
+                playlistDialog.getNewPlaylist().setName(playlistDialog.getNameTextField().getText());
+                playlistDialog.getNewPlaylist().setVisible(!playlistDialog.getCheckBox().isSelected());
+
+            }
+        };
+        EventHandler<ActionEvent> cancelButtonHandler = new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                System.out.println("Premuto cancel");
+            }
+        };
+
+
+        playlistDialog.getInputImageButton().setOnAction(inputImageButtonHandler);
+        playlistDialog.getSaveButton().setOnAction(saveButtonHandler);
+        playlistDialog.getCancelButton().setOnAction(cancelButtonHandler);
     }
     /*---------------------------------------*/
 }

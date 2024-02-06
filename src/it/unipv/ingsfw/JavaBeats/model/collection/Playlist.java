@@ -3,8 +3,11 @@ package it.unipv.ingsfw.JavaBeats.model.collection;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 
+import java.io.IOException;
 import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Class representing a Playlist containing {@link it.unipv.ingsfw.JavaBeats.model.playable.audio.Song} and {@link it.unipv.ingsfw.JavaBeats.model.playable.audio.Episode} and created by a {@link it.unipv.ingsfw.JavaBeats.model.profile.User} or an {@link it.unipv.ingsfw.JavaBeats.model.profile.Artist}.
@@ -106,5 +109,16 @@ public class Playlist extends JBCollection {
     public String toString() {
         return this.getName();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        Playlist playlist = (Playlist) obj;
+        if (super.getId() == playlist.getId() && super.getName().equals(playlist.getName()) && super.getCreator().equals(playlist.getCreator()) && super.getPicture().equals(playlist.getPicture()) && this.trackList.equals(playlist.getTrackList()) && this.isVisible == playlist.isVisible) {
+            return true;
+        } else {
+            return false;
+        }//end-if
+    }
+
 
 }

@@ -41,6 +41,8 @@ public class CollectionHeader extends VBox {
 
     private Button buttonBin;
     private Button addEpisodeButton;
+    private Label collectionTitle;
+    private ImageView collectionImageView;
 
     /*---------------------------------------*/
     //Costruttori
@@ -79,6 +81,14 @@ public class CollectionHeader extends VBox {
 
     public Button getAddEpisodeButton() {
         return addEpisodeButton;
+    }
+
+    public Label getCollectionTitle() {
+        return collectionTitle;
+    }
+
+    public ImageView getCollectionImageView() {
+        return collectionImageView;
     }
 
     /*---------------------------------------*/
@@ -155,7 +165,7 @@ public class CollectionHeader extends VBox {
 
     private void initComponents(JBProfile activeProfile, JBCollection jbCollection) {
 
-        ImageView collectionImageView = null;
+        collectionImageView = null;
         try {
             if (jbCollection.equals(activeProfile.getFavorites())) {
                 collectionImageView = new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/RecordBig.png", true));
@@ -189,7 +199,7 @@ public class CollectionHeader extends VBox {
         collectionLabel.setTextFill(Color.LIGHTGRAY);
         collectionLabel.setFont(fontCollectionInfo);
 
-        Label collectionTitle = new Label(jbCollection.getName());
+        collectionTitle = new Label(jbCollection.getName());
         collectionTitle.setFont(fontTitle);
         collectionTitle.setTextFill(Color.LIGHTGRAY);
 
