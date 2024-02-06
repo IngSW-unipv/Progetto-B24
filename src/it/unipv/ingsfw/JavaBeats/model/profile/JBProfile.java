@@ -3,7 +3,12 @@ package it.unipv.ingsfw.JavaBeats.model.profile;
 import it.unipv.ingsfw.JavaBeats.model.IJBResearchable;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.collection.Playlist;
+import javafx.scene.image.Image;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
@@ -19,7 +24,7 @@ import java.util.Arrays;
  * @see User
  * @see Artist
  */
-public abstract class JBProfile implements IJBResearchable {
+public abstract class JBProfile implements IJBResearchable{
 
   //ATTRIBUTES:
   private String username, mail, password, name, surname, biography;
@@ -33,16 +38,16 @@ public abstract class JBProfile implements IJBResearchable {
    * Complete constructor to initialize all parameters.
    * Note that an abstract class cannot be instantiated, this constructor will be used by classes that extend JBProfile to initialize parameters.
    */
-  protected JBProfile(String username, String mail, String password, String name, String surname, String biography, Blob profilePicture, ArrayList<JBAudio> listeningHistory, Playlist favorites) {
-    this.username = username;
-    this.mail = mail;
-    this.password = password;
-    this.name = name;
-    this.surname = surname;
-    this.biography = biography;
-    this.profilePicture = profilePicture;
-    this.listeningHistory = listeningHistory;
-    this.favorites = favorites;
+  protected JBProfile(String username, String mail, String password, String name, String surname, String biography, Blob profilePicture, ArrayList<JBAudio> listeningHistory, Playlist favorites){
+    this.username=username;
+    this.mail=mail;
+    this.password=password;
+    this.name=name;
+    this.surname=surname;
+    this.biography=biography;
+    this.profilePicture=profilePicture;
+    this.listeningHistory=listeningHistory;
+    this.favorites=favorites;
   }
 
 
@@ -52,7 +57,7 @@ public abstract class JBProfile implements IJBResearchable {
    *
    * @return username
    */
-  public String getUsername() {
+  public String getUsername(){
     return username;
   }
 
@@ -61,7 +66,7 @@ public abstract class JBProfile implements IJBResearchable {
    *
    * @return mail
    */
-  public String getMail() {
+  public String getMail(){
     return mail;
   }
 
@@ -70,7 +75,7 @@ public abstract class JBProfile implements IJBResearchable {
    *
    * @return password
    */
-  public String getPassword() {
+  public String getPassword(){
     return password;
   }
 
@@ -79,7 +84,7 @@ public abstract class JBProfile implements IJBResearchable {
    *
    * @return name
    */
-  public String getName() {
+  public String getName(){
     return name;
   }
 
@@ -88,7 +93,7 @@ public abstract class JBProfile implements IJBResearchable {
    *
    * @return surname
    */
-  public String getSurname() {
+  public String getSurname(){
     return surname;
   }
 
@@ -97,7 +102,7 @@ public abstract class JBProfile implements IJBResearchable {
    *
    * @return biography
    */
-  public String getBiography() {
+  public String getBiography(){
     return biography;
   }
 
@@ -106,7 +111,7 @@ public abstract class JBProfile implements IJBResearchable {
    *
    * @return profile picture
    */
-  public Blob getProfilePicture() {
+  public Blob getProfilePicture(){
     return profilePicture;
   }
 
@@ -115,7 +120,7 @@ public abstract class JBProfile implements IJBResearchable {
    *
    * @return listening history
    */
-  public ArrayList<JBAudio> getListeningHistory() {
+  public ArrayList<JBAudio> getListeningHistory(){
     return listeningHistory;
   }
 
@@ -124,7 +129,7 @@ public abstract class JBProfile implements IJBResearchable {
    *
    * @return listening history
    */
-  public Playlist getFavorites() {
+  public Playlist getFavorites(){
     return favorites;
   }
 
@@ -143,8 +148,8 @@ public abstract class JBProfile implements IJBResearchable {
    *
    * @param username new username
    */
-  public void setUsername(String username) {
-    this.username = username;
+  public void setUsername(String username){
+    this.username=username;
   }
 
   /**
@@ -152,8 +157,8 @@ public abstract class JBProfile implements IJBResearchable {
    *
    * @param mail new mail
    */
-  public void setMail(String mail) {
-    this.mail = mail;
+  public void setMail(String mail){
+    this.mail=mail;
   }
 
   /**
@@ -161,8 +166,8 @@ public abstract class JBProfile implements IJBResearchable {
    *
    * @param password new password
    */
-  public void setPassword(String password) {
-    this.password = password;
+  public void setPassword(String password){
+    this.password=password;
   }
 
   /**
@@ -170,8 +175,8 @@ public abstract class JBProfile implements IJBResearchable {
    *
    * @param name new name
    */
-  public void setName(String name) {
-    this.name = name;
+  public void setName(String name){
+    this.name=name;
   }
 
   /**
@@ -179,8 +184,8 @@ public abstract class JBProfile implements IJBResearchable {
    *
    * @param surname new surname
    */
-  public void setSurname(String surname) {
-    this.surname = surname;
+  public void setSurname(String surname){
+    this.surname=surname;
   }
 
   /**
@@ -188,8 +193,8 @@ public abstract class JBProfile implements IJBResearchable {
    *
    * @param biography new biography
    */
-  public void setBiography(String biography) {
-    this.biography = biography;
+  public void setBiography(String biography){
+    this.biography=biography;
   }
 
   /**
@@ -197,8 +202,8 @@ public abstract class JBProfile implements IJBResearchable {
    *
    * @param profilePicture new profile picture
    */
-  public void setProfilePicture(Blob profilePicture) {
-    this.profilePicture = profilePicture;
+  public void setProfilePicture(Blob profilePicture){
+    this.profilePicture=profilePicture;
   }
 
   /**
@@ -206,8 +211,8 @@ public abstract class JBProfile implements IJBResearchable {
    *
    * @param listeningHistory new listening history
    */
-  public void setListeningHistory(ArrayList<JBAudio> listeningHistory) {
-    this.listeningHistory = listeningHistory;
+  public void setListeningHistory(ArrayList<JBAudio> listeningHistory){
+    this.listeningHistory=listeningHistory;
   }
 
   /**
@@ -215,23 +220,51 @@ public abstract class JBProfile implements IJBResearchable {
    *
    * @param favorites new favorite playlist
    */
-  public void setFavorites(Playlist favorites) {
-    this.favorites = favorites;
+  public void setFavorites(Playlist favorites){
+    this.favorites=favorites;
   }
 
   /**
    * Override of equals to compare {@link JBProfile}.
    */
   @Override
-  public boolean equals(Object obj) {
-    JBProfile profile = (JBProfile) obj;
-    try {
-      if (this.username.equals(profile.getUsername()) && this.mail.equals(profile.getMail()) && this.password.equals(profile.getPassword()) && this.name.equals(profile.getName()) && this.surname.equals(profile.getSurname()) && this.biography.equals(profile.getBiography()) && Arrays.equals(this.profilePicture.getBinaryStream().readAllBytes(), profile.getProfilePicture().getBinaryStream().readAllBytes()) && this.getClass().equals(profile.getClass())) {
+  public boolean equals(Object obj){
+    JBProfile profile=(JBProfile)obj;
+    try{
+      if(this.username.equals(profile.getUsername()) && this.mail.equals(profile.getMail()) && this.password.equals(profile.getPassword()) && this.name.equals(profile.getName()) && this.surname.equals(profile.getSurname()) && this.biography.equals(profile.getBiography()) && Arrays.equals(this.profilePicture.getBinaryStream().readAllBytes(), profile.getProfilePicture().getBinaryStream().readAllBytes()) && this.getClass().equals(profile.getClass())){
         return true;
-      } else {
+      }else{
         return false;
       }//end-if
-    } catch (IOException | SQLException e) {
+    }catch(IOException | SQLException e){
+      throw new RuntimeException(e);
+    }//end-try
+  }
+
+  /**
+   * Returns the profile picture as an {@link Image} of the required size expressed as an int.
+   *
+   * @param size desired picture size
+   * @return scaled collection picture
+   */
+  public Image scalePicture(int size){
+    /*
+    Downscaling the collection image to a size square so that it fits
+    * */
+    //Creating a buffered image from collection picture
+    BufferedImage bufferedImage=null;
+    try{
+      bufferedImage=ImageIO.read(new ByteArrayInputStream(this.profilePicture.getBinaryStream().readAllBytes()));
+      //Downscaling
+      BufferedImage outputImage=new BufferedImage(size, size, BufferedImage.TYPE_INT_RGB);
+      outputImage.getGraphics().drawImage(bufferedImage.getScaledInstance(size, size, java.awt.Image.SCALE_DEFAULT), 0, 0, null);
+
+      //Creating an output stream for reading the byte[]
+      ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
+      ImageIO.write(outputImage, "png", byteArrayOutputStream);
+
+      return new Image(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()));
+    }catch(IOException | SQLException e){
       throw new RuntimeException(e);
     }//end-try
   }

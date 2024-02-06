@@ -65,6 +65,8 @@ public class SidebarHandler{
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
         HomePageGUI homePageGUI=new HomePageGUI(activeProfile);
         HomePageHandler homePageHandler=new HomePageHandler(homePageGUI, activeProfile);
+        AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING=null;
+        AudioTableHandler.setQueue(false);
         Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getHomeButton());
 
         Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
@@ -81,6 +83,8 @@ public class SidebarHandler{
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
         SearchPageGUI searchPageGUI=new SearchPageGUI(activeProfile, null, null);
         SearchPageHandler searchPageHandler=new SearchPageHandler(searchPageGUI, activeProfile);
+        AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING=null;
+        AudioTableHandler.setQueue(false);
         Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getSearchButton());
 
         Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
@@ -97,6 +101,8 @@ public class SidebarHandler{
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
         ProfileViewGUI profileViewGUI=new ProfileViewGUI(activeProfile, activeProfile);
         ProfileViewHandler profileViewHandler=new ProfileViewHandler(profileViewGUI, activeProfile);
+        AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING=null;
+        AudioTableHandler.setQueue(false);
         Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getProfileButton());
 
         Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
@@ -155,6 +161,8 @@ public class SidebarHandler{
         ArrayList<JBCollection> playlists=CollectionManagerFactory.getInstance().getCollectionManager().getPlaylists(activeProfile);
         CollectionLibraryGUI collectionLibraryGUI=new CollectionLibraryGUI(activeProfile, playlists, EJBENTITY.PLAYLIST);
         CollectionLibraryHandler collectionLibraryHandler=new CollectionLibraryHandler(activeProfile, collectionLibraryGUI);
+        AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING=null;
+        AudioTableHandler.setQueue(false);
         Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getPlaylistsButton());
 
         Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
@@ -181,6 +189,8 @@ public class SidebarHandler{
 
         CollectionLibraryGUI collectionLibraryGUI=new CollectionLibraryGUI(activeProfile, albums, EJBENTITY.ALBUM);
         CollectionLibraryHandler collectionLibraryHandler=new CollectionLibraryHandler(activeProfile, collectionLibraryGUI);
+        AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING=null;
+        AudioTableHandler.setQueue(false);
         Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getAlbumButton());
 
 
@@ -208,6 +218,8 @@ public class SidebarHandler{
 
         CollectionLibraryGUI collectionLibraryGUI=new CollectionLibraryGUI(activeProfile, podcasts, EJBENTITY.PODCAST);
         CollectionLibraryHandler collectionLibraryHandler=new CollectionLibraryHandler(activeProfile, collectionLibraryGUI);
+        AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING=null;
+        AudioTableHandler.setQueue(false);
         Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getPodcastButton());
 
 
@@ -227,9 +239,5 @@ public class SidebarHandler{
     Sidebar.getInstance(activeProfile).getPlaylistsButton().setOnAction(playlistsButtonHandler);
     Sidebar.getInstance(activeProfile).getAlbumButton().setOnAction(albumsButtonHandler);
     Sidebar.getInstance(activeProfile).getPodcastButton().setOnAction(podcastsButtonHandler);
-
-
   }
-
-
 }

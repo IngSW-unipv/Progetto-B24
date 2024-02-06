@@ -23,7 +23,7 @@ public class AudioTableHandler{
   public static AudioTableHandler getInstance(AudioTable currentAudioTable){
     if(instance==null){
       instance=new AudioTableHandler(currentAudioTable);
-    }else if(!AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.equals(currentAudioTable)){
+    }else if(AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING!=null && !AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.equals(currentAudioTable)){
       instance=new AudioTableHandler(currentAudioTable);
     }//end-if
     return instance;

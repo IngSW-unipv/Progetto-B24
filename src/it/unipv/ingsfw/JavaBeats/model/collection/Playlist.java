@@ -18,107 +18,109 @@ import java.util.Arrays;
  * @see it.unipv.ingsfw.JavaBeats.model.profile.User
  * @see it.unipv.ingsfw.JavaBeats.model.profile.Artist
  */
-public class Playlist extends JBCollection {
+public class Playlist extends JBCollection{
 
-    //ATTRIBUTES:
-    private ArrayList<JBAudio> trackList;
-    private boolean isVisible;
-
-
-    //CONSTRUCTOR:
-
-    /**
-     * Complete constructor to initialize all parameters.
-     */
-    public Playlist(int id, String name, JBProfile creator, ArrayList<JBAudio> trackList, Blob picture, boolean isVisible) {
-        super(id, name, creator, picture);
-        this.trackList = trackList;
-        this.isVisible = isVisible;
-    }
-
-    /**
-     * Minimal constructor to initialize strictly necessary parameters.
-     */
-    public Playlist(int id, String name, JBProfile creator, ArrayList<JBAudio> trackList) {
-        this(id, name, creator, trackList, null, true);
-    }
-
-    /**
-     * Minimal constructor to initialize strictly necessary parameters. Note that a playlist can exist even if the track list is empty.
-     */
-    public Playlist(int id, String name, JBProfile creator) {
-        this(id, name, creator, null, null, true);
-    }
+  //ATTRIBUTES:
+  private ArrayList<JBAudio> trackList;
+  private boolean isVisible;
 
 
-    //GETTERS:
+  //CONSTRUCTOR:
 
-    /**
-     * Returns the track list of a Playlist as an {@link ArrayList} of {@link JBAudio}.
-     *
-     * @return playlist clone
-     */
-    @Override
-    public ArrayList<JBAudio> getTrackList() {
-        return trackList;
-    }
+  /**
+   * Complete constructor to initialize all parameters.
+   */
+  public Playlist(int id, String name, JBProfile creator, ArrayList<JBAudio> trackList, Blob picture, boolean isVisible){
+    super(id, name, creator, picture);
+    this.trackList=trackList;
+    this.isVisible=isVisible;
+  }
 
-    /**
-     * Returns a clone of the playlist as a {@link JBCollection}.
-     *
-     * @return playlist clone
-     */
-    @Override
-    public JBCollection getCopy() {
-        return new Playlist(this.getId(), this.getName(), this.getCreator(), this.trackList, this.getPicture(), this.isVisible);
-    }
+  /**
+   * Minimal constructor to initialize strictly necessary parameters.
+   */
+  public Playlist(int id, String name, JBProfile creator, ArrayList<JBAudio> trackList){
+    this(id, name, creator, trackList, null, true);
+  }
 
-    public boolean isVisible() {
-        return isVisible;
-    }
-
-
-    //SETTERS:
-
-    /**
-     * Sets an {@link ArrayList} of {@link JBAudio} as the new playlist trackList.
-     *
-     * @param trackList new trackList
-     */
-    @Override
-    public void setTrackList(ArrayList<JBAudio> trackList) {
-        this.trackList = trackList;
-    }
-
-    /**
-     * Sets {@link Boolean} as the new visibility.
-     *
-     * @param visible new visibility
-     */
-    public void setVisible(boolean visible) {
-        isVisible = visible;
-    }
+  /**
+   * Minimal constructor to initialize strictly necessary parameters. Note that a playlist can exist even if the track list is empty.
+   */
+  public Playlist(int id, String name, JBProfile creator){
+    this(id, name, creator, null, null, true);
+  }
 
 
-    //METHODS:
+  //GETTERS:
 
-    /**
-     * Override of toString to return a {@link String} with characterizing information.
-     */
-    @Override
-    public String toString() {
-        return this.getName();
-    }
+  /**
+   * Returns the track list of a Playlist as an {@link ArrayList} of {@link JBAudio}.
+   *
+   * @return playlist clone
+   */
+  @Override
+  public ArrayList<JBAudio> getTrackList(){
+    return trackList;
+  }
 
-    @Override
-    public boolean equals(Object obj) {
-        Playlist playlist = (Playlist) obj;
-        if (super.getId() == playlist.getId() && super.getName().equals(playlist.getName()) && super.getCreator().equals(playlist.getCreator()) && super.getPicture().equals(playlist.getPicture()) && this.trackList.equals(playlist.getTrackList()) && this.isVisible == playlist.isVisible) {
-            return true;
-        } else {
-            return false;
-        }//end-if
-    }
+  /**
+   * Returns a clone of the playlist as a {@link JBCollection}.
+   *
+   * @return playlist clone
+   */
+  @Override
+  public JBCollection getCopy(){
+    return new Playlist(this.getId(), this.getName(), this.getCreator(), new ArrayList<>(this.trackList), this.getPicture(), this.isVisible);
+  }
+
+  public boolean isVisible(){
+    return isVisible;
+  }
 
 
+  //SETTERS:
+
+  /**
+   * Sets an {@link ArrayList} of {@link JBAudio} as the new playlist trackList.
+   *
+   * @param trackList new trackList
+   */
+  @Override
+  public void setTrackList(ArrayList<JBAudio> trackList){
+    this.trackList=trackList;
+  }
+
+  /**
+   * Sets {@link Boolean} as the new visibility.
+   *
+   * @param visible new visibility
+   */
+  public void setVisible(boolean visible){
+    isVisible=visible;
+  }
+
+
+  //METHODS:
+
+  /**
+   * Override of toString to return a {@link String} with characterizing information.
+   */
+  @Override
+  public String toString(){
+    return this.getName();
+  }
+
+  @Override
+  public boolean equals(Object obj){
+    try{
+      Playlist playlist=(Playlist)obj;
+      if(playlist!=null && super.getId()==playlist.getId() && super.getName().equals(playlist.getName()) && super.getCreator().equals(playlist.getCreator()) && Arrays.equals(super.getPicture().getBinaryStream().readAllBytes(), playlist.getPicture().getBinaryStream().readAllBytes()) && this.trackList.equals(playlist.getTrackList()) && this.isVisible==playlist.isVisible){
+        return true;
+      }else{
+        return false;
+      }//end-if
+    }catch(ClassCastException | SQLException | IOException c){
+      return false;
+    }//end-try
+  }
 }

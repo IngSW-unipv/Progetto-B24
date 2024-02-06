@@ -13,7 +13,7 @@ import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
  * @see it.unipv.ingsfw.JavaBeats.model.playable.audio.Episode
  * @see it.unipv.ingsfw.JavaBeats.model.profile.Artist
  */
-public class Podcast extends JBCollection {
+public class Podcast extends JBCollection{
 
   //ATTRIBUTE:
   private ArrayList<JBAudio> trackList;
@@ -24,15 +24,15 @@ public class Podcast extends JBCollection {
   /**
    * Complete constructor to initialize all parameters.
    */
-  public Podcast(int id, String name, JBProfile creator, ArrayList<JBAudio> trackList, Blob picture) {
+  public Podcast(int id, String name, JBProfile creator, ArrayList<JBAudio> trackList, Blob picture){
     super(id, name, creator, picture);
-    this.trackList = trackList;
+    this.trackList=trackList;
   }
 
   /**
    * Minimal constructor to initialize strictly necessary parameters.
    */
-  public Podcast(int id, String name, JBProfile creator, ArrayList<JBAudio> trackList) {
+  public Podcast(int id, String name, JBProfile creator, ArrayList<JBAudio> trackList){
     this(id, name, creator, trackList, null);
   }
 
@@ -45,7 +45,7 @@ public class Podcast extends JBCollection {
    * @return podcast clone
    */
   @Override
-  public ArrayList<JBAudio> getTrackList() {
+  public ArrayList<JBAudio> getTrackList(){
     return trackList;
   }
 
@@ -55,8 +55,8 @@ public class Podcast extends JBCollection {
    * @return podcast clone
    */
   @Override
-  public JBCollection getCopy() {
-    return new Podcast(this.getId(), this.getName(), this.getCreator(), this.trackList, this.getPicture());
+  public JBCollection getCopy(){
+    return new Podcast(this.getId(), this.getName(), this.getCreator(), new ArrayList<>(this.trackList), this.getPicture());
   }
 
 
@@ -68,8 +68,8 @@ public class Podcast extends JBCollection {
    * @param trackList new trackList
    */
   @Override
-  public void setTrackList(ArrayList<JBAudio> trackList) {
-    this.trackList = trackList;
+  public void setTrackList(ArrayList<JBAudio> trackList){
+    this.trackList=trackList;
   }
 
 
@@ -79,8 +79,8 @@ public class Podcast extends JBCollection {
    * Override of toString to return a {@link String} with characterizing information.
    */
   @Override
-  public String toString() {
-    return "PODCAST  -  Name: " + this.getName() + "; Creator Mail: " + this.getCreator().getMail() + ".";
+  public String toString(){
+    return "PODCAST  -  Name: "+this.getName()+"; Creator Mail: "+this.getCreator().getMail()+".";
   }
 
 }

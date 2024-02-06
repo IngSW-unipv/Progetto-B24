@@ -14,100 +14,118 @@ import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import javax.imageio.ImageIO;
 import javax.sql.rowset.serial.SerialBlob;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 
-public class EditProfileDialogHandler {
-    /*---------------------------------------*/
-    //Attributi
-    /*---------------------------------------*/
-    private EditProfileDialog profileDialog;
-    private byte[] fileContent;
+public class EditProfileDialogHandler{
+  /*---------------------------------------*/
+  //Attributi
+  /*---------------------------------------*/
+  private EditProfileDialog profileDialog;
+  private byte[] fileContent;
 
-    /*---------------------------------------*/
-    //Costruttori
-    /*---------------------------------------*/
-    public EditProfileDialogHandler(EditProfileDialog profileDialog) {
-        this.profileDialog = profileDialog;
-        initComponents();
-    }
-    /*---------------------------------------*/
-    //Getter/Setter
-    /*---------------------------------------*/
+  /*---------------------------------------*/
+  //Costruttori
+  /*---------------------------------------*/
+  public EditProfileDialogHandler(EditProfileDialog profileDialog){
+    this.profileDialog=profileDialog;
+    initComponents();
+  }
+  /*---------------------------------------*/
+  //Getter/Setter
+  /*---------------------------------------*/
 
-    /*---------------------------------------*/
-    //Metodi
-    /*---------------------------------------*/
-    private void initComponents() {
-        EventHandler<ActionEvent> inputImageButtonHandler = new EventHandler<>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+  /*---------------------------------------*/
+  //Metodi
+  /*---------------------------------------*/
+  private void initComponents(){
+    EventHandler<ActionEvent> inputImageButtonHandler=new EventHandler<>(){
+      @Override
+      public void handle(ActionEvent actionEvent){
+        Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
 
-                FileChooser fileChooser = new FileChooser();
-                fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("PNG file", "*png"));
-                File f = fileChooser.showOpenDialog(stage);
-                fileContent = new byte[(int) f.length()];
-                FileInputStream fileInputStream = null;
-                URL url = null;
-                try {
-                    url = f.toURI().toURL();
-                    fileInputStream = new FileInputStream(f);
-                    fileInputStream.read(fileContent);
-                    fileInputStream.close();
-                    profileDialog.getProfileImageView().setImage(new Image(url.toExternalForm(), true));
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }//end-try
-            }
-        };
-        EventHandler<ActionEvent> saveButtonHandler = new EventHandler<>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
+        FileChooser fileChooser=new FileChooser();
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("PNG file", "*png"));
+        File f=fileChooser.showOpenDialog(stage);
+        if(f!=null){
+          byte[] fileContent=new byte[(int)f.length()];
+          FileInputStream fileInputStream=null;
+          URL url=null;
+          try{
+            url=f.toURI().toURL();
+            fileInputStream=new FileInputStream(f);
+            fileInputStream.read(fileContent);
+            fileInputStream.close();
 
-                Stage stage = ((Stage) profileDialog.getOwner());
+            BufferedImage bufferedImage=ImageIO.read(url);
+            java.awt.Image resultingImage=bufferedImage.getScaledInstance(250, 250, java.awt.Image.SCALE_DEFAULT);
+            BufferedImage outputImage=new BufferedImage(250, 250, BufferedImage.TYPE_INT_RGB);
+            outputImage.getGraphics().drawImage(resultingImage, 0, 0, null);
 
-                JBProfile tmpProfile = null;
+            ByteArrayOutputStream baos=new ByteArrayOutputStream();
+            ImageIO.write(outputImage, "png", baos);
+            byte[] bytes=baos.toByteArray();
 
-                try {
+            profileDialog.getNewProfile().setProfilePicture(new SerialBlob(bytes));
+            profileDialog.getProfileImageView().setImage(new Image(profileDialog.getNewProfile().getProfilePicture().getBinaryStream()));
+          }catch(IOException | SQLException e){
+            throw new RuntimeException(e);
+          }//end-try
+        }
+      }
+    };
 
-                    tmpProfile = new Artist(profileDialog.getUsernameTextField().getText(), null, null);
-                    ProfileManagerFactory.getInstance().getProfileManager().checkIfUsernameAlreadyExists(tmpProfile);
-                    try {
-                        if (fileContent != null)
-                            profileDialog.getNewProfile().setProfilePicture(new SerialBlob(fileContent));
-                    } catch (SQLException e) {
-                        throw new RuntimeException(e);
-                    }//end-try
-                    profileDialog.getNewProfile().setBiography(profileDialog.getBiography().getText());
-                    profileDialog.getNewProfile().setName(profileDialog.getNameTextField().getText());
-                    profileDialog.getNewProfile().setSurname(profileDialog.getSurnameTextField().getText());
+    
+    EventHandler<ActionEvent> saveButtonHandler=new EventHandler<>(){
+      @Override
+      public void handle(ActionEvent actionEvent){
 
-                    profileDialog.getNewProfile().setUsername(profileDialog.getUsernameTextField().getText());
-                } catch (UsernameAlreadyTakenException e) {
+        Stage stage=((Stage)profileDialog.getOwner());
 
-                    profileDialog.getDialogPane().setEffect(new BoxBlur(10, 10, 10));
+        JBProfile tmpProfile=null;
 
-                    UsernameAlreadyTakenDialog usernameAlreadyTakenDialog = new UsernameAlreadyTakenDialog(stage, e, tmpProfile);
+        try{
 
-                    usernameAlreadyTakenDialog.showAndWait();
-                    profileDialog.getDialogPane().setEffect(null); /* Removing blur effect */
-                }
-            }
-        };
-        EventHandler<ActionEvent> cancelButtonHandler = new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                System.out.println("Premuto cancel");
-            }
-        };
-        profileDialog.getInputImageButton().setOnAction(inputImageButtonHandler);
-        profileDialog.getSaveButton().setOnAction(saveButtonHandler);
-        profileDialog.getCancelButton().setOnAction(cancelButtonHandler);
-    }
-    /*---------------------------------------*/
+          tmpProfile=new Artist(profileDialog.getUsernameTextField().getText(), null, null);
+          ProfileManagerFactory.getInstance().getProfileManager().checkIfUsernameAlreadyExists(tmpProfile);
+          try{
+            if(fileContent!=null)
+              profileDialog.getNewProfile().setProfilePicture(new SerialBlob(fileContent));
+          }catch(SQLException e){
+            throw new RuntimeException(e);
+          }//end-try
+          profileDialog.getNewProfile().setBiography(profileDialog.getBiography().getText());
+          profileDialog.getNewProfile().setName(profileDialog.getNameTextField().getText());
+          profileDialog.getNewProfile().setSurname(profileDialog.getSurnameTextField().getText());
+
+          profileDialog.getNewProfile().setUsername(profileDialog.getUsernameTextField().getText());
+        }catch(UsernameAlreadyTakenException e){
+
+          profileDialog.getDialogPane().setEffect(new BoxBlur(10, 10, 10));
+
+          UsernameAlreadyTakenDialog usernameAlreadyTakenDialog=new UsernameAlreadyTakenDialog(stage, e, tmpProfile);
+
+          usernameAlreadyTakenDialog.showAndWait();
+          profileDialog.getDialogPane().setEffect(null); /* Removing blur effect */
+        }
+      }
+    };
+    EventHandler<ActionEvent> cancelButtonHandler=new EventHandler<ActionEvent>(){
+      @Override
+      public void handle(ActionEvent actionEvent){
+        System.out.println("Premuto cancel");
+      }
+    };
+    profileDialog.getInputImageButton().setOnAction(inputImageButtonHandler);
+    profileDialog.getSaveButton().setOnAction(saveButtonHandler);
+    profileDialog.getCancelButton().setOnAction(cancelButtonHandler);
+  }
+  /*---------------------------------------*/
 }

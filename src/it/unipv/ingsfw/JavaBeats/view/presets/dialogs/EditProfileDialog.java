@@ -99,10 +99,8 @@ public class EditProfileDialog extends Dialog<JBCollection>{
     editLabelHBox.setAlignment(Pos.CENTER_LEFT);
 
     /* Setup of profile image button used to change the profile picture */
-    Image profileImage=new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/RecordBig.png", true);
-    profileImageView=new ImageView(profileImage);
+    profileImageView=new ImageView(originalProfile.scalePicture(200));
     profileImageView.setPreserveRatio(true);
-    profileImageView.setFitHeight(250);
     inputImageButton=new Button();
     inputImageButton.setGraphic(profileImageView);
     inputImageButton.setBackground(bgHome);
