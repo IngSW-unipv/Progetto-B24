@@ -314,6 +314,8 @@ public class SearchResults extends ScrollPanePreset {
             Label chAddToLabel = new Label("Add to");
             chAddToLabel.setFont(fontAddTo);
             chAddToLabel.setTextFill(Color.LIGHTGRAY);
+            chAddToLabel.setPadding(new Insets(0, 10, 0, 0));
+
 
             ChoiceBox<Playlist> ch = new ChoiceBox<Playlist>();
             ch.getItems().add(activeProfile.getFavorites());
@@ -331,7 +333,7 @@ public class SearchResults extends ScrollPanePreset {
             choiceButton.setStyle("-fx-background-color: transparent");
             HBox.setMargin(choiceButton, new Insets(0, 20, 0, 0));
 
-            HBox chHbox = new HBox(ch);
+            HBox chHbox = new HBox(chAddToLabel, ch);
             chHbox.setAlignment(Pos.CENTER);
 
             episodesHBox.getChildren().add(new VBox(10, new AudioCard(ijbResearchable), chHbox));

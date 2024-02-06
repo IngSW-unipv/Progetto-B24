@@ -6,6 +6,7 @@ import it.unipv.ingsfw.JavaBeats.controller.factory.SearchManagerFactory;
 import it.unipv.ingsfw.JavaBeats.model.EJBENTITY;
 import it.unipv.ingsfw.JavaBeats.model.IJBResearchable;
 import it.unipv.ingsfw.JavaBeats.model.collection.Playlist;
+import it.unipv.ingsfw.JavaBeats.model.playable.audio.Episode;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.collection.JBCollection;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.Song;
@@ -70,7 +71,7 @@ public class SearchPageHandler {
 
         };
 
-        EventHandler<ActionEvent> choiceBoxHandler = new EventHandler<ActionEvent>() {
+        EventHandler<ActionEvent> songsChoiceBoxHandler = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 System.out.println(actionEvent);
@@ -99,9 +100,45 @@ public class SearchPageHandler {
             }
         };
 
+        EventHandler<ActionEvent> episodesChoiceBoxHandler = new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                System.out.println(actionEvent);
+
+                ChoiceBox<Playlist> choiceBoxPressed = searchPageGUI.getSearchResults().getEpisodesChoiceBoxArrayList().get(searchPageGUI.getSearchResults().getEpisodesChoiceBoxArrayList().indexOf((ChoiceBox<Playlist>) actionEvent.getSource()));
+                System.out.println(choiceBoxPressed.getValue());
+
+                Episode episode = (Episode) searchPageGUI.getSearchResults().getSearchedMap().get(EJBENTITY.EPISODE).get(searchPageGUI.getSearchResults().getEpisodesChoiceBoxArrayList().indexOf((ChoiceBox<Playlist>) actionEvent.getSource()));
+
+                if (choiceBoxPressed.getValue().toString().equals("Queue")) {
+                    PlayerManagerFactory.getInstance().getPlayerManager().addToQueue(episode);
+
+                } else if (choiceBoxPressed.getValue().getName().equals("Favorites")) {
+
+                    if (!activeProfile.getFavorites().getTrackList().contains(episode)) {
+                        activeProfile.getFavorites().getTrackList().add(episode);
+                        CollectionManagerFactory.getInstance().getCollectionManager().setFavorites(activeProfile);
+                    }
+                } else {
+
+                    if (!choiceBoxPressed.getValue().getTrackList().contains(episode)) {
+                        CollectionManagerFactory.getInstance().getCollectionManager().addToCollection(choiceBoxPressed.getValue(), episode);
+                    }
+                }
+
+            }
+        };
+
+
         searchPageGUI.getSearchTextField().setOnKeyPressed(searchTextfieldHandler);
         try {
-            searchPageGUI.getSearchResults().getChoiceBoxArrayList().forEach(b -> b.setOnAction(choiceBoxHandler));
+            searchPageGUI.getSearchResults().getChoiceBoxArrayList().forEach(b -> b.setOnAction(songsChoiceBoxHandler));
+        } catch (NullPointerException n) {
+
+        }
+
+        try {
+            searchPageGUI.getSearchResults().getEpisodesChoiceBoxArrayList().forEach(b -> b.setOnAction(episodesChoiceBoxHandler));
         } catch (NullPointerException n) {
 
         }
