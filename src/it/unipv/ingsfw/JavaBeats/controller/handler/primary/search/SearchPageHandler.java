@@ -101,7 +101,7 @@ public class SearchPageHandler {
 
         searchPageGUI.getSearchTextField().setOnKeyPressed(searchTextfieldHandler);
         try {
-            searchPageGUI.getSearchResults().getChoiceBoxArrayList().getFirst().setOnAction(choiceBoxHandler);
+            searchPageGUI.getSearchResults().getChoiceBoxArrayList().forEach(b -> b.setOnAction(choiceBoxHandler));
         } catch (NullPointerException n) {
 
         }

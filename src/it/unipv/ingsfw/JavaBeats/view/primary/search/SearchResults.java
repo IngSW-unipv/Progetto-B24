@@ -183,7 +183,7 @@ public class SearchResults extends ScrollPanePreset {
 
             ChoiceBox<Playlist> c = new ChoiceBox<Playlist>();
             c.getItems().add(activeProfile.getFavorites());
-            cb.getItems().add(new Playlist(-1, "Queue", activeProfile));
+            c.getItems().add(new Playlist(-1, "Queue", activeProfile));
 
             for (JBCollection collection : profilePlaylists) {
                 c.getItems().add((Playlist) collection);
