@@ -1,5 +1,7 @@
 package it.unipv.ingsfw.JavaBeats.exceptions;
 
+import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
+
 import java.util.Random;
 
 /**
@@ -26,8 +28,8 @@ public class UsernameAlreadyTakenException extends Exception {
      *
      * @param takenUsername username that is already taken as a {@link String}
      */
-    public UsernameAlreadyTakenException(String takenUsername) {
-        super(takenUsername + " is already taken.");
+    public UsernameAlreadyTakenException(JBProfile jbProfile) {
+        super(jbProfile.getUsername() + " is already taken.");
     }
 
 

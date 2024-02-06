@@ -119,10 +119,10 @@ public class ProfileManager {
 
     }
 
-    public void checkIfUsernameAlreadyExists(String newUsername) throws UsernameAlreadyTakenException {
-        JBProfile tmpProfile = new Artist(newUsername, null, null);
+    public void checkIfUsernameAlreadyExists(JBProfile jbProfile) throws UsernameAlreadyTakenException {
+
         ProfileDAO p = new ProfileDAO();
-        if (p.get(tmpProfile) != null) {
+        if (p.get(jbProfile) != null) {
             UsernameAlreadyTakenException e = new UsernameAlreadyTakenException();
             throw e;
         }
