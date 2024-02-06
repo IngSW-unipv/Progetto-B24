@@ -6,6 +6,8 @@ import it.unipv.ingsfw.JavaBeats.model.IJBResearchable;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.HashMap;
 
 public class SearchManager {
 
@@ -17,18 +19,19 @@ public class SearchManager {
 
     //Metodi
 
-    public ArrayList<ArrayList<IJBResearchable>> search(String searchText, JBProfile activeProfile) {
+    public EnumMap<EJBENTITY, ArrayList<IJBResearchable>> search(String searchText, JBProfile activeProfile) {
         SearchDAO s = new SearchDAO();
 
         EJBENTITY[] ejbEntities = new EJBENTITY[]{EJBENTITY.SONG, EJBENTITY.EPISODE, EJBENTITY.PLAYLIST, EJBENTITY.ALBUM, EJBENTITY.PODCAST, EJBENTITY.USER, EJBENTITY.ARTIST};
 
-        //Filling in the array
-        ArrayList<ArrayList<IJBResearchable>> searchedList = new ArrayList<>();
+        //Filling in the map
+        EnumMap<EJBENTITY, ArrayList<IJBResearchable>> searchedMap = new EnumMap<>(EJBENTITY.class);
         for (EJBENTITY ejbentity : ejbEntities) {
-            searchedList.add(s.search(searchText, activeProfile, ejbentity));
+            searchedMap.put(ejbentity, s.search(searchText, activeProfile, ejbentity));
+
         }
 
-        return searchedList;
+        return searchedMap;
     }
 
 

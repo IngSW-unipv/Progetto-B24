@@ -1,21 +1,27 @@
 package it.unipv.ingsfw.JavaBeats.controller.handler.primary.search;
 
 import it.unipv.ingsfw.JavaBeats.controller.factory.CollectionManagerFactory;
+import it.unipv.ingsfw.JavaBeats.controller.factory.PlayerManagerFactory;
 import it.unipv.ingsfw.JavaBeats.controller.factory.SearchManagerFactory;
+import it.unipv.ingsfw.JavaBeats.model.EJBENTITY;
 import it.unipv.ingsfw.JavaBeats.model.IJBResearchable;
+import it.unipv.ingsfw.JavaBeats.model.collection.Playlist;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.collection.JBCollection;
+import it.unipv.ingsfw.JavaBeats.model.playable.audio.Song;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.view.primary.search.SearchPageGUI;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Dimension2D;
 import javafx.scene.Node;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 
 public class SearchPageHandler {
 
@@ -46,10 +52,10 @@ public class SearchPageHandler {
 
                     Stage stage = (Stage) ((Node) keyEvent.getSource()).getScene().getWindow();
 
-                    //PlayerManager returns array of searched arrays
-                    ArrayList<ArrayList<IJBResearchable>> searchedList = SearchManagerFactory.getInstance().getSearchManager().search(searchPageGUI.getSearchTextField().getText(), activeProfile);
+                    //PlayerManager returns map of searched arrays
+                    EnumMap<EJBENTITY, ArrayList<IJBResearchable>> searchedMap = SearchManagerFactory.getInstance().getSearchManager().search(searchPageGUI.getSearchTextField().getText(), activeProfile);
                     ArrayList<JBCollection> profilePlaylists = CollectionManagerFactory.getInstance().getCollectionManager().getPlaylists(activeProfile);
-                    SearchPageGUI searchPageGUI = new SearchPageGUI(activeProfile, searchedList, profilePlaylists);
+                    SearchPageGUI searchPageGUI = new SearchPageGUI(activeProfile, searchedMap, profilePlaylists);
                     SearchPageHandler searchPageHandler = new SearchPageHandler(searchPageGUI, activeProfile);
 
                     Dimension2D previousDimension = new Dimension2D(stage.getWidth(), stage.getHeight());
@@ -67,7 +73,29 @@ public class SearchPageHandler {
         EventHandler<ActionEvent> choiceBoxHandler = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                System.out.println(actionEvent.getSource());
+                System.out.println(actionEvent);
+
+                ChoiceBox<Playlist> choiceBoxPressed = searchPageGUI.getSearchResults().getChoiceBoxArrayList().get(searchPageGUI.getSearchResults().getChoiceBoxArrayList().indexOf((ChoiceBox<Playlist>) actionEvent.getSource()));
+                System.out.println(choiceBoxPressed.getValue());
+
+                Song song = (Song) searchPageGUI.getSearchResults().getSearchedMap().get(EJBENTITY.SONG).get(searchPageGUI.getSearchResults().getChoiceBoxArrayList().indexOf((ChoiceBox<Playlist>) actionEvent.getSource()));
+
+                if (choiceBoxPressed.getValue().toString().equals("Queue")) {
+                    PlayerManagerFactory.getInstance().getPlayerManager().addToQueue(song);
+
+                } else if (choiceBoxPressed.getValue().getName().equals("Favorites")) {
+
+                    if (!activeProfile.getFavorites().getTrackList().contains(song)) {
+                        activeProfile.getFavorites().getTrackList().add(song);
+                        CollectionManagerFactory.getInstance().getCollectionManager().setFavorites(activeProfile);
+                    }
+                } else {
+
+                    if (!choiceBoxPressed.getValue().getTrackList().contains(song)) {
+                        CollectionManagerFactory.getInstance().getCollectionManager().addToCollection(choiceBoxPressed.getValue(), song);
+                    }
+                }
+
             }
         };
 

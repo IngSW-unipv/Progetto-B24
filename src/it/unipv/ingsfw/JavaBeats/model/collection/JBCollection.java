@@ -25,170 +25,170 @@ import java.util.ArrayList;
  */
 public abstract class JBCollection implements IJBResearchable {
 
-  //ATTRIBUTES:
-  private int id;
-  private String name;
-  private JBProfile creator;
-  private Blob picture;
+    //ATTRIBUTES:
+    private int id;
+    private String name;
+    private JBProfile creator;
+    private Blob picture;
 
 
-  //CONSTRUCTOR:
+    //CONSTRUCTOR:
 
-  /**
-   * Complete constructor to initialize all parameters.
-   * Note that an abstract class cannot be instantiated, this constructor will be used by classes that extend JBCollection to initialize parameters.
-   */
-  protected JBCollection(int id, String name, JBProfile creator, Blob picture) {
-    this.id = id;
-    this.name = name;
-    this.creator = creator;
-    this.picture = picture;
-  }
-
-
-  //GETTERS:
-
-  /**
-   * Returns collection id as an int.
-   *
-   * @return id
-   */
-  public int getId() {
-    return id;
-  }
-
-  /**
-   * Returns collection name as a {@link String}.
-   *
-   * @return name
-   */
-  public String getName() {
-    return name;
-  }
-
-  /**
-   * Returns collection creator as a {@link JBProfile}.
-   *
-   * @return creator
-   */
-  public JBProfile getCreator() {
-    return creator;
-  }
-
-  /**
-   * Returns profile picture as a {@link Blob}.
-   *
-   * @return profile picture
-   */
-  public Blob getPicture() {
-    return picture;
-  }
-
-  /**
-   * Abstract method to be implemented.
-   * Is expected to return the track list of a collection as an {@link ArrayList} of {@link JBAudio}.
-   *
-   * @return track list
-   */
-  public abstract ArrayList<JBAudio> getTrackList();
-
-  /**
-   * Abstract method to be implemented.
-   * Is expected to return a clone of the collection as a {@link JBCollection}.
-   *
-   * @return collection clone
-   */
-  public abstract JBCollection getCopy();
+    /**
+     * Complete constructor to initialize all parameters.
+     * Note that an abstract class cannot be instantiated, this constructor will be used by classes that extend JBCollection to initialize parameters.
+     */
+    protected JBCollection(int id, String name, JBProfile creator, Blob picture) {
+        this.id = id;
+        this.name = name;
+        this.creator = creator;
+        this.picture = picture;
+    }
 
 
-  //SETTERS:
+    //GETTERS:
 
-  /**
-   * Sets int as the new collection id.
-   *
-   * @param id new id
-   */
-  public void setId(int id) {
-    this.id = id;
-  }
+    /**
+     * Returns collection id as an int.
+     *
+     * @return id
+     */
+    public int getId() {
+        return id;
+    }
 
-  /**
-   * Sets {@link String} as the new collection name.
-   *
-   * @param name new name
-   */
-  public void setName(String name) {
-    this.name = name;
-  }
+    /**
+     * Returns collection name as a {@link String}.
+     *
+     * @return name
+     */
+    public String getName() {
+        return name;
+    }
 
-  /**
-   * Sets {@link JBProfile} as the new collection creator.
-   *
-   * @param creator new creator
-   */
-  public void setCreator(JBProfile creator) {
-    this.creator = creator;
-  }
+    /**
+     * Returns collection creator as a {@link JBProfile}.
+     *
+     * @return creator
+     */
+    public JBProfile getCreator() {
+        return creator;
+    }
 
-  /**
-   * Sets {@link Blob} as the new collection picture.
-   *
-   * @param picture new picture
-   */
-  public void setPicture(Blob picture) {
-    this.picture = picture;
-  }
+    /**
+     * Returns profile picture as a {@link Blob}.
+     *
+     * @return profile picture
+     */
+    public Blob getPicture() {
+        return picture;
+    }
 
-  /**
-   * Abstract method to be implemented.
-   * Is expected set an {@link ArrayList} of {@link JBAudio} as the new collection trackList.
-   *
-   * @param trackList new trackList
-   */
-  public abstract void setTrackList(ArrayList<JBAudio> trackList);
+    /**
+     * Abstract method to be implemented.
+     * Is expected to return the track list of a collection as an {@link ArrayList} of {@link JBAudio}.
+     *
+     * @return track list
+     */
+    public abstract ArrayList<JBAudio> getTrackList();
+
+    /**
+     * Abstract method to be implemented.
+     * Is expected to return a clone of the collection as a {@link JBCollection}.
+     *
+     * @return collection clone
+     */
+    public abstract JBCollection getCopy();
 
 
-  //METHODS:
+    //SETTERS:
 
-  /**
-   * Override of equals to compare {@link JBCollection}.
-   */
-  @Override
-  public boolean equals(Object obj) {
-    JBCollection jbCollection = (JBCollection) obj;
+    /**
+     * Sets int as the new collection id.
+     *
+     * @param id new id
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    if (this.id == jbCollection.getId()) {
-      return true;
-    }//end-if
-    return false;
-  }
+    /**
+     * Sets {@link String} as the new collection name.
+     *
+     * @param name new name
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
 
-  /**
-   * Returns the collection picture as an {@link Image} of the required size expressed as an int.
-   *
-   * @param size desired picture size
-   * @return scaled collection picture
-   */
-  public Image scalePicture(int size) {
+    /**
+     * Sets {@link JBProfile} as the new collection creator.
+     *
+     * @param creator new creator
+     */
+    public void setCreator(JBProfile creator) {
+        this.creator = creator;
+    }
+
+    /**
+     * Sets {@link Blob} as the new collection picture.
+     *
+     * @param picture new picture
+     */
+    public void setPicture(Blob picture) {
+        this.picture = picture;
+    }
+
+    /**
+     * Abstract method to be implemented.
+     * Is expected set an {@link ArrayList} of {@link JBAudio} as the new collection trackList.
+     *
+     * @param trackList new trackList
+     */
+    public abstract void setTrackList(ArrayList<JBAudio> trackList);
+
+
+    //METHODS:
+
+    /**
+     * Override of equals to compare {@link JBCollection}.
+     */
+    @Override
+    public boolean equals(Object obj) {
+        JBCollection jbCollection = (JBCollection) obj;
+
+        if (jbCollection != null && this.id == jbCollection.getId()) {
+            return true;
+        }//end-if
+        return false;
+    }
+
+    /**
+     * Returns the collection picture as an {@link Image} of the required size expressed as an int.
+     *
+     * @param size desired picture size
+     * @return scaled collection picture
+     */
+    public Image scalePicture(int size) {
     /*
     Downscaling the collection image to a size square so that it fits
     * */
-    //Creating a buffered image from collection picture
-    BufferedImage bufferedImage = null;
-    try {
-      bufferedImage = ImageIO.read(new ByteArrayInputStream(this.picture.getBinaryStream().readAllBytes()));
-      //Downscaling
-      BufferedImage outputImage = new BufferedImage(size, size, BufferedImage.TYPE_INT_RGB);
-      outputImage.getGraphics().drawImage(bufferedImage.getScaledInstance(size, size, java.awt.Image.SCALE_DEFAULT), 0, 0, null);
+        //Creating a buffered image from collection picture
+        BufferedImage bufferedImage = null;
+        try {
+            bufferedImage = ImageIO.read(new ByteArrayInputStream(this.picture.getBinaryStream().readAllBytes()));
+            //Downscaling
+            BufferedImage outputImage = new BufferedImage(size, size, BufferedImage.TYPE_INT_RGB);
+            outputImage.getGraphics().drawImage(bufferedImage.getScaledInstance(size, size, java.awt.Image.SCALE_DEFAULT), 0, 0, null);
 
-      //Creating an output stream for reading the byte[]
-      ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-      ImageIO.write(outputImage, "png", byteArrayOutputStream);
+            //Creating an output stream for reading the byte[]
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            ImageIO.write(outputImage, "png", byteArrayOutputStream);
 
-      return new Image(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()));
-    } catch (IOException | SQLException e) {
-      throw new RuntimeException(e);
-    }//end-try
-  }
+            return new Image(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()));
+        } catch (IOException | SQLException e) {
+            throw new RuntimeException(e);
+        }//end-try
+    }
 
 }

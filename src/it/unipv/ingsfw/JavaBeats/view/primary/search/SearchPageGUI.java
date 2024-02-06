@@ -1,5 +1,6 @@
 package it.unipv.ingsfw.JavaBeats.view.primary.search;
 
+import it.unipv.ingsfw.JavaBeats.model.EJBENTITY;
 import it.unipv.ingsfw.JavaBeats.model.IJBResearchable;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.collection.JBCollection;
@@ -24,6 +25,7 @@ import javafx.stage.Screen;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.EnumMap;
 
 public class SearchPageGUI {
     /*---------------------------------------*/
@@ -46,8 +48,8 @@ public class SearchPageGUI {
     /*---------------------------------------*/
     //Costruttori
     /*---------------------------------------*/
-    public SearchPageGUI(JBProfile activeProfile, ArrayList<ArrayList<IJBResearchable>> searchedList, ArrayList<JBCollection> profilePlaylists) {
-        initComponents(activeProfile, searchedList, profilePlaylists);
+    public SearchPageGUI(JBProfile activeProfile, EnumMap<EJBENTITY, ArrayList<IJBResearchable>> searchedMap, ArrayList<JBCollection> profilePlaylists) {
+        initComponents(activeProfile, searchedMap, profilePlaylists);
     }
 
     /*---------------------------------------*/
@@ -68,7 +70,7 @@ public class SearchPageGUI {
     /*---------------------------------------*/
     //Metodi
     /*---------------------------------------*/
-    private void initComponents(JBProfile activeProfile, ArrayList<ArrayList<IJBResearchable>> searchedList, ArrayList<JBCollection> profilePlaylists) {
+    private void initComponents(JBProfile activeProfile, EnumMap<EJBENTITY, ArrayList<IJBResearchable>> searchedMap, ArrayList<JBCollection> profilePlaylists) {
 
         //Search
 
@@ -115,11 +117,11 @@ public class SearchPageGUI {
         //Vbox Search
         VBox searchVBox = new VBox();
         searchVBox.setBackground(bgSearchPage);
-        if (searchedList == null) {
+        if (searchedMap == null) {
             searchDefault = new SearchDefault();
             searchVBox.getChildren().addAll(searchBar, searchDefault);
         } else {
-            searchResults = new SearchResults(searchedList, activeProfile, profilePlaylists);
+            searchResults = new SearchResults(searchedMap, activeProfile, profilePlaylists);
             searchVBox.getChildren().addAll(searchBar, searchResults);
             searchResults.getStylesheets().add("it/unipv/ingsfw/JavaBeats/view/resources/css/scrollbar.css");
         }//end-if
