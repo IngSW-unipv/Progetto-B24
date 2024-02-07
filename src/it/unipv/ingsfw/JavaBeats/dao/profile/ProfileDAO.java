@@ -268,7 +268,7 @@ public class ProfileDAO implements IProfileDAO{
     connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
     PreparedStatement st;
     ResultSet rs;
-    Time result=new Time(0);
+    Time result = new Time(0);
 
     try{
       String query="SELECT (SUM(TIMEDIFF(duration, '00:00:00'))) AS 'total' FROM "+
@@ -288,6 +288,8 @@ public class ProfileDAO implements IProfileDAO{
     }
 
     DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+
+    if(result==null) result = new Time(0);
 
     return result;
   }
