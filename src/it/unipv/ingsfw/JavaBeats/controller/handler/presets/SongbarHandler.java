@@ -2,6 +2,8 @@ package it.unipv.ingsfw.JavaBeats.controller.handler.presets;
 import it.unipv.ingsfw.JavaBeats.controller.factory.CollectionManagerFactory;
 import it.unipv.ingsfw.JavaBeats.controller.factory.PlayerManagerFactory;
 import it.unipv.ingsfw.JavaBeats.controller.handler.library.CollectionViewHandler;
+import it.unipv.ingsfw.JavaBeats.exceptions.AccountNotFoundException;
+import it.unipv.ingsfw.JavaBeats.exceptions.SystemErrorException;
 import it.unipv.ingsfw.JavaBeats.model.collection.JBCollection;
 import it.unipv.ingsfw.JavaBeats.model.collection.Playlist;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
@@ -110,7 +112,11 @@ public class SongbarHandler{
         boolean tmpBoolLooping=PlayerManagerFactory.getInstance().getPlayerManager().isAudioLooping();
 
         /* I let the playerManager figure what to do next */
-        PlayerManagerFactory.getInstance().getPlayerManager().play();
+        try{
+          PlayerManagerFactory.getInstance().getPlayerManager().play();
+        }catch(SystemErrorException e){
+
+        }
 
         /* If I'm displaying the Queue, when I pass to the next song I update the GUI by obtaining the Queue from the player manager.
          *  In addition, I check if this is the last song of a randomized collection then I change the random button color by reloading the GUI.
@@ -178,7 +184,11 @@ public class SongbarHandler{
 
             Songbar.getInstance().getButtonHeart().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/FullHeart.png", true)));
           }//end-if
-          CollectionManagerFactory.getInstance().getCollectionManager().setFavorites(activeProfile);
+          try{
+            CollectionManagerFactory.getInstance().getCollectionManager().setFavorites(activeProfile);
+          }catch(AccountNotFoundException e){
+            throw new RuntimeException(e);
+          }
 
           System.out.println(AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.getItems()+"\n"+tmpFavorites);
 
@@ -195,7 +205,11 @@ public class SongbarHandler{
       @Override
       public void handle(ActionEvent actionEvent){
         /* If I'm playing a collection and I click random It will be randomized and played from the beginning */
-        PlayerManagerFactory.getInstance().getPlayerManager().randomize();
+        try{
+          PlayerManagerFactory.getInstance().getPlayerManager().randomize();
+        }catch(SystemErrorException e){
+          throw new RuntimeException(e);
+        }
         if(PlayerManagerFactory.getInstance().getPlayerManager().isRandomized()){
           Songbar.getInstance().getButtonRandom().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/FullRandom.png", true)));
           if(AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING!=null){
@@ -236,7 +250,11 @@ public class SongbarHandler{
     EventHandler<ActionEvent> skipForwardButtonHandler=new EventHandler<>(){
       @Override
       public void handle(ActionEvent actionEvent){
-        PlayerManagerFactory.getInstance().getPlayerManager().skipForward();
+        try{
+          PlayerManagerFactory.getInstance().getPlayerManager().skipForward();
+        }catch(SystemErrorException e){
+          throw new RuntimeException(e);
+        }
 
         if(AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING!=null && AudioTableHandler.isQueue()){
           reloadCollectionViewGUI();
@@ -246,7 +264,11 @@ public class SongbarHandler{
     EventHandler<ActionEvent> skipbackButtonHandler=new EventHandler<>(){
       @Override
       public void handle(ActionEvent actionEvent){
-        PlayerManagerFactory.getInstance().getPlayerManager().skipBack();
+        try{
+          PlayerManagerFactory.getInstance().getPlayerManager().skipBack();
+        }catch(SystemErrorException e){
+          throw new RuntimeException(e);
+        }
 
         if(AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING!=null && AudioTableHandler.isQueue()){
           reloadCollectionViewGUI();
@@ -280,7 +302,11 @@ public class SongbarHandler{
     AudioTableHandler.setQueue(true);
   }
   private void reloadCollectionViewGUI(JBAudio currentAudio){
-    currentAudio.getMetadata().getCollection().setTrackList(CollectionManagerFactory.getInstance().getCollectionManager().getCollectionAudios(currentAudio.getMetadata().getCollection(), activeProfile));
+    try{
+      currentAudio.getMetadata().getCollection().setTrackList(CollectionManagerFactory.getInstance().getCollectionManager().getCollectionAudios(currentAudio.getMetadata().getCollection(), activeProfile));
+    }catch(AccountNotFoundException e){
+      throw new RuntimeException(e);
+    }
 
     if(AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.getItems().equals(FXCollections.observableArrayList(currentAudio.getMetadata().getCollection().getTrackList()))){
       CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, currentAudio.getMetadata().getCollection());

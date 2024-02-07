@@ -2,6 +2,7 @@ package it.unipv.ingsfw.JavaBeats.controller.handler.library;
 
 import it.unipv.ingsfw.JavaBeats.controller.factory.CollectionManagerFactory;
 import it.unipv.ingsfw.JavaBeats.controller.handler.presets.AudioTableHandler;
+import it.unipv.ingsfw.JavaBeats.exceptions.AccountNotFoundException;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.collection.Album;
 import it.unipv.ingsfw.JavaBeats.model.collection.JBCollection;
@@ -50,7 +51,11 @@ public class CollectionLibraryHandler{
         Stage stage=(Stage)((Node)mouseEvent.getSource()).getScene().getWindow();
 
         JBCollection jbCollection=((JBCollection)((AudioCard)mouseEvent.getSource()).getIjbResearchable());
-        jbCollection.setTrackList(CollectionManagerFactory.getInstance().getCollectionManager().getCollectionAudios(jbCollection, activeProfile));
+        try{
+          jbCollection.setTrackList(CollectionManagerFactory.getInstance().getCollectionManager().getCollectionAudios(jbCollection, activeProfile));
+        }catch(AccountNotFoundException e){
+          throw new RuntimeException(e);
+        }
         CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, jbCollection);
         CollectionViewHandler collectionViewHandler=new CollectionViewHandler(collectionViewGUI, activeProfile);
         AudioTableHandler.getInstance((AudioTable)collectionViewGUI.getAudioTable());
@@ -84,8 +89,17 @@ public class CollectionLibraryHandler{
         switch(collectionLibraryGUI.getEjbentity()){
           case PLAYLIST:
             newCollection=new Playlist(0, "New playlist", activeProfile);
-            CollectionManagerFactory.getInstance().getCollectionManager().createJBCollection(newCollection);
-            ArrayList<JBCollection> jbPlaylistsArraylist=CollectionManagerFactory.getInstance().getCollectionManager().getPlaylists(activeProfile);
+            try{
+              CollectionManagerFactory.getInstance().getCollectionManager().createJBCollection(newCollection);
+            }catch(AccountNotFoundException e){
+              throw new RuntimeException(e);
+            }
+            ArrayList<JBCollection> jbPlaylistsArraylist=null;
+            try{
+              jbPlaylistsArraylist=CollectionManagerFactory.getInstance().getCollectionManager().getPlaylists(activeProfile);
+            }catch(AccountNotFoundException e){
+              throw new RuntimeException(e);
+            }
             CollectionLibraryGUI collectionLibraryGUI1=new CollectionLibraryGUI(activeProfile, jbPlaylistsArraylist, collectionLibraryGUI.getEjbentity());
             CollectionLibraryHandler collectionLibraryHandler=new CollectionLibraryHandler(activeProfile, collectionLibraryGUI1);
             stage.setScene(collectionLibraryGUI1.getScene());

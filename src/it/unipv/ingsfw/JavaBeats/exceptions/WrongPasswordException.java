@@ -7,15 +7,18 @@ package it.unipv.ingsfw.JavaBeats.exceptions;
  * @author Giorgio Giacomotti
  * @see Exception
  */
-public class WrongPasswordException extends Exception {
+public class WrongPasswordException extends Exception implements IJBException{
 
-    //CONSTRUCTOR:
+  //CONSTRUCTOR:
 
-    /**
-     * Constructor to create an instance of the custom exception.
-     */
-    public WrongPasswordException() {
-        super("Password entered is wrong.");
-    }
-
+  /**
+   * Constructor to create an instance of the custom exception.
+   */
+  public WrongPasswordException(){
+    super("Password entered is wrong.");
+  }
+  @Override
+  public String suggestAlternative(){
+    return "Password must be at least 8 characters long and contain at least one\nlowercase letter, one uppercase letter, one number.";
+  }
 }

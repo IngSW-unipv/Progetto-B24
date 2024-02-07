@@ -1,15 +1,9 @@
 package it.unipv.ingsfw.JavaBeats.controller.handler.presets.dialogs;
 
-import it.unipv.ingsfw.JavaBeats.controller.factory.ProfileManagerFactory;
-import it.unipv.ingsfw.JavaBeats.exceptions.UsernameAlreadyTakenException;
-import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
-import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.view.presets.dialogs.EditPlaylistDialog;
-import it.unipv.ingsfw.JavaBeats.view.presets.dialogs.UsernameAlreadyTakenDialog;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
-import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;

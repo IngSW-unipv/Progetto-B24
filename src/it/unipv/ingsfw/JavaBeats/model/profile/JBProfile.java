@@ -139,7 +139,7 @@ public abstract class JBProfile implements IJBResearchable{
    *
    * @return profile clone
    */
-  public abstract JBProfile getCopy();
+  public abstract JBProfile getCopy() throws SQLException;
 
 
   //SETTERS:

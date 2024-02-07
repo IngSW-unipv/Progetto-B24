@@ -7,6 +7,7 @@ import it.unipv.ingsfw.JavaBeats.controller.handler.library.CollectionViewHandle
 import it.unipv.ingsfw.JavaBeats.controller.handler.presets.AudioTableHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.presets.SidebarHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.presets.SongbarHandler;
+import it.unipv.ingsfw.JavaBeats.exceptions.AccountNotFoundException;
 import it.unipv.ingsfw.JavaBeats.model.IJBResearchable;
 import it.unipv.ingsfw.JavaBeats.model.collection.JBCollection;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
@@ -97,6 +98,8 @@ public class HomePageHandler{
             stage.setHeight(previousDimension.getHeight());
 
 
+          }catch(AccountNotFoundException ex){
+            throw new RuntimeException(ex);
           }
 
 

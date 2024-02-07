@@ -1,5 +1,6 @@
 package it.unipv.ingsfw.JavaBeats.dao.collection;
 
+import it.unipv.ingsfw.JavaBeats.exceptions.AccountNotFoundException;
 import it.unipv.ingsfw.JavaBeats.model.collection.*;
 import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
  * @see Playlist
  * @see Podcast
  */
-public interface ICollectionDAO {
+public interface ICollectionDAO{
 
   //METHODS:
 
@@ -26,7 +27,7 @@ public interface ICollectionDAO {
    *
    * @param collection collection to add
    */
-  JBCollection insert(JBCollection collection);
+  JBCollection insert(JBCollection collection) throws AccountNotFoundException;
 
   /**
    * Removes a {@link JBCollection} record from the database.
@@ -41,7 +42,7 @@ public interface ICollectionDAO {
    *
    * @param collection collection to update
    */
-  void update(JBCollection collection);
+  void update(JBCollection collection) throws AccountNotFoundException;
 
   /**
    * Retrieves the complete information regarding a specific {@link JBCollection} record from the database.
@@ -49,7 +50,7 @@ public interface ICollectionDAO {
    * @param collection collection to get
    * @return collection with complete and updated info
    */
-  JBCollection get(JBCollection collection);
+  JBCollection get(JBCollection collection) throws AccountNotFoundException;
 
   /**
    * Retrieves the complete information regarding a specific {@link Playlist} record from the database.
@@ -57,7 +58,7 @@ public interface ICollectionDAO {
    * @param collection playlist to get
    * @return collection with complete and updated info
    */
-  Playlist getPlaylist(JBCollection collection);
+  Playlist getPlaylist(JBCollection collection) throws AccountNotFoundException;
 
   /**
    * Retrieves the complete information regarding a specific {@link Album} record from the database.
@@ -81,7 +82,7 @@ public interface ICollectionDAO {
    * @param activeProfile current active profile
    * @return collection with complete and updated info
    */
-  Playlist getFavorites(JBProfile activeProfile);
+  Playlist getFavorites(JBProfile activeProfile) throws AccountNotFoundException;
 
   /**
    * Retrieves all {@link Playlist} created by a specific {@link JBProfile} from the database.
@@ -89,7 +90,7 @@ public interface ICollectionDAO {
    * @param profile playlist creator
    * @return playlists as an {@link ArrayList} of {@link JBCollection}
    */
-  ArrayList<JBCollection> selectPlaylistsByProfile(JBProfile profile);
+  ArrayList<JBCollection> selectPlaylistsByProfile(JBProfile profile) throws AccountNotFoundException;
 
   /**
    * Retrieves all {@link Album} created by a specific {@link Artist} from the database.
@@ -97,7 +98,7 @@ public interface ICollectionDAO {
    * @param artist album creator
    * @return albums as an {@link ArrayList} of {@link JBCollection}
    */
-  ArrayList<JBCollection> selectAlbumsByArtist(Artist artist);
+  ArrayList<JBCollection> selectAlbumsByArtist(Artist artist) throws AccountNotFoundException;
 
   /**
    * Retrieves all {@link Podcast} created by a specific {@link Artist} from the database.
@@ -105,6 +106,6 @@ public interface ICollectionDAO {
    * @param artist podcast creator
    * @return podcasts as an {@link ArrayList} of {@link JBCollection}
    */
-  ArrayList<JBCollection> selectPodcastsByArtist(Artist artist);
+  ArrayList<JBCollection> selectPodcastsByArtist(Artist artist) throws AccountNotFoundException;
 
 }

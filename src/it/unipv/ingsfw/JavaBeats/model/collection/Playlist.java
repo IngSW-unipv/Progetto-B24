@@ -1,8 +1,10 @@
 package it.unipv.ingsfw.JavaBeats.model.collection;
 
+import it.unipv.ingsfw.JavaBeats.exceptions.SystemErrorException;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 
+import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
@@ -69,8 +71,12 @@ public class Playlist extends JBCollection{
    * @return playlist clone
    */
   @Override
-  public JBCollection getCopy(){
-    return new Playlist(this.getId(), this.getName(), this.getCreator(), new ArrayList<>(this.trackList), this.getPicture(), this.isVisible);
+  public JBCollection getCopy() throws SystemErrorException{
+    try{
+      return new Playlist(this.getId(), this.getName(), this.getCreator(), new ArrayList<>(this.trackList), new SerialBlob(getPicture()), this.isVisible);
+    }catch(SQLException s){
+      throw new SystemErrorException();
+    }//end-try
   }
 
   public boolean isVisible(){

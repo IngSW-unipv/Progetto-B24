@@ -1,5 +1,6 @@
 package it.unipv.ingsfw.JavaBeats.dao.profile;
 
+import it.unipv.ingsfw.JavaBeats.exceptions.AccountNotFoundException;
 import it.unipv.ingsfw.JavaBeats.model.profile.*;
 
 /**
@@ -11,53 +12,53 @@ import it.unipv.ingsfw.JavaBeats.model.profile.*;
  * @see User
  * @see Artist
  */
-public interface IProfileDAO {
+public interface IProfileDAO{
 
-    //METHODS:
+  //METHODS:
 
-    /**
-     * Inserts a new {@link JBProfile} record in the database.
-     *
-     * @param profile profile to add
-     */
-    void insert(JBProfile profile);
+  /**
+   * Inserts a new {@link JBProfile} record in the database.
+   *
+   * @param profile profile to add
+   */
+  void insert(JBProfile profile);
 
-    /**
-     * Removes a {@link JBProfile} record from the database.
-     *
-     * @param profile profile to delete
-     */
-    void remove(JBProfile profile);
+  /**
+   * Removes a {@link JBProfile} record from the database.
+   *
+   * @param profile profile to delete
+   */
+  void remove(JBProfile profile);
 
-    /**
-     * Updates a {@link JBProfile} record in the database.
-     *
-     * @param profile profile to update
-     */
-    void update(JBProfile profile);
+  /**
+   * Updates a {@link JBProfile} record in the database.
+   *
+   * @param profile profile to update
+   */
+  void update(JBProfile profile) throws AccountNotFoundException;
 
-    /**
-     * Retrieves the complete information regarding a specific {@link JBProfile} record from the database.
-     *
-     * @param profile profile to get
-     * @return profile with complete and updated info
-     */
-    JBProfile get(JBProfile profile);
+  /**
+   * Retrieves the complete information regarding a specific {@link JBProfile} record from the database.
+   *
+   * @param profile profile to get
+   * @return profile with complete and updated info
+   */
+  JBProfile get(JBProfile profile) throws AccountNotFoundException;
 
-    /**
-     * Retrieves the complete information regarding a specific {@link Artist} record from the database.
-     *
-     * @param profile user to get
-     * @return profile with complete and updated info
-     */
-    Artist getArtist(JBProfile profile);
+  /**
+   * Retrieves the complete information regarding a specific {@link Artist} record from the database.
+   *
+   * @param profile user to get
+   * @return profile with complete and updated info
+   */
+  Artist getArtist(JBProfile profile);
 
-    /**
-     * Retrieves the complete information regarding a specific {@link User} record from the database.
-     *
-     * @param profile user to get
-     * @return profile with complete and updated info
-     */
-    User getUser(JBProfile profile);
+  /**
+   * Retrieves the complete information regarding a specific {@link User} record from the database.
+   *
+   * @param profile user to get
+   * @return profile with complete and updated info
+   */
+  User getUser(JBProfile profile);
 
 }

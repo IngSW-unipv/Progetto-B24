@@ -1,11 +1,13 @@
 package it.unipv.ingsfw.JavaBeats.controller.handler.presets.dialogs;
 
 import it.unipv.ingsfw.JavaBeats.controller.factory.ProfileManagerFactory;
+import it.unipv.ingsfw.JavaBeats.exceptions.RegexException;
+import it.unipv.ingsfw.JavaBeats.exceptions.SystemErrorException;
 import it.unipv.ingsfw.JavaBeats.exceptions.UsernameAlreadyTakenException;
 import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.view.presets.dialogs.EditProfileDialog;
-import it.unipv.ingsfw.JavaBeats.view.presets.dialogs.UsernameAlreadyTakenDialog;
+import it.unipv.ingsfw.JavaBeats.view.presets.dialogs.ExceptionDialog;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -29,7 +31,7 @@ public class EditProfileDialogHandler{
   //Attributi
   /*---------------------------------------*/
   private EditProfileDialog profileDialog;
-  private byte[] fileContent;
+  private byte[] fileContent=null;
 
   /*---------------------------------------*/
   //Costruttori
@@ -82,39 +84,41 @@ public class EditProfileDialogHandler{
       }
     };
 
-    
+
     EventHandler<ActionEvent> saveButtonHandler=new EventHandler<>(){
       @Override
       public void handle(ActionEvent actionEvent){
-
         Stage stage=((Stage)profileDialog.getOwner());
 
-        JBProfile tmpProfile=null;
-
         try{
-
-          tmpProfile=new Artist(profileDialog.getUsernameTextField().getText(), null, null);
-          ProfileManagerFactory.getInstance().getProfileManager().checkIfUsernameAlreadyExists(tmpProfile);
-          try{
-            if(fileContent!=null)
-              profileDialog.getNewProfile().setProfilePicture(new SerialBlob(fileContent));
-          }catch(SQLException e){
-            throw new RuntimeException(e);
-          }//end-try
+          /* profile picture is already handled when adding it */
           profileDialog.getNewProfile().setBiography(profileDialog.getBiography().getText());
           profileDialog.getNewProfile().setName(profileDialog.getNameTextField().getText());
           profileDialog.getNewProfile().setSurname(profileDialog.getSurnameTextField().getText());
-
           profileDialog.getNewProfile().setUsername(profileDialog.getUsernameTextField().getText());
-        }catch(UsernameAlreadyTakenException e){
+
+          /* Checking format of inserted parameters */
+          ProfileManagerFactory.getInstance().getProfileManager().checkRegex(profileDialog.getNewProfile());
+
+          /* Checking if the username is already in the DB only if it's different from the original */
+          if(!profileDialog.getUsernameTextField().getText().equals(profileDialog.getOriginalProfile().getUsername())){
+            ProfileManagerFactory.getInstance().getProfileManager().checkIfUsernameAlreadyExists(profileDialog.getNewProfile());
+          }//end-if
+        }catch(RegexException | UsernameAlreadyTakenException e){
+          /* Reverting to original profile */
+          profileDialog.getNewProfile().setProfilePicture(profileDialog.getOriginalProfile().getProfilePicture());
+          profileDialog.getNewProfile().setUsername(profileDialog.getOriginalProfile().getUsername());
+          profileDialog.getNewProfile().setName(profileDialog.getOriginalProfile().getName());
+          profileDialog.getNewProfile().setSurname(profileDialog.getOriginalProfile().getSurname());
+          profileDialog.getNewProfile().setBiography(profileDialog.getOriginalProfile().getBiography());
 
           profileDialog.getDialogPane().setEffect(new BoxBlur(10, 10, 10));
 
-          UsernameAlreadyTakenDialog usernameAlreadyTakenDialog=new UsernameAlreadyTakenDialog(stage, e, tmpProfile);
+          ExceptionDialog exceptionDialog=new ExceptionDialog(stage, e);
+          exceptionDialog.showAndWait();
 
-          usernameAlreadyTakenDialog.showAndWait();
           profileDialog.getDialogPane().setEffect(null); /* Removing blur effect */
-        }
+        }//end-try
       }
     };
     EventHandler<ActionEvent> cancelButtonHandler=new EventHandler<ActionEvent>(){

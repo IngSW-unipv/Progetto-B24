@@ -3,6 +3,7 @@ package it.unipv.ingsfw.JavaBeats.controller.handler.primary.search;
 import it.unipv.ingsfw.JavaBeats.controller.factory.CollectionManagerFactory;
 import it.unipv.ingsfw.JavaBeats.controller.factory.PlayerManagerFactory;
 import it.unipv.ingsfw.JavaBeats.controller.factory.SearchManagerFactory;
+import it.unipv.ingsfw.JavaBeats.exceptions.AccountNotFoundException;
 import it.unipv.ingsfw.JavaBeats.model.EJBENTITY;
 import it.unipv.ingsfw.JavaBeats.model.IJBResearchable;
 import it.unipv.ingsfw.JavaBeats.model.collection.Playlist;
@@ -54,8 +55,18 @@ public class SearchPageHandler{
           Stage stage=(Stage)((Node)keyEvent.getSource()).getScene().getWindow();
 
           //PlayerManager returns map of searched arrays
-          EnumMap<EJBENTITY, ArrayList<IJBResearchable>> searchedMap=SearchManagerFactory.getInstance().getSearchManager().search(searchPageGUI.getSearchTextField().getText(), activeProfile);
-          ArrayList<JBCollection> profilePlaylists=CollectionManagerFactory.getInstance().getCollectionManager().getPlaylists(activeProfile);
+          EnumMap<EJBENTITY, ArrayList<IJBResearchable>> searchedMap=null;
+          try{
+            searchedMap=SearchManagerFactory.getInstance().getSearchManager().search(searchPageGUI.getSearchTextField().getText(), activeProfile);
+          }catch(AccountNotFoundException e){
+            throw new RuntimeException(e);
+          }
+          ArrayList<JBCollection> profilePlaylists=null;
+          try{
+            profilePlaylists=CollectionManagerFactory.getInstance().getCollectionManager().getPlaylists(activeProfile);
+          }catch(AccountNotFoundException e){
+            throw new RuntimeException(e);
+          }
           SearchPageGUI searchPageGUI=new SearchPageGUI(activeProfile, searchedMap, profilePlaylists);
           SearchPageHandler searchPageHandler=new SearchPageHandler(searchPageGUI, activeProfile);
 
@@ -88,12 +99,20 @@ public class SearchPageHandler{
 
           if(!activeProfile.getFavorites().getTrackList().contains(song)){
             activeProfile.getFavorites().getTrackList().add(song);
-            CollectionManagerFactory.getInstance().getCollectionManager().setFavorites(activeProfile);
+            try{
+              CollectionManagerFactory.getInstance().getCollectionManager().setFavorites(activeProfile);
+            }catch(AccountNotFoundException e){
+              throw new RuntimeException(e);
+            }
           }
         }else{
 
           if(!choiceBoxPressed.getValue().getTrackList().contains(song)){
-            CollectionManagerFactory.getInstance().getCollectionManager().addToCollection(choiceBoxPressed.getValue(), song);
+            try{
+              CollectionManagerFactory.getInstance().getCollectionManager().addToCollection(choiceBoxPressed.getValue(), song);
+            }catch(AccountNotFoundException e){
+              throw new RuntimeException(e);
+            }
           }
         }
 
@@ -117,12 +136,20 @@ public class SearchPageHandler{
 
           if(!activeProfile.getFavorites().getTrackList().contains(episode)){
             activeProfile.getFavorites().getTrackList().add(episode);
-            CollectionManagerFactory.getInstance().getCollectionManager().setFavorites(activeProfile);
+            try{
+              CollectionManagerFactory.getInstance().getCollectionManager().setFavorites(activeProfile);
+            }catch(AccountNotFoundException e){
+              throw new RuntimeException(e);
+            }
           }
         }else{
 
           if(!choiceBoxPressed.getValue().getTrackList().contains(episode)){
-            CollectionManagerFactory.getInstance().getCollectionManager().addToCollection(choiceBoxPressed.getValue(), episode);
+            try{
+              CollectionManagerFactory.getInstance().getCollectionManager().addToCollection(choiceBoxPressed.getValue(), episode);
+            }catch(AccountNotFoundException e){
+              throw new RuntimeException(e);
+            }
           }
         }
 

@@ -3,6 +3,7 @@ package it.unipv.ingsfw.JavaBeats.dao.profile;
 import it.unipv.ingsfw.JavaBeats.controller.factory.DBManagerFactory;
 import it.unipv.ingsfw.JavaBeats.dao.playable.AudioDAO;
 import it.unipv.ingsfw.JavaBeats.dao.collection.CollectionDAO;
+import it.unipv.ingsfw.JavaBeats.exceptions.AccountNotFoundException;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.Song;
 import it.unipv.ingsfw.JavaBeats.model.profile.*;
@@ -96,7 +97,7 @@ public class ProfileDAO implements IProfileDAO{
   }
 
   @Override
-  public void update(JBProfile profile){
+  public void update(JBProfile profile) throws AccountNotFoundException{
     JBProfile oldProfile=get(profile);        //get profile as it is in DB to check for changes
 
     try{
@@ -138,7 +139,7 @@ public class ProfileDAO implements IProfileDAO{
   }
 
   @Override
-  public JBProfile get(JBProfile profile) throws IllegalArgumentException{            //retrieve profile from database
+  public JBProfile get(JBProfile profile) throws AccountNotFoundException{            //retrieve profile from database
 
     JBProfile profileOut=getUser(profile);                 //check if profile is in User table
 
@@ -146,7 +147,7 @@ public class ProfileDAO implements IProfileDAO{
       profileOut=getArtist(profile);    //check if profile is in Artist table
 
       if(profileOut==null){
-        throw new IllegalArgumentException();
+        throw new AccountNotFoundException();
       }//end-if
 
       /* Profile is an artist */
@@ -240,7 +241,7 @@ public class ProfileDAO implements IProfileDAO{
     return result;
   }
 
-  public void refreshProfileInfo(JBProfile jbProfile){
+  public void refreshProfileInfo(JBProfile jbProfile) throws AccountNotFoundException{
     CollectionDAO cDAO=new CollectionDAO();
 
     try{
@@ -257,6 +258,9 @@ public class ProfileDAO implements IProfileDAO{
 
       a.setFavorites(cDAO.getFavorites(a));             //set favorites playlist
     }//end-try
+    catch(AccountNotFoundException e){
+      throw new AccountNotFoundException();
+    }
   }
 
   //PRIVATE METHODS:
@@ -314,7 +318,7 @@ public class ProfileDAO implements IProfileDAO{
     return result;
   }
 
-  private ArrayList<JBAudio> getListeningHistory(JBProfile profile){
+  private ArrayList<JBAudio> getListeningHistory(JBProfile profile) throws AccountNotFoundException{
     connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
     PreparedStatement st;
     ResultSet rs;

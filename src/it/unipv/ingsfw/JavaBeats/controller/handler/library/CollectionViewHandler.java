@@ -7,6 +7,8 @@ import it.unipv.ingsfw.JavaBeats.controller.handler.presets.SongbarHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.presets.dialogs.EditPlaylistDialogHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.primary.home.HomePageHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.presets.AudioTableHandler;
+import it.unipv.ingsfw.JavaBeats.exceptions.AccountNotFoundException;
+import it.unipv.ingsfw.JavaBeats.exceptions.SystemErrorException;
 import it.unipv.ingsfw.JavaBeats.model.collection.Playlist;
 import it.unipv.ingsfw.JavaBeats.model.collection.Podcast;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.Episode;
@@ -80,7 +82,12 @@ public class CollectionViewHandler{
         gui.getGp().setEffect(new BoxBlur(10, 10, 10));
 
         Playlist p=(Playlist)gui.getJbCollection();
-        EditPlaylistDialog dialog=new EditPlaylistDialog(stage, p, (Playlist)p.getCopy());
+        EditPlaylistDialog dialog=null;
+        try{
+          dialog=new EditPlaylistDialog(stage, p, (Playlist)p.getCopy());
+        }catch(SystemErrorException e){
+          throw new RuntimeException(e);
+        }
         EditPlaylistDialogHandler editPlaylistDialogHandler=new EditPlaylistDialogHandler(dialog);
         dialog.showAndWait();
         gui.getGp().setEffect(null);
@@ -89,7 +96,11 @@ public class CollectionViewHandler{
         if(!dialog.getOriginalPlaylist().equals(dialog.getNewPlaylist())){
 
           //Collection manager updates DB
-          CollectionManagerFactory.getInstance().getCollectionManager().edit(dialog.getNewPlaylist());
+          try{
+            CollectionManagerFactory.getInstance().getCollectionManager().edit(dialog.getNewPlaylist());
+          }catch(AccountNotFoundException e){
+            throw new RuntimeException(e);
+          }
           try{
             gui.getCollectionHeader().getCollectionImageView().setImage(new Image(dialog.getNewPlaylist().getPicture().getBinaryStream()));
           }catch(SQLException e){
@@ -116,7 +127,11 @@ public class CollectionViewHandler{
       public void handle(ActionEvent actionEvent){
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
 
-        PlayerManagerFactory.getInstance().getPlayerManager().play(gui.getJbCollection());
+        try{
+          PlayerManagerFactory.getInstance().getPlayerManager().play(gui.getJbCollection());
+        }catch(SystemErrorException e){
+          throw new RuntimeException(e);
+        }
         PlayerManagerFactory.getInstance().getPlayerManager().setRandomized(false);
         gui.getCollectionHeader().getButtonRandom().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/EmptyRandom.png", true)));
         Songbar.getInstance().getButtonRandom().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/EmptyRandom.png", true)));
@@ -129,7 +144,11 @@ public class CollectionViewHandler{
       public void handle(ActionEvent actionEvent){
         /* Handling random playing the collection */
         if(gui.getJbCollection()!=null){
-          PlayerManagerFactory.getInstance().getPlayerManager().randomize(gui.getJbCollection());
+          try{
+            PlayerManagerFactory.getInstance().getPlayerManager().randomize(gui.getJbCollection());
+          }catch(SystemErrorException e){
+            throw new RuntimeException(e);
+          }
           gui.getCollectionHeader().getButtonRandom().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/FullRandom.png", true)));
           Songbar.getInstance().getButtonRandom().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/FullRandom.png", true)));
           gui.getCollectionHeader().getButtonLoop().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/EmptyLoop.png", true)));
@@ -142,7 +161,11 @@ public class CollectionViewHandler{
       public void handle(ActionEvent actionEvent){
         /* Handling looping the collection */
         if(gui.getJbCollection()!=null){
-          PlayerManagerFactory.getInstance().getPlayerManager().loop(gui.getJbCollection());
+          try{
+            PlayerManagerFactory.getInstance().getPlayerManager().loop(gui.getJbCollection());
+          }catch(SystemErrorException e){
+            throw new RuntimeException(e);
+          }
           gui.getCollectionHeader().getButtonRandom().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/EmptyRandom.png", true)));
           Songbar.getInstance().getButtonRandom().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/EmptyRandom.png", true)));
           gui.getCollectionHeader().getButtonLoop().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/FullLoop.png", true)));
@@ -165,7 +188,11 @@ public class CollectionViewHandler{
           AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.setItems(FXCollections.observableArrayList(PlayerManagerFactory.getInstance().getPlayerManager().getQueue()));
           AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.refresh();
         }else if(gui.getJbCollection().getCreator().equals(activeProfile)){
-          CollectionManagerFactory.getInstance().getCollectionManager().removeCollection(gui.getJbCollection());
+          try{
+            CollectionManagerFactory.getInstance().getCollectionManager().removeCollection(gui.getJbCollection());
+          }catch(AccountNotFoundException e){
+            throw new RuntimeException(e);
+          }
 
           if(PlayerManagerFactory.getInstance().getPlayerManager().getCurrentCollectionPlaying()!=null && PlayerManagerFactory.getInstance().getPlayerManager().getCurrentCollectionPlaying().equals(gui.getJbCollection())){
             PlayerManagerFactory.getInstance().getPlayerManager().setCollectionLooping(false);
@@ -222,6 +249,8 @@ public class CollectionViewHandler{
 
           }catch(IOException | TikaException | SAXException | SQLException e){
             throw new RuntimeException(e);
+          }catch(AccountNotFoundException e){
+            throw new RuntimeException(e);
           }
         }//end-foreach
 
@@ -269,7 +298,11 @@ public class CollectionViewHandler{
 
             /* If I play from the queue then the queue starts from the song I clicked to the last song. Otherwise, I just play normally */
             if(AudioTableHandler.isQueue()){
-              PlayerManagerFactory.getInstance().getPlayerManager().playFromQueue(audioClicked);
+              try{
+                PlayerManagerFactory.getInstance().getPlayerManager().playFromQueue(audioClicked);
+              }catch(SystemErrorException e){
+                throw new RuntimeException(e);
+              }
 
               reloadCollectionViewGUI(activeProfile);
             }else{
@@ -283,7 +316,11 @@ public class CollectionViewHandler{
             }else{
               activeProfile.getFavorites().getTrackList().add(audioClicked);
             }//end-if
-            CollectionManagerFactory.getInstance().getCollectionManager().setFavorites(activeProfile);
+            try{
+              CollectionManagerFactory.getInstance().getCollectionManager().setFavorites(activeProfile);
+            }catch(AccountNotFoundException e){
+              throw new RuntimeException(e);
+            }
 
             if(gui.getJbCollection().getName().equals("Favorites")){
               CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, activeProfile.getFavorites());
@@ -304,7 +341,11 @@ public class CollectionViewHandler{
 
               reloadCollectionViewGUI(activeProfile);
             }else if(gui.getJbCollection().getCreator().equals(activeProfile)){
-              CollectionManagerFactory.getInstance().getCollectionManager().removeFromPlaylist(gui.getJbCollection(), audioClicked);
+              try{
+                CollectionManagerFactory.getInstance().getCollectionManager().removeFromPlaylist(gui.getJbCollection(), audioClicked);
+              }catch(AccountNotFoundException e){
+                throw new RuntimeException(e);
+              }
 
               CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, gui.getJbCollection());
               CollectionViewHandler collectionViewHandler=new CollectionViewHandler(collectionViewGUI, activeProfile);

@@ -3,7 +3,9 @@ package it.unipv.ingsfw.JavaBeats.model.profile;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.collection.Playlist;
 
+import javax.sql.rowset.serial.SerialBlob;
 import java.sql.Blob;
+import java.sql.SQLException;
 import java.sql.Time;
 import java.util.ArrayList;
 
@@ -19,7 +21,7 @@ import java.util.ArrayList;
  * @see it.unipv.ingsfw.JavaBeats.model.playable.audio.Episode
  * @see Playlist
  */
-public class User extends JBProfile {
+public class User extends JBProfile{
 
   //ATTRIBUTES:
   private boolean isVisible;
@@ -30,23 +32,23 @@ public class User extends JBProfile {
   /**
    * Complete constructor to initialize all parameters.
    */
-  public User(String username, String mail, String password, String name, String surname, String biography, Blob profilePicture, boolean isVisible, Time totalListeningTime, ArrayList<JBAudio> listeningHistory, Playlist favorites) {
+  public User(String username, String mail, String password, String name, String surname, String biography, Blob profilePicture, boolean isVisible, Time totalListeningTime, ArrayList<JBAudio> listeningHistory, Playlist favorites){
     super(username, mail, password, name, surname, biography, profilePicture, listeningHistory, favorites);
-    this.isVisible = isVisible;
-    this.totalListeningTime = totalListeningTime;
+    this.isVisible=isVisible;
+    this.totalListeningTime=totalListeningTime;
   }
 
   /**
    * Minimal constructor to initialize strictly necessary parameters.
    */
-  public User(String username, String mail, String password) {
+  public User(String username, String mail, String password){
     this(username, mail, password, null, null, null, null, true, null, null, null);
   }
 
   /**
    * Constructor to initialize registration parameters.
    */
-  public User(String username, String mail, String password, String name, String surname) {
+  public User(String username, String mail, String password, String name, String surname){
     this(username, mail, password, name, surname, null, null, true, null, null, null);
   }
 
@@ -57,7 +59,7 @@ public class User extends JBProfile {
    *
    * @return visibility
    */
-  public boolean isVisible() {
+  public boolean isVisible(){
     return isVisible;
   }
 
@@ -66,7 +68,7 @@ public class User extends JBProfile {
    *
    * @return total listening time
    */
-  public Time getMinuteListened() {
+  public Time getMinuteListened(){
     return totalListeningTime;
   }
 
@@ -75,8 +77,8 @@ public class User extends JBProfile {
    *
    * @return user clone
    */
-  public JBProfile getCopy() {
-    return new User(this.getUsername(), this.getMail(), this.getPassword(), this.getName(), this.getSurname(), this.getBiography(), this.getProfilePicture(), this.isVisible, this.totalListeningTime, this.getListeningHistory(), this.getFavorites());
+  public JBProfile getCopy() throws SQLException{
+    return new User(this.getUsername(), this.getMail(), this.getPassword(), this.getName(), this.getSurname(), this.getBiography(), new SerialBlob(getProfilePicture()), this.isVisible, this.totalListeningTime, this.getListeningHistory(), this.getFavorites());
   }
 
 
@@ -86,8 +88,8 @@ public class User extends JBProfile {
    *
    * @param visible new visibility
    */
-  public void setVisible(boolean visible) {
-    isVisible = visible;
+  public void setVisible(boolean visible){
+    isVisible=visible;
   }
 
   /**
@@ -95,8 +97,8 @@ public class User extends JBProfile {
    *
    * @param minuteListened new total listening time
    */
-  public void setMinuteListened(Time minuteListened) {
-    this.totalListeningTime = minuteListened;
+  public void setMinuteListened(Time minuteListened){
+    this.totalListeningTime=minuteListened;
   }
 
 
@@ -105,8 +107,8 @@ public class User extends JBProfile {
    * Override of toString to return a {@link String} with characterizing information.
    */
   @Override
-  public String toString() {
-    return "USER  -  Username: " + this.getUsername() + "; Mail: " + this.getMail() + ".";
+  public String toString(){
+    return "USER  -  Username: "+this.getUsername()+"; Mail: "+this.getMail()+".";
   }
 
 }

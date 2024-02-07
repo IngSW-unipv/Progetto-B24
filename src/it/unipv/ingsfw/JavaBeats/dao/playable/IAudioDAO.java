@@ -1,5 +1,6 @@
 package it.unipv.ingsfw.JavaBeats.dao.playable;
 
+import it.unipv.ingsfw.JavaBeats.exceptions.AccountNotFoundException;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.*;
 import it.unipv.ingsfw.JavaBeats.model.collection.Album;
 import it.unipv.ingsfw.JavaBeats.model.collection.Playlist;
@@ -19,7 +20,7 @@ import java.util.ArrayList;
  * @see Episode
  * @see it.unipv.ingsfw.JavaBeats.model.collection.JBCollection
  */
-public interface IAudioDAO {
+public interface IAudioDAO{
 
   //METHODS:
 
@@ -28,7 +29,7 @@ public interface IAudioDAO {
    *
    * @param audio audio to add
    */
-  void insert(JBAudio audio);
+  void insert(JBAudio audio) throws AccountNotFoundException;
 
   /**
    * Removes a {@link JBAudio} record from the database.
@@ -45,7 +46,7 @@ public interface IAudioDAO {
    * @param activeProfile current active profile
    * @return audio with complete and updated info
    */
-  JBAudio get(JBAudio audio, JBProfile activeProfile);
+  JBAudio get(JBAudio audio, JBProfile activeProfile) throws AccountNotFoundException;
 
   /**
    * Retrieves the complete information regarding a specific {@link Song} record from the database.
@@ -55,7 +56,7 @@ public interface IAudioDAO {
    * @param activeProfile current active profile
    * @return audio with complete and updated info
    */
-  Song getSong(JBAudio audio, JBProfile activeProfile);
+  Song getSong(JBAudio audio, JBProfile activeProfile) throws AccountNotFoundException;
 
   /**
    * Retrieves the complete information regarding a specific {@link Episode} record from the database.
@@ -65,7 +66,7 @@ public interface IAudioDAO {
    * @param activeProfile current active profile
    * @return audio with complete and updated info
    */
-  Episode getEpisode(JBAudio audio, JBProfile activeProfile);
+  Episode getEpisode(JBAudio audio, JBProfile activeProfile) throws AccountNotFoundException;
 
   /**
    * Updates the Favorites playlist associated with a {@link JBProfile}.
@@ -73,7 +74,7 @@ public interface IAudioDAO {
    *
    * @param activeProfile current active profile
    */
-  void updateIsFavorite(JBProfile activeProfile);
+  void updateIsFavorite(JBProfile activeProfile) throws AccountNotFoundException;
 
   /**
    * Marks a specific {@link JBAudio} as listened in the database.
@@ -93,7 +94,7 @@ public interface IAudioDAO {
    * @param activeProfile current active profile
    * @return audios as an {@link ArrayList} of {@link JBAudio}
    */
-  ArrayList<JBAudio> selectByPlaylist(Playlist playlist, JBProfile activeProfile);
+  ArrayList<JBAudio> selectByPlaylist(Playlist playlist, JBProfile activeProfile) throws AccountNotFoundException;
 
   /**
    * Retrieves all {@link Song} from a specific {@link Album} from the database.
@@ -103,7 +104,7 @@ public interface IAudioDAO {
    * @param activeProfile current active profile
    * @return audios as an {@link ArrayList} of {@link Song}
    */
-  ArrayList<Song> selectByAlbum(Album album, JBProfile activeProfile);
+  ArrayList<Song> selectByAlbum(Album album, JBProfile activeProfile) throws AccountNotFoundException;
 
   /**
    * Retrieves all {@link Episode} from a specific {@link Podcast} from the database.
@@ -113,7 +114,7 @@ public interface IAudioDAO {
    * @param activeProfile current active profile
    * @return audios as an {@link ArrayList} of {@link Episode}
    */
-  ArrayList<Episode> selectByPodcast(Podcast podcast, JBProfile activeProfile);
+  ArrayList<Episode> selectByPodcast(Podcast podcast, JBProfile activeProfile) throws AccountNotFoundException;
 
   /**
    * Retrieves all {@link JBAudio} from the favorites playlist.
@@ -122,6 +123,6 @@ public interface IAudioDAO {
    * @param activeProfile current active profile
    * @return audios as an {@link ArrayList} of {@link JBAudio}
    */
-  ArrayList<JBAudio> selectFavorites(JBProfile activeProfile);
+  ArrayList<JBAudio> selectFavorites(JBProfile activeProfile) throws AccountNotFoundException;
 
 }

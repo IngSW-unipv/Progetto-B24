@@ -7,6 +7,7 @@ import it.unipv.ingsfw.JavaBeats.controller.handler.library.CollectionViewHandle
 import it.unipv.ingsfw.JavaBeats.controller.handler.primary.home.HomePageHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.primary.profile.ProfileViewHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.primary.search.SearchPageHandler;
+import it.unipv.ingsfw.JavaBeats.exceptions.AccountNotFoundException;
 import it.unipv.ingsfw.JavaBeats.model.EJBENTITY;
 import it.unipv.ingsfw.JavaBeats.model.collection.JBCollection;
 import it.unipv.ingsfw.JavaBeats.model.collection.Playlist;
@@ -139,7 +140,12 @@ public class SidebarHandler{
       @Override
       public void handle(ActionEvent actionEvent){
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, CollectionManagerFactory.getInstance().getCollectionManager().getFavorites(activeProfile));
+        CollectionViewGUI collectionViewGUI=null;
+        try{
+          collectionViewGUI=new CollectionViewGUI(activeProfile, CollectionManagerFactory.getInstance().getCollectionManager().getFavorites(activeProfile));
+        }catch(AccountNotFoundException e){
+          throw new RuntimeException(e);
+        }
         CollectionViewHandler collectionViewHandler=new CollectionViewHandler(collectionViewGUI, activeProfile);
         AudioTableHandler.getInstance((AudioTable)collectionViewGUI.getAudioTable());
         AudioTableHandler.setQueue(false);
@@ -158,7 +164,12 @@ public class SidebarHandler{
       @Override
       public void handle(ActionEvent actionEvent){
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        ArrayList<JBCollection> playlists=CollectionManagerFactory.getInstance().getCollectionManager().getPlaylists(activeProfile);
+        ArrayList<JBCollection> playlists=null;
+        try{
+          playlists=CollectionManagerFactory.getInstance().getCollectionManager().getPlaylists(activeProfile);
+        }catch(AccountNotFoundException e){
+          throw new RuntimeException(e);
+        }
         CollectionLibraryGUI collectionLibraryGUI=new CollectionLibraryGUI(activeProfile, playlists, EJBENTITY.PLAYLIST);
         CollectionLibraryHandler collectionLibraryHandler=new CollectionLibraryHandler(activeProfile, collectionLibraryGUI);
         AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING=null;
@@ -185,6 +196,8 @@ public class SidebarHandler{
           albums=CollectionManagerFactory.getInstance().getCollectionManager().getAlbums((Artist)activeProfile);
         }catch(ClassCastException e){
           //popup
+        }catch(AccountNotFoundException e){
+          throw new RuntimeException(e);
         }
 
         CollectionLibraryGUI collectionLibraryGUI=new CollectionLibraryGUI(activeProfile, albums, EJBENTITY.ALBUM);
@@ -214,6 +227,8 @@ public class SidebarHandler{
           podcasts=CollectionManagerFactory.getInstance().getCollectionManager().getPodcasts((Artist)activeProfile);
         }catch(ClassCastException e){
           //popup
+        }catch(AccountNotFoundException e){
+
         }
 
         CollectionLibraryGUI collectionLibraryGUI=new CollectionLibraryGUI(activeProfile, podcasts, EJBENTITY.PODCAST);

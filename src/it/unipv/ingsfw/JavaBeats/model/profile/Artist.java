@@ -3,7 +3,9 @@ package it.unipv.ingsfw.JavaBeats.model.profile;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.collection.Playlist;
 
+import javax.sql.rowset.serial.SerialBlob;
 import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -22,7 +24,7 @@ import java.util.ArrayList;
  * @see it.unipv.ingsfw.JavaBeats.model.collection.Playlist
  * @see it.unipv.ingsfw.JavaBeats.model.collection.Podcast
  */
-public class Artist extends JBProfile {
+public class Artist extends JBProfile{
 
   //ATTRIBUTES:
   private int totalListeners;
@@ -33,15 +35,15 @@ public class Artist extends JBProfile {
   /**
    * Complete constructor to initialize all parameters.
    */
-  public Artist(String username, String mail, String password, String name, String surname, String biography, Blob profilePicture, int totalListeners, ArrayList<JBAudio> listeningHistory, Playlist favorites) {
+  public Artist(String username, String mail, String password, String name, String surname, String biography, Blob profilePicture, int totalListeners, ArrayList<JBAudio> listeningHistory, Playlist favorites){
     super(username, mail, password, name, surname, biography, profilePicture, listeningHistory, favorites);
-    this.totalListeners = totalListeners;
+    this.totalListeners=totalListeners;
   }
 
   /**
    * Minimal constructor to initialize strictly necessary parameters.
    */
-  public Artist(String username, String mail, String password) {
+  public Artist(String username, String mail, String password){
     this(username, mail, password, null, null, null, null, 0, null, null);
   }
 
@@ -53,7 +55,7 @@ public class Artist extends JBProfile {
    *
    * @return totalListeners
    */
-  public int getTotalListeners() {
+  public int getTotalListeners(){
     return totalListeners;
   }
 
@@ -62,8 +64,8 @@ public class Artist extends JBProfile {
    *
    * @return artist clone
    */
-  public JBProfile getCopy() {
-    return new Artist(this.getUsername(), this.getMail(), this.getPassword(), this.getName(), this.getSurname(), this.getBiography(), this.getProfilePicture(), this.totalListeners, this.getListeningHistory(), this.getFavorites());
+  public JBProfile getCopy() throws SQLException{
+    return new Artist(this.getUsername(), this.getMail(), this.getPassword(), this.getName(), this.getSurname(), this.getBiography(), new SerialBlob(getProfilePicture()), this.totalListeners, this.getListeningHistory(), this.getFavorites());
   }
 
 
@@ -73,8 +75,8 @@ public class Artist extends JBProfile {
    *
    * @param totalListeners new total listeners count
    */
-  public void setTotalListeners(int totalListeners) {
-    this.totalListeners = totalListeners;
+  public void setTotalListeners(int totalListeners){
+    this.totalListeners=totalListeners;
   }
 
 
@@ -83,8 +85,8 @@ public class Artist extends JBProfile {
    * Override of toString to return a {@link String} with characterizing information.
    */
   @Override
-  public String toString() {
-    return "ARTIST  -  Username: " + this.getUsername() + "; Mail: " + this.getMail() + ".";
+  public String toString(){
+    return "ARTIST  -  Username: "+this.getUsername()+"; Mail: "+this.getMail()+".";
   }
 
 }

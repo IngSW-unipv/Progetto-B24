@@ -12,39 +12,35 @@ import java.util.Random;
  * @see Exception
  * @see it.unipv.ingsfw.JavaBeats.model.profile.JBProfile
  */
-public class UsernameAlreadyTakenException extends Exception {
+public class UsernameAlreadyTakenException extends Exception implements IJBException{
 
-    //CONSTRUCTORS:
+  private final JBProfile jbProfile;
+  //CONSTRUCTORS:
 
-    /**
-     * Constructor to create an instance of the custom exception.
-     */
-    public UsernameAlreadyTakenException() {
-        super("Inserted username is already taken.");
-    }
-
-    /**
-     * Constructor to create an instance of the custom exception with a specific message.
-     *
-     * @param takenUsername username that is already taken as a {@link String}
-     */
-    public UsernameAlreadyTakenException(JBProfile jbProfile) {
-        super(jbProfile.getUsername() + " is already taken.");
-    }
+  /**
+   * Constructor to create an instance of the custom exception with a specific message.
+   *
+   * @param takenUsername username that is already taken as a {@link String}
+   */
+  public UsernameAlreadyTakenException(JBProfile jbProfile){
+    super(jbProfile.getUsername()+" is already taken.");
+    this.jbProfile=jbProfile;
+  }
 
 
-    //METHODS:
+  //METHODS:
 
-    /**
-     * Method that returns an alternative username created adding a two digit random number at the unavailable username.
-     * Note that it will not check if the suggested username is available.
-     *
-     * @param takenUsername username that is already taken as a {@link String}
-     * @return suggested alternative username as a{@link String}
-     */
-    public String suggestAlternativeUsername(JBProfile jbProfile) {
-        Random random = new Random();
-        return "Try with: " + jbProfile.getUsername() + random.nextInt(100) + " or " + jbProfile.getUsername() + "_" + random.nextInt(100);
-    }
+  /**
+   * Method that returns an alternative username created adding a two digit random number at the unavailable username.
+   * Note that it will not check if the suggested username is available.
+   *
+   * @param takenUsername username that is already taken as a {@link String}
+   * @return suggested alternative username as a{@link String}
+   */
+  @Override
+  public String suggestAlternative(){
+    Random random=new Random();
+    return "Try with: "+jbProfile.getUsername()+random.nextInt(100)+" or "+jbProfile.getUsername()+"_"+random.nextInt(100);
+  }
 
 }

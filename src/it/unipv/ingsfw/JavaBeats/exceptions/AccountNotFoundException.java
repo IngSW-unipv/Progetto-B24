@@ -7,15 +7,18 @@ package it.unipv.ingsfw.JavaBeats.exceptions;
  * @see Exception
  * @see it.unipv.ingsfw.JavaBeats.model.profile.JBProfile
  */
-public class AccountNotFoundException extends Exception {
+public class AccountNotFoundException extends Exception implements IJBException{
 
-    //CONSTRUCTOR:
+  //CONSTRUCTOR:
 
-    /**
-     * Constructor to create an instance of the custom exception.
-     */
-    public AccountNotFoundException() {
-        super("Account not found. Please register or use an active profile.");
-    }
-
+  /**
+   * Constructor to create an instance of the custom exception.
+   */
+  public AccountNotFoundException(){
+    super("Account not found.");
+  }
+  @Override
+  public String suggestAlternative(){
+    return "Please register or use an active profile.";
+  }
 }

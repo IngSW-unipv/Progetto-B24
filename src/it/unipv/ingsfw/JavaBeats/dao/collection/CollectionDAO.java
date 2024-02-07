@@ -4,6 +4,7 @@ import it.unipv.ingsfw.JavaBeats.controller.factory.DBManagerFactory;
 import it.unipv.ingsfw.JavaBeats.controller.factory.PlayerManagerFactory;
 import it.unipv.ingsfw.JavaBeats.dao.playable.AudioDAO;
 import it.unipv.ingsfw.JavaBeats.dao.profile.ProfileDAO;
+import it.unipv.ingsfw.JavaBeats.exceptions.AccountNotFoundException;
 import it.unipv.ingsfw.JavaBeats.model.EJBENTITY;
 import it.unipv.ingsfw.JavaBeats.model.IJBResearchable;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.*;
@@ -46,7 +47,7 @@ public class CollectionDAO implements ICollectionDAO{
 
   //PUBLIC METHODS:
   @Override
-  public JBCollection insert(JBCollection collection){
+  public JBCollection insert(JBCollection collection) throws AccountNotFoundException{
     insertCollection(collection);
 
     linkCollectionToProfile(collection);
@@ -77,7 +78,7 @@ public class CollectionDAO implements ICollectionDAO{
   }
 
   @Override
-  public void update(JBCollection collection){
+  public void update(JBCollection collection) throws AccountNotFoundException{
     JBCollection oldCollection=get(collection);
 
     if(collection.getName()!=null)               //check for null before using .equals to avoid exceptions
@@ -104,7 +105,7 @@ public class CollectionDAO implements ICollectionDAO{
   }
 
   @Override
-  public JBCollection get(JBCollection collection){
+  public JBCollection get(JBCollection collection) throws AccountNotFoundException{
 
     JBCollection collectionOut=getPlaylist(collection);               //if collection is a playlist
     if(collectionOut==null)
@@ -116,7 +117,7 @@ public class CollectionDAO implements ICollectionDAO{
   }
 
   @Override
-  public Playlist getPlaylist(JBCollection collection){
+  public Playlist getPlaylist(JBCollection collection) throws AccountNotFoundException{
     connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
     PreparedStatement st;
     ResultSet rs;
@@ -239,7 +240,7 @@ public class CollectionDAO implements ICollectionDAO{
   }
 
   @Override
-  public Playlist getFavorites(JBProfile activeProfile){
+  public Playlist getFavorites(JBProfile activeProfile) throws AccountNotFoundException{
     AudioDAO aDAO=new AudioDAO();
     /* Default collection image */
     BufferedImage bufferedImage=null;
@@ -255,7 +256,7 @@ public class CollectionDAO implements ICollectionDAO{
   }
 
   @Override
-  public ArrayList<JBCollection> selectPlaylistsByProfile(JBProfile profile){
+  public ArrayList<JBCollection> selectPlaylistsByProfile(JBProfile profile) throws AccountNotFoundException{
     connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
     PreparedStatement st1;
     ResultSet rs1;
@@ -290,7 +291,7 @@ public class CollectionDAO implements ICollectionDAO{
 
 
   @Override
-  public ArrayList<JBCollection> selectAlbumsByArtist(Artist artist){
+  public ArrayList<JBCollection> selectAlbumsByArtist(Artist artist) throws AccountNotFoundException{
     connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
     PreparedStatement st1;
     ResultSet rs1;
@@ -326,7 +327,7 @@ public class CollectionDAO implements ICollectionDAO{
 
 
   @Override
-  public ArrayList<JBCollection> selectPodcastsByArtist(Artist artist){
+  public ArrayList<JBCollection> selectPodcastsByArtist(Artist artist) throws AccountNotFoundException{
     connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
     PreparedStatement st1;
     ResultSet rs1;
@@ -401,7 +402,7 @@ public class CollectionDAO implements ICollectionDAO{
   }
 
 
-  private void updateTrackList(JBCollection collection){
+  private void updateTrackList(JBCollection collection) throws AccountNotFoundException{
     connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
     PreparedStatement st1, st2;
     String q1=null, q2=null;
@@ -518,7 +519,7 @@ public class CollectionDAO implements ICollectionDAO{
     DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
   }
 
-  private void linkCollectionToProfile(JBCollection collection){
+  private void linkCollectionToProfile(JBCollection collection) throws AccountNotFoundException{
 
     if(collection.getCreator()!=null){
 
@@ -533,7 +534,7 @@ public class CollectionDAO implements ICollectionDAO{
 
   }
 
-  private void linkPlaylistToProfile(Playlist playlist){
+  private void linkPlaylistToProfile(Playlist playlist) throws AccountNotFoundException{
     ProfileDAO pDAO=new ProfileDAO();
 
     if(pDAO.get(playlist.getCreator())==null)        //if artist not present in DB
@@ -556,7 +557,7 @@ public class CollectionDAO implements ICollectionDAO{
     DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
   }
 
-  private void linkAlbumToArtist(Album album){
+  private void linkAlbumToArtist(Album album) throws AccountNotFoundException{
     ProfileDAO pDAO=new ProfileDAO();
 
     if(pDAO.get(album.getCreator())==null)        //if artist not present in DB
@@ -579,7 +580,7 @@ public class CollectionDAO implements ICollectionDAO{
     DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
   }
 
-  private void linkPodcastToArtist(Podcast podcast){
+  private void linkPodcastToArtist(Podcast podcast) throws AccountNotFoundException{
     ProfileDAO pDAO=new ProfileDAO();
 
     if(pDAO.get(podcast.getCreator())==null)         //if artist not present in DB
@@ -602,7 +603,7 @@ public class CollectionDAO implements ICollectionDAO{
     DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
   }
 
-  private void linkCollectionToAudios(JBCollection collection){
+  private void linkCollectionToAudios(JBCollection collection) throws AccountNotFoundException{
 
     if(collection.getTrackList()!=null){
 
@@ -617,7 +618,7 @@ public class CollectionDAO implements ICollectionDAO{
     }
   }
 
-  private void linkPlaylistToAudios(Playlist playlist){
+  private void linkPlaylistToAudios(Playlist playlist) throws AccountNotFoundException{
     AudioDAO aDAO=new AudioDAO();
     ArrayList<JBAudio> trackList=playlist.getTrackList();
     Iterator<JBAudio> trackListIT=trackList.iterator();
@@ -651,7 +652,7 @@ public class CollectionDAO implements ICollectionDAO{
     DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
   }
 
-  private void linkAlbumToSongs(Album album){
+  private void linkAlbumToSongs(Album album) throws AccountNotFoundException{
     AudioDAO aDAO=new AudioDAO();
     ArrayList<JBAudio> trackList=album.getTrackList();
     Iterator<JBAudio> trackListIT=trackList.iterator();
@@ -684,7 +685,7 @@ public class CollectionDAO implements ICollectionDAO{
     DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
   }
 
-  private void linkPodcastToEpisodes(Podcast podcast){
+  private void linkPodcastToEpisodes(Podcast podcast) throws AccountNotFoundException{
     AudioDAO aDAO=new AudioDAO();
     ArrayList<JBAudio> trackList=podcast.getTrackList();
     Iterator<JBAudio> trackListIT=trackList.iterator();
