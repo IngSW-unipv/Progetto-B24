@@ -3,6 +3,7 @@ package it.unipv.ingsfw.JavaBeats.controller.handler.library;
 import it.unipv.ingsfw.JavaBeats.controller.factory.CollectionManagerFactory;
 import it.unipv.ingsfw.JavaBeats.controller.handler.presets.AudioTableHandler;
 import it.unipv.ingsfw.JavaBeats.exceptions.AccountNotFoundException;
+import it.unipv.ingsfw.JavaBeats.exceptions.SystemErrorException;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.collection.Album;
 import it.unipv.ingsfw.JavaBeats.model.collection.JBCollection;
@@ -14,10 +15,12 @@ import it.unipv.ingsfw.JavaBeats.view.library.CollectionViewGUI;
 import it.unipv.ingsfw.JavaBeats.view.library.CreationGUI;
 import it.unipv.ingsfw.JavaBeats.view.presets.AudioCard;
 import it.unipv.ingsfw.JavaBeats.view.presets.AudioTable;
+import it.unipv.ingsfw.JavaBeats.view.presets.dialogs.ExceptionDialog;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Dimension2D;
 import javafx.scene.Node;
+import javafx.scene.effect.BoxBlur;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
@@ -50,25 +53,30 @@ public class CollectionLibraryHandler{
       public void handle(MouseEvent mouseEvent){
         Stage stage=(Stage)((Node)mouseEvent.getSource()).getScene().getWindow();
 
-        JBCollection jbCollection=((JBCollection)((AudioCard)mouseEvent.getSource()).getIjbResearchable());
         try{
+          JBCollection jbCollection=((JBCollection)((AudioCard)mouseEvent.getSource()).getIjbResearchable());
           jbCollection.setTrackList(CollectionManagerFactory.getInstance().getCollectionManager().getCollectionAudios(jbCollection, activeProfile));
-        }catch(AccountNotFoundException e){
-          throw new RuntimeException(e);
-        }
-        CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, jbCollection);
-        CollectionViewHandler collectionViewHandler=new CollectionViewHandler(collectionViewGUI, activeProfile);
-        AudioTableHandler.getInstance((AudioTable)collectionViewGUI.getAudioTable());
-        AudioTableHandler.setQueue(false);
+          CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, jbCollection);
+          CollectionViewHandler collectionViewHandler=new CollectionViewHandler(collectionViewGUI, activeProfile);
+          AudioTableHandler.getInstance((AudioTable)collectionViewGUI.getAudioTable());
+          AudioTableHandler.setQueue(false);
 
-        Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
-        stage.setScene(collectionViewGUI.getScene());
-        stage.setTitle("Collection");
-        stage.setWidth(previousDimension.getWidth());
-        stage.setHeight(previousDimension.getHeight());
+          Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
+          stage.setScene(collectionViewGUI.getScene());
+          stage.setTitle("Collection");
+          stage.setWidth(previousDimension.getWidth());
+          stage.setHeight(previousDimension.getHeight());
+        }catch(AccountNotFoundException e){
+          collectionLibraryGUI.getGp().setEffect(new BoxBlur(10, 10, 10));
+
+          ExceptionDialog exceptionDialog=new ExceptionDialog(stage, new SystemErrorException());
+          exceptionDialog.showAndWait();
+
+          collectionLibraryGUI.getGp().setEffect(null);
+        }//end-try
       }
     };
-    EventHandler<ActionEvent> plusButtonHandler=new EventHandler<ActionEvent>(){
+    EventHandler<ActionEvent> plusButtonHandler=new EventHandler<>(){
       @Override
       public void handle(ActionEvent actionEvent){
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
@@ -84,51 +92,65 @@ public class CollectionLibraryHandler{
           ImageIO.write(bufferedImage, "png", byteArrayOutputStream);
           image=byteArrayOutputStream.toByteArray();
         }catch(IOException e){
-          throw new RuntimeException(e);
+          collectionLibraryGUI.getGp().setEffect(new BoxBlur(10, 10, 10));
+
+          ExceptionDialog exceptionDialog=new ExceptionDialog(stage, new SystemErrorException());
+          exceptionDialog.showAndWait();
+
+          collectionLibraryGUI.getGp().setEffect(null);
         }//end-try
         switch(collectionLibraryGUI.getEjbentity()){
           case PLAYLIST:
-            newCollection=new Playlist(0, "New playlist", activeProfile);
             try{
+              newCollection=new Playlist(0, "New playlist", activeProfile);
               CollectionManagerFactory.getInstance().getCollectionManager().createJBCollection(newCollection);
-            }catch(AccountNotFoundException e){
-              throw new RuntimeException(e);
-            }
-            ArrayList<JBCollection> jbPlaylistsArraylist=null;
-            try{
+              ArrayList<JBCollection> jbPlaylistsArraylist=null;
               jbPlaylistsArraylist=CollectionManagerFactory.getInstance().getCollectionManager().getPlaylists(activeProfile);
+              CollectionLibraryGUI collectionLibraryGUI1=new CollectionLibraryGUI(activeProfile, jbPlaylistsArraylist, collectionLibraryGUI.getEjbentity());
+              CollectionLibraryHandler collectionLibraryHandler=new CollectionLibraryHandler(activeProfile, collectionLibraryGUI1);
+              stage.setScene(collectionLibraryGUI1.getScene());
             }catch(AccountNotFoundException e){
-              throw new RuntimeException(e);
-            }
-            CollectionLibraryGUI collectionLibraryGUI1=new CollectionLibraryGUI(activeProfile, jbPlaylistsArraylist, collectionLibraryGUI.getEjbentity());
-            CollectionLibraryHandler collectionLibraryHandler=new CollectionLibraryHandler(activeProfile, collectionLibraryGUI1);
-            stage.setScene(collectionLibraryGUI1.getScene());
+              collectionLibraryGUI.getGp().setEffect(new BoxBlur(10, 10, 10));
+
+              ExceptionDialog exceptionDialog=new ExceptionDialog(stage, new SystemErrorException());
+              exceptionDialog.showAndWait();
+
+              collectionLibraryGUI.getGp().setEffect(null);
+            }//end-try
             break;
           case ALBUM:
             try{
               newCollection=new Album(0, "New album", activeProfile, new ArrayList<JBAudio>(), new SerialBlob(image));
+              CreationGUI creationGUI=new CreationGUI(activeProfile, newCollection);
+              CreationGUIHandler CreationGUIHandler=new CreationGUIHandler(creationGUI, activeProfile);
+              stage.setScene(creationGUI.getScene());
+              stage.setTitle("Create your album");
             }catch(SQLException e){
-              throw new RuntimeException(e);
+              collectionLibraryGUI.getGp().setEffect(new BoxBlur(10, 10, 10));
+
+              ExceptionDialog exceptionDialog=new ExceptionDialog(stage, new SystemErrorException());
+              exceptionDialog.showAndWait();
+
+              collectionLibraryGUI.getGp().setEffect(null);
             }//end-try
-            CreationGUI creationGUI=new CreationGUI(activeProfile, newCollection);
-            CreationGUIHandler CreationGUIHandler=new CreationGUIHandler(creationGUI, activeProfile);
-            stage.setScene(creationGUI.getScene());
-            stage.setTitle("Create your album");
             break;
           case PODCAST:
             try{
-              newCollection=new Podcast(0, "New podcast", activeProfile, new ArrayList<JBAudio>(), new SerialBlob(image));
+              newCollection=new Podcast(0, "New podcast", activeProfile, new ArrayList<>(), new SerialBlob(image));
+              CreationGUI creationGUI=new CreationGUI(activeProfile, newCollection);
+              CreationGUIHandler creationGUIHandler=new CreationGUIHandler(creationGUI, activeProfile);
+              stage.setScene(creationGUI.getScene());
+              stage.setTitle("Create your podcast");
             }catch(SQLException e){
-              throw new RuntimeException(e);
-            }//end-try
+              collectionLibraryGUI.getGp().setEffect(new BoxBlur(10, 10, 10));
 
-            creationGUI=new CreationGUI(activeProfile, newCollection);
-            CreationGUIHandler=new CreationGUIHandler(creationGUI, activeProfile);
-            stage.setScene(creationGUI.getScene());
-            stage.setTitle("Create your podcast");
+              ExceptionDialog exceptionDialog=new ExceptionDialog(stage, new SystemErrorException());
+              exceptionDialog.showAndWait();
+
+              collectionLibraryGUI.getGp().setEffect(null);
+            }//end-try
             break;
         }//end-switch
-
         stage.setWidth(previousDimension.getWidth());
         stage.setHeight(previousDimension.getHeight());
       }

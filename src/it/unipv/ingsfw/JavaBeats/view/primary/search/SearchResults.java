@@ -3,15 +3,10 @@ package it.unipv.ingsfw.JavaBeats.view.primary.search;
 import it.unipv.ingsfw.JavaBeats.model.EJBENTITY;
 import it.unipv.ingsfw.JavaBeats.model.IJBResearchable;
 import it.unipv.ingsfw.JavaBeats.model.collection.JBCollection;
-import it.unipv.ingsfw.JavaBeats.model.playable.audio.Episode;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.Song;
-import it.unipv.ingsfw.JavaBeats.model.collection.Album;
 import it.unipv.ingsfw.JavaBeats.model.collection.Playlist;
-import it.unipv.ingsfw.JavaBeats.model.collection.Podcast;
-import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
-import it.unipv.ingsfw.JavaBeats.model.profile.User;
 import it.unipv.ingsfw.JavaBeats.view.presets.AudioCard;
 import it.unipv.ingsfw.JavaBeats.view.presets.scrollpanes.ScrollPanePreset;
 import javafx.geometry.Insets;
@@ -26,7 +21,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
-import javafx.util.Duration;
 
 import javax.imageio.ImageIO;
 import javax.sql.rowset.serial.SerialBlob;
@@ -86,17 +80,17 @@ public class SearchResults extends ScrollPanePreset {
     //Getter/Setter
     /*---------------------------------------*/
 
-    public EnumMap<EJBENTITY, ArrayList<IJBResearchable>> getSearchedMap() {
-        return searchedMap;
-    }
+  public EnumMap<EJBENTITY, ArrayList<IJBResearchable>> getSearchedMap(){
+    return searchedMap;
+  }
 
-    public ArrayList<ChoiceBox<Playlist>> getChoiceBoxArrayList() {
-        return choiceBoxArrayList;
-    }
+  public ArrayList<ChoiceBox<Playlist>> getChoiceBoxArrayList(){
+    return choiceBoxArrayList;
+  }
 
-    public ArrayList<ChoiceBox<Playlist>> getEpisodesChoiceBoxArrayList() {
-        return episodesChoiceBoxArrayList;
-    }
+  public ArrayList<ChoiceBox<Playlist>> getEpisodesChoiceBoxArrayList(){
+    return episodesChoiceBoxArrayList;
+  }
 
     public Playlist getQueue() {
         return queue;
@@ -253,7 +247,7 @@ public class SearchResults extends ScrollPanePreset {
             choiceButton.setStyle("-fx-background-color: transparent");
             HBox.setMargin(choiceButton, new Insets(0, 20, 0, 0));
 
-            Label songDuration = new Label(JBAudio.convertToMinutesAndSeconds(((Song) searchedMap.get(EJBENTITY.SONG).get(i)).getMetadata().getDuration()));
+      Label songDuration=new Label(JBAudio.convertToHoursMinutesAndSeconds(((Song)searchedMap.get(EJBENTITY.SONG).get(i)).getMetadata().getDuration()));
 
             songDuration.setTextFill(Color.LIGHTGRAY);
 

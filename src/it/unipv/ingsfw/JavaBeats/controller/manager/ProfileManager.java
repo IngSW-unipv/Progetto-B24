@@ -9,7 +9,6 @@ import it.unipv.ingsfw.JavaBeats.model.collection.JBCollection;
 import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.model.profile.User;
-import javafx.geometry.Pos;
 
 import javax.imageio.ImageIO;
 import javax.sql.rowset.serial.SerialBlob;
@@ -18,7 +17,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
@@ -42,11 +40,11 @@ public class ProfileManager{
 
   //Login
   //Propagates exception from dao
-  public JBProfile login(JBProfile profile) throws IllegalArgumentException, AccountNotFoundException{
+  public JBProfile login(JBProfile profile) throws WrongPasswordException, AccountNotFoundException{
     ProfileDAO p=new ProfileDAO();
     activeProfile=p.get(profile);
     if(!profile.getPassword().equals(activeProfile.getPassword())){
-      throw new IllegalArgumentException();
+      throw new WrongPasswordException();
     }//end-if
     return activeProfile;
   }
@@ -73,7 +71,7 @@ public class ProfileManager{
   }
 
 
-  public JBProfile switchProfileType(JBProfile jbProfile) throws ClassCastException, AccountNotFoundException{
+  public JBProfile switchProfileType(JBProfile jbProfile) throws AccountNotFoundException{
     ProfileDAO profileDAO=new ProfileDAO();
     AudioDAO audioDAO=new AudioDAO();
     CollectionDAO collectionDAO=new CollectionDAO();
@@ -94,7 +92,7 @@ public class ProfileManager{
       activeProfile=profileDAO.get(artist);
     }catch(ClassCastException c){
       Artist artist=(Artist)jbProfile;
-      User user=new User(artist.getUsername(), artist.getMail(), artist.getPassword(), artist.getName(), artist.getSurname(), artist.getBiography(), artist.getProfilePicture(), true, new Time(0), artist.getListeningHistory(), artist.getFavorites());
+      User user=new User(artist.getUsername(), artist.getMail(), artist.getPassword(), artist.getName(), artist.getSurname(), artist.getBiography(), artist.getProfilePicture(), true, 0, artist.getListeningHistory(), artist.getFavorites());
       profileDAO.remove(artist);
       profileDAO.insert(user);
 
@@ -120,6 +118,7 @@ public class ProfileManager{
     ProfileDAO p=new ProfileDAO();
     p.update(newProfile);
 
+    activeProfile=p.get(newProfile);
   }
 
   public void checkIfUsernameAlreadyExists(JBProfile jbProfile) throws UsernameAlreadyTakenException{
@@ -129,7 +128,7 @@ public class ProfileManager{
       p.get(jbProfile);
       UsernameAlreadyTakenException e=new UsernameAlreadyTakenException(jbProfile);
       throw e;
-    }catch(AccountNotFoundException e){
+    }catch(AccountNotFoundException ignored){
 
     }//end-try
   }
@@ -140,7 +139,7 @@ public class ProfileManager{
     try{
       p.get(jbProfile);
       throw new AccountAlreadyExistsException();
-    }catch(AccountNotFoundException e){
+    }catch(AccountNotFoundException ignored){
 
     }//end-try
   }

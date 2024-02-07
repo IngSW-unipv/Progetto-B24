@@ -1,5 +1,6 @@
 package it.unipv.ingsfw.JavaBeats.model.profile;
 
+import it.unipv.ingsfw.JavaBeats.exceptions.SystemErrorException;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.collection.Playlist;
 
@@ -64,8 +65,12 @@ public class Artist extends JBProfile{
    *
    * @return artist clone
    */
-  public JBProfile getCopy() throws SQLException{
-    return new Artist(this.getUsername(), this.getMail(), this.getPassword(), this.getName(), this.getSurname(), this.getBiography(), new SerialBlob(getProfilePicture()), this.totalListeners, this.getListeningHistory(), this.getFavorites());
+  public JBProfile getCopy() throws SystemErrorException{
+    try{
+      return new Artist(this.getUsername(), this.getMail(), this.getPassword(), this.getName(), this.getSurname(), this.getBiography(), new SerialBlob(getProfilePicture()), this.totalListeners, this.getListeningHistory(), this.getFavorites());
+    }catch(SQLException s){
+      throw new SystemErrorException();
+    }//end-try
   }
 
 

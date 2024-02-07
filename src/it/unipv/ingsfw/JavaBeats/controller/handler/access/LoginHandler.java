@@ -6,6 +6,7 @@ import it.unipv.ingsfw.JavaBeats.controller.handler.primary.home.HomePageHandler
 import it.unipv.ingsfw.JavaBeats.controller.manager.ProfileManager;
 import it.unipv.ingsfw.JavaBeats.controller.handler.primary.home.HomePageHandler;
 import it.unipv.ingsfw.JavaBeats.exceptions.AccountNotFoundException;
+import it.unipv.ingsfw.JavaBeats.exceptions.WrongPasswordException;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.model.profile.User;
@@ -42,7 +43,7 @@ public class LoginHandler{
   //Metodi
   /*---------------------------------------*/
   private void initComponents(){
-    EventHandler<ActionEvent> loginButtonHandler=new EventHandler<ActionEvent>(){
+    EventHandler<ActionEvent> loginButtonHandler=new EventHandler<>(){
       @Override
       public void handle(ActionEvent actionEvent){
         Stage s=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
@@ -54,7 +55,7 @@ public class LoginHandler{
           gui.getErrorMessage().setText("Please enter valid password.");
         }else{
           gui.getErrorMessage().setText("");
-          
+
           JBProfile profile=new User(gui.getUsername().getText(), gui.getUsername().getText(), gui.getPassword().getText());
 
           //Checks if the profile exists or handles the exception
@@ -71,7 +72,7 @@ public class LoginHandler{
             s.setTitle("HomePage");
             s.setWidth(previousDimension.getWidth());
             s.setHeight(previousDimension.getHeight());
-          }catch(AccountNotFoundException e){
+          }catch(AccountNotFoundException | WrongPasswordException e){
             gui.getErrorMessage().setText(e.getMessage()+"\n"+e.suggestAlternative());
           }//end-try
         }//end-if

@@ -1,5 +1,6 @@
 package it.unipv.ingsfw.JavaBeats.model.profile;
 
+import it.unipv.ingsfw.JavaBeats.exceptions.SystemErrorException;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.collection.Playlist;
 
@@ -25,14 +26,14 @@ public class User extends JBProfile{
 
   //ATTRIBUTES:
   private boolean isVisible;
-  private Time totalListeningTime;
+  private double totalListeningTime;
 
 
   //CONSTRUCTORS:
   /**
    * Complete constructor to initialize all parameters.
    */
-  public User(String username, String mail, String password, String name, String surname, String biography, Blob profilePicture, boolean isVisible, Time totalListeningTime, ArrayList<JBAudio> listeningHistory, Playlist favorites){
+  public User(String username, String mail, String password, String name, String surname, String biography, Blob profilePicture, boolean isVisible, double totalListeningTime, ArrayList<JBAudio> listeningHistory, Playlist favorites){
     super(username, mail, password, name, surname, biography, profilePicture, listeningHistory, favorites);
     this.isVisible=isVisible;
     this.totalListeningTime=totalListeningTime;
@@ -42,14 +43,14 @@ public class User extends JBProfile{
    * Minimal constructor to initialize strictly necessary parameters.
    */
   public User(String username, String mail, String password){
-    this(username, mail, password, null, null, null, null, true, null, null, null);
+    this(username, mail, password, null, null, null, null, true, 0, null, null);
   }
 
   /**
    * Constructor to initialize registration parameters.
    */
   public User(String username, String mail, String password, String name, String surname){
-    this(username, mail, password, name, surname, null, null, true, null, null, null);
+    this(username, mail, password, name, surname, null, null, true, 0, null, null);
   }
 
 
@@ -68,7 +69,7 @@ public class User extends JBProfile{
    *
    * @return total listening time
    */
-  public Time getMinuteListened(){
+  public double getMinuteListened(){
     return totalListeningTime;
   }
 
@@ -77,8 +78,12 @@ public class User extends JBProfile{
    *
    * @return user clone
    */
-  public JBProfile getCopy() throws SQLException{
-    return new User(this.getUsername(), this.getMail(), this.getPassword(), this.getName(), this.getSurname(), this.getBiography(), new SerialBlob(getProfilePicture()), this.isVisible, this.totalListeningTime, this.getListeningHistory(), this.getFavorites());
+  public JBProfile getCopy() throws SystemErrorException{
+    try{
+      return new User(this.getUsername(), this.getMail(), this.getPassword(), this.getName(), this.getSurname(), this.getBiography(), new SerialBlob(getProfilePicture()), this.isVisible, this.totalListeningTime, this.getListeningHistory(), this.getFavorites());
+    }catch(SQLException s){
+      throw new SystemErrorException();
+    }//end-try
   }
 
 
@@ -97,7 +102,7 @@ public class User extends JBProfile{
    *
    * @param minuteListened new total listening time
    */
-  public void setMinuteListened(Time minuteListened){
+  public void setMinuteListened(double minuteListened){
     this.totalListeningTime=minuteListened;
   }
 

@@ -10,60 +10,51 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-public class CollectionManagerFactory {
+public class CollectionManagerFactory{
 
 
-	//Attributi
-	private static CollectionManager collectionManager;
-	private static final String COLLECTIONMANAGER_PROPERTYNAME="collectionmanager.class.name";
-	private static CollectionManagerFactory instance = null;
+  //Attributi
+  private static CollectionManager collectionManager;
+  private static final String COLLECTIONMANAGER_PROPERTYNAME="collectionmanager.class.name";
+  private static CollectionManagerFactory instance=null;
 
-	private CollectionManagerFactory() {
+  private CollectionManagerFactory(){
 
-	}
+  }
 
-	//Singleton
-	public static CollectionManagerFactory getInstance() {
-		if(instance == null) {
-			instance = new CollectionManagerFactory();
-			System.out.println("Create new instance");
-		}
-		else
-			System.out.println("Instance already available");
-		return instance;
-	}
+  //Singleton
+  public static CollectionManagerFactory getInstance(){
+    if(instance==null){
+      instance=new CollectionManagerFactory();
+    }//end-if
+    return instance;
+  }
 
 
-	//Metodo per avere collectionmanager
-	public CollectionManager getCollectionManager() {
-		if(collectionManager==null) {
-			String collectionManagerClassName;
+  //Metodo per avere collectionmanager
+  public CollectionManager getCollectionManager(){
+    if(collectionManager==null){
+      String collectionManagerClassName;
 
-			try {
+      try{
 
-				//Ottengo path playermanager
-				Properties p = new Properties(System.getProperties());
-				p.load(new FileInputStream("Properties/Properties"));
-				collectionManagerClassName=p.getProperty(COLLECTIONMANAGER_PROPERTYNAME);
-
-
-				//JavaReflection 
-				Constructor c = Class.forName(collectionManagerClassName).getConstructor();
-				collectionManager=(CollectionManager) c.newInstance();
-			}
+        //Ottengo path playermanager
+        Properties p=new Properties(System.getProperties());
+        p.load(new FileInputStream("Properties/Properties"));
+        collectionManagerClassName=p.getProperty(COLLECTIONMANAGER_PROPERTYNAME);
 
 
-			catch (Exception e) {
+        //JavaReflection
+        Constructor c=Class.forName(collectionManagerClassName).getConstructor();
+        collectionManager=(CollectionManager)c.newInstance();
+      }catch(Exception e){
 
-				e.printStackTrace();
-			} 
-		}
+        e.printStackTrace();
+      }
+    }
 
-		return collectionManager;
-	}
-
-
-
+    return collectionManager;
+  }
 
 
 }

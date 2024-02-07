@@ -666,12 +666,9 @@ public class CollectionDAO implements ICollectionDAO{
     connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
     PreparedStatement st;
 
-    System.out.println(trackList.size());
-    trackList.forEach(a -> System.out.println(a+" "+a.getId()));
 
     for(JBAudio track: trackList){
       try{
-        System.out.println(track);
         String query="INSERT INTO AlbumSongs(idAlbum, idSong) VALUES(?, ?);";
         st=connection.prepareStatement(query);
         st.setInt(1, album.getId());
@@ -703,7 +700,6 @@ public class CollectionDAO implements ICollectionDAO{
 
     for(JBAudio track: trackList){
       try{
-        System.out.println(track);
         String query="INSERT INTO PodcastEpisodes(idPodcast, idEpisode) VALUES(?, ?);";
         st=connection.prepareStatement(query);
         st.setInt(1, podcast.getId());

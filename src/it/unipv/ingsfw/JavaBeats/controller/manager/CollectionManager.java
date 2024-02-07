@@ -65,7 +65,6 @@ public class CollectionManager{
   public void addToCollection(JBCollection jbCollection, JBAudio jbAudio) throws AccountNotFoundException{
     CollectionDAO c=new CollectionDAO();
     jbCollection.getTrackList().add(jbAudio);
-    System.out.println(jbCollection.getTrackList());
     c.update(jbCollection);
 
   }

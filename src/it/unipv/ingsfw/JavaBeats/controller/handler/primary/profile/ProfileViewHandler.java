@@ -1,14 +1,17 @@
 package it.unipv.ingsfw.JavaBeats.controller.handler.primary.profile;
 
+import it.unipv.ingsfw.JavaBeats.controller.factory.PlayerManagerFactory;
 import it.unipv.ingsfw.JavaBeats.controller.factory.ProfileManagerFactory;
+import it.unipv.ingsfw.JavaBeats.controller.handler.presets.SongbarHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.presets.dialogs.EditProfileDialogHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.presets.SidebarHandler;
 import it.unipv.ingsfw.JavaBeats.exceptions.AccountNotFoundException;
-import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
+import it.unipv.ingsfw.JavaBeats.exceptions.SystemErrorException;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import it.unipv.ingsfw.JavaBeats.view.presets.Sidebar;
 import it.unipv.ingsfw.JavaBeats.view.presets.Songbar;
 import it.unipv.ingsfw.JavaBeats.view.presets.dialogs.EditProfileDialog;
+import it.unipv.ingsfw.JavaBeats.view.presets.dialogs.ExceptionDialog;
 import it.unipv.ingsfw.JavaBeats.view.primary.profile.ProfileViewGUI;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -45,40 +48,52 @@ public class ProfileViewHandler{
       @Override
       public void handle(ActionEvent actionEvent){
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        gui.getGp().setEffect(new BoxBlur(10, 10, 10));
 
-        EditProfileDialog dialog=null;
         try{
+          gui.getGp().setEffect(new BoxBlur(10, 10, 10));
+
+          EditProfileDialog dialog=null;
           dialog=new EditProfileDialog(stage, originalProfile, originalProfile.getCopy());
-        }catch(SQLException e){
-          throw new RuntimeException(e);
-        }//end-try
-        EditProfileDialogHandler editProfileDialogHandler=new EditProfileDialogHandler(dialog);
-        dialog.showAndWait();
-        gui.getGp().setEffect(null); /* Removing blur effect */
 
-        /* Checking if an edit has been made */
-        if(!dialog.getOriginalProfile().equals(dialog.getNewProfile())){
+          EditProfileDialogHandler editProfileDialogHandler=new EditProfileDialogHandler(dialog);
+          dialog.showAndWait();
+          gui.getGp().setEffect(null);
 
-          //Profile manager updates DB
-          try{
+          /* Checking if an edit has been made */
+          if(!dialog.getOriginalProfile().equals(dialog.getNewProfile())){
+
+            //Profile manager updates DB
             ProfileManagerFactory.getInstance().getProfileManager().edit(dialog.getNewProfile());
-          }catch(AccountNotFoundException e){
-            throw new RuntimeException(e);
-          }
 
-          try{
+            /* Re-instantiating Sidebar, SidebarHandler, Songbar and SongbarHandler*/
+            Sidebar.getInstance(dialog.getNewProfile());
+            SidebarHandler sidebarHandler=new SidebarHandler();
+            Songbar.getInstance();
+            SongbarHandler.getInstance(dialog.getNewProfile(), PlayerManagerFactory.getInstance().getPlayerManager().getCurrentAudioPlaying());
+
             gui.getProfileHeader().getProfileImageView().setImage(new Image(dialog.getNewProfile().getProfilePicture().getBinaryStream()));
-          }catch(SQLException e){
-            throw new RuntimeException(e);
-          }//end-try
+            gui.getProfileHeader().getNameLabel().setText(dialog.getNewProfile().getName());
+            gui.getProfileHeader().getSurnameLabel().setText(dialog.getNewProfile().getSurname());
+            gui.getProfileHeader().getBiographyText().setText(dialog.getNewProfile().getBiography());
+            gui.getProfileHeader().sizeTextArea(gui.getProfileHeader().getBiographyText(), gui.getProfileHeader().getBiographyText().getText());
+            gui.getProfileHeader().getUsernameLabel().setText(dialog.getNewProfile().getUsername());
+          }//end-if
 
-          gui.getProfileHeader().getNameLabel().setText(dialog.getNewProfile().getName());
-          gui.getProfileHeader().getSurnameLabel().setText(dialog.getNewProfile().getSurname());
-          gui.getProfileHeader().getBiographyText().setText(dialog.getNewProfile().getBiography());
-          gui.getProfileHeader().sizeTextArea(gui.getProfileHeader().getBiographyText(), gui.getProfileHeader().getBiographyText().getText());
-          gui.getProfileHeader().getUsernameLabel().setText(dialog.getNewProfile().getUsername());
-        }//end-if
+        }catch(SystemErrorException e){
+          gui.getGp().setEffect(new BoxBlur(10, 10, 10));
+
+          ExceptionDialog exceptionDialog=new ExceptionDialog(stage, e);
+          exceptionDialog.showAndWait();
+
+          gui.getGp().setEffect(null);
+        }catch(SQLException | AccountNotFoundException e){
+          gui.getGp().setEffect(new BoxBlur(10, 10, 10));
+
+          ExceptionDialog exceptionDialog=new ExceptionDialog(stage, new SystemErrorException());
+          exceptionDialog.showAndWait();
+
+          gui.getGp().setEffect(null);
+        }//end-try
       }
     };
     EventHandler<ActionEvent> switchProfileTypehandler=new EventHandler<>(){
@@ -88,11 +103,12 @@ public class ProfileViewHandler{
 
         try{
           JBProfile switchedProfile=ProfileManagerFactory.getInstance().getProfileManager().switchProfileType(originalProfile);
+
           /* Re-instantiating Sidebar, SidebarHandler, Songbar and SongbarHandler*/
           Sidebar.getInstance(switchedProfile);
-          SidebarHandler.getInstance(switchedProfile);
+          SidebarHandler sidebarHandler=new SidebarHandler();
           Songbar.getInstance();
-//          SongbarHandler.getInstance(switchedProfile);
+          SongbarHandler.getInstance(switchedProfile, PlayerManagerFactory.getInstance().getPlayerManager().getCurrentAudioPlaying());
 
           ProfileViewGUI profileViewGUI=new ProfileViewGUI(switchedProfile, switchedProfile);
           ProfileViewHandler profileViewHandler=new ProfileViewHandler(profileViewGUI, switchedProfile);
@@ -102,16 +118,20 @@ public class ProfileViewHandler{
           stage.setTitle("Home");
           stage.setWidth(previousDimension.getWidth());
           stage.setHeight(previousDimension.getHeight());
-        }catch(ClassCastException | AccountNotFoundException e){
-          /* do something */
+        }catch(AccountNotFoundException e){
+          gui.getGp().setEffect(new BoxBlur(10, 10, 10));
+
+          ExceptionDialog exceptionDialog=new ExceptionDialog(stage, new SystemErrorException());
+          exceptionDialog.showAndWait();
+
+          gui.getGp().setEffect(null);
         }//end-try
       }
     };
     try{
       gui.getProfileHeader().getEditButton().setOnAction(editButtonHandler);
       gui.getProfileHeader().getSwitchButton().setOnAction(switchProfileTypehandler);
-    }catch(NullPointerException n){
-
+    }catch(NullPointerException ignored){
     }//end-try
   }
   /*---------------------------------------*/

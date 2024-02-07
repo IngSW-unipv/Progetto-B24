@@ -20,6 +20,7 @@ import it.unipv.ingsfw.JavaBeats.view.presets.AudioTable;
 import it.unipv.ingsfw.JavaBeats.view.presets.Sidebar;
 import it.unipv.ingsfw.JavaBeats.view.presets.Songbar;
 import it.unipv.ingsfw.JavaBeats.view.presets.dialogs.EditPlaylistDialog;
+import it.unipv.ingsfw.JavaBeats.view.presets.dialogs.ExceptionDialog;
 import it.unipv.ingsfw.JavaBeats.view.primary.home.HomePageGUI;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -79,100 +80,124 @@ public class CollectionViewHandler{
       @Override
       public void handle(ActionEvent actionEvent){
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        gui.getGp().setEffect(new BoxBlur(10, 10, 10));
 
-        Playlist p=(Playlist)gui.getJbCollection();
-        EditPlaylistDialog dialog=null;
         try{
-          dialog=new EditPlaylistDialog(stage, p, (Playlist)p.getCopy());
-        }catch(SystemErrorException e){
-          throw new RuntimeException(e);
-        }
-        EditPlaylistDialogHandler editPlaylistDialogHandler=new EditPlaylistDialogHandler(dialog);
-        dialog.showAndWait();
-        gui.getGp().setEffect(null);
-        System.out.println(dialog.getNewPlaylist().getName());
-        /* Checking if an edit has been made */
-        if(!dialog.getOriginalPlaylist().equals(dialog.getNewPlaylist())){
+          gui.getGp().setEffect(new BoxBlur(10, 10, 10));
 
-          //Collection manager updates DB
-          try{
+          Playlist p=(Playlist)gui.getJbCollection();
+
+          EditPlaylistDialog dialog=new EditPlaylistDialog(stage, p, (Playlist)p.getCopy());
+          EditPlaylistDialogHandler editPlaylistDialogHandler=new EditPlaylistDialogHandler(dialog);
+
+          dialog.showAndWait();
+
+          gui.getGp().setEffect(null);
+
+          /* Checking if an edit has been made */
+          if(!dialog.getOriginalPlaylist().equals(dialog.getNewPlaylist())){
+
+            //Collection manager updates DB
             CollectionManagerFactory.getInstance().getCollectionManager().edit(dialog.getNewPlaylist());
-          }catch(AccountNotFoundException e){
-            throw new RuntimeException(e);
-          }
-          try{
+
             gui.getCollectionHeader().getCollectionImageView().setImage(new Image(dialog.getNewPlaylist().getPicture().getBinaryStream()));
-          }catch(SQLException e){
-            throw new RuntimeException(e);
-          }//end-try
+            gui.getCollectionHeader().getCollectionTitle().setText(dialog.getNewPlaylist().getName());
 
-          gui.getCollectionHeader().getCollectionTitle().setText(dialog.getNewPlaylist().getName());
+            CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, dialog.getNewPlaylist());
+            CollectionViewHandler collectionViewHandler=new CollectionViewHandler(collectionViewGUI, activeProfile);
+            Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getPlaylistsButton());
 
-          CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, dialog.getNewPlaylist());
-          CollectionViewHandler collectionViewHandler=new CollectionViewHandler(collectionViewGUI, activeProfile);
-          Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getPlaylistsButton());
+            Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
+            stage.setScene(collectionViewGUI.getScene());
+            stage.setTitle("Playlist");
+            stage.setWidth(previousDimension.getWidth());
+            stage.setHeight(previousDimension.getHeight());
+          }//end-if
+        }catch(SystemErrorException | SQLException | AccountNotFoundException e){
+          gui.getGp().setEffect(new BoxBlur(10, 10, 10));
 
-          Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
-          stage.setScene(collectionViewGUI.getScene());
-          stage.setTitle("Playlist");
-          stage.setWidth(previousDimension.getWidth());
-          stage.setHeight(previousDimension.getHeight());
+          ExceptionDialog exceptionDialog=new ExceptionDialog(stage, new SystemErrorException());
+          exceptionDialog.showAndWait();
 
-        }
+          gui.getGp().setEffect(null);
+        }//end-try
       }
     };
-    EventHandler<ActionEvent> playCollectionButtonHandler=new EventHandler<ActionEvent>(){
+    EventHandler<ActionEvent> playCollectionButtonHandler=new EventHandler<>(){
       @Override
       public void handle(ActionEvent actionEvent){
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
 
         try{
           PlayerManagerFactory.getInstance().getPlayerManager().play(gui.getJbCollection());
+
+          PlayerManagerFactory.getInstance().getPlayerManager().setRandomized(false);
+          PlayerManagerFactory.getInstance().getPlayerManager().setAudioLooping(false);
+          PlayerManagerFactory.getInstance().getPlayerManager().setCollectionLooping(false);
+
+          gui.getCollectionHeader().getButtonRandom().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/EmptyRandom.png", true)));
+          Songbar.getInstance().getButtonRandom().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/EmptyRandom.png", true)));
+          gui.getCollectionHeader().getButtonLoop().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/EmptyLoop.png", true)));
+          Songbar.getInstance().getButtonLoop().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/EmptyLoop.png", true)));
         }catch(SystemErrorException e){
-          throw new RuntimeException(e);
-        }
-        PlayerManagerFactory.getInstance().getPlayerManager().setRandomized(false);
-        gui.getCollectionHeader().getButtonRandom().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/EmptyRandom.png", true)));
-        Songbar.getInstance().getButtonRandom().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/EmptyRandom.png", true)));
-        gui.getCollectionHeader().getButtonLoop().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/EmptyLoop.png", true)));
-        Songbar.getInstance().getButtonLoop().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/EmptyLoop.png", true)));
+          gui.getGp().setEffect(new BoxBlur(10, 10, 10));
+
+          ExceptionDialog exceptionDialog=new ExceptionDialog(stage, e);
+          exceptionDialog.showAndWait();
+
+          gui.getGp().setEffect(null);
+        }//end-try
       }
     };
     EventHandler<ActionEvent> randomButtonHandler=new EventHandler<>(){
       @Override
       public void handle(ActionEvent actionEvent){
+        Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+
         /* Handling random playing the collection */
         if(gui.getJbCollection()!=null){
           try{
             PlayerManagerFactory.getInstance().getPlayerManager().randomize(gui.getJbCollection());
+
+            gui.getCollectionHeader().getButtonRandom().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/FullRandom.png", true)));
+            Songbar.getInstance().getButtonRandom().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/FullRandom.png", true)));
+            gui.getCollectionHeader().getButtonLoop().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/EmptyLoop.png", true)));
+            Songbar.getInstance().getButtonLoop().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/EmptyLoop.png", true)));
           }catch(SystemErrorException e){
-            throw new RuntimeException(e);
-          }
-          gui.getCollectionHeader().getButtonRandom().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/FullRandom.png", true)));
-          Songbar.getInstance().getButtonRandom().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/FullRandom.png", true)));
-          gui.getCollectionHeader().getButtonLoop().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/EmptyLoop.png", true)));
-          Songbar.getInstance().getButtonLoop().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/EmptyLoop.png", true)));
+            gui.getGp().setEffect(new BoxBlur(10, 10, 10));
+
+            ExceptionDialog exceptionDialog=new ExceptionDialog(stage, e);
+            exceptionDialog.showAndWait();
+
+            gui.getGp().setEffect(null);
+          }//end-try
         }//end-if
       }
     };
     EventHandler<ActionEvent> loopButtonHandler=new EventHandler<>(){
       @Override
       public void handle(ActionEvent actionEvent){
+        Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+
         /* Handling looping the collection */
         if(gui.getJbCollection()!=null){
           try{
             PlayerManagerFactory.getInstance().getPlayerManager().loop(gui.getJbCollection());
+
+            gui.getCollectionHeader().getButtonRandom().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/EmptyRandom.png", true)));
+            Songbar.getInstance().getButtonRandom().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/EmptyRandom.png", true)));
+            gui.getCollectionHeader().getButtonLoop().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/FullLoop.png", true)));
           }catch(SystemErrorException e){
-            throw new RuntimeException(e);
-          }
-          gui.getCollectionHeader().getButtonRandom().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/EmptyRandom.png", true)));
-          Songbar.getInstance().getButtonRandom().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/EmptyRandom.png", true)));
-          gui.getCollectionHeader().getButtonLoop().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/FullLoop.png", true)));
+            gui.getGp().setEffect(new BoxBlur(10, 10, 10));
+
+            ExceptionDialog exceptionDialog=new ExceptionDialog(stage, e);
+            exceptionDialog.showAndWait();
+
+            gui.getGp().setEffect(null);
+          }//end-try
         }//end-if
       }
     };
-    EventHandler<ActionEvent> binButtonHandler=new EventHandler<ActionEvent>(){
+    EventHandler<ActionEvent> binButtonHandler=new EventHandler<>(){
       @Override
       public void handle(ActionEvent actionEvent){
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
@@ -190,28 +215,33 @@ public class CollectionViewHandler{
         }else if(gui.getJbCollection().getCreator().equals(activeProfile)){
           try{
             CollectionManagerFactory.getInstance().getCollectionManager().removeCollection(gui.getJbCollection());
+
+            if(PlayerManagerFactory.getInstance().getPlayerManager().getCurrentCollectionPlaying()!=null && PlayerManagerFactory.getInstance().getPlayerManager().getCurrentCollectionPlaying().equals(gui.getJbCollection())){
+              PlayerManagerFactory.getInstance().getPlayerManager().setCollectionLooping(false);
+              PlayerManagerFactory.getInstance().getPlayerManager().setCollectionLooping(false);
+            }//end-if
+
+            HomePageGUI homePageGUI=new HomePageGUI(activeProfile);
+            HomePageHandler homePageHandler=new HomePageHandler(homePageGUI, activeProfile);
+            Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getHomeButton());
+
+            Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
+            stage.setScene(homePageGUI.getScene());
+            stage.setTitle("HomePage");
+            stage.setWidth(previousDimension.getWidth());
+            stage.setHeight(previousDimension.getHeight());
           }catch(AccountNotFoundException e){
-            throw new RuntimeException(e);
-          }
+            gui.getGp().setEffect(new BoxBlur(10, 10, 10));
 
-          if(PlayerManagerFactory.getInstance().getPlayerManager().getCurrentCollectionPlaying()!=null && PlayerManagerFactory.getInstance().getPlayerManager().getCurrentCollectionPlaying().equals(gui.getJbCollection())){
-            PlayerManagerFactory.getInstance().getPlayerManager().setCollectionLooping(false);
-            PlayerManagerFactory.getInstance().getPlayerManager().setCollectionLooping(false);
-          }//end-if
+            ExceptionDialog exceptionDialog=new ExceptionDialog(stage, new SystemErrorException());
+            exceptionDialog.showAndWait();
 
-          HomePageGUI homePageGUI=new HomePageGUI(activeProfile);
-          HomePageHandler homePageHandler=new HomePageHandler(homePageGUI, activeProfile);
-          Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getHomeButton());
-
-          Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
-          stage.setScene(homePageGUI.getScene());
-          stage.setTitle("HomePage");
-          stage.setWidth(previousDimension.getWidth());
-          stage.setHeight(previousDimension.getHeight());
+            gui.getGp().setEffect(null);
+          }//end-try
         }//end-if
       }
     };
-    EventHandler<ActionEvent> addEpisodeHandler=new EventHandler<ActionEvent>(){
+    EventHandler<ActionEvent> addEpisodeHandler=new EventHandler<>(){
       @Override
       public void handle(ActionEvent actionEvent){
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
@@ -220,39 +250,41 @@ public class CollectionViewHandler{
         fileChooser.setTitle("Add your episodes");
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("MP3 file", "*mp3"));
         List<File> fileList=fileChooser.showOpenMultipleDialog(stage);
-        for(File f: fileList){
-          byte[] fileContent=new byte[(int)f.length()];
-          FileInputStream fileInputStream=null;
-          URL url=null;
-          try{
-            fileInputStream=new FileInputStream(f);
-            ContentHandler handler=new DefaultHandler();
-            Metadata metadata=new Metadata();
-            Parser parser=new Mp3Parser();
-            ParseContext parseContext=new ParseContext();
-            parser.parse(fileInputStream, handler, metadata, parseContext);
-            fileInputStream.close();
+        if(fileList!=null){
+          for(File f: fileList){
+            byte[] fileContent=new byte[(int)f.length()];
+            FileInputStream fileInputStream=null;
+            URL url=null;
+            try{
+              fileInputStream=new FileInputStream(f);
+              ContentHandler handler=new DefaultHandler();
+              Metadata metadata=new Metadata();
+              Parser parser=new Mp3Parser();
+              ParseContext parseContext=new ParseContext();
+              parser.parse(fileInputStream, handler, metadata, parseContext);
+              fileInputStream.close();
 
-            fileInputStream=new FileInputStream(f);
-            fileInputStream.read(fileContent);
-            fileInputStream.close();
+              fileInputStream=new FileInputStream(f);
+              fileInputStream.read(fileContent);
+              fileInputStream.close();
 
-            Blob fileAudio=new SerialBlob(fileContent);
+              Blob fileAudio=new SerialBlob(fileContent);
 
-            Podcast p=(Podcast)gui.getJbCollection();
-            JBAudio jbAudio=new Episode(0, metadata.get("dc:title")==null ? FilenameUtils.removeExtension(f.getName()) : metadata.get("dc:title"), (Artist)p.getCreator(), gui.getJbCollection(), fileAudio, Double.parseDouble(metadata.get("xmpDM:duration"))*1000, new Date(System.currentTimeMillis()), new String[]{metadata.get("xmpDM:genre")}, false, 0);
+              Podcast p=(Podcast)gui.getJbCollection();
+              JBAudio jbAudio=new Episode(0, metadata.get("dc:title")==null ? FilenameUtils.removeExtension(f.getName()) : metadata.get("dc:title"), (Artist)p.getCreator(), gui.getJbCollection(), fileAudio, Double.parseDouble(metadata.get("xmpDM:duration"))*1000, new Date(System.currentTimeMillis()), new String[]{metadata.get("xmpDM:genre")}, false, 0);
 
-            System.out.println("Prima dell'aggiunta: "+CollectionManagerFactory.getInstance().getCollectionManager().getCollectionAudios(gui.getJbCollection(), activeProfile));
-            CollectionManagerFactory.getInstance().getCollectionManager().addToCollection(gui.getJbCollection(), jbAudio);
-            System.out.println("Dopo l'aggiunta: "+CollectionManagerFactory.getInstance().getCollectionManager().getCollectionAudios(gui.getJbCollection(), activeProfile));
+              CollectionManagerFactory.getInstance().getCollectionManager().addToCollection(gui.getJbCollection(), jbAudio);
 
+            }catch(IOException | TikaException | SAXException | SQLException | AccountNotFoundException e){
+              gui.getGp().setEffect(new BoxBlur(10, 10, 10));
 
-          }catch(IOException | TikaException | SAXException | SQLException e){
-            throw new RuntimeException(e);
-          }catch(AccountNotFoundException e){
-            throw new RuntimeException(e);
-          }
-        }//end-foreach
+              ExceptionDialog exceptionDialog=new ExceptionDialog(stage, new SystemErrorException());
+              exceptionDialog.showAndWait();
+
+              gui.getGp().setEffect(null);
+            }//end-try
+          }//end-foreach
+        }//end-if
 
         CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, gui.getJbCollection());
         CollectionViewHandler collectionViewHandler=new CollectionViewHandler(collectionViewGUI, activeProfile);
@@ -266,9 +298,11 @@ public class CollectionViewHandler{
       }
     };
 
-    EventHandler<MouseEvent> tableViewClickHandler=new EventHandler<MouseEvent>(){
+    EventHandler<MouseEvent> tableViewClickHandler=new EventHandler<>(){
       @Override
       public void handle(MouseEvent mouseEvent){
+        Stage stage=(Stage)((Node)mouseEvent.getSource()).getScene().getWindow();
+
         if(mouseEvent.getButton()==MouseButton.PRIMARY){
           Node node=mouseEvent.getPickResult().getIntersectedNode();
 
@@ -300,39 +334,50 @@ public class CollectionViewHandler{
             if(AudioTableHandler.isQueue()){
               try{
                 PlayerManagerFactory.getInstance().getPlayerManager().playFromQueue(audioClicked);
-              }catch(SystemErrorException e){
-                throw new RuntimeException(e);
-              }
 
-              reloadCollectionViewGUI(activeProfile);
+                reloadCollectionViewGUI(activeProfile);
+              }catch(SystemErrorException e){
+                gui.getGp().setEffect(new BoxBlur(10, 10, 10));
+
+                ExceptionDialog exceptionDialog=new ExceptionDialog(stage, e);
+                exceptionDialog.showAndWait();
+
+                gui.getGp().setEffect(null);
+              }//end-try
             }else{
               PlayerManagerFactory.getInstance().getPlayerManager().play(audioClicked);
             }//end-if
           }else if(foundIsFavoriteButton){
-            JBAudio audioClicked=gui.getAudioTable().getItems().get(gui.getAudioTable().getSelectionModel().getSelectedIndex());
-
-            if(activeProfile.getFavorites().getTrackList().contains(audioClicked)){
-              activeProfile.getFavorites().getTrackList().remove(audioClicked);
-            }else{
-              activeProfile.getFavorites().getTrackList().add(audioClicked);
-            }//end-if
             try{
-              CollectionManagerFactory.getInstance().getCollectionManager().setFavorites(activeProfile);
-            }catch(AccountNotFoundException e){
-              throw new RuntimeException(e);
-            }
+              JBAudio audioClicked=gui.getAudioTable().getItems().get(gui.getAudioTable().getSelectionModel().getSelectedIndex());
 
-            if(gui.getJbCollection().getName().equals("Favorites")){
-              CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, activeProfile.getFavorites());
-              CollectionViewHandler collectionViewHandler=new CollectionViewHandler(collectionViewGUI, activeProfile);
-              ((Stage)AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.getScene().getWindow()).setScene(collectionViewGUI.getScene());
-              AudioTableHandler.getInstance((AudioTable)collectionViewGUI.getAudioTable());
-              AudioTableHandler.setQueue(false);
-            }else{
-              if(AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING!=null){
-                AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.refresh();
+              if(activeProfile.getFavorites().getTrackList().contains(audioClicked)){
+                activeProfile.getFavorites().getTrackList().remove(audioClicked);
+              }else{
+                activeProfile.getFavorites().getTrackList().add(audioClicked);
               }//end-if
-            }//end-if
+
+              CollectionManagerFactory.getInstance().getCollectionManager().setFavorites(activeProfile);
+
+              if(gui.getJbCollection().getName().equals("Favorites")){
+                CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, activeProfile.getFavorites());
+                CollectionViewHandler collectionViewHandler=new CollectionViewHandler(collectionViewGUI, activeProfile);
+                ((Stage)AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.getScene().getWindow()).setScene(collectionViewGUI.getScene());
+                AudioTableHandler.getInstance((AudioTable)collectionViewGUI.getAudioTable());
+                AudioTableHandler.setQueue(false);
+              }else{
+                if(AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING!=null){
+                  AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.refresh();
+                }//end-if
+              }//end-if
+            }catch(AccountNotFoundException e){
+              gui.getGp().setEffect(new BoxBlur(10, 10, 10));
+
+              ExceptionDialog exceptionDialog=new ExceptionDialog(stage, new SystemErrorException());
+              exceptionDialog.showAndWait();
+
+              gui.getGp().setEffect(null);
+            }//end-try
           }else if(foundBinButton){
             JBAudio audioClicked=gui.getAudioTable().getItems().get(gui.getAudioTable().getSelectionModel().getSelectedIndex());
 
@@ -343,15 +388,20 @@ public class CollectionViewHandler{
             }else if(gui.getJbCollection().getCreator().equals(activeProfile)){
               try{
                 CollectionManagerFactory.getInstance().getCollectionManager().removeFromPlaylist(gui.getJbCollection(), audioClicked);
-              }catch(AccountNotFoundException e){
-                throw new RuntimeException(e);
-              }
 
-              CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, gui.getJbCollection());
-              CollectionViewHandler collectionViewHandler=new CollectionViewHandler(collectionViewGUI, activeProfile);
-              ((Stage)AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.getScene().getWindow()).setScene(collectionViewGUI.getScene());
-              AudioTableHandler.getInstance((AudioTable)collectionViewGUI.getAudioTable());
-              AudioTableHandler.setQueue(false);
+                CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, gui.getJbCollection());
+                CollectionViewHandler collectionViewHandler=new CollectionViewHandler(collectionViewGUI, activeProfile);
+                ((Stage)AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.getScene().getWindow()).setScene(collectionViewGUI.getScene());
+                AudioTableHandler.getInstance((AudioTable)collectionViewGUI.getAudioTable());
+                AudioTableHandler.setQueue(false);
+              }catch(AccountNotFoundException e){
+                gui.getGp().setEffect(new BoxBlur(10, 10, 10));
+
+                ExceptionDialog exceptionDialog=new ExceptionDialog(stage, new SystemErrorException());
+                exceptionDialog.showAndWait();
+
+                gui.getGp().setEffect(null);
+              }//end-try
             }//end-if
           }//end-if
         }//end-if

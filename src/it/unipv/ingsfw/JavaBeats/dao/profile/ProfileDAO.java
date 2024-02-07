@@ -122,8 +122,9 @@ public class ProfileDAO implements IProfileDAO{
           updateBiography(profile);
 
       if(profile.getProfilePicture()!=null)
-        if(!Arrays.equals(profile.getProfilePicture().getBinaryStream().readAllBytes(), profile.getProfilePicture().getBinaryStream().readAllBytes()))
+        if(!Arrays.equals(profile.getProfilePicture().getBinaryStream().readAllBytes(), oldProfile.getProfilePicture().getBinaryStream().readAllBytes()))
           updateProfilePicture(profile);
+
     }catch(SQLException | IOException s){
       throw new RuntimeException(s);
     }
@@ -229,7 +230,7 @@ public class ProfileDAO implements IProfileDAO{
                 rs.getString("biography"),
                 rs.getBlob("profilePicture"),
                 rs.getBoolean("isVisible"),
-                null,
+                0,
                 null, null);
       }
 
@@ -264,11 +265,11 @@ public class ProfileDAO implements IProfileDAO{
   }
 
   //PRIVATE METHODS:
-  private Time getTotalListeningTime(User user){
+  private double getTotalListeningTime(User user){
     connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
     PreparedStatement st;
     ResultSet rs;
-    Time result = new Time(0);
+    double result=00.00;
 
     try{
       String query="SELECT (SUM(TIMEDIFF(duration, '00:00:00'))) AS 'total' FROM "+
@@ -281,15 +282,13 @@ public class ProfileDAO implements IProfileDAO{
       rs=st.executeQuery();
 
       rs.next();
-      result=rs.getTime("total");
+      result=rs.getDouble("total");
 
     }catch(Exception e){
       e.printStackTrace();
     }
 
     DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
-
-    if(result==null) result = new Time(0);
 
     return result;
   }
@@ -328,7 +327,7 @@ public class ProfileDAO implements IProfileDAO{
     ArrayList<JBAudio> result=new ArrayList<>();
 
     try{
-      String query="SELECT DISTINCT idAudio, listeningDate FROM ListeningHistory WHERE profileMail=? ORDER BY listeningDate DESC LIMIT 25;";
+      String query="SELECT DISTINCT idAudio FROM ListeningHistory WHERE profileMail=? ORDER BY listeningDate DESC LIMIT 25;";
 
       st=connection.prepareStatement(query);
       st.setString(1, profile.getMail());
@@ -344,6 +343,7 @@ public class ProfileDAO implements IProfileDAO{
 
     DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
     AudioDAO aDAO=new AudioDAO();
+
     for(Integer track: audioIDs){
       result.add(aDAO.get(new Song(track, null, null, null), profile));      //aDAO.get() will return either Song or Episode (only cares about the id of the JBAudio input, not the type)
     }

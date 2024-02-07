@@ -135,7 +135,7 @@ public class AudioDAO implements IAudioDAO{
     Song result=null;
 
     try{
-      String query="SELECT Audio.id, title, artistMail, idAlbum, audioFile, duration, releaseDate "+
+      String query="SELECT DISTINCT Audio.id, title, artistMail, idAlbum, audioFile, duration, releaseDate "+
               "FROM Audio "+
               "JOIN Song ON Audio.id=Song.id "+
               "JOIN ArtistAudios ON Audio.id=ArtistAudios.idAudio "+
@@ -173,6 +173,7 @@ public class AudioDAO implements IAudioDAO{
       ProfileDAO pDAO=new ProfileDAO();
       CollectionDAO cDAO=new CollectionDAO();
       result.getMetadata().setArtist(pDAO.getArtist(result.getMetadata().getArtist()));       //set complete artist profile
+
       result.getMetadata().setCollection(cDAO.get(result.getMetadata().getCollection()));     //set complete collection data
 
       if(activeProfile!=null)
@@ -190,7 +191,7 @@ public class AudioDAO implements IAudioDAO{
     Episode result=null;
 
     try{
-      String query="SELECT Audio.id, title, artistMail, idPodcast, audioFile, duration, releaseDate "+
+      String query="SELECT DISTINCT Audio.id, title, artistMail, idPodcast, audioFile, duration, releaseDate "+
               "FROM Audio "+
               "JOIN Episode ON Audio.id=Episode.id "+
               "JOIN ArtistAudios ON Audio.id=ArtistAudios.idAudio "+
@@ -242,6 +243,7 @@ public class AudioDAO implements IAudioDAO{
     connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
     PreparedStatement st;
 
+
     try{
       String query="INSERT INTO ListeningHistory(idListeningHistory, profileMail, idAudio) VALUES(default, ?, ?);";
 
@@ -249,7 +251,6 @@ public class AudioDAO implements IAudioDAO{
       st.setString(1, activeProfile.getMail());
       st.setInt(2, audio.getId());
       st.executeUpdate();
-
     }catch(Exception e){
       e.printStackTrace();
     }
@@ -524,12 +525,7 @@ public class AudioDAO implements IAudioDAO{
     DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
   }
 
-  private void linkAudioToArtist(JBAudio audio) throws AccountNotFoundException{
-    ProfileDAO pDAO=new ProfileDAO();
-
-    if(pDAO.get(audio.getMetadata().getArtist())==null)    //if artist not present in DB
-      pDAO.insert(audio.getMetadata().getArtist());           //insert new artist
-
+  private void linkAudioToArtist(JBAudio audio){
     connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
     PreparedStatement st;
 
@@ -547,16 +543,10 @@ public class AudioDAO implements IAudioDAO{
     }
 
     DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
-
   }
 
-  private void linkAudioToCollection(JBAudio audio) throws AccountNotFoundException{
+  private void linkAudioToCollection(JBAudio audio){
     if(audio.getMetadata().getCollection()!=null){       //sometimes metadata don't specify collection
-
-      CollectionDAO cDAO=new CollectionDAO();
-
-      if(cDAO.get(audio.getMetadata().getCollection())==null)      //if the collection is not present in the DB
-        cDAO.insert(audio.getMetadata().getCollection());           //insert new collection in DB
 
       connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
       PreparedStatement st;
@@ -589,7 +579,6 @@ public class AudioDAO implements IAudioDAO{
 
     if(audio.getMetadata().getGenres()!=null){       //sometimes metadata don't specify genres
       String[] genreArray=audio.getMetadata().getGenres();
-      System.out.println(Arrays.toString(genreArray));
 
       connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
       PreparedStatement st1, st2, st3;
@@ -605,7 +594,6 @@ public class AudioDAO implements IAudioDAO{
           rs1=st1.executeQuery();
 
           if(!rs1.isBeforeFirst()){         //if genre not in DB
-            System.out.println("Genere non in DB");
             String q2="INSERT INTO Genre(genre) VALUE(?);";
             st2=connection.prepareStatement(q2);
 
@@ -613,7 +601,6 @@ public class AudioDAO implements IAudioDAO{
             st2.executeUpdate();
           }
 
-          System.out.println("Genere in DB ora linko");
           String q3="INSERT INTO AudioGenres(idAudio, genre) VALUE(?, ?);";
           st3=connection.prepareStatement(q3);
 

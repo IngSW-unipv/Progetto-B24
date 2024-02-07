@@ -18,7 +18,7 @@ import java.sql.Date;
  * @see Song
  * @see Episode
  */
-public abstract class JBAudio implements IJBPlayable {
+public abstract class JBAudio implements IJBPlayable{
 
   //ATTRIBUTES:
   private int id;
@@ -36,7 +36,7 @@ public abstract class JBAudio implements IJBPlayable {
    * @see Song
    * @see Episode
    */
-  public class Metadata {
+  public class Metadata{
 
     //NESTED CLASS ATTRIBUTES:
     private Artist artist;
@@ -51,13 +51,13 @@ public abstract class JBAudio implements IJBPlayable {
     /**
      * Complete constructor to initialize all nested class parameters.
      */
-    public Metadata(Artist artist, String title, JBCollection collection, double duration, Date releaseDate, String[] genres) {
-      this.artist = artist;
-      this.title = title;
-      this.collection = collection;
-      this.duration = duration;
-      this.releaseDate = releaseDate;
-      this.genres = genres;
+    public Metadata(Artist artist, String title, JBCollection collection, double duration, Date releaseDate, String[] genres){
+      this.artist=artist;
+      this.title=title;
+      this.collection=collection;
+      this.duration=duration;
+      this.releaseDate=releaseDate;
+      this.genres=genres;
     }
 
     //NESTED CLASS GETTERS & SETTERS:
@@ -67,7 +67,7 @@ public abstract class JBAudio implements IJBPlayable {
      *
      * @return artist
      */
-    public Artist getArtist() {
+    public Artist getArtist(){
       return artist;
     }
 
@@ -76,8 +76,8 @@ public abstract class JBAudio implements IJBPlayable {
      *
      * @param artist new artist
      */
-    public void setArtist(Artist artist) {
-      this.artist = artist;
+    public void setArtist(Artist artist){
+      this.artist=artist;
     }
 
     /**
@@ -85,7 +85,7 @@ public abstract class JBAudio implements IJBPlayable {
      *
      * @return title
      */
-    public String getTitle() {
+    public String getTitle(){
       return title;
     }
 
@@ -94,8 +94,8 @@ public abstract class JBAudio implements IJBPlayable {
      *
      * @param title new title
      */
-    public void setTitle(String title) {
-      this.title = title;
+    public void setTitle(String title){
+      this.title=title;
     }
 
     /**
@@ -103,7 +103,7 @@ public abstract class JBAudio implements IJBPlayable {
      *
      * @return duration
      */
-    public double getDuration() {
+    public double getDuration(){
       return duration;
     }
 
@@ -112,8 +112,8 @@ public abstract class JBAudio implements IJBPlayable {
      *
      * @param duration new duration
      */
-    public void setDuration(double duration) {
-      this.duration = duration;
+    public void setDuration(double duration){
+      this.duration=duration;
     }
 
     /**
@@ -121,7 +121,7 @@ public abstract class JBAudio implements IJBPlayable {
      *
      * @return release date
      */
-    public Date getReleaseDate() {
+    public Date getReleaseDate(){
       return releaseDate;
     }
 
@@ -130,8 +130,8 @@ public abstract class JBAudio implements IJBPlayable {
      *
      * @param releaseDate new release date
      */
-    public void setReleaseDate(Date releaseDate) {
-      this.releaseDate = releaseDate;
+    public void setReleaseDate(Date releaseDate){
+      this.releaseDate=releaseDate;
     }
 
     /**
@@ -139,7 +139,7 @@ public abstract class JBAudio implements IJBPlayable {
      *
      * @return array of genres
      */
-    public String[] getGenres() {
+    public String[] getGenres(){
       return genres;
     }
 
@@ -148,8 +148,8 @@ public abstract class JBAudio implements IJBPlayable {
      *
      * @param genres new genres array
      */
-    public void setGenres(String[] genres) {
-      this.genres = genres;
+    public void setGenres(String[] genres){
+      this.genres=genres;
     }
 
     /**
@@ -157,7 +157,7 @@ public abstract class JBAudio implements IJBPlayable {
      *
      * @return collection
      */
-    public JBCollection getCollection() {
+    public JBCollection getCollection(){
       return collection;
     }
 
@@ -166,8 +166,8 @@ public abstract class JBAudio implements IJBPlayable {
      *
      * @param collection new collection
      */
-    public void setCollection(JBCollection collection) {
-      this.collection = collection;
+    public void setCollection(JBCollection collection){
+      this.collection=collection;
     }
   }
 
@@ -178,13 +178,13 @@ public abstract class JBAudio implements IJBPlayable {
    * Complete constructor to initialize all parameters.
    * Note that an abstract class cannot be instantiated, this constructor will be used by classes that extend JBAudio to initialize parameters.
    */
-  protected JBAudio(int id, String title, Artist artist, JBCollection collection, Blob audioFile, double duration, Date releaseDate, String[] genres, boolean isFavorite, int numberOfStreams) {
-    this.id = id;
-    metadata = new Metadata(artist, title, collection, duration, releaseDate, genres);
-    this.audioFile = audioFile;
-    this.isFavorite = isFavorite;
-    this.numberOfStreams = numberOfStreams;
-    mediaPlayer = null;
+  protected JBAudio(int id, String title, Artist artist, JBCollection collection, Blob audioFile, double duration, Date releaseDate, String[] genres, boolean isFavorite, int numberOfStreams){
+    this.id=id;
+    metadata=new Metadata(artist, title, collection, duration, releaseDate, genres);
+    this.audioFile=audioFile;
+    this.isFavorite=isFavorite;
+    this.numberOfStreams=numberOfStreams;
+    mediaPlayer=null;
   }
 
 
@@ -195,7 +195,7 @@ public abstract class JBAudio implements IJBPlayable {
    *
    * @return id
    */
-  public int getId() {
+  public int getId(){
     return id;
   }
 
@@ -204,7 +204,7 @@ public abstract class JBAudio implements IJBPlayable {
    *
    * @return is favorite
    */
-  public boolean isFavorite() {
+  public boolean isFavorite(){
     return isFavorite;
   }
 
@@ -213,7 +213,7 @@ public abstract class JBAudio implements IJBPlayable {
    *
    * @return total number of streams
    */
-  public int getNumberOfStreams() {
+  public int getNumberOfStreams(){
     return numberOfStreams;
   }
 
@@ -222,7 +222,7 @@ public abstract class JBAudio implements IJBPlayable {
    *
    * @return metadata
    */
-  public Metadata getMetadata() {
+  public Metadata getMetadata(){
     return metadata;
   }
 
@@ -231,7 +231,7 @@ public abstract class JBAudio implements IJBPlayable {
    *
    * @return audio file
    */
-  public Blob getAudioFileBlob() {
+  public Blob getAudioFileBlob(){
     return audioFile;
   }
 
@@ -240,7 +240,7 @@ public abstract class JBAudio implements IJBPlayable {
    *
    * @return media player
    */
-  public MediaPlayer getMediaPlayer() {
+  public MediaPlayer getMediaPlayer(){
     return mediaPlayer;
   }
 
@@ -251,8 +251,8 @@ public abstract class JBAudio implements IJBPlayable {
    *
    * @param id new id
    */
-  public void setId(int id) {
-    this.id = id;
+  public void setId(int id){
+    this.id=id;
   }
 
   /**
@@ -260,8 +260,8 @@ public abstract class JBAudio implements IJBPlayable {
    *
    * @param isFavorite is favorite
    */
-  public void setFavorite(boolean isFavorite) {
-    this.isFavorite = this.isFavorite;
+  public void setFavorite(boolean isFavorite){
+    this.isFavorite=this.isFavorite;
   }
 
   /**
@@ -269,8 +269,8 @@ public abstract class JBAudio implements IJBPlayable {
    *
    * @param numberOfStreams new total number of streams
    */
-  public void setNumberOfStreams(int numberOfStreams) {
-    this.numberOfStreams = numberOfStreams;
+  public void setNumberOfStreams(int numberOfStreams){
+    this.numberOfStreams=numberOfStreams;
   }
 
   /**
@@ -278,8 +278,8 @@ public abstract class JBAudio implements IJBPlayable {
    *
    * @param metadata new metadata
    */
-  public void setMetadata(Metadata metadata) {
-    this.metadata = metadata;
+  public void setMetadata(Metadata metadata){
+    this.metadata=metadata;
   }
 
   /**
@@ -287,39 +287,40 @@ public abstract class JBAudio implements IJBPlayable {
    *
    * @param audioFile new audio file
    */
-  public void setAudioFileBlob(Blob audioFile) {
-    this.audioFile = audioFile;
+  public void setAudioFileBlob(Blob audioFile){
+    this.audioFile=audioFile;
   }
 
   /**
    * Override of equals to compare {@link JBAudio}.
    */
   @Override
-  public boolean equals(Object obj) {
-    if (obj == null) {
+  public boolean equals(Object obj){
+    if(obj==null){
       return false;
     }//end-if
 
-    JBAudio jbAudio = (JBAudio) obj;
+    JBAudio jbAudio=(JBAudio)obj;
 
-    if (this.id == jbAudio.getId()) {
+    if(this.id==jbAudio.getId()){
       return true;
     }//end-if
     return false;
   }
 
   /**
-   * Converts milliseconds passed as double into minutes and seconds as a {@link String} formatted as MM:SS.
+   * Converts milliseconds passed as double into hours, minutes and seconds as a {@link String} formatted as HH:MM:SS.
    *
    * @param milliSeconds milliseconds to convert
-   * @return equivalent time in minutes and second
+   * @return equivalent time in hours, minutes and second
    */
-  public static String convertToMinutesAndSeconds(double milliSeconds) {
-    long totalSeconds = (long) (milliSeconds / 1000);
-    int minutes = (int) (totalSeconds / 60);
-    int seconds = (int) (totalSeconds % 60);
+  public static String convertToHoursMinutesAndSeconds(double milliSeconds){
+    long totalSeconds=(long)(milliSeconds/1000);
+    int hours=(int)(totalSeconds/3600);
+    int minutes=(int)(totalSeconds/60);
+    int seconds=(int)(totalSeconds%60);
 
-    return String.format("%02d", minutes) + ":" + String.format("%02d", seconds);
+    return String.format("%02d", hours)+":"+String.format("%02d", minutes)+":"+String.format("%02d", seconds);
   }
 
 }
