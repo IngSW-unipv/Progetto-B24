@@ -1,5 +1,7 @@
 package it.unipv.ingsfw.JavaBeats.view.presets;
 
+import it.unipv.ingsfw.JavaBeats.model.collection.Playlist;
+import it.unipv.ingsfw.JavaBeats.model.collection.Podcast;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.collection.Album;
 import it.unipv.ingsfw.JavaBeats.model.collection.JBCollection;
@@ -92,15 +94,17 @@ public class AudioTable extends TableView<JBAudio> {
             getColumns().addAll(playColumn, titleColumn, collectionColumn, dateColumn, favoriteColumn, durationColumn);
         } else {
             try {
-                Album album = (Album) jbCollection;
-                getColumns().addAll(playColumn, titleColumn, collectionColumn, dateColumn, favoriteColumn, durationColumn);
-            } catch (ClassCastException e) {
+                Playlist playlist = (Playlist) jbCollection;
+
                 if (jbCollection.equals(jbProfile.getFavorites())) {
                     getColumns().addAll(playColumn, titleColumn, collectionColumn, dateColumn, favoriteColumn, durationColumn);
                 } else {
                     getColumns().addAll(playColumn, titleColumn, collectionColumn, dateColumn, favoriteColumn, durationColumn, deleteColumn);
 
                 }
+
+            } catch (ClassCastException e) {
+                getColumns().addAll(playColumn, titleColumn, collectionColumn, dateColumn, favoriteColumn, durationColumn);
             }
 
         }
