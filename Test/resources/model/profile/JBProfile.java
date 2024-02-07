@@ -1,8 +1,8 @@
 package it.unipv.ingsfw.JavaBeats.model.profile;
 
 import it.unipv.ingsfw.JavaBeats.model.IJBResearchable;
-import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.collection.Playlist;
+import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import javafx.scene.image.Image;
 
 import javax.imageio.ImageIO;

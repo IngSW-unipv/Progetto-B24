@@ -18,7 +18,6 @@ public class ProfileViewGUI {
     private static final int clientWidth = (int) Screen.getPrimary().getBounds().getWidth();
     private static final int clientHeight = (int) Screen.getPrimary().getBounds().getHeight();
     private ProfileHeader profileHeader;
-    private ProfileDefault profileDefault;
     private GridPane gp;
     private Scene scene;
 
@@ -40,10 +39,6 @@ public class ProfileViewGUI {
         return profileHeader;
     }
 
-    public ProfileDefault getProfileDefault() {
-        return profileDefault;
-    }
-
     public GridPane getGp() {
         return gp;
     }
@@ -54,9 +49,8 @@ public class ProfileViewGUI {
     private void initComponents(JBProfile activeProfile, JBProfile searchedProfile) {
         /* Header and main components */
         profileHeader = new ProfileHeader(activeProfile, searchedProfile);
-        profileDefault = new ProfileDefault(activeProfile, searchedProfile);
 
-        ScrollPanePreset mainContent = new ScrollPanePreset(new VBox(profileHeader, profileDefault));
+        ScrollPanePreset mainContent = new ScrollPanePreset(new VBox(profileHeader));
         mainContent.setPadding(new Insets(20, 20, 0, 20));
         mainContent.setStyle("-fx-background: #0F0F0FFF; -fx-border-color: #0F0F0FFF;");
         mainContent.setFitToWidth(true);
