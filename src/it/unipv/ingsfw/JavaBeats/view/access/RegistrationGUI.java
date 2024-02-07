@@ -184,6 +184,9 @@ public class RegistrationGUI {
         confirmPassword = new Label("Confirm password");
         confirmPassword.setTextFill(Color.WHITE);
 
+        Label dataTreatment = new Label("By registering you accept our data treatment");
+        dataTreatment.setTextFill(Color.WHITE);
+
         errorMessage = new Label("");
         errorMessage.setTextFill(Color.RED);
 
@@ -203,7 +206,7 @@ public class RegistrationGUI {
         login.setCursor(Cursor.HAND);
 
         /* Set up of the main VBox containing all the elements for the login page */
-        VBox v = new VBox(logoTitleHBox, name, surname, mail, username, password1, confirmPassword, password2, errorMessage, register, login);
+        VBox v = new VBox(logoTitleHBox, name, surname, mail, username, password1, confirmPassword, password2, errorMessage, dataTreatment, register, login);
         v.setPrefSize(vboxWidth, vboxHeight);
         v.setFillWidth(false);
         v.setAlignment(Pos.CENTER);
@@ -217,6 +220,7 @@ public class RegistrationGUI {
         VBox.setMargin(confirmPassword, new Insets(0, 0, 15, 0));
         VBox.setMargin(password2, new Insets(0, 0, 15, 0));
         VBox.setMargin(errorMessage, new Insets(0, 0, 15, 0));
+        VBox.setMargin(dataTreatment, new Insets(0, 0, 15, 0));
         VBox.setMargin(register, new Insets(0, 0, 30, 0));
 
         /* SetUp of the background GridPane that "holds" the VBox in the middle of the screen */
