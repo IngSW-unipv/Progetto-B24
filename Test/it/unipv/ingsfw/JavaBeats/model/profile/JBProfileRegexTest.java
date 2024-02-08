@@ -2,20 +2,21 @@ package it.unipv.ingsfw.JavaBeats.model.profile;
 
 import it.unipv.ingsfw.JavaBeats.controller.factory.ProfileManagerFactory;
 import it.unipv.ingsfw.JavaBeats.exceptions.InvalidPasswordException;
-import it.unipv.ingsfw.JavaBeats.exceptions.RegexException;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class JBProfileTest {
+public class JBProfileRegexTest {
 
     //Attributes
     private Artist artist;
 
+
     @Before
     public void intTest() {
         artist = new Artist("", "", "");
+
 
     }
 
