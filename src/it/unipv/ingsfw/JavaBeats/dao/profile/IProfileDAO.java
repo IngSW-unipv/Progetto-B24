@@ -33,6 +33,7 @@ public interface IProfileDAO{
    * Updates a {@link JBProfile} record in the database.
    *
    * @param profile profile to update
+   * @throws AccountNotFoundException if the profile is not found in the database
    */
   void update(JBProfile profile) throws AccountNotFoundException;
 
@@ -41,6 +42,7 @@ public interface IProfileDAO{
    *
    * @param profile profile to get
    * @return profile with complete and updated info
+   * @throws AccountNotFoundException if the profile is not found in the database
    */
   JBProfile get(JBProfile profile) throws AccountNotFoundException;
 

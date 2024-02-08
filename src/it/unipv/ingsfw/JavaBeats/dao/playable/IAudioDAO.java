@@ -27,6 +27,7 @@ public interface IAudioDAO{
    * Inserts a new {@link JBAudio} record in the database.
    *
    * @param audio audio to add
+   * @throws AccountNotFoundException
    */
   void insert(JBAudio audio) throws AccountNotFoundException;
 
@@ -44,6 +45,7 @@ public interface IAudioDAO{
    * @param audio         audio to get
    * @param activeProfile current active profile
    * @return audio with complete and updated info
+   * @throws AccountNotFoundException if the active profile is not found in the database
    */
   JBAudio get(JBAudio audio, JBProfile activeProfile) throws AccountNotFoundException;
 
@@ -54,6 +56,7 @@ public interface IAudioDAO{
    * @param audio         song to get
    * @param activeProfile current active profile
    * @return audio with complete and updated info
+   * @throws AccountNotFoundException if the active profile is not found in the database
    */
   Song getSong(JBAudio audio, JBProfile activeProfile) throws AccountNotFoundException;
 
@@ -64,6 +67,7 @@ public interface IAudioDAO{
    * @param audio         episode to get
    * @param activeProfile current active profile
    * @return audio with complete and updated info
+   * @throws AccountNotFoundException if the active profile is not found in the database
    */
   Episode getEpisode(JBAudio audio, JBProfile activeProfile) throws AccountNotFoundException;
 
@@ -72,6 +76,7 @@ public interface IAudioDAO{
    * Note that it will behave differently based on the user requesting it.
    *
    * @param activeProfile current active profile
+   * @throws AccountNotFoundException if the active profile is not found in the database
    */
   void updateIsFavorite(JBProfile activeProfile) throws AccountNotFoundException;
 
@@ -92,6 +97,7 @@ public interface IAudioDAO{
    * @param playlist      collection from which to recover the audios
    * @param activeProfile current active profile
    * @return audios as an {@link ArrayList} of {@link JBAudio}
+   * @throws AccountNotFoundException if the active profile is not found in the database
    */
   ArrayList<JBAudio> selectByPlaylist(Playlist playlist, JBProfile activeProfile) throws AccountNotFoundException;
 
@@ -102,6 +108,7 @@ public interface IAudioDAO{
    * @param album         collection from which to recover the audios
    * @param activeProfile current active profile
    * @return audios as an {@link ArrayList} of {@link Song}
+   * @throws AccountNotFoundException if the active profile is not found in the database
    */
   ArrayList<Song> selectByAlbum(Album album, JBProfile activeProfile) throws AccountNotFoundException;
 
@@ -112,6 +119,7 @@ public interface IAudioDAO{
    * @param podcast       collection from which to recover the audios
    * @param activeProfile current active profile
    * @return audios as an {@link ArrayList} of {@link Episode}
+   * @throws AccountNotFoundException if the active profile is not found in the database
    */
   ArrayList<Episode> selectByPodcast(Podcast podcast, JBProfile activeProfile) throws AccountNotFoundException;
 
@@ -121,6 +129,7 @@ public interface IAudioDAO{
    *
    * @param activeProfile current active profile
    * @return audios as an {@link ArrayList} of {@link JBAudio}
+   * @throws AccountNotFoundException if the active profile is not found in the database
    */
   ArrayList<JBAudio> selectFavorites(JBProfile activeProfile) throws AccountNotFoundException;
 

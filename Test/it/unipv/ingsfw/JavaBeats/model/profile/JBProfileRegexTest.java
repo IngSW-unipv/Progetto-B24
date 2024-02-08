@@ -8,6 +8,10 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+/**
+ * Tests profile Regular Expressions.
+ * This test verifies the allowed username and password.
+ */
 public class JBProfileRegexTest {
 
     //Attributes
