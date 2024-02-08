@@ -21,144 +21,148 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
-public class ProfileManager{
+public class ProfileManager {
 
-  //Attributi
+    //Attributi
 
-  private static JBProfile activeProfile;
-  private static final String nameRegex="^[A-Z][a-zA-Z0-9_-]{1,50}$";
-  private static final String usernameRegex="^[a-zA-Z0-9._+-]{1,30}$";
-
-  //Getters and Setters
-
-  public static JBProfile getActiveProfile(){
-    return activeProfile;
-  }
+    private static JBProfile activeProfile;
+    private static final String nameRegex = "^[A-Z][a-zA-Z0-9_-]{1,50}$";
+    private static final String usernameRegex = "^[a-zA-Z0-9._+-]{1,30}$";
+    private static final String passwordRegex = ("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,100}$");  //at least: 8 char, one uppercase, one lowercase, one number
 
 
-  //Metodi
+    //Getters and Setters
 
-
-  //Login
-  //Propagates exception from dao
-  public JBProfile login(JBProfile profile) throws WrongPasswordException, AccountNotFoundException{
-    ProfileDAO p=new ProfileDAO();
-    activeProfile=p.get(profile);
-    if(!profile.getPassword().equals(activeProfile.getPassword())){
-      throw new WrongPasswordException();
-    }//end-if
-    return activeProfile;
-  }
-
-  //Registration
-  //Propagates exception from dao
-  public JBProfile registration(JBProfile profile) throws AccountNotFoundException{
-    ProfileDAO p=new ProfileDAO();
-    /* Default profile image when inserting */
-    try{
-      BufferedImage bufferedImage=ImageIO.read(new File("src/it/unipv/ingsfw/JavaBeats/view/resources/icons/DefaultUser.png"));
-      ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
-      ImageIO.write(bufferedImage, "png", byteArrayOutputStream);
-      byte[] image=byteArrayOutputStream.toByteArray();
-      profile.setProfilePicture(new SerialBlob(image));
-    }catch(IOException | SQLException e){
-      throw new RuntimeException(e);
+    public static JBProfile getActiveProfile() {
+        return activeProfile;
     }
-    profile.setBiography("");
-
-    p.insert(profile);
-    activeProfile=p.get(profile);
-    return activeProfile;
-  }
 
 
-  public JBProfile switchProfileType(JBProfile jbProfile) throws AccountNotFoundException{
-    ProfileDAO profileDAO=new ProfileDAO();
-    AudioDAO audioDAO=new AudioDAO();
-    CollectionDAO collectionDAO=new CollectionDAO();
-    ArrayList<JBCollection> oldProfilePlaylists=collectionDAO.selectPlaylistsByProfile(jbProfile);
+    //Metodi
 
-    /* If the profile passed is a user then is switched to an artist and vice-versa */
-    try{
-      User user=(User)jbProfile;
-      Artist artist=new Artist(user.getUsername(), user.getMail(), user.getPassword(), user.getName(), user.getSurname(), user.getBiography(), user.getProfilePicture(), 0, user.getListeningHistory(), user.getFavorites());
-      profileDAO.remove(user);
-      profileDAO.insert(artist);
 
-      audioDAO.updateIsFavorite(artist);
-      for(JBAudio jbAudio: artist.getListeningHistory()){
-        audioDAO.addToListeningHistory(jbAudio, artist);
-      }//end-foreach
+    //Login
+    //Propagates exception from dao
+    public JBProfile login(JBProfile profile) throws WrongPasswordException, AccountNotFoundException {
+        ProfileDAO p = new ProfileDAO();
+        activeProfile = p.get(profile);
+        if (!profile.getPassword().equals(activeProfile.getPassword())) {
+            throw new WrongPasswordException();
+        }//end-if
+        return activeProfile;
+    }
 
-      activeProfile=profileDAO.get(artist);
-    }catch(ClassCastException c){
-      Artist artist=(Artist)jbProfile;
-      User user=new User(artist.getUsername(), artist.getMail(), artist.getPassword(), artist.getName(), artist.getSurname(), artist.getBiography(), artist.getProfilePicture(), true, 0, artist.getListeningHistory(), artist.getFavorites());
+    //Registration
+    //Propagates exception from dao
+    public JBProfile registration(JBProfile profile) throws AccountNotFoundException {
+        ProfileDAO p = new ProfileDAO();
+        /* Default profile image when inserting */
+        try {
+            BufferedImage bufferedImage = ImageIO.read(new File("src/it/unipv/ingsfw/JavaBeats/view/resources/icons/DefaultUser.png"));
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            ImageIO.write(bufferedImage, "png", byteArrayOutputStream);
+            byte[] image = byteArrayOutputStream.toByteArray();
+            profile.setProfilePicture(new SerialBlob(image));
+        } catch (IOException | SQLException e) {
+            throw new RuntimeException(e);
+        }
+        profile.setBiography("");
 
-      profileDAO.remove(artist);
+        p.insert(profile);
+        activeProfile = p.get(profile);
+        return activeProfile;
+    }
 
-      for(JBCollection jbCollection: CollectionManagerFactory.getInstance().getCollectionManager().getAlbums(artist)){
-        CollectionManagerFactory.getInstance().getCollectionManager().removeCollection(jbCollection);
-      }//end-foreach
-      for(JBCollection jbCollection: CollectionManagerFactory.getInstance().getCollectionManager().getPodcasts(artist)){
-        CollectionManagerFactory.getInstance().getCollectionManager().removeCollection(jbCollection);
-      }//end-foreach
 
-      profileDAO.insert(user);
+    public JBProfile switchProfileType(JBProfile jbProfile) throws AccountNotFoundException {
+        ProfileDAO profileDAO = new ProfileDAO();
+        AudioDAO audioDAO = new AudioDAO();
+        CollectionDAO collectionDAO = new CollectionDAO();
+        ArrayList<JBCollection> oldProfilePlaylists = collectionDAO.selectPlaylistsByProfile(jbProfile);
 
-      audioDAO.updateIsFavorite(user);
-      for(JBAudio jbAudio: user.getListeningHistory()){
-        audioDAO.addToListeningHistory(jbAudio, user);
-      }//end-foreach
+        /* If the profile passed is a user then is switched to an artist and vice-versa */
+        try {
+            User user = (User) jbProfile;
+            Artist artist = new Artist(user.getUsername(), user.getMail(), user.getPassword(), user.getName(), user.getSurname(), user.getBiography(), user.getProfilePicture(), 0, user.getListeningHistory(), user.getFavorites());
+            profileDAO.remove(user);
+            profileDAO.insert(artist);
 
-      activeProfile=profileDAO.get(user);
-    }//end-try
+            audioDAO.updateIsFavorite(artist);
+            for (JBAudio jbAudio : artist.getListeningHistory()) {
+                audioDAO.addToListeningHistory(jbAudio, artist);
+            }//end-foreach
 
-    /* Passing the playlist from old profile to new profile when switching */
-    for(JBCollection p: oldProfilePlaylists){
-      p.setCreator(activeProfile);
-      collectionDAO.insert(p);
-    }//end-foreach
+            activeProfile = profileDAO.get(artist);
+        } catch (ClassCastException c) {
+            Artist artist = (Artist) jbProfile;
+            User user = new User(artist.getUsername(), artist.getMail(), artist.getPassword(), artist.getName(), artist.getSurname(), artist.getBiography(), artist.getProfilePicture(), true, 0, artist.getListeningHistory(), artist.getFavorites());
 
-    return activeProfile;
-  }
+            profileDAO.remove(artist);
 
-  public void edit(JBProfile newProfile) throws AccountNotFoundException{
+            for (JBCollection jbCollection : CollectionManagerFactory.getInstance().getCollectionManager().getAlbums(artist)) {
+                CollectionManagerFactory.getInstance().getCollectionManager().removeCollection(jbCollection);
+            }//end-foreach
+            for (JBCollection jbCollection : CollectionManagerFactory.getInstance().getCollectionManager().getPodcasts(artist)) {
+                CollectionManagerFactory.getInstance().getCollectionManager().removeCollection(jbCollection);
+            }//end-foreach
 
-    ProfileDAO p=new ProfileDAO();
-    p.update(newProfile);
+            profileDAO.insert(user);
 
-    activeProfile=p.get(newProfile);
-  }
+            audioDAO.updateIsFavorite(user);
+            for (JBAudio jbAudio : user.getListeningHistory()) {
+                audioDAO.addToListeningHistory(jbAudio, user);
+            }//end-foreach
 
-  public void checkIfUsernameAlreadyExists(JBProfile jbProfile) throws UsernameAlreadyTakenException{
+            activeProfile = profileDAO.get(user);
+        }//end-try
 
-    ProfileDAO p=new ProfileDAO();
-    try{
-      p.get(jbProfile);
-      UsernameAlreadyTakenException e=new UsernameAlreadyTakenException(jbProfile);
-      throw e;
-    }catch(AccountNotFoundException ignored){
+        /* Passing the playlist from old profile to new profile when switching */
+        for (JBCollection p : oldProfilePlaylists) {
+            p.setCreator(activeProfile);
+            collectionDAO.insert(p);
+        }//end-foreach
 
-    }//end-try
-  }
+        return activeProfile;
+    }
 
-  public void checkIfAccountAlreadyExists(JBProfile jbProfile) throws AccountAlreadyExistsException{
+    public void edit(JBProfile newProfile) throws AccountNotFoundException {
 
-    ProfileDAO p=new ProfileDAO();
-    try{
-      p.get(jbProfile);
-      throw new AccountAlreadyExistsException();
-    }catch(AccountNotFoundException ignored){
+        ProfileDAO p = new ProfileDAO();
+        p.update(newProfile);
 
-    }//end-try
-  }
+        activeProfile = p.get(newProfile);
+    }
 
-  public void checkRegex(JBProfile jbProfile) throws RegexException{
-    if(!(Pattern.matches(nameRegex, jbProfile.getName()) || Pattern.matches(nameRegex, jbProfile.getSurname()))){
-      throw new InvalidNameException();
-    }else if(!(Pattern.matches(usernameRegex, jbProfile.getUsername()))){
-      throw new InvalidUsernameException();
-    }//end-if
-  }
+    public void checkIfUsernameAlreadyExists(JBProfile jbProfile) throws UsernameAlreadyTakenException {
+
+        ProfileDAO p = new ProfileDAO();
+        try {
+            p.get(jbProfile);
+            UsernameAlreadyTakenException e = new UsernameAlreadyTakenException(jbProfile);
+            throw e;
+        } catch (AccountNotFoundException ignored) {
+
+        }//end-try
+    }
+
+    public void checkIfAccountAlreadyExists(JBProfile jbProfile) throws AccountAlreadyExistsException {
+
+        ProfileDAO p = new ProfileDAO();
+        try {
+            p.get(jbProfile);
+            throw new AccountAlreadyExistsException();
+        } catch (AccountNotFoundException ignored) {
+
+        }//end-try
+    }
+
+    public void checkRegex(JBProfile jbProfile) throws RegexException {
+        if (!(Pattern.matches(nameRegex, jbProfile.getName()) || Pattern.matches(nameRegex, jbProfile.getSurname()))) {
+            throw new InvalidNameException();
+        } else if (!(Pattern.matches(usernameRegex, jbProfile.getUsername()))) {
+            throw new InvalidUsernameException();
+        } else if (!(Pattern.matches(passwordRegex, jbProfile.getPassword()))) {
+            throw new InvalidPasswordException();
+        }
+    }
 }
