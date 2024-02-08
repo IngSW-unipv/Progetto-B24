@@ -2,6 +2,7 @@ package it.unipv.ingsfw.JavaBeats.model.profile;
 
 import it.unipv.ingsfw.JavaBeats.controller.factory.ProfileManagerFactory;
 import it.unipv.ingsfw.JavaBeats.exceptions.InvalidPasswordException;
+import it.unipv.ingsfw.JavaBeats.exceptions.InvalidUsernameException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -73,6 +74,66 @@ public class JBProfileRegexTest {
             try {
                 ProfileManagerFactory.getInstance().getProfileManager().checkPasswordRegex(artist);
             } catch (InvalidPasswordException e) {
+                result = false;
+            }
+        }
+        assertFalse(result);
+
+    }
+
+    @Test
+    public void testUsernameOne() {
+
+        String[] username = {"giaco", "GIAC0_01", "3giaco.2GIACO.1giaco"};
+
+        boolean result = true;
+
+        for (String s : username) {
+
+            artist.setUsername(s);
+            try {
+                ProfileManagerFactory.getInstance().getProfileManager().checkUsernameRegex(artist);
+            } catch (InvalidUsernameException e) {
+                result = false;
+            }
+        }
+        assertTrue(result);
+
+    }
+
+    @Test
+    public void testUsernameTwo() {
+
+        String[] username = {"", "    ", "TrentatreTrentiniEntraronoInTrentoTrotterellando", "g g"};
+
+        boolean result = true;
+
+        for (String s : username) {
+
+            artist.setUsername(s);
+            try {
+                ProfileManagerFactory.getInstance().getProfileManager().checkUsernameRegex(artist);
+            } catch (InvalidUsernameException e) {
+                result = false;
+            }
+        }
+        assertFalse(result);
+
+    }
+
+    @Test
+    public void testUsernameThree() {
+
+        String[] username = {"CIAO!", "❤", "cì@ò"};
+
+        boolean result = true;
+
+        for (String s : username) {
+
+            artist.setUsername(s);
+            try {
+                ProfileManagerFactory.getInstance().getProfileManager().checkUsernameRegex(artist);
+            } catch (InvalidUsernameException e) {
                 result = false;
             }
         }
