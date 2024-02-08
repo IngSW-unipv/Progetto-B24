@@ -158,11 +158,27 @@ public class ProfileManager{
     }//end-try
   }
 
-  public void checkRegex(JBProfile jbProfile) throws RegexException{
-    if(!(Pattern.matches(nameRegex, jbProfile.getName()) || Pattern.matches(nameRegex, jbProfile.getSurname()))){
-      throw new InvalidNameException();
-    }else if(!(Pattern.matches(usernameRegex, jbProfile.getUsername()))){
-      throw new InvalidUsernameException();
-    }//end-if
-  }
+    public void checkRegex(JBProfile jbProfile) throws RegexException {
+        if (!(Pattern.matches(nameRegex, jbProfile.getName()) || Pattern.matches(nameRegex, jbProfile.getSurname()))) {
+            throw new InvalidNameException();
+        } else if (!(Pattern.matches(usernameRegex, jbProfile.getUsername()))) {
+            throw new InvalidUsernameException();
+        } else if (!(Pattern.matches(passwordRegex, jbProfile.getPassword()))) {
+            throw new InvalidPasswordException();
+        }
+    }
+
+    public void checkPasswordRegex(JBProfile jbProfile) throws InvalidPasswordException {
+
+        if (!(Pattern.matches(passwordRegex, jbProfile.getPassword()))) {
+            throw new InvalidPasswordException();
+        }
+    }
+
+    public void checkUsernameRegex(JBProfile jbProfile) throws InvalidUsernameException {
+        if (!(Pattern.matches(usernameRegex, jbProfile.getUsername()))) {
+            throw new InvalidUsernameException();
+        }
+    }
+
 }
