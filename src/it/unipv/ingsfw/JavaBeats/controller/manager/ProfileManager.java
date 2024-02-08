@@ -1,5 +1,6 @@
 package it.unipv.ingsfw.JavaBeats.controller.manager;
 
+import it.unipv.ingsfw.JavaBeats.controller.factory.CollectionManagerFactory;
 import it.unipv.ingsfw.JavaBeats.dao.playable.AudioDAO;
 import it.unipv.ingsfw.JavaBeats.dao.collection.CollectionDAO;
 import it.unipv.ingsfw.JavaBeats.dao.profile.ProfileDAO;
@@ -93,7 +94,16 @@ public class ProfileManager{
     }catch(ClassCastException c){
       Artist artist=(Artist)jbProfile;
       User user=new User(artist.getUsername(), artist.getMail(), artist.getPassword(), artist.getName(), artist.getSurname(), artist.getBiography(), artist.getProfilePicture(), true, 0, artist.getListeningHistory(), artist.getFavorites());
+
       profileDAO.remove(artist);
+
+      for(JBCollection jbCollection: CollectionManagerFactory.getInstance().getCollectionManager().getAlbums(artist)){
+        CollectionManagerFactory.getInstance().getCollectionManager().removeCollection(jbCollection);
+      }//end-foreach
+      for(JBCollection jbCollection: CollectionManagerFactory.getInstance().getCollectionManager().getPodcasts(artist)){
+        CollectionManagerFactory.getInstance().getCollectionManager().removeCollection(jbCollection);
+      }//end-foreach
+
       profileDAO.insert(user);
 
       audioDAO.updateIsFavorite(user);

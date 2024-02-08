@@ -2,7 +2,6 @@ package it.unipv.ingsfw.JavaBeats.dao.playable;
 
 import it.unipv.ingsfw.JavaBeats.controller.factory.DBManagerFactory;
 import it.unipv.ingsfw.JavaBeats.dao.collection.CollectionDAO;
-import it.unipv.ingsfw.JavaBeats.dao.profile.IProfileDAO;
 import it.unipv.ingsfw.JavaBeats.dao.profile.ProfileDAO;
 import it.unipv.ingsfw.JavaBeats.exceptions.AccountNotFoundException;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.*;
@@ -11,14 +10,12 @@ import it.unipv.ingsfw.JavaBeats.model.collection.Playlist;
 import it.unipv.ingsfw.JavaBeats.model.collection.Podcast;
 import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
-import it.unipv.ingsfw.JavaBeats.model.profile.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 
 /**
@@ -537,9 +534,9 @@ public class AudioDAO implements IAudioDAO{
 
       st.executeUpdate();
 
-    }catch(Exception e){
-      e.printStackTrace();
-    }
+    }catch(Exception ignored){
+
+    }//end-try
 
     DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
   }
@@ -565,9 +562,9 @@ public class AudioDAO implements IAudioDAO{
           st.setInt(2, audio.getMetadata().getCollection().getId());
           st.executeUpdate();
         }
-      }catch(Exception e){
-        e.printStackTrace();
-      }
+      }catch(Exception ignored){
+
+      }//end-try
 
       DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
 
@@ -607,9 +604,8 @@ public class AudioDAO implements IAudioDAO{
           st3.setString(2, s);
           st3.executeUpdate();
         }//end-for
-      }catch(Exception e){
-        e.printStackTrace();
-      }
+      }catch(Exception ignored){
+      }//end-try
 
       DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
 
