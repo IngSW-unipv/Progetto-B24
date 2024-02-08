@@ -1,0 +1,481 @@
+@startuml
+
+!theme carbon-gray
+
+participant Actor
+Actor -> SearchManager : search
+activate SearchManager
+SearchManager -> SearchDAO : search
+activate SearchDAO
+SearchDAO -> SearchDAO : searchSongs
+activate SearchDAO
+SearchDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> SearchDAO
+deactivate DBManager
+SearchDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> SearchDAO
+deactivate DBManager
+SearchDAO -> AudioDAO : getSong
+activate AudioDAO
+AudioDAO -> DBManager : startConnection
+activate DBManager
+DBManager --> AudioDAO
+deactivate DBManager
+AudioDAO -> DBManager : closeConnection
+activate DBManager
+DBManager --> AudioDAO
+deactivate DBManager
+AudioDAO -> AudioDAO : getGenres
+activate AudioDAO
+AudioDAO --> AudioDAO
+deactivate AudioDAO
+AudioDAO -> AudioDAO : getNumberOfStreams
+activate AudioDAO
+AudioDAO --> AudioDAO
+deactivate AudioDAO
+AudioDAO -> ProfileDAO : getArtist
+activate ProfileDAO
+ProfileDAO --> AudioDAO
+deactivate ProfileDAO
+AudioDAO -> CollectionDAO : get
+activate CollectionDAO
+CollectionDAO --> AudioDAO
+deactivate CollectionDAO
+AudioDAO -> AudioDAO : isFavorite
+activate AudioDAO
+AudioDAO --> AudioDAO
+deactivate AudioDAO
+AudioDAO --> SearchDAO
+deactivate AudioDAO
+SearchDAO --> SearchDAO
+deactivate SearchDAO
+SearchDAO -> SearchDAO : searchEpisodes
+activate SearchDAO
+SearchDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> SearchDAO
+deactivate DBManager
+SearchDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> SearchDAO
+deactivate DBManager
+SearchDAO -> AudioDAO : getEpisode
+activate AudioDAO
+AudioDAO -> DBManager : startConnection
+activate DBManager
+DBManager --> AudioDAO
+deactivate DBManager
+AudioDAO -> DBManager : closeConnection
+activate DBManager
+DBManager --> AudioDAO
+deactivate DBManager
+AudioDAO -> AudioDAO : getGenres
+activate AudioDAO
+AudioDAO --> AudioDAO
+deactivate AudioDAO
+AudioDAO -> AudioDAO : getNumberOfStreams
+activate AudioDAO
+AudioDAO --> AudioDAO
+deactivate AudioDAO
+AudioDAO -> ProfileDAO : getArtist
+activate ProfileDAO
+ProfileDAO --> AudioDAO
+deactivate ProfileDAO
+AudioDAO -> CollectionDAO : get
+activate CollectionDAO
+CollectionDAO --> AudioDAO
+deactivate CollectionDAO
+AudioDAO -> AudioDAO : isFavorite
+activate AudioDAO
+AudioDAO --> AudioDAO
+deactivate AudioDAO
+AudioDAO --> SearchDAO
+deactivate AudioDAO
+SearchDAO --> SearchDAO
+deactivate SearchDAO
+SearchDAO -> SearchDAO : searchPlaylists
+activate SearchDAO
+SearchDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> SearchDAO
+deactivate DBManager
+SearchDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> SearchDAO
+deactivate DBManager
+SearchDAO -> CollectionDAO : getPlaylist
+activate CollectionDAO
+CollectionDAO -> DBManager : startConnection
+activate DBManager
+DBManager --> CollectionDAO
+deactivate DBManager
+CollectionDAO -> DBManager : closeConnection
+activate DBManager
+DBManager --> CollectionDAO
+deactivate DBManager
+CollectionDAO -> ProfileDAO : get
+activate ProfileDAO
+ProfileDAO --> CollectionDAO
+deactivate ProfileDAO
+CollectionDAO --> SearchDAO
+deactivate CollectionDAO
+SearchDAO --> SearchDAO
+deactivate SearchDAO
+SearchDAO -> SearchDAO : searchAlbums
+activate SearchDAO
+SearchDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> SearchDAO
+deactivate DBManager
+SearchDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> SearchDAO
+deactivate DBManager
+SearchDAO -> CollectionDAO : getAlbum
+activate CollectionDAO
+CollectionDAO -> DBManager : startConnection
+activate DBManager
+DBManager --> CollectionDAO
+deactivate DBManager
+CollectionDAO -> DBManager : closeConnection
+activate DBManager
+DBManager --> CollectionDAO
+deactivate DBManager
+CollectionDAO -> ProfileDAO : getArtist
+activate ProfileDAO
+ProfileDAO --> CollectionDAO
+deactivate ProfileDAO
+CollectionDAO --> SearchDAO
+deactivate CollectionDAO
+SearchDAO --> SearchDAO
+deactivate SearchDAO
+SearchDAO -> SearchDAO : searchPodcasts
+activate SearchDAO
+SearchDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> SearchDAO
+deactivate DBManager
+SearchDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> SearchDAO
+deactivate DBManager
+SearchDAO -> CollectionDAO : getPodcast
+activate CollectionDAO
+CollectionDAO -> DBManager : startConnection
+activate DBManager
+DBManager --> CollectionDAO
+deactivate DBManager
+CollectionDAO -> DBManager : closeConnection
+activate DBManager
+DBManager --> CollectionDAO
+deactivate DBManager
+CollectionDAO -> ProfileDAO : getArtist
+activate ProfileDAO
+ProfileDAO --> CollectionDAO
+deactivate ProfileDAO
+CollectionDAO --> SearchDAO
+deactivate CollectionDAO
+SearchDAO --> SearchDAO
+deactivate SearchDAO
+SearchDAO -> SearchDAO : searchUsers
+activate SearchDAO
+SearchDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> SearchDAO
+deactivate DBManager
+SearchDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> SearchDAO
+deactivate DBManager
+SearchDAO -> ProfileDAO : getUser
+activate ProfileDAO
+ProfileDAO -> DBManager : startConnection
+activate DBManager
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO -> DBManager : closeConnection
+activate DBManager
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO --> SearchDAO
+deactivate ProfileDAO
+SearchDAO --> SearchDAO
+deactivate SearchDAO
+SearchDAO -> SearchDAO : searchArtists
+activate SearchDAO
+SearchDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> SearchDAO
+deactivate DBManager
+SearchDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> SearchDAO
+deactivate DBManager
+SearchDAO -> ProfileDAO : getArtist
+activate ProfileDAO
+ProfileDAO -> DBManager : startConnection
+activate DBManager
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO -> DBManager : closeConnection
+activate DBManager
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO --> SearchDAO
+deactivate ProfileDAO
+SearchDAO --> SearchDAO
+deactivate SearchDAO
+SearchDAO -> SearchDAO : searchSongs
+activate SearchDAO
+SearchDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> SearchDAO
+deactivate DBManager
+SearchDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> SearchDAO
+deactivate DBManager
+SearchDAO -> AudioDAO : getSong
+activate AudioDAO
+AudioDAO -> DBManager : startConnection
+activate DBManager
+DBManager --> AudioDAO
+deactivate DBManager
+AudioDAO -> DBManager : closeConnection
+activate DBManager
+DBManager --> AudioDAO
+deactivate DBManager
+AudioDAO -> AudioDAO : getGenres
+activate AudioDAO
+AudioDAO --> AudioDAO
+deactivate AudioDAO
+AudioDAO -> AudioDAO : getNumberOfStreams
+activate AudioDAO
+AudioDAO --> AudioDAO
+deactivate AudioDAO
+AudioDAO -> ProfileDAO : getArtist
+activate ProfileDAO
+ProfileDAO --> AudioDAO
+deactivate ProfileDAO
+AudioDAO -> CollectionDAO : get
+activate CollectionDAO
+CollectionDAO --> AudioDAO
+deactivate CollectionDAO
+AudioDAO -> AudioDAO : isFavorite
+activate AudioDAO
+AudioDAO --> AudioDAO
+deactivate AudioDAO
+AudioDAO --> SearchDAO
+deactivate AudioDAO
+SearchDAO --> SearchDAO
+deactivate SearchDAO
+SearchDAO -> SearchDAO : searchEpisodes
+activate SearchDAO
+SearchDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> SearchDAO
+deactivate DBManager
+SearchDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> SearchDAO
+deactivate DBManager
+SearchDAO -> AudioDAO : getEpisode
+activate AudioDAO
+AudioDAO -> DBManager : startConnection
+activate DBManager
+DBManager --> AudioDAO
+deactivate DBManager
+AudioDAO -> DBManager : closeConnection
+activate DBManager
+DBManager --> AudioDAO
+deactivate DBManager
+AudioDAO -> AudioDAO : getGenres
+activate AudioDAO
+AudioDAO --> AudioDAO
+deactivate AudioDAO
+AudioDAO -> AudioDAO : getNumberOfStreams
+activate AudioDAO
+AudioDAO --> AudioDAO
+deactivate AudioDAO
+AudioDAO -> ProfileDAO : getArtist
+activate ProfileDAO
+ProfileDAO --> AudioDAO
+deactivate ProfileDAO
+AudioDAO -> CollectionDAO : get
+activate CollectionDAO
+CollectionDAO --> AudioDAO
+deactivate CollectionDAO
+AudioDAO -> AudioDAO : isFavorite
+activate AudioDAO
+AudioDAO --> AudioDAO
+deactivate AudioDAO
+AudioDAO --> SearchDAO
+deactivate AudioDAO
+SearchDAO --> SearchDAO
+deactivate SearchDAO
+SearchDAO -> SearchDAO : searchPlaylists
+activate SearchDAO
+SearchDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> SearchDAO
+deactivate DBManager
+SearchDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> SearchDAO
+deactivate DBManager
+SearchDAO -> CollectionDAO : getPlaylist
+activate CollectionDAO
+CollectionDAO -> DBManager : startConnection
+activate DBManager
+DBManager --> CollectionDAO
+deactivate DBManager
+CollectionDAO -> DBManager : closeConnection
+activate DBManager
+DBManager --> CollectionDAO
+deactivate DBManager
+CollectionDAO -> ProfileDAO : get
+activate ProfileDAO
+ProfileDAO --> CollectionDAO
+deactivate ProfileDAO
+CollectionDAO --> SearchDAO
+deactivate CollectionDAO
+SearchDAO --> SearchDAO
+deactivate SearchDAO
+SearchDAO -> SearchDAO : searchAlbums
+activate SearchDAO
+SearchDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> SearchDAO
+deactivate DBManager
+SearchDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> SearchDAO
+deactivate DBManager
+SearchDAO -> CollectionDAO : getAlbum
+activate CollectionDAO
+CollectionDAO -> DBManager : startConnection
+activate DBManager
+DBManager --> CollectionDAO
+deactivate DBManager
+CollectionDAO -> DBManager : closeConnection
+activate DBManager
+DBManager --> CollectionDAO
+deactivate DBManager
+CollectionDAO -> ProfileDAO : getArtist
+activate ProfileDAO
+ProfileDAO --> CollectionDAO
+deactivate ProfileDAO
+CollectionDAO --> SearchDAO
+deactivate CollectionDAO
+SearchDAO --> SearchDAO
+deactivate SearchDAO
+SearchDAO -> SearchDAO : searchPodcasts
+activate SearchDAO
+SearchDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> SearchDAO
+deactivate DBManager
+SearchDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> SearchDAO
+deactivate DBManager
+SearchDAO -> CollectionDAO : getPodcast
+activate CollectionDAO
+CollectionDAO -> DBManager : startConnection
+activate DBManager
+DBManager --> CollectionDAO
+deactivate DBManager
+CollectionDAO -> DBManager : closeConnection
+activate DBManager
+DBManager --> CollectionDAO
+deactivate DBManager
+CollectionDAO -> ProfileDAO : getArtist
+activate ProfileDAO
+ProfileDAO --> CollectionDAO
+deactivate ProfileDAO
+CollectionDAO --> SearchDAO
+deactivate CollectionDAO
+SearchDAO --> SearchDAO
+deactivate SearchDAO
+SearchDAO -> SearchDAO : searchUsers
+activate SearchDAO
+SearchDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> SearchDAO
+deactivate DBManager
+SearchDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> SearchDAO
+deactivate DBManager
+SearchDAO -> ProfileDAO : getUser
+activate ProfileDAO
+ProfileDAO -> DBManager : startConnection
+activate DBManager
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO -> DBManager : closeConnection
+activate DBManager
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO --> SearchDAO
+deactivate ProfileDAO
+SearchDAO --> SearchDAO
+deactivate SearchDAO
+SearchDAO -> SearchDAO : searchArtists
+activate SearchDAO
+SearchDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> SearchDAO
+deactivate DBManager
+SearchDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> SearchDAO
+deactivate DBManager
+SearchDAO -> ProfileDAO : getArtist
+activate ProfileDAO
+ProfileDAO -> DBManager : startConnection
+activate DBManager
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO -> DBManager : closeConnection
+activate DBManager
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO --> SearchDAO
+deactivate ProfileDAO
+SearchDAO --> SearchDAO
+deactivate SearchDAO
+SearchDAO --> SearchManager
+deactivate SearchDAO
+return
+@enduml
