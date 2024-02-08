@@ -13,7 +13,6 @@ import java.sql.Date;
  * Abstract class representing a generic JavaBeats audio track.
  * Contains attributes and methods common both to {@link Song} and {@link Episode}.
  *
- * @author Giorgio Giacomotti
  * @see IJBResearchable
  * @see Song
  * @see Episode
@@ -31,7 +30,6 @@ public abstract class JBAudio implements IJBPlayable{
   /**
    * Nested class representing the metadata associated with every {@link JBAudio}.
    *
-   * @author Giorgio Giacomotti
    * @see JBAudio
    * @see Song
    * @see Episode

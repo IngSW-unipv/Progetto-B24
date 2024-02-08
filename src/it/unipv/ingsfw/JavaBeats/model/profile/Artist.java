@@ -13,7 +13,6 @@ import java.util.ArrayList;
  * Class representing an artist capable of uploading {@link JBAudio} (both {@link it.unipv.ingsfw.JavaBeats.model.playable.audio.Song} and {@link it.unipv.ingsfw.JavaBeats.model.playable.audio.Episode}) and create {@link it.unipv.ingsfw.JavaBeats.model.collection.JBCollection} ({@link it.unipv.ingsfw.JavaBeats.model.collection.Album}, {@link Playlist}, {@link it.unipv.ingsfw.JavaBeats.model.collection.Podcast}).
  * Contains attributes and methods common both to {@link User} and {@link Artist}.
  *
- * @author Giorgio Giacomotti
  * @see JBProfile
  * @see User
  * @see Artist

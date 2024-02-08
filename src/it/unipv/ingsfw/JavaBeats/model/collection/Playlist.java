@@ -14,7 +14,6 @@ import java.util.Arrays;
 /**
  * Class representing a Playlist containing {@link it.unipv.ingsfw.JavaBeats.model.playable.audio.Song} and {@link it.unipv.ingsfw.JavaBeats.model.playable.audio.Episode} and created by a {@link it.unipv.ingsfw.JavaBeats.model.profile.User} or an {@link it.unipv.ingsfw.JavaBeats.model.profile.Artist}.
  *
- * @author Giorgio Giacomotti
  * @see it.unipv.ingsfw.JavaBeats.model.playable.audio.Song
  * @see it.unipv.ingsfw.JavaBeats.model.playable.audio.Episode
  * @see it.unipv.ingsfw.JavaBeats.model.profile.User

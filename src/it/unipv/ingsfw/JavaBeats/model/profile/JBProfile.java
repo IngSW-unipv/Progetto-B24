@@ -20,7 +20,6 @@ import java.util.Arrays;
  * Abstract class representing a generic JavaBeats profile.
  * Contains attributes and methods common both to {@link User} and {@link Artist}.
  *
- * @author Giorgio Giacomotti
  * @see IJBResearchable
  * @see User
  * @see Artist

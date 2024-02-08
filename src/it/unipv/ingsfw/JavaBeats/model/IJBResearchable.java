@@ -5,7 +5,6 @@ package it.unipv.ingsfw.JavaBeats.model;
  * Extended by {@link it.unipv.ingsfw.JavaBeats.model.playable.IJBPlayable}.
  * Implemented by {@link it.unipv.ingsfw.JavaBeats.model.collection.JBCollection} and {@link it.unipv.ingsfw.JavaBeats.model.profile.JBProfile}.
  *
- * @author Giorgio Giacomotti
  * @see it.unipv.ingsfw.JavaBeats.model.playable.IJBPlayable
  * @see it.unipv.ingsfw.JavaBeats.model.collection.JBCollection
  * @see it.unipv.ingsfw.JavaBeats.model.profile.JBProfile

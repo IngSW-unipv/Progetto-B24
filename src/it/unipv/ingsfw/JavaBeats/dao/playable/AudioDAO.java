@@ -25,7 +25,6 @@ import java.util.Iterator;
  * Implementation of the methods declared in {@link IAudioDAO}.
  * It encapsulates database interactions, providing a clean and reusable interface for accessing {@link JBAudio} data.
  *
- * @author Giorgio Giacomotti
  * @see JBAudio
  * @see Song
  * @see Episode

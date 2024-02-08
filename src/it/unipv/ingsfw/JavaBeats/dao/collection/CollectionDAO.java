@@ -28,7 +28,6 @@ import java.util.Iterator;
  * Implementation of the methods declared in {@link it.unipv.ingsfw.JavaBeats.dao.ISearchDAO}.
  * It encapsulates database interactions, providing a clean and reusable interface for accessing {@link IJBResearchable} items.
  *
- * @author Giorgio Giacomotti
  * @see IJBResearchable
  * @see EJBENTITY
  */

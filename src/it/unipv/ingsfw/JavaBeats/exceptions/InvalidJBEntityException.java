@@ -5,19 +5,19 @@ import it.unipv.ingsfw.JavaBeats.model.IJBResearchable;
 /**
  * Exception to report that a JavaBeats entity is not correctly recognized or is used improperly.
  *
- * @author Giorgio Giacomotti
  * @see Exception
+ * @see IJBException
  * @see IJBResearchable
  * @see it.unipv.ingsfw.JavaBeats.model.EJBENTITY
  */
-public class InvalidJBEntityException extends Exception implements IJBException{
+public class InvalidJBEntityException extends Exception implements IJBException {
 
   //CONSTRUCTOR:
 
   /**
    * Constructor to create an instance of the custom exception.
    */
-  public InvalidJBEntityException(){
+  public InvalidJBEntityException() {
     super("Invalid or not recognized JB object type.");
   }
 
@@ -30,11 +30,13 @@ public class InvalidJBEntityException extends Exception implements IJBException{
    * @param JBEntity the invalid/unrecognized JavaBeats entity
    * @return class name as a {@link String}
    */
-  private String getClassName(IJBResearchable JBEntity){
+  private String getClassName(IJBResearchable JBEntity) {
     return JBEntity.getClass().getName();
   }
+
   @Override
-  public String suggestAlternative(){
+  public String suggestAlternative() {
     return "Please insert something different.";
   }
+
 }

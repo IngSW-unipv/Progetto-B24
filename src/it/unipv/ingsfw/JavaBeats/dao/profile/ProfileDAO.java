@@ -17,7 +17,6 @@ import java.util.Arrays;
  * Implementation of the methods declared in {@link IProfileDAO}.
  * It encapsulates database interactions, providing a clean and reusable interface for accessing {@link JBProfile} data.
  *
- * @author Giorgio Giacomotti
  * @see JBProfile
  * @see User
  * @see Artist

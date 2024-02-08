@@ -16,7 +16,6 @@ import java.sql.SQLException;
 /**
  * Class representing a Song that can be part of an {@link it.unipv.ingsfw.JavaBeats.model.collection.Album} or a {@link Playlist}.
  *
- * @author Giorgio Giacomotti
  * @see JBAudio
  * @see it.unipv.ingsfw.JavaBeats.model.collection.Album
  * @see Playlist

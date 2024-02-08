@@ -9,7 +9,6 @@ import java.util.ArrayList;
 /**
  * Class representing an Album containing {@link it.unipv.ingsfw.JavaBeats.model.playable.audio.Song} and created by an {@link it.unipv.ingsfw.JavaBeats.model.profile.Artist}.
  *
- * @author Giorgio Giacomotti
  * @see it.unipv.ingsfw.JavaBeats.model.playable.audio.Song
  * @see it.unipv.ingsfw.JavaBeats.model.profile.Artist
  */

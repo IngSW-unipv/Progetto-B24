@@ -13,7 +13,6 @@ import java.util.ArrayList;
 /**
  * Class representing the base user capable of listening {@link JBAudio} (both {@link it.unipv.ingsfw.JavaBeats.model.playable.audio.Song} and {@link it.unipv.ingsfw.JavaBeats.model.playable.audio.Episode}) and create {@link Playlist}.
  *
- * @author Giorgio Giacomotti
  * @see JBProfile
  * @see User
  * @see Artist
