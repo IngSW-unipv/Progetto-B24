@@ -39,6 +39,7 @@ public class SearchPageGUI {
     private static final Font fontSearchBar = Font.font("Verdana", FontWeight.NORMAL, FontPosture.REGULAR, 16);
     private Scene scene;
 
+    private Button userProfileButton;
     private SearchResults searchResults;
     private SearchDefault searchDefault;
 
@@ -65,6 +66,10 @@ public class SearchPageGUI {
 
     public SearchResults getSearchResults() {
         return searchResults;
+    }
+
+    public Button getUserProfileButton() {
+        return userProfileButton;
     }
 
     /*---------------------------------------*/
@@ -100,7 +105,7 @@ public class SearchPageGUI {
         }//end-try
         userPicImageView.setPreserveRatio(true);
         userPicImageView.setFitHeight(60);
-        Button userProfileButton = new Button(activeProfile.getUsername());
+        userProfileButton = new Button(activeProfile.getUsername());
         userProfileButton.setBackground(bgSearchPage);
         userProfileButton.setGraphic(userPicImageView);
         userProfileButton.setCursor(Cursor.HAND);
