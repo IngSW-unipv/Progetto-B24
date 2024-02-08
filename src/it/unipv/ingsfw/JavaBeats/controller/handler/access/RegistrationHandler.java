@@ -79,15 +79,7 @@ public class RegistrationHandler{
         }else{
           gui.getErrorMessage().setText("");
 
-
-          JBProfile profile=new User(gui.getUsername().getText(), null, null);
-
           try{
-
-            ProfileManagerFactory.getInstance().getProfileManager().checkIfUsernameAlreadyExists(profile);
-            profile.setMail(gui.getMail().getText());
-            ProfileManagerFactory.getInstance().getProfileManager().checkIfAccountAlreadyExists(profile);
-
             //Register the profile exists or handles the exception
             JBProfile jbprofile=new User(gui.getUsername().getText(), gui.getMail().getText(), gui.getPassword2().getText(), gui.getName().getText(), gui.getSurname().getText());
             activeProfile=ProfileManagerFactory.getInstance().getProfileManager().registration(jbprofile);

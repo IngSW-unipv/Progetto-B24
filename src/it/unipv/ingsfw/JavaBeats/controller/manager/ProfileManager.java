@@ -52,8 +52,12 @@ public class ProfileManager{
 
   //Registration
   //Propagates exception from dao
-  public JBProfile registration(JBProfile profile) throws AccountNotFoundException{
+  public JBProfile registration(JBProfile profile) throws AccountNotFoundException, UsernameAlreadyTakenException, AccountAlreadyExistsException{
     ProfileDAO p=new ProfileDAO();
+
+    checkIfUsernameAlreadyExists(profile);
+    checkIfAccountAlreadyExists(profile);
+
     /* Default profile image when inserting */
     try{
       BufferedImage bufferedImage=ImageIO.read(new File("src/it/unipv/ingsfw/JavaBeats/view/resources/icons/DefaultUser.png"));
@@ -134,12 +138,12 @@ public class ProfileManager{
   public void checkIfUsernameAlreadyExists(JBProfile jbProfile) throws UsernameAlreadyTakenException{
 
     ProfileDAO p=new ProfileDAO();
+    User u=new User(jbProfile.getUsername(), null, null);
     try{
-      p.get(jbProfile);
+      p.get(u);
       UsernameAlreadyTakenException e=new UsernameAlreadyTakenException(jbProfile);
       throw e;
     }catch(AccountNotFoundException ignored){
-
     }//end-try
   }
 
