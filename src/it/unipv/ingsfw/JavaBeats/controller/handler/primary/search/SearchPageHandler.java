@@ -1,5 +1,4 @@
 package it.unipv.ingsfw.JavaBeats.controller.handler.primary.search;
-
 import it.unipv.ingsfw.JavaBeats.controller.factory.CollectionManagerFactory;
 import it.unipv.ingsfw.JavaBeats.controller.factory.PlayerManagerFactory;
 import it.unipv.ingsfw.JavaBeats.controller.factory.SearchManagerFactory;
@@ -55,29 +54,25 @@ public class SearchPageHandler{
     initComponents();
   }
 
-
   //Metodi
-
   private void initComponents(){
+    EventHandler<ActionEvent> profileButtonHandler=new EventHandler<>(){
+      @Override
+      public void handle(ActionEvent actionEvent){
+        Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+        ProfileViewGUI profileViewGUI=new ProfileViewGUI(activeProfile, activeProfile);
+        ProfileViewHandler profileViewHandler=new ProfileViewHandler(profileViewGUI, activeProfile);
+        Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getProfileButton());
 
-        EventHandler<ActionEvent> profileButtonHandler = new EventHandler<>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-                ProfileViewGUI profileViewGUI = new ProfileViewGUI(activeProfile, activeProfile);
-                ProfileViewHandler profileViewHandler = new ProfileViewHandler(profileViewGUI, activeProfile);
-                Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getProfileButton());
+        Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
+        stage.setScene(profileViewGUI.getScene());
+        stage.setTitle("Profile");
+        stage.setWidth(previousDimension.getWidth());
+        stage.setHeight(previousDimension.getHeight());
+      }
+    };
 
-                Dimension2D previousDimension = new Dimension2D(stage.getWidth(), stage.getHeight());
-                stage.setScene(profileViewGUI.getScene());
-                stage.setTitle("Profile");
-                stage.setWidth(previousDimension.getWidth());
-                stage.setHeight(previousDimension.getHeight());
-            }
-        };
-
-        EventHandler<KeyEvent> searchTextfieldHandler = new EventHandler<KeyEvent>() {
-
+    EventHandler<KeyEvent> searchTextfieldHandler=new EventHandler<KeyEvent>(){
       @Override
       public void handle(KeyEvent keyEvent){
         if(keyEvent.getCode().equals(KeyCode.ENTER)){
@@ -298,36 +293,19 @@ public class SearchPageHandler{
         }//end-try
       }
     };
-
-
-        searchPageGUI.getUserProfileButton().setOnAction(profileButtonHandler);
-        searchPageGUI.getSearchTextField().setOnKeyPressed(searchTextfieldHandler);
-
-        try {
-            searchPageGUI.getSearchResults().getChoiceBoxArrayList().forEach(b -> b.setOnAction(songsChoiceBoxHandler));
-        } catch (NullPointerException n) {
+    searchPageGUI.getUserProfileButton().setOnAction(profileButtonHandler);
     searchPageGUI.getSearchTextField().setOnKeyPressed(searchTextfieldHandler);
-    try{
-      searchPageGUI.getSearchResults().getChoiceBoxArrayList().forEach(b -> b.setOnAction(songsChoiceBoxHandler));
-    }catch(NullPointerException ignored){
-
-    }
-
-    try{
-      searchPageGUI.getSearchResults().getEpisodesChoiceBoxArrayList().forEach(b -> b.setOnAction(episodesChoiceBoxHandler));
-    }catch(NullPointerException ignored){
-
-    }
+    searchPageGUI.getSearchTextField().setOnKeyPressed(searchTextfieldHandler);
     if(searchPageGUI.getSearchResults()!=null){
+      searchPageGUI.getSearchResults().getChoiceBoxArrayList().forEach(b -> b.setOnAction(songsChoiceBoxHandler));
+      searchPageGUI.getSearchResults().getChoiceBoxArrayList().forEach(b -> b.setOnAction(songsChoiceBoxHandler));
+      searchPageGUI.getSearchResults().getEpisodesChoiceBoxArrayList().forEach(b -> b.setOnAction(episodesChoiceBoxHandler));
       searchPageGUI.getSearchResults().getArtistsHBox().getChildren().forEach(a -> a.setOnMouseClicked(audioCardClickHandler));
       searchPageGUI.getSearchResults().getAlbumsHBox().getChildren().forEach(a -> a.setOnMouseClicked(audioCardClickHandler));
       searchPageGUI.getSearchResults().getPodcastsHBox().getChildren().forEach(a -> a.setOnMouseClicked(audioCardClickHandler));
       searchPageGUI.getSearchResults().getPlaylistsHBox().getChildren().forEach(a -> a.setOnMouseClicked(audioCardClickHandler));
       searchPageGUI.getSearchResults().getUsersHBox().getChildren().forEach(a -> a.setOnMouseClicked(audioCardClickHandler));
-    }
-
+    }//end-if
 
   }
-
-
 }
