@@ -165,4 +165,18 @@ public class ProfileManager {
             throw new InvalidPasswordException();
         }
     }
+
+    public void checkPasswordRegex(JBProfile jbProfile) throws InvalidPasswordException {
+
+        if (!(Pattern.matches(passwordRegex, jbProfile.getPassword()))) {
+            throw new InvalidPasswordException();
+        }
+    }
+
+    public void checkUsernameRegex(JBProfile jbProfile) throws InvalidUsernameException {
+        if (!(Pattern.matches(usernameRegex, jbProfile.getUsername()))) {
+            throw new InvalidUsernameException();
+        }
+    }
+
 }
