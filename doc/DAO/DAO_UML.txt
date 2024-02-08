@@ -36,7 +36,7 @@ package DAO{
         }
         class ProfileDAO implements IProfileDAO{
             !if (showPrivateMethods)
-                - getTotalListeningTime(user : User) : Time
+                - getTotalListeningTime(user : User) : double
                 - getTotalListeners(artist : Artist) : int
                 - getListeningHistory(profile : JBProfile) : ArrayList<JBAudio>
                 - updateUsername(profile : JBProfile) : void

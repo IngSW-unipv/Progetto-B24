@@ -64,7 +64,7 @@ public class User extends JBProfile{
   }
 
   /**
-   * Returns total listening {@link Time}.
+   * Returns total listening time as a double.
    *
    * @return total listening time
    */

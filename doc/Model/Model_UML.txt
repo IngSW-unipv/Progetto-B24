@@ -133,7 +133,7 @@ package model{
         class User extends JBProfile{
             !if (showAttributes)
                 - isVisible : Boolean
-                - totalListeningTime : Time
+                - totalListeningTime : double
             !endif
             !if (showMethods)
                 + getters() & setters()

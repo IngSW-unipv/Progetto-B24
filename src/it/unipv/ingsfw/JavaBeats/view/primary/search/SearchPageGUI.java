@@ -40,6 +40,7 @@ public class SearchPageGUI{
   private Scene scene;
   private SearchResults searchResults;
   private SearchDefault searchDefault;
+  private Button userProfileButton;
   private GridPane gp;
   private TextField searchTextField;
 
@@ -68,7 +69,9 @@ public class SearchPageGUI{
   public GridPane getGp(){
     return gp;
   }
-
+  public Button getUserProfileButton() {
+    return userProfileButton;
+  }
   /*---------------------------------------*/
   //Metodi
   /*---------------------------------------*/
@@ -93,22 +96,22 @@ public class SearchPageGUI{
     Pane whitePane=new Pane();
     HBox.setHgrow(whitePane, Priority.ALWAYS);
 
-    /* Button with user's profile picture and username */
-    ImageView userPicImageView=null;
-    try{
-      userPicImageView=new ImageView(new Image(activeProfile.getProfilePicture().getBinaryStream()));
-    }catch(SQLException e){
-      throw new RuntimeException(e);
-    }//end-try
-    userPicImageView.setPreserveRatio(true);
-    userPicImageView.setFitHeight(60);
-    Button userProfileButton=new Button(activeProfile.getUsername());
-    userProfileButton.setBackground(bgSearchPage);
-    userProfileButton.setGraphic(userPicImageView);
-    userProfileButton.setCursor(Cursor.HAND);
-    userProfileButton.setFont(fontUser);
-    userProfileButton.setTextFill(Color.LIGHTGRAY);
-    userProfileButton.setAlignment(Pos.CENTER_RIGHT);
+        /* Button with user's profile picture and username */
+        ImageView userPicImageView = null;
+        try {
+            userPicImageView = new ImageView(new Image(activeProfile.getProfilePicture().getBinaryStream()));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }//end-try
+        userPicImageView.setPreserveRatio(true);
+        userPicImageView.setFitHeight(60);
+        userProfileButton = new Button(activeProfile.getUsername());
+        userProfileButton.setBackground(bgSearchPage);
+        userProfileButton.setGraphic(userPicImageView);
+        userProfileButton.setCursor(Cursor.HAND);
+        userProfileButton.setFont(fontUser);
+        userProfileButton.setTextFill(Color.LIGHTGRAY);
+        userProfileButton.setAlignment(Pos.CENTER_RIGHT);
 
 
     HBox searchBar=new HBox(20, searchTextField, whitePane, userProfileButton);

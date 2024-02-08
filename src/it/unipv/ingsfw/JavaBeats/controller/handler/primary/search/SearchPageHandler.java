@@ -60,7 +60,23 @@ public class SearchPageHandler{
 
   private void initComponents(){
 
-    EventHandler<KeyEvent> searchTextfieldHandler=new EventHandler<>(){
+        EventHandler<ActionEvent> profileButtonHandler = new EventHandler<>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+                ProfileViewGUI profileViewGUI = new ProfileViewGUI(activeProfile, activeProfile);
+                ProfileViewHandler profileViewHandler = new ProfileViewHandler(profileViewGUI, activeProfile);
+                Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getProfileButton());
+
+                Dimension2D previousDimension = new Dimension2D(stage.getWidth(), stage.getHeight());
+                stage.setScene(profileViewGUI.getScene());
+                stage.setTitle("Profile");
+                stage.setWidth(previousDimension.getWidth());
+                stage.setHeight(previousDimension.getHeight());
+            }
+        };
+
+        EventHandler<KeyEvent> searchTextfieldHandler = new EventHandler<KeyEvent>() {
 
       @Override
       public void handle(KeyEvent keyEvent){
@@ -284,6 +300,12 @@ public class SearchPageHandler{
     };
 
 
+        searchPageGUI.getUserProfileButton().setOnAction(profileButtonHandler);
+        searchPageGUI.getSearchTextField().setOnKeyPressed(searchTextfieldHandler);
+
+        try {
+            searchPageGUI.getSearchResults().getChoiceBoxArrayList().forEach(b -> b.setOnAction(songsChoiceBoxHandler));
+        } catch (NullPointerException n) {
     searchPageGUI.getSearchTextField().setOnKeyPressed(searchTextfieldHandler);
     try{
       searchPageGUI.getSearchResults().getChoiceBoxArrayList().forEach(b -> b.setOnAction(songsChoiceBoxHandler));
