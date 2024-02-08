@@ -28,7 +28,7 @@ public class ProfileManager{
   private static JBProfile activeProfile;
   private static final String nameRegex="^[A-Z][a-zA-Z0-9_-]{1,50}$";
   private static final String usernameRegex="^[a-zA-Z0-9._+-]{1,30}$";
-
+  private static final String passwordRegex="^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,100}$";  //at least: 8 char, one uppercase, one lowercase, one number
   //Getters and Setters
 
   public static JBProfile getActiveProfile(){
@@ -158,27 +158,27 @@ public class ProfileManager{
     }//end-try
   }
 
-    public void checkRegex(JBProfile jbProfile) throws RegexException {
-        if (!(Pattern.matches(nameRegex, jbProfile.getName()) || Pattern.matches(nameRegex, jbProfile.getSurname()))) {
-            throw new InvalidNameException();
-        } else if (!(Pattern.matches(usernameRegex, jbProfile.getUsername()))) {
-            throw new InvalidUsernameException();
-        } else if (!(Pattern.matches(passwordRegex, jbProfile.getPassword()))) {
-            throw new InvalidPasswordException();
-        }
+  public void checkRegex(JBProfile jbProfile) throws RegexException{
+    if(!(Pattern.matches(nameRegex, jbProfile.getName()) || Pattern.matches(nameRegex, jbProfile.getSurname()))){
+      throw new InvalidNameException();
+    }else if(!(Pattern.matches(usernameRegex, jbProfile.getUsername()))){
+      throw new InvalidUsernameException();
+    }else if(!(Pattern.matches(passwordRegex, jbProfile.getPassword()))){
+      throw new InvalidPasswordException();
     }
+  }
 
-    public void checkPasswordRegex(JBProfile jbProfile) throws InvalidPasswordException {
+  public void checkPasswordRegex(JBProfile jbProfile) throws InvalidPasswordException{
 
-        if (!(Pattern.matches(passwordRegex, jbProfile.getPassword()))) {
-            throw new InvalidPasswordException();
-        }
+    if(!(Pattern.matches(passwordRegex, jbProfile.getPassword()))){
+      throw new InvalidPasswordException();
     }
+  }
 
-    public void checkUsernameRegex(JBProfile jbProfile) throws InvalidUsernameException {
-        if (!(Pattern.matches(usernameRegex, jbProfile.getUsername()))) {
-            throw new InvalidUsernameException();
-        }
+  public void checkUsernameRegex(JBProfile jbProfile) throws InvalidUsernameException{
+    if(!(Pattern.matches(usernameRegex, jbProfile.getUsername()))){
+      throw new InvalidUsernameException();
     }
+  }
 
 }
