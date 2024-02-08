@@ -28,7 +28,6 @@ public class JBAudioTest{
   public void initTest(){
     try{
       File f=new File("Test/resources/Faint.mp3");
-      f.deleteOnExit();
       FileInputStream fileInputStream=new FileInputStream(f);
       ContentHandler handler=new DefaultHandler();
       Parser parser=new Mp3Parser();
