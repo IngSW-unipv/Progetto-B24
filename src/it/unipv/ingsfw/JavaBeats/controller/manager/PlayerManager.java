@@ -106,10 +106,9 @@ public class PlayerManager{
     collectionLooping=false;
   }
 
-  public void play() throws SystemErrorException, AccountNotFoundException{
+  public void play() throws SystemErrorException{
     if(!queue.isEmpty()){
       AudioDAO audioDAO=new AudioDAO();
-      ProfileDAO profileDAO=new ProfileDAO();
 
       if(CURRENT_AUDIO_PLAYING!=null){
         CURRENT_AUDIO_PLAYING.getMediaPlayer().dispose();
@@ -120,17 +119,14 @@ public class PlayerManager{
       adapter.play(audioToBePlayed);
       CURRENT_AUDIO_PLAYING.getMediaPlayer().setVolume(volume);
       audioDAO.addToListeningHistory(audioToBePlayed, ProfileManagerFactory.getInstance().getProfileManager().getActiveProfile());
-      profileDAO.refreshProfileInfo(ProfileManagerFactory.getInstance().getProfileManager().getActiveProfile());
     }else if(collectionLooping){
       loop(CURRENT_COLLECTION_PLAYING);
     }else if(audioLooping){
       AudioDAO audioDAO=new AudioDAO();
-      ProfileDAO profileDAO=new ProfileDAO();
 
       adapter.play(CURRENT_AUDIO_PLAYING);
       CURRENT_AUDIO_PLAYING.getMediaPlayer().setVolume(volume);
       audioDAO.addToListeningHistory(CURRENT_AUDIO_PLAYING, ProfileManagerFactory.getInstance().getProfileManager().getActiveProfile());
-      profileDAO.refreshProfileInfo(ProfileManagerFactory.getInstance().getProfileManager().getActiveProfile());
     }else{
       playingAudiosCopy.clear();
       CURRENT_AUDIO_PLAYING=null;
@@ -142,9 +138,8 @@ public class PlayerManager{
     SongbarHandler.getInstance(ProfileManagerFactory.getInstance().getProfileManager().getActiveProfile(), CURRENT_AUDIO_PLAYING);
   }
 
-  public void play(JBAudio jbAudio) throws AccountNotFoundException{
+  public void play(JBAudio jbAudio){
     AudioDAO audioDAO=new AudioDAO();
-    ProfileDAO profileDAO=new ProfileDAO();
 
     queue.clear();
     if(CURRENT_AUDIO_PLAYING!=null){
@@ -160,13 +155,12 @@ public class PlayerManager{
     adapter.play(jbAudio);
     CURRENT_AUDIO_PLAYING.getMediaPlayer().setVolume(volume);
     audioDAO.addToListeningHistory(jbAudio, ProfileManagerFactory.getInstance().getProfileManager().getActiveProfile());
-    profileDAO.refreshProfileInfo(ProfileManagerFactory.getInstance().getProfileManager().getActiveProfile());
 
     SidebarHandler sidebarHandler=new SidebarHandler();
     SongbarHandler.getInstance(ProfileManagerFactory.getInstance().getProfileManager().getActiveProfile(), CURRENT_AUDIO_PLAYING);
   }
 
-  public void play(JBCollection jbCollection) throws SystemErrorException, AccountNotFoundException{
+  public void play(JBCollection jbCollection) throws SystemErrorException{
     CURRENT_COLLECTION_PLAYING=jbCollection.getCopy();
     Collections.reverse(CURRENT_COLLECTION_PLAYING.getTrackList());
 
@@ -202,7 +196,7 @@ public class PlayerManager{
   }
 
   /* Handles SongBar random button */
-  public void randomize() throws SystemErrorException, AccountNotFoundException{
+  public void randomize() throws SystemErrorException{
     randomized=false;
 
     if(CURRENT_COLLECTION_PLAYING!=null){
@@ -218,7 +212,7 @@ public class PlayerManager{
   }
 
   /* Handles CollectionViewGUI random button */
-  public void randomize(JBCollection jbCollection) throws SystemErrorException, AccountNotFoundException{
+  public void randomize(JBCollection jbCollection) throws SystemErrorException{
     collectionLooping=false;
     audioLooping=false;
     playingAudiosCopy.clear();
@@ -230,7 +224,7 @@ public class PlayerManager{
   }
 
   /* Handles CollectionViewGUI loop button */
-  public void loop(JBCollection jbCollection) throws SystemErrorException, AccountNotFoundException{
+  public void loop(JBCollection jbCollection) throws SystemErrorException{
     collectionLooping=true;
     randomized=false;
     audioLooping=false;
@@ -248,7 +242,7 @@ public class PlayerManager{
     playingAudiosCopy.clear();
   }
 
-  public void skipForward() throws SystemErrorException, AccountNotFoundException{
+  public void skipForward() throws SystemErrorException{
     audioLooping=false;
 
     if(CURRENT_AUDIO_PLAYING!=null){
@@ -257,7 +251,7 @@ public class PlayerManager{
     play();
   }
 
-  public void skipBack() throws SystemErrorException, AccountNotFoundException{
+  public void skipBack() throws SystemErrorException{
     if(CURRENT_AUDIO_PLAYING!=null && CURRENT_COLLECTION_PLAYING!=null){
       audioLooping=false;
 

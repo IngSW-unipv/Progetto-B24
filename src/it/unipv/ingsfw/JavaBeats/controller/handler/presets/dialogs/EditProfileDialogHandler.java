@@ -105,6 +105,9 @@ public class EditProfileDialogHandler{
             ProfileManagerFactory.getInstance().getProfileManager().checkIfUsernameAlreadyExists(profileDialog.getNewProfile());
           }//end-if
         }catch(RegexException | UsernameAlreadyTakenException e){
+
+          System.out.println("BROSKI SONO ENTRATO");
+
           /* Reverting to original profile */
           profileDialog.getNewProfile().setProfilePicture(profileDialog.getOriginalProfile().getProfilePicture());
           profileDialog.getNewProfile().setUsername(profileDialog.getOriginalProfile().getUsername());

@@ -264,7 +264,7 @@ public class ProfileDAO implements IProfileDAO{
   }
 
   //PRIVATE METHODS:
-  private double getTotalListeningTime(User user){
+  public double getTotalListeningTime(User user){
     connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
     PreparedStatement st;
     ResultSet rs;

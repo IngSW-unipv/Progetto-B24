@@ -5,6 +5,7 @@ import it.unipv.ingsfw.JavaBeats.dao.playable.AudioDAO;
 import it.unipv.ingsfw.JavaBeats.dao.collection.CollectionDAO;
 import it.unipv.ingsfw.JavaBeats.dao.profile.ProfileDAO;
 import it.unipv.ingsfw.JavaBeats.exceptions.AccountNotFoundException;
+import it.unipv.ingsfw.JavaBeats.exceptions.InvalidAudioException;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.collection.Album;
 import it.unipv.ingsfw.JavaBeats.model.collection.JBCollection;
@@ -12,6 +13,7 @@ import it.unipv.ingsfw.JavaBeats.model.collection.Playlist;
 import it.unipv.ingsfw.JavaBeats.model.collection.Podcast;
 import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
+import org.apache.tika.metadata.Metadata;
 
 import javax.imageio.ImageIO;
 import javax.sql.rowset.serial.SerialBlob;
@@ -135,5 +137,13 @@ public class CollectionManager{
     CollectionDAO c=new CollectionDAO();
     c.update(jbCollection);
 
+  }
+
+  public void checkMetadata(Metadata metadata) throws InvalidAudioException{
+    if(metadata.get("xmpDM:genre")==null){
+      throw new InvalidAudioException();
+    }else if(metadata.get("xmpDM:duration")==null){
+      throw new InvalidAudioException();
+    }//end-if
   }
 }

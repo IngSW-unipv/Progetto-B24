@@ -68,7 +68,7 @@ public class HomePageHandler{
 
         try{
           JBAudio jbAudio=(JBAudio)ijbResearchable;
-
+          
           PlayerManagerFactory.getInstance().getPlayerManager().play(jbAudio);
         }catch(ClassCastException e){
           try{
@@ -104,13 +104,6 @@ public class HomePageHandler{
 
             homePageGUI.getGp().setEffect(null); /* Removing blur effect */
           }//end-try
-        }catch(AccountNotFoundException e){
-          homePageGUI.getGp().setEffect(new BoxBlur(10, 10, 10));
-
-          ExceptionDialog exceptionDialog=new ExceptionDialog(stage, new SystemErrorException());
-          exceptionDialog.showAndWait();
-
-          homePageGUI.getGp().setEffect(null); /* Removing blur effect */
         }
       }
     };

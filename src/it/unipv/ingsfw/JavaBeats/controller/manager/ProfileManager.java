@@ -159,7 +159,7 @@ public class ProfileManager{
   }
 
   public void checkRegex(JBProfile jbProfile) throws RegexException{
-    if(!(Pattern.matches(nameRegex, jbProfile.getName()) || Pattern.matches(nameRegex, jbProfile.getSurname()))){
+    if(!Pattern.matches(nameRegex, jbProfile.getName()) || !Pattern.matches(nameRegex, jbProfile.getSurname())){
       throw new InvalidNameException();
     }else if(!(Pattern.matches(usernameRegex, jbProfile.getUsername()))){
       throw new InvalidUsernameException();

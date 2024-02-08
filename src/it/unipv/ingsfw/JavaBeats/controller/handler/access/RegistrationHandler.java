@@ -65,7 +65,7 @@ public class RegistrationHandler{
       public void handle(ActionEvent actionEvent){
 
         //Registration Regex:
-        if(!(Pattern.matches(nameRegex, gui.getName().getText()) || Pattern.matches(nameRegex, gui.getSurname().getText()))){
+        if(!Pattern.matches(nameRegex, gui.getName().getText()) || !Pattern.matches(nameRegex, gui.getSurname().getText())){
           gui.getErrorMessage().setText("Name and Surname fields must start with capital letter.");
         }else if(!(Pattern.matches(mailRegex, gui.getMail().getText()))){
           gui.getErrorMessage().setText("Please enter valid mail.");

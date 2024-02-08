@@ -10,6 +10,7 @@ import it.unipv.ingsfw.JavaBeats.model.collection.Playlist;
 import it.unipv.ingsfw.JavaBeats.model.collection.Podcast;
 import it.unipv.ingsfw.JavaBeats.model.profile.Artist;
 import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
+import it.unipv.ingsfw.JavaBeats.model.profile.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -249,9 +250,17 @@ public class AudioDAO implements IAudioDAO{
       st.executeUpdate();
     }catch(Exception e){
       e.printStackTrace();
-    }
+    }//end-try
 
     DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
+
+    try{
+      User u=(User)activeProfile;
+      ProfileDAO profileDAO=new ProfileDAO();
+
+      u.setMinuteListened(profileDAO.getTotalListeningTime(u));
+    }catch(ClassCastException ignored){
+    }//end-try
   }
 
   @Override

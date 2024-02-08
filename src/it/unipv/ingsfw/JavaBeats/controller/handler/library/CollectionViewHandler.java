@@ -9,6 +9,7 @@ import it.unipv.ingsfw.JavaBeats.controller.handler.primary.home.HomePageHandler
 import it.unipv.ingsfw.JavaBeats.controller.handler.presets.AudioTableHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.primary.profile.ProfileViewHandler;
 import it.unipv.ingsfw.JavaBeats.exceptions.AccountNotFoundException;
+import it.unipv.ingsfw.JavaBeats.exceptions.InvalidAudioException;
 import it.unipv.ingsfw.JavaBeats.exceptions.SystemErrorException;
 import it.unipv.ingsfw.JavaBeats.model.collection.Playlist;
 import it.unipv.ingsfw.JavaBeats.model.collection.Podcast;
@@ -147,13 +148,6 @@ public class CollectionViewHandler{
           exceptionDialog.showAndWait();
 
           gui.getGp().setEffect(null);
-        }catch(AccountNotFoundException e){
-          gui.getGp().setEffect(new BoxBlur(10, 10, 10));
-
-          ExceptionDialog exceptionDialog=new ExceptionDialog(stage, new SystemErrorException());
-          exceptionDialog.showAndWait();
-
-          gui.getGp().setEffect(null); /* Removing blur effect */
         }//end-try
       }
     };
@@ -179,14 +173,7 @@ public class CollectionViewHandler{
 
             gui.getGp().setEffect(null);
           }//end-try
-          catch(AccountNotFoundException e){
-            gui.getGp().setEffect(new BoxBlur(10, 10, 10));
 
-            ExceptionDialog exceptionDialog=new ExceptionDialog(stage, new SystemErrorException());
-            exceptionDialog.showAndWait();
-
-            gui.getGp().setEffect(null); /* Removing blur effect */
-          }
         }//end-if
       }
     };
@@ -211,14 +198,7 @@ public class CollectionViewHandler{
 
             gui.getGp().setEffect(null);
           }//end-try
-          catch(AccountNotFoundException e){
-            gui.getGp().setEffect(new BoxBlur(10, 10, 10));
 
-            ExceptionDialog exceptionDialog=new ExceptionDialog(stage, new SystemErrorException());
-            exceptionDialog.showAndWait();
-
-            gui.getGp().setEffect(null); /* Removing blur effect */
-          }
         }//end-if
       }
     };
@@ -293,13 +273,33 @@ public class CollectionViewHandler{
               fileInputStream.read(fileContent);
               fileInputStream.close();
 
-              Blob fileAudio=new SerialBlob(fileContent);
+              try{
+                CollectionManagerFactory.getInstance().getCollectionManager().checkMetadata(metadata);
 
-              Podcast p=(Podcast)gui.getJbCollection();
-              JBAudio jbAudio=new Episode(0, metadata.get("dc:title")==null ? FilenameUtils.removeExtension(f.getName()) : metadata.get("dc:title"), (Artist)p.getCreator(), gui.getJbCollection(), fileAudio, Double.parseDouble(metadata.get("xmpDM:duration"))*1000, new Date(System.currentTimeMillis()), new String[] {metadata.get("xmpDM:genre")}, false, 0);
+                Blob fileAudio=new SerialBlob(fileContent);
 
-              CollectionManagerFactory.getInstance().getCollectionManager().addToCollection(gui.getJbCollection(), jbAudio);
+                Podcast p=(Podcast)gui.getJbCollection();
+                JBAudio jbAudio=new Episode(0, metadata.get("dc:title")==null ? FilenameUtils.removeExtension(f.getName()) : metadata.get("dc:title"), (Artist)p.getCreator(), gui.getJbCollection(), fileAudio, Double.parseDouble(metadata.get("xmpDM:duration"))*1000, new Date(System.currentTimeMillis()), new String[] {metadata.get("xmpDM:genre")}, false, 0);
 
+                CollectionManagerFactory.getInstance().getCollectionManager().addToCollection(gui.getJbCollection(), jbAudio);
+
+                CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, gui.getJbCollection());
+                CollectionViewHandler collectionViewHandler=new CollectionViewHandler(collectionViewGUI, activeProfile);
+                AudioTableHandler.getInstance((AudioTable)collectionViewGUI.getAudioTable());
+
+                Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
+                stage.setScene(collectionViewGUI.getScene());
+                stage.setTitle("Collection");
+                stage.setWidth(previousDimension.getWidth());
+                stage.setHeight(previousDimension.getHeight());
+              }catch(InvalidAudioException i){
+                gui.getGp().setEffect(new BoxBlur(10, 10, 10));
+
+                ExceptionDialog exceptionDialog=new ExceptionDialog(stage, i);
+                exceptionDialog.showAndWait();
+
+                gui.getGp().setEffect(null);
+              }//end-try
             }catch(IOException | TikaException | SAXException | SQLException | AccountNotFoundException e){
               gui.getGp().setEffect(new BoxBlur(10, 10, 10));
 
@@ -310,16 +310,6 @@ public class CollectionViewHandler{
             }//end-try
           }//end-foreach
         }//end-if
-
-        CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, gui.getJbCollection());
-        CollectionViewHandler collectionViewHandler=new CollectionViewHandler(collectionViewGUI, activeProfile);
-        AudioTableHandler.getInstance((AudioTable)collectionViewGUI.getAudioTable());
-
-        Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
-        stage.setScene(collectionViewGUI.getScene());
-        stage.setTitle("Collection");
-        stage.setWidth(previousDimension.getWidth());
-        stage.setHeight(previousDimension.getHeight());
       }
     };
 
@@ -377,16 +367,7 @@ public class CollectionViewHandler{
                 gui.getGp().setEffect(null); /* Removing blur effect */
               }//end-try
             }else{
-              try{
-                PlayerManagerFactory.getInstance().getPlayerManager().play(audioClicked);
-              }catch(AccountNotFoundException e){
-                gui.getGp().setEffect(new BoxBlur(10, 10, 10));
-
-                ExceptionDialog exceptionDialog=new ExceptionDialog(stage, new SystemErrorException());
-                exceptionDialog.showAndWait();
-
-                gui.getGp().setEffect(null); /* Removing blur effect */
-              }//end-try
+              PlayerManagerFactory.getInstance().getPlayerManager().play(audioClicked);
             }//end-if
           }else if(foundIsFavoriteButton){
             try{

@@ -82,7 +82,7 @@ public class ExceptionDialog extends Dialog<JBCollection>{
 
     getDialogPane().getStylesheets().add("it/unipv/ingsfw/JavaBeats/view/resources/css/dialog.css");
     getDialogPane().getStyleClass().add("myDialog");
-    getDialogPane().setPrefSize(600, 400);
+    getDialogPane().setPrefSize(800, 600);
   }
   /*---------------------------------------*/
 }

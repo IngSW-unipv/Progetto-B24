@@ -132,12 +132,7 @@ public class SongbarHandler{
             exceptionDialog.showAndWait();
           }//end-if
         }//end-try
-        catch(AccountNotFoundException e){
-          if(AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING!=null){
-            ExceptionDialog exceptionDialog=new ExceptionDialog(((Stage)AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.getScene().getWindow()), new SystemErrorException());
-            exceptionDialog.showAndWait();
-          }//end-if
-        }
+
       }
     };
     InvalidationListener mediaPlayerDurationListener=new InvalidationListener(){
@@ -234,12 +229,7 @@ public class SongbarHandler{
             exceptionDialog.showAndWait();
           }//end-if
         }//end-try
-        catch(AccountNotFoundException e){
-          if(AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING!=null){
-            ExceptionDialog exceptionDialog=new ExceptionDialog(((Stage)AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.getScene().getWindow()), new SystemErrorException());
-            exceptionDialog.showAndWait();
-          }//end-if
-        }
+
       }
     };
     EventHandler<ActionEvent> loopButtonHandler=new EventHandler<>(){
@@ -280,11 +270,6 @@ public class SongbarHandler{
             ExceptionDialog exceptionDialog=new ExceptionDialog(((Stage)AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.getScene().getWindow()), e);
             exceptionDialog.showAndWait();
           }//end-if
-        }catch(AccountNotFoundException e){
-          if(AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING!=null){
-            ExceptionDialog exceptionDialog=new ExceptionDialog(((Stage)AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.getScene().getWindow()), new SystemErrorException());
-            exceptionDialog.showAndWait();
-          }//end-if
         }//end-try
       }
     };
@@ -303,12 +288,7 @@ public class SongbarHandler{
             exceptionDialog.showAndWait();
           }//end-if
         }//end-try
-        catch(AccountNotFoundException e){
-          if(AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING!=null){
-            ExceptionDialog exceptionDialog=new ExceptionDialog(((Stage)AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.getScene().getWindow()), new SystemErrorException());
-            exceptionDialog.showAndWait();
-          }//end-if
-        }
+
       }
     };
     try{

@@ -2,6 +2,7 @@ package it.unipv.ingsfw.JavaBeats.controller.handler.library;
 
 import it.unipv.ingsfw.JavaBeats.controller.factory.CollectionManagerFactory;
 import it.unipv.ingsfw.JavaBeats.exceptions.AccountNotFoundException;
+import it.unipv.ingsfw.JavaBeats.exceptions.InvalidAudioException;
 import it.unipv.ingsfw.JavaBeats.exceptions.InvalidJBEntityException;
 import it.unipv.ingsfw.JavaBeats.exceptions.SystemErrorException;
 import it.unipv.ingsfw.JavaBeats.model.EJBENTITY;
@@ -142,22 +143,32 @@ public class CreationGUIHandler{
               fileInputStream.read(fileContent);
               fileInputStream.close();
 
+              try{
+                CollectionManagerFactory.getInstance().getCollectionManager().checkMetadata(metadata);
 //              System.out.println("----------------------------------------------");
 //              System.out.println("Title: "+metadata.get("dc:title")+"  "+FilenameUtils.removeExtension(f.getName()));
 //              System.out.println("Genre : "+metadata.get("xmpDM:genre"));
 //              System.out.println("Duration: "+metadata.get("xmpDM:duration"));
 //              System.out.println("----------------------------------------------");
 
-              JBAudio jbAudio=null;
-              Blob fileAudio=new SerialBlob(fileContent);
-              try{
-                Album a=(Album)creationGUI.getNewCollection();
-                jbAudio=new Song(0, metadata.get("dc:title")==null ? FilenameUtils.removeExtension(f.getName()) : metadata.get("dc:title"), (Artist)a.getCreator(), creationGUI.getNewCollection(), fileAudio, Double.parseDouble(metadata.get("xmpDM:duration"))*1000, new Date(System.currentTimeMillis()), new String[]{metadata.get("xmpDM:genre")}, false, 0);
-              }catch(ClassCastException c){
-                Podcast p=(Podcast)creationGUI.getNewCollection();
-                jbAudio=new Episode(0, metadata.get("dc:title")==null ? FilenameUtils.removeExtension(f.getName()) : metadata.get("dc:title"), (Artist)p.getCreator(), creationGUI.getNewCollection(), fileAudio, Double.parseDouble(metadata.get("xmpDM:duration"))*1000, new Date(System.currentTimeMillis()), new String[]{metadata.get("xmpDM:genre")}, false, 0);
+                JBAudio jbAudio=null;
+                Blob fileAudio=new SerialBlob(fileContent);
+                try{
+                  Album a=(Album)creationGUI.getNewCollection();
+                  jbAudio=new Song(0, metadata.get("dc:title")==null ? FilenameUtils.removeExtension(f.getName()) : metadata.get("dc:title"), (Artist)a.getCreator(), creationGUI.getNewCollection(), fileAudio, Double.parseDouble(metadata.get("xmpDM:duration"))*1000, new Date(System.currentTimeMillis()), new String[] {metadata.get("xmpDM:genre")}, false, 0);
+                }catch(ClassCastException c){
+                  Podcast p=(Podcast)creationGUI.getNewCollection();
+                  jbAudio=new Episode(0, metadata.get("dc:title")==null ? FilenameUtils.removeExtension(f.getName()) : metadata.get("dc:title"), (Artist)p.getCreator(), creationGUI.getNewCollection(), fileAudio, Double.parseDouble(metadata.get("xmpDM:duration"))*1000, new Date(System.currentTimeMillis()), new String[] {metadata.get("xmpDM:genre")}, false, 0);
+                }//end-try
+                creationGUI.getNewCollection().getTrackList().add(jbAudio);
+              }catch(InvalidAudioException i){
+                creationGUI.getGp().setEffect(new BoxBlur(10, 10, 10));
+
+                ExceptionDialog exceptionDialog=new ExceptionDialog(stage, i);
+                exceptionDialog.showAndWait();
+
+                creationGUI.getGp().setEffect(null);
               }//end-try
-              creationGUI.getNewCollection().getTrackList().add(jbAudio);
             }catch(IOException | TikaException | SAXException | SQLException e){
               creationGUI.getGp().setEffect(new BoxBlur(10, 10, 10));
 
