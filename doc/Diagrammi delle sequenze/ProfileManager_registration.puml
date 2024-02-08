@@ -1,0 +1,501 @@
+@startuml
+!theme carbon-gray
+participant Actor
+Actor -> ProfileManager : registration
+activate ProfileManager
+ProfileManager -> ProfileDAO : insert
+
+activate ProfileDAO
+ProfileDAO -> DBManager : startConnection
+activate DBManager
+DBManager --> ProfileDAO
+deactivate DBManager
+
+ProfileDAO --> ProfileManager
+deactivate ProfileDAO
+ProfileManager -> ProfileDAO : get
+activate ProfileDAO
+ProfileDAO -> ProfileDAO : getUser
+
+activate ProfileDAO
+ProfileDAO -> DBManager : startConnection
+activate DBManager
+DBManager --> ProfileDAO
+deactivate DBManager
+
+ProfileDAO -> DBManager : closeConnection
+activate DBManager
+DBManager --> ProfileDAO
+deactivate DBManager
+
+ProfileDAO --> ProfileDAO
+deactivate ProfileDAO
+ProfileDAO -> ProfileDAO : getArtist
+
+activate ProfileDAO
+ProfileDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO -> DBManager : closeConnection
+
+activate DBManager
+
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO --> ProfileDAO
+deactivate ProfileDAO
+ProfileDAO -> CollectionDAO : getFavorites
+activate CollectionDAO
+CollectionDAO -> AudioDAO : selectFavorites
+activate AudioDAO
+AudioDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> AudioDAO
+deactivate DBManager
+AudioDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> AudioDAO
+deactivate DBManager
+AudioDAO -> AudioDAO : get
+activate AudioDAO
+AudioDAO -> AudioDAO : getSong
+activate AudioDAO
+AudioDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> AudioDAO
+deactivate DBManager
+AudioDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> AudioDAO
+deactivate DBManager
+AudioDAO -> ProfileDAO : getArtist
+activate ProfileDAO
+ProfileDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO --> AudioDAO
+deactivate ProfileDAO
+AudioDAO -> CollectionDAO : get
+activate CollectionDAO
+CollectionDAO -> CollectionDAO : getPlaylist
+activate CollectionDAO
+CollectionDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> CollectionDAO
+deactivate DBManager
+CollectionDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> CollectionDAO
+deactivate DBManager
+CollectionDAO --> CollectionDAO
+deactivate CollectionDAO
+CollectionDAO -> CollectionDAO : getAlbum
+activate CollectionDAO
+CollectionDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> CollectionDAO
+deactivate DBManager
+CollectionDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> CollectionDAO
+deactivate DBManager
+CollectionDAO -> ProfileDAO : getArtist
+activate ProfileDAO
+ProfileDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO --> CollectionDAO
+deactivate ProfileDAO
+CollectionDAO --> CollectionDAO
+deactivate CollectionDAO
+CollectionDAO -> CollectionDAO : getPodcast
+activate CollectionDAO
+CollectionDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> CollectionDAO
+deactivate DBManager
+CollectionDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> CollectionDAO
+deactivate DBManager
+CollectionDAO -> ProfileDAO : getArtist
+activate ProfileDAO
+ProfileDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO --> CollectionDAO
+deactivate ProfileDAO
+CollectionDAO --> CollectionDAO
+deactivate CollectionDAO
+CollectionDAO --> AudioDAO
+deactivate CollectionDAO
+AudioDAO --> AudioDAO
+deactivate AudioDAO
+AudioDAO -> AudioDAO : getEpisode
+activate AudioDAO
+AudioDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> AudioDAO
+deactivate DBManager
+AudioDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> AudioDAO
+deactivate DBManager
+AudioDAO -> ProfileDAO : getArtist
+activate ProfileDAO
+ProfileDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO --> AudioDAO
+deactivate ProfileDAO
+AudioDAO -> CollectionDAO : get
+activate CollectionDAO
+CollectionDAO -> CollectionDAO : getPlaylist
+activate CollectionDAO
+CollectionDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> CollectionDAO
+deactivate DBManager
+CollectionDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> CollectionDAO
+deactivate DBManager
+CollectionDAO --> CollectionDAO
+deactivate CollectionDAO
+CollectionDAO -> CollectionDAO : getAlbum
+activate CollectionDAO
+CollectionDAO -> DBManager : startConnection
+activate DBManager
+DBManager --> CollectionDAO
+deactivate DBManager
+CollectionDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> CollectionDAO
+deactivate DBManager
+CollectionDAO -> ProfileDAO : getArtist
+activate ProfileDAO
+ProfileDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO --> CollectionDAO
+deactivate ProfileDAO
+CollectionDAO --> CollectionDAO
+deactivate CollectionDAO
+CollectionDAO -> CollectionDAO : getPodcast
+activate CollectionDAO
+CollectionDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> CollectionDAO
+deactivate DBManager
+CollectionDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> CollectionDAO
+deactivate DBManager
+CollectionDAO -> ProfileDAO : getArtist
+activate ProfileDAO
+ProfileDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO --> CollectionDAO
+deactivate ProfileDAO
+CollectionDAO --> CollectionDAO
+deactivate CollectionDAO
+CollectionDAO --> AudioDAO
+deactivate CollectionDAO
+AudioDAO --> AudioDAO
+deactivate AudioDAO
+AudioDAO --> AudioDAO
+deactivate AudioDAO
+AudioDAO --> CollectionDAO
+deactivate AudioDAO
+CollectionDAO --> ProfileDAO
+deactivate CollectionDAO
+ProfileDAO -> CollectionDAO : getFavorites
+activate CollectionDAO
+CollectionDAO -> AudioDAO : selectFavorites
+activate AudioDAO
+AudioDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> AudioDAO
+deactivate DBManager
+AudioDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> AudioDAO
+deactivate DBManager
+AudioDAO -> AudioDAO : get
+activate AudioDAO
+AudioDAO -> AudioDAO : getSong
+activate AudioDAO
+AudioDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> AudioDAO
+deactivate DBManager
+AudioDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> AudioDAO
+deactivate DBManager
+AudioDAO -> ProfileDAO : getArtist
+activate ProfileDAO
+ProfileDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO --> AudioDAO
+deactivate ProfileDAO
+AudioDAO -> CollectionDAO : get
+activate CollectionDAO
+CollectionDAO -> CollectionDAO : getPlaylist
+activate CollectionDAO
+CollectionDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> CollectionDAO
+deactivate DBManager
+CollectionDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> CollectionDAO
+deactivate DBManager
+CollectionDAO --> CollectionDAO
+deactivate CollectionDAO
+CollectionDAO -> CollectionDAO : getAlbum
+activate CollectionDAO
+CollectionDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> CollectionDAO
+deactivate DBManager
+CollectionDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> CollectionDAO
+deactivate DBManager
+CollectionDAO -> ProfileDAO : getArtist
+activate ProfileDAO
+ProfileDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO --> CollectionDAO
+deactivate ProfileDAO
+CollectionDAO --> CollectionDAO
+deactivate CollectionDAO
+CollectionDAO -> CollectionDAO : getPodcast
+activate CollectionDAO
+CollectionDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> CollectionDAO
+deactivate DBManager
+CollectionDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> CollectionDAO
+deactivate DBManager
+CollectionDAO -> ProfileDAO : getArtist
+activate ProfileDAO
+ProfileDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO --> CollectionDAO
+deactivate ProfileDAO
+CollectionDAO --> CollectionDAO
+deactivate CollectionDAO
+CollectionDAO --> AudioDAO
+deactivate CollectionDAO
+AudioDAO --> AudioDAO
+deactivate AudioDAO
+AudioDAO -> AudioDAO : getEpisode
+activate AudioDAO
+AudioDAO -> DBManager : startConnection
+activate DBManager
+DBManager --> AudioDAO
+deactivate DBManager
+AudioDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> AudioDAO
+deactivate DBManager
+AudioDAO -> ProfileDAO : getArtist
+activate ProfileDAO
+ProfileDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO --> AudioDAO
+deactivate ProfileDAO
+AudioDAO -> CollectionDAO : get
+activate CollectionDAO
+CollectionDAO -> CollectionDAO : getPlaylist
+activate CollectionDAO
+CollectionDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> CollectionDAO
+deactivate DBManager
+CollectionDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> CollectionDAO
+deactivate DBManager
+CollectionDAO --> CollectionDAO
+deactivate CollectionDAO
+CollectionDAO -> CollectionDAO : getAlbum
+activate CollectionDAO
+CollectionDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> CollectionDAO
+deactivate DBManager
+CollectionDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> CollectionDAO
+deactivate DBManager
+CollectionDAO -> ProfileDAO : getArtist
+activate ProfileDAO
+ProfileDAO -> DBManager : startConnection
+activate DBManager
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO --> CollectionDAO
+deactivate ProfileDAO
+CollectionDAO --> CollectionDAO
+deactivate CollectionDAO
+CollectionDAO -> CollectionDAO : getPodcast
+activate CollectionDAO
+CollectionDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> CollectionDAO
+deactivate DBManager
+CollectionDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> CollectionDAO
+deactivate DBManager
+CollectionDAO -> ProfileDAO : getArtist
+activate ProfileDAO
+ProfileDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO --> CollectionDAO
+deactivate ProfileDAO
+CollectionDAO --> CollectionDAO
+deactivate CollectionDAO
+CollectionDAO --> AudioDAO
+deactivate CollectionDAO
+AudioDAO --> AudioDAO
+deactivate AudioDAO
+AudioDAO --> AudioDAO
+deactivate AudioDAO
+AudioDAO --> CollectionDAO
+deactivate AudioDAO
+CollectionDAO --> ProfileDAO
+deactivate CollectionDAO
+ProfileDAO --> ProfileManager
+deactivate ProfileDAO
+return
+@enduml
