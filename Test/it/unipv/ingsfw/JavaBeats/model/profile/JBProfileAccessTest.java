@@ -14,196 +14,192 @@ import static org.junit.Assert.*;
  * Tests profile access and registration.
  * This test verifies whether the user can successfully register and access with test credentials.
  */
-public class JBProfileAccessTest {
+public class JBProfileAccessTest{
 
-    //Attributes
-    private User user;
-    private User userTest;
-    private ProfileDAO p;
-
-
-    @Test
-    public void testRegistrationOne() {
-
-        //Manually registering testUser
-        userTest = new User("Maria", "maria@gmail.com", "Maria1");
-        p = new ProfileDAO();
-        p.insert(userTest);
-
-        user = new User("", "", "");
+  //Attributes
+  private User user;
+  private User userTest;
+  private ProfileDAO p;
 
 
-        user.setUsername("Mario");
-        user.setMail("mario@gmail.com");
-        user.setPassword("Mario1");
+  @Test
+  public void testRegistrationOne(){
 
-        boolean result = true;
+    //Manually registering testUser
+    userTest=new User("Maria", "maria@gmail.com", "Maria1");
+    p=new ProfileDAO();
+    p.insert(userTest);
 
-        try {
-            ProfileManagerFactory.getInstance().getProfileManager().registration(user);
+    user=new User("", "", "");
 
-        } catch (AccountAlreadyExistsException e) {
-            result = false;
-        } catch (UsernameAlreadyTakenException u) {
-            result = false;
-        } catch (AccountNotFoundException ignored) {
 
-        }
-        assertTrue(result);
-        p.remove(user);
-        p.remove(userTest);
+    user.setUsername("Mario");
+    user.setMail("mario@gmail.com");
+    user.setPassword("Mario1");
+
+    boolean result=true;
+
+    try{
+      ProfileManagerFactory.getInstance().getProfileManager().registration(user);
+
+    }catch(AccountAlreadyExistsException e){
+      result=false;
+    }catch(UsernameAlreadyTakenException u){
+      result=false;
+    }catch(AccountNotFoundException a){
+      result=false;
+    }
+    assertTrue(result);
+    p.remove(user);
+    p.remove(userTest);
+
+  }
+
+  @Test
+  public void testRegistrationTwo(){
+
+    userTest=new User("Maria", "maria@gmail.com", "Maria1");
+    p=new ProfileDAO();
+    p.insert(userTest);
+
+    user=new User("", "", "");
+
+    user.setUsername("Maria");
+    user.setMail("maria@gmail.com");
+    user.setPassword("Maria1");
+
+    boolean result=true;
+
+    try{
+      ProfileManagerFactory.getInstance().getProfileManager().registration(user);
+
+    }catch(AccountAlreadyExistsException ignored){
+    }catch(UsernameAlreadyTakenException u){
+      result=false;
+    }catch(AccountNotFoundException ignored){
+    }
+    assertFalse(result);
+
+    p.remove(userTest);
+  }
+
+  @Test
+  public void testRegistrationThree(){
+
+    userTest=new User("Maria", "maria@gmail.com", "Maria1");
+    p=new ProfileDAO();
+    p.insert(userTest);
+
+    user=new User("", "", "");
+
+    user.setUsername("Maria");
+    user.setMail("Maria@gmail.com");
+    user.setPassword("Maria1");
+
+    boolean result=true;
+
+    try{
+      ProfileManagerFactory.getInstance().getProfileManager().registration(user);
+
+    }catch(AccountAlreadyExistsException ignored){
+    }catch(UsernameAlreadyTakenException u){
+      result=false;
+    }catch(AccountNotFoundException ignored){
+    }
+    assertFalse(result);
+
+    p.remove(userTest);
+  }
+
+  @Test
+  public void testLoginOne(){
+
+    userTest=new User("Maria", "maria@gmail.com", "Maria1");
+    p=new ProfileDAO();
+    p.insert(userTest);
+
+    user=new User("", "", "");
+
+
+    user.setUsername("Maria");
+    user.setMail("maria@gmail.com");
+    user.setPassword("Maria1");
+
+
+    boolean result=true;
+
+    try{
+      ProfileManagerFactory.getInstance().getProfileManager().login(user);
+
+
+    }catch(AccountNotFoundException a){
+      result=false;
+
+    }catch(WrongPasswordException e){
+      result=false;
+    }
+    assertTrue(result);
+
+    p.remove(userTest);
+  }
+
+
+  @Test
+  public void testLoginTwo(){
+
+
+    user=new User("", "", "");
+
+    user.setUsername("Maria");
+    user.setMail("Maria@gmail.com");
+    user.setPassword("Maria1");
+
+    boolean result=true;
+
+    try{
+      ProfileManagerFactory.getInstance().getProfileManager().login(user);
+
+
+    }catch(AccountNotFoundException a){
+      result=false;
+
+    }catch(WrongPasswordException ignored){
 
     }
+    assertFalse(result);
 
-    @Test
-    public void testRegistrationTwo() {
+  }
 
-        userTest = new User("Maria", "maria@gmail.com", "Maria1");
-        p = new ProfileDAO();
-        p.insert(userTest);
+  @Test
+  public void testLoginThree(){
 
-        user = new User("", "", "");
+    userTest=new User("Maria", "maria@gmail.com", "Maria1");
+    p=new ProfileDAO();
+    p.insert(userTest);
 
-        user.setUsername("Maria");
-        user.setMail("maria@gmail.com");
-        user.setPassword("Maria1");
 
-        boolean result = true;
+    user=new User("", "", "");
 
-        try {
-            ProfileManagerFactory.getInstance().getProfileManager().registration(user);
+    user.setUsername("Maria");
+    user.setMail("Maria@gmail.com");
+    user.setPassword("Maria");
 
-        } catch (AccountAlreadyExistsException e) {
-            result = false;
-        } catch (UsernameAlreadyTakenException u) {
-            result = false;
-        } catch (AccountNotFoundException ignored) {
+    boolean result=true;
 
-        }
-        assertFalse(result);
+    try{
+      ProfileManagerFactory.getInstance().getProfileManager().login(user);
 
-        p.remove(userTest);
+
+    }catch(AccountNotFoundException ignored){
+
+    }catch(WrongPasswordException e){
+      result=false;
     }
-
-    @Test
-    public void testRegistrationThree() {
-
-        userTest = new User("Maria", "maria@gmail.com", "Maria1");
-        p = new ProfileDAO();
-        p.insert(userTest);
-
-        user = new User("", "", "");
-
-        user.setUsername("Maria");
-        user.setMail("Maria@gmail.com");
-        user.setPassword("Maria1");
-
-        boolean result = true;
-
-        try {
-            ProfileManagerFactory.getInstance().getProfileManager().registration(user);
-
-        } catch (AccountAlreadyExistsException e) {
-            result = false;
-        } catch (UsernameAlreadyTakenException u) {
-            result = false;
-        } catch (AccountNotFoundException ignored) {
-
-        }
-        assertFalse(result);
-
-        p.remove(userTest);
-    }
-
-    @Test
-    public void testLoginOne() {
-
-        userTest = new User("Maria", "maria@gmail.com", "Maria1");
-        p = new ProfileDAO();
-        p.insert(userTest);
-
-        user = new User("", "", "");
+    assertFalse(result);
+    p.remove(userTest);
 
 
-        user.setUsername("Maria");
-        user.setMail("maria@gmail.com");
-        user.setPassword("Maria1");
-
-
-        boolean result = true;
-
-        try {
-            ProfileManagerFactory.getInstance().getProfileManager().login(user);
-
-
-        } catch (AccountNotFoundException a) {
-            result = false;
-
-        } catch (WrongPasswordException e) {
-            result = false;
-        }
-        assertTrue(result);
-
-        p.remove(userTest);
-    }
-
-
-    @Test
-    public void testLoginTwo() {
-
-
-        user = new User("", "", "");
-
-        user.setUsername("Maria");
-        user.setMail("Maria@gmail.com");
-        user.setPassword("Maria1");
-
-        boolean result = true;
-
-        try {
-            ProfileManagerFactory.getInstance().getProfileManager().login(user);
-
-
-        } catch (AccountNotFoundException a) {
-            result = false;
-
-        } catch (WrongPasswordException ignored) {
-
-        }
-        assertFalse(result);
-
-    }
-
-    @Test
-    public void testLoginThree() {
-
-        userTest = new User("Maria", "maria@gmail.com", "Maria1");
-        p = new ProfileDAO();
-        p.insert(userTest);
-
-
-        user = new User("", "", "");
-
-        user.setUsername("Maria");
-        user.setMail("Maria@gmail.com");
-        user.setPassword("Maria");
-
-        boolean result = true;
-
-        try {
-            ProfileManagerFactory.getInstance().getProfileManager().login(user);
-
-
-        } catch (AccountNotFoundException ignored) {
-
-        } catch (WrongPasswordException e) {
-            result = false;
-        }
-        assertFalse(result);
-        p.remove(userTest);
-
-
-    }
+  }
 
 
 }
