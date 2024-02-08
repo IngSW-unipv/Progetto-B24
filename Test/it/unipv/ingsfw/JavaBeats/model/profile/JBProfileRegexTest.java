@@ -12,138 +12,138 @@ import static org.junit.Assert.*;
  * Tests profile Regular Expressions.
  * This test verifies the allowed username and password.
  */
-public class JBProfileRegexTest {
+public class JBProfileRegexTest{
 
-    //Attributes
-    private Artist artist;
-
-
-    @Before
-    public void intTest() {
-        artist = new Artist("", "", "");
+  //Attributes
+  private Artist artist;
 
 
+  @Before
+  public void intTest(){
+    artist=new Artist("", "", "");
+
+
+  }
+
+  @Test
+  public void testPasswordOne(){
+
+    String[] password={"Alessia1", "_Ale300502_", "3AleProtti"};
+
+    boolean result=true;
+
+    for(String s: password){
+
+      artist.setPassword(s);
+      try{
+        ProfileManagerFactory.getInstance().getProfileManager().checkPasswordRegex(artist);
+      }catch(InvalidPasswordException e){
+        result=false;
+      }//end-try
     }
+    assertTrue(result);
 
-    @Test
-    public void testPasswordOne() {
+  }
 
-        String[] password = {"Alessia1", "_Ale300502_", "3AleProtti"};
+  @Test
+  public void testPasswordTwo(){
 
-        boolean result = true;
+    String[] password={"ale", "Alessiaaa", "AP3", "33", "xhjcbslhjbvjbddkjvbsdhfsidhfsiodcnsdncjndsjkcndjsnvjkfvnkjfbsjkvbsjkvbskjfbvsjkvbsjkbvsjkfvbdvdksjnvjksdnvjksdbfjksbjvkbsjkvbvsvbv"};
 
-        for (String s : password) {
+    boolean result=true;
 
-            artist.setPassword(s);
-            try {
-                ProfileManagerFactory.getInstance().getProfileManager().checkPasswordRegex(artist);
-            } catch (InvalidPasswordException e) {
-                result = false;
-            }
-        }
-        assertTrue(result);
+    for(String s: password){
 
+      artist.setPassword(s);
+      try{
+        ProfileManagerFactory.getInstance().getProfileManager().checkPasswordRegex(artist);
+      }catch(InvalidPasswordException e){
+        result=false;
+      }//end-try
     }
+    assertFalse(result);
 
-    @Test
-    public void testPasswordTwo() {
+  }
 
-        String[] password = {"ale", "Alessiaaa", "AP3", "33"};
+  @Test
+  public void testPasswordThree(){
 
-        boolean result = true;
+    String[] password={"", "      "};
 
-        for (String s : password) {
+    boolean result=true;
 
-            artist.setPassword(s);
-            try {
-                ProfileManagerFactory.getInstance().getProfileManager().checkPasswordRegex(artist);
-            } catch (InvalidPasswordException e) {
-                result = false;
-            }
-        }
-        assertFalse(result);
+    for(String s: password){
 
+      artist.setPassword(s);
+      try{
+        ProfileManagerFactory.getInstance().getProfileManager().checkPasswordRegex(artist);
+      }catch(InvalidPasswordException e){
+        result=false;
+      }//end-try
     }
+    assertFalse(result);
 
-    @Test
-    public void testPasswordThree() {
+  }
 
-        String[] password = {"", "      "};
+  @Test
+  public void testUsernameOne(){
 
-        boolean result = true;
+    String[] username={"giaco", "GIAC0_01", "3giaco.2GIACO.1giaco"};
 
-        for (String s : password) {
+    boolean result=true;
 
-            artist.setPassword(s);
-            try {
-                ProfileManagerFactory.getInstance().getProfileManager().checkPasswordRegex(artist);
-            } catch (InvalidPasswordException e) {
-                result = false;
-            }
-        }
-        assertFalse(result);
+    for(String s: username){
 
+      artist.setUsername(s);
+      try{
+        ProfileManagerFactory.getInstance().getProfileManager().checkUsernameRegex(artist);
+      }catch(InvalidUsernameException e){
+        result=false;
+      }//end-try
     }
+    assertTrue(result);
 
-    @Test
-    public void testUsernameOne() {
+  }
 
-        String[] username = {"giaco", "GIAC0_01", "3giaco.2GIACO.1giaco"};
+  @Test
+  public void testUsernameTwo(){
 
-        boolean result = true;
+    String[] username={"", "    ", "TrentatreTrentiniEntraronoInTrentoTrotterellando", "g g"};
 
-        for (String s : username) {
+    boolean result=true;
 
-            artist.setUsername(s);
-            try {
-                ProfileManagerFactory.getInstance().getProfileManager().checkUsernameRegex(artist);
-            } catch (InvalidUsernameException e) {
-                result = false;
-            }
-        }
-        assertTrue(result);
+    for(String s: username){
 
+      artist.setUsername(s);
+      try{
+        ProfileManagerFactory.getInstance().getProfileManager().checkUsernameRegex(artist);
+      }catch(InvalidUsernameException e){
+        result=false;
+      }//end-try
     }
+    assertFalse(result);
 
-    @Test
-    public void testUsernameTwo() {
+  }
 
-        String[] username = {"", "    ", "TrentatreTrentiniEntraronoInTrentoTrotterellando", "g g"};
+  @Test
+  public void testUsernameThree(){
 
-        boolean result = true;
+    String[] username={"CIAO!", "❤", "cì@ò"};
 
-        for (String s : username) {
+    boolean result=true;
 
-            artist.setUsername(s);
-            try {
-                ProfileManagerFactory.getInstance().getProfileManager().checkUsernameRegex(artist);
-            } catch (InvalidUsernameException e) {
-                result = false;
-            }
-        }
-        assertFalse(result);
+    for(String s: username){
 
+      artist.setUsername(s);
+      try{
+        ProfileManagerFactory.getInstance().getProfileManager().checkUsernameRegex(artist);
+      }catch(InvalidUsernameException e){
+        result=false;
+      }//end-try
     }
+    assertFalse(result);
 
-    @Test
-    public void testUsernameThree() {
-
-        String[] username = {"CIAO!", "❤", "cì@ò"};
-
-        boolean result = true;
-
-        for (String s : username) {
-
-            artist.setUsername(s);
-            try {
-                ProfileManagerFactory.getInstance().getProfileManager().checkUsernameRegex(artist);
-            } catch (InvalidUsernameException e) {
-                result = false;
-            }
-        }
-        assertFalse(result);
-
-    }
+  }
 
 
 }
