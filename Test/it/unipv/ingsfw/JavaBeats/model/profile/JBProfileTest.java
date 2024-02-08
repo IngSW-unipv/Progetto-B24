@@ -15,7 +15,7 @@ public class JBProfileTest {
 
     @Before
     public void intTest() {
-        artist = new Artist("Alessia", "alessia@gmail.com", "");
+        artist = new Artist("", "", "");
 
     }
 
@@ -38,4 +38,46 @@ public class JBProfileTest {
         assertTrue(result);
 
     }
+
+    @Test
+    public void testPasswordTwo() {
+
+        String[] password = {"ale", "Alessiaaa", "AP3", "33"};
+
+        boolean result = true;
+
+        for (String s : password) {
+
+            artist.setPassword(s);
+            try {
+                ProfileManagerFactory.getInstance().getProfileManager().checkPasswordRegex(artist);
+            } catch (InvalidPasswordException e) {
+                result = false;
+            }
+        }
+        assertFalse(result);
+
+    }
+
+    @Test
+    public void testPasswordThree() {
+
+        String[] password = {"", "      "};
+
+        boolean result = true;
+
+        for (String s : password) {
+
+            artist.setPassword(s);
+            try {
+                ProfileManagerFactory.getInstance().getProfileManager().checkPasswordRegex(artist);
+            } catch (InvalidPasswordException e) {
+                result = false;
+            }
+        }
+        assertFalse(result);
+
+    }
+
+
 }
