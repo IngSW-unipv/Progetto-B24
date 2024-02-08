@@ -7,6 +7,8 @@ import it.unipv.ingsfw.JavaBeats.controller.handler.presets.AudioTableHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.presets.SidebarHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.presets.SongbarHandler;
 import it.unipv.ingsfw.JavaBeats.dao.playable.AudioDAO;
+import it.unipv.ingsfw.JavaBeats.dao.profile.ProfileDAO;
+import it.unipv.ingsfw.JavaBeats.exceptions.AccountNotFoundException;
 import it.unipv.ingsfw.JavaBeats.exceptions.SystemErrorException;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.collection.JBCollection;
@@ -54,6 +56,7 @@ public class PlayerManager{
   public static JBCollection getCurrentCollectionPlaying(){
     return CURRENT_COLLECTION_PLAYING;
   }
+
   public static boolean isRandomized(){
     return randomized;
   }
@@ -61,30 +64,38 @@ public class PlayerManager{
   public static void setRandomized(boolean randomized){
     PlayerManager.randomized=randomized;
   }
+
   public static boolean isCollectionLooping(){
     return collectionLooping;
   }
+
   public static void setCollectionLooping(boolean collectionLooping){
     PlayerManager.collectionLooping=collectionLooping;
   }
+
   public static boolean isAudioLooping(){
     return audioLooping;
   }
+
   public static void setAudioLooping(boolean audioLooping){
     PlayerManager.audioLooping=audioLooping;
   }
+
   public static double getVolume(){
     return volume;
   }
+
   public static void setVolume(double volume){
     PlayerManager.volume=volume;
   }
+
   /*---------------------------------------*/
   //Methods
   /*---------------------------------------*/
   public void addToQueue(JBAudio ijbPlayable){
     queue.push(ijbPlayable);
   }
+
   public void removeFromQueue(JBAudio jbAudio){
     queue.remove(jbAudio);
   }
@@ -95,9 +106,10 @@ public class PlayerManager{
     collectionLooping=false;
   }
 
-  public void play() throws SystemErrorException{
+  public void play() throws SystemErrorException, AccountNotFoundException{
     if(!queue.isEmpty()){
       AudioDAO audioDAO=new AudioDAO();
+      ProfileDAO profileDAO=new ProfileDAO();
 
       if(CURRENT_AUDIO_PLAYING!=null){
         CURRENT_AUDIO_PLAYING.getMediaPlayer().dispose();
@@ -108,14 +120,17 @@ public class PlayerManager{
       adapter.play(audioToBePlayed);
       CURRENT_AUDIO_PLAYING.getMediaPlayer().setVolume(volume);
       audioDAO.addToListeningHistory(audioToBePlayed, ProfileManagerFactory.getInstance().getProfileManager().getActiveProfile());
+      profileDAO.refreshProfileInfo(ProfileManagerFactory.getInstance().getProfileManager().getActiveProfile());
     }else if(collectionLooping){
       loop(CURRENT_COLLECTION_PLAYING);
     }else if(audioLooping){
       AudioDAO audioDAO=new AudioDAO();
+      ProfileDAO profileDAO=new ProfileDAO();
 
       adapter.play(CURRENT_AUDIO_PLAYING);
       CURRENT_AUDIO_PLAYING.getMediaPlayer().setVolume(volume);
       audioDAO.addToListeningHistory(CURRENT_AUDIO_PLAYING, ProfileManagerFactory.getInstance().getProfileManager().getActiveProfile());
+      profileDAO.refreshProfileInfo(ProfileManagerFactory.getInstance().getProfileManager().getActiveProfile());
     }else{
       playingAudiosCopy.clear();
       CURRENT_AUDIO_PLAYING=null;
@@ -127,8 +142,9 @@ public class PlayerManager{
     SongbarHandler.getInstance(ProfileManagerFactory.getInstance().getProfileManager().getActiveProfile(), CURRENT_AUDIO_PLAYING);
   }
 
-  public void play(JBAudio jbAudio){
+  public void play(JBAudio jbAudio) throws AccountNotFoundException{
     AudioDAO audioDAO=new AudioDAO();
+    ProfileDAO profileDAO=new ProfileDAO();
 
     queue.clear();
     if(CURRENT_AUDIO_PLAYING!=null){
@@ -144,12 +160,13 @@ public class PlayerManager{
     adapter.play(jbAudio);
     CURRENT_AUDIO_PLAYING.getMediaPlayer().setVolume(volume);
     audioDAO.addToListeningHistory(jbAudio, ProfileManagerFactory.getInstance().getProfileManager().getActiveProfile());
+    profileDAO.refreshProfileInfo(ProfileManagerFactory.getInstance().getProfileManager().getActiveProfile());
 
     SidebarHandler sidebarHandler=new SidebarHandler();
     SongbarHandler.getInstance(ProfileManagerFactory.getInstance().getProfileManager().getActiveProfile(), CURRENT_AUDIO_PLAYING);
   }
 
-  public void play(JBCollection jbCollection) throws SystemErrorException{
+  public void play(JBCollection jbCollection) throws SystemErrorException, AccountNotFoundException{
     CURRENT_COLLECTION_PLAYING=jbCollection.getCopy();
     Collections.reverse(CURRENT_COLLECTION_PLAYING.getTrackList());
 
@@ -175,7 +192,7 @@ public class PlayerManager{
     }//end-if
   }
 
-  public void playFromQueue(JBAudio jbAudio) throws SystemErrorException{
+  public void playFromQueue(JBAudio jbAudio) throws SystemErrorException, AccountNotFoundException{
     LinkedList<JBAudio> newQueue=new LinkedList<>(queue.subList(queue.indexOf(jbAudio), queue.size()));
     queue.clear();
     playingAudiosCopy.clear();
@@ -185,7 +202,7 @@ public class PlayerManager{
   }
 
   /* Handles SongBar random button */
-  public void randomize() throws SystemErrorException{
+  public void randomize() throws SystemErrorException, AccountNotFoundException{
     randomized=false;
 
     if(CURRENT_COLLECTION_PLAYING!=null){
@@ -201,7 +218,7 @@ public class PlayerManager{
   }
 
   /* Handles CollectionViewGUI random button */
-  public void randomize(JBCollection jbCollection) throws SystemErrorException{
+  public void randomize(JBCollection jbCollection) throws SystemErrorException, AccountNotFoundException{
     collectionLooping=false;
     audioLooping=false;
     playingAudiosCopy.clear();
@@ -213,7 +230,7 @@ public class PlayerManager{
   }
 
   /* Handles CollectionViewGUI loop button */
-  public void loop(JBCollection jbCollection) throws SystemErrorException{
+  public void loop(JBCollection jbCollection) throws SystemErrorException, AccountNotFoundException{
     collectionLooping=true;
     randomized=false;
     audioLooping=false;
@@ -231,7 +248,7 @@ public class PlayerManager{
     playingAudiosCopy.clear();
   }
 
-  public void skipForward() throws SystemErrorException{
+  public void skipForward() throws SystemErrorException, AccountNotFoundException{
     audioLooping=false;
 
     if(CURRENT_AUDIO_PLAYING!=null){
@@ -240,7 +257,7 @@ public class PlayerManager{
     play();
   }
 
-  public void skipBack() throws SystemErrorException{
+  public void skipBack() throws SystemErrorException, AccountNotFoundException{
     if(CURRENT_AUDIO_PLAYING!=null && CURRENT_COLLECTION_PLAYING!=null){
       audioLooping=false;
 
