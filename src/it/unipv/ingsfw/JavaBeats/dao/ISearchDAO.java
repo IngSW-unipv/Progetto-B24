@@ -28,6 +28,7 @@ public interface ISearchDAO{
    * @param field         search field as a {@link String}
    * @param activeProfile current active profile
    * @return results of the search organized in an {@link ArrayList} of {@link IJBResearchable}
+   * @throws AccountNotFoundException if active profile is not found in the database
    */
   ArrayList<IJBResearchable> search(String field, JBProfile activeProfile) throws AccountNotFoundException;
 
@@ -39,6 +40,7 @@ public interface ISearchDAO{
    * @param activeProfile current active profile
    * @param mode          JavaBeats entity to search for
    * @return results of the search organized in an {@link ArrayList} of {@link IJBResearchable}
+   * @throws AccountNotFoundException if active profile is not found in the database
    */
   ArrayList<IJBResearchable> search(String field, JBProfile activeProfile, EJBENTITY mode) throws AccountNotFoundException;
 }

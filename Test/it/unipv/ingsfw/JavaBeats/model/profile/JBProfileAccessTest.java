@@ -9,6 +9,11 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+
+/**
+ * Tests profile access and registration.
+ * This test verifies whether the user can successfully register and access with test credentials.
+ */
 public class JBProfileAccessTest {
 
     //Attributes

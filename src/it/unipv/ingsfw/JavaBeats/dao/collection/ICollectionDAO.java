@@ -25,6 +25,7 @@ public interface ICollectionDAO{
    * Inserts a new {@link JBCollection} record in the database.
    *
    * @param collection collection to add
+   * @throws AccountNotFoundException
    */
   JBCollection insert(JBCollection collection) throws AccountNotFoundException;
 
@@ -40,6 +41,7 @@ public interface ICollectionDAO{
    * Note that an {@link Album} cannot be updated.
    *
    * @param collection collection to update
+   * @throws AccountNotFoundException
    */
   void update(JBCollection collection) throws AccountNotFoundException;
 
@@ -48,6 +50,7 @@ public interface ICollectionDAO{
    *
    * @param collection collection to get
    * @return collection with complete and updated info
+   * @throws AccountNotFoundException
    */
   JBCollection get(JBCollection collection) throws AccountNotFoundException;
 
@@ -56,6 +59,7 @@ public interface ICollectionDAO{
    *
    * @param collection playlist to get
    * @return collection with complete and updated info
+   * @throws AccountNotFoundException
    */
   Playlist getPlaylist(JBCollection collection) throws AccountNotFoundException;
 
@@ -80,6 +84,7 @@ public interface ICollectionDAO{
    *
    * @param activeProfile current active profile
    * @return collection with complete and updated info
+   * @throws AccountNotFoundException
    */
   Playlist getFavorites(JBProfile activeProfile) throws AccountNotFoundException;
 
@@ -88,6 +93,7 @@ public interface ICollectionDAO{
    *
    * @param profile playlist creator
    * @return playlists as an {@link ArrayList} of {@link JBCollection}
+   * @throws AccountNotFoundException
    */
   ArrayList<JBCollection> selectPlaylistsByProfile(JBProfile profile) throws AccountNotFoundException;
 
@@ -96,6 +102,7 @@ public interface ICollectionDAO{
    *
    * @param artist album creator
    * @return albums as an {@link ArrayList} of {@link JBCollection}
+   * @throws AccountNotFoundException
    */
   ArrayList<JBCollection> selectAlbumsByArtist(Artist artist) throws AccountNotFoundException;
 
@@ -104,6 +111,7 @@ public interface ICollectionDAO{
    *
    * @param artist podcast creator
    * @return podcasts as an {@link ArrayList} of {@link JBCollection}
+   * @throws AccountNotFoundException
    */
   ArrayList<JBCollection> selectPodcastsByArtist(Artist artist) throws AccountNotFoundException;
 
