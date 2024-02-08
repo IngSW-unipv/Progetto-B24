@@ -176,7 +176,7 @@ public class ProfileDAO implements IProfileDAO{
     Artist result=null;
 
     try{
-      String query="SELECT * FROM Profile INNER JOIN Artist ON Profile.mail = Artist.mail WHERE Artist.mail=? OR username=?;";
+      String query="SELECT * FROM Profile INNER JOIN Artist ON Profile.mail = Artist.mail WHERE Artist.mail= BINARY ? OR username=BINARY ?;";
 
       st=connection.prepareStatement(query);
       st.setString(1, profile.getMail());
@@ -212,7 +212,7 @@ public class ProfileDAO implements IProfileDAO{
     User result=null;
 
     try{
-      String query="SELECT * FROM Profile INNER JOIN User ON Profile.mail = User.mail WHERE User.mail=? OR username=?;";
+      String query="SELECT * FROM Profile INNER JOIN User ON Profile.mail = User.mail WHERE User.mail=BINARY ? OR username=BINARY ?;";
 
       st=connection.prepareStatement(query);
       st.setString(1, profile.getMail());
@@ -299,7 +299,7 @@ public class ProfileDAO implements IProfileDAO{
     int result=0;
 
     try{
-      String query="SELECT count(idAudio) as 'total' FROM ListeningHistory NATURAL JOIN ArtistAudios WHERE artistMail=?;";
+      String query="SELECT count(idAudio) as 'total' FROM ListeningHistory NATURAL JOIN ArtistAudios WHERE artistMail= BINARY ?;";
 
       st=connection.prepareStatement(query);
       st.setString(1, artist.getMail());
