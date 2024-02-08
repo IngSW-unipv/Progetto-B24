@@ -1,0 +1,103 @@
+@startuml
+
+!theme carbon-gray
+participant Actor
+Actor -> PlayerManager : play
+activate PlayerManager
+PlayerManager -> FXAdapter : play
+activate FXAdapter
+FXAdapter -> IJBPlayable : playFX
+activate IJBPlayable
+IJBPlayable --> FXAdapter
+deactivate IJBPlayable
+FXAdapter --> PlayerManager
+deactivate FXAdapter
+PlayerManager -> AudioDAO : addToListeningHistory
+activate AudioDAO
+AudioDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> AudioDAO
+deactivate DBManager
+AudioDAO -> DBManager : closeConnection
+activate DBManager
+
+deactivate DBManager
+DBManager --> AudioDAO
+deactivate DBManager
+AudioDAO -> ProfileDAO : getTotalListeningTime
+activate ProfileDAO
+ProfileDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO -> DBManager : closeConnection
+activate DBManager
+
+
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO --> AudioDAO
+deactivate ProfileDAO
+AudioDAO --> PlayerManager
+deactivate AudioDAO
+PlayerManager -> PlayerManager : loop
+activate PlayerManager
+PlayerManager -> PlayerManager : play
+activate PlayerManager
+PlayerManager --> PlayerManager
+deactivate PlayerManager
+PlayerManager --> PlayerManager
+deactivate PlayerManager
+PlayerManager -> FXAdapter : play
+activate FXAdapter
+FXAdapter -> IJBPlayable : playFX
+activate IJBPlayable
+IJBPlayable --> FXAdapter
+deactivate IJBPlayable
+FXAdapter --> PlayerManager
+deactivate FXAdapter
+PlayerManager -> AudioDAO : addToListeningHistory
+activate AudioDAO
+AudioDAO -> DBManager : startConnection
+activate DBManager
+
+
+DBManager --> AudioDAO
+deactivate DBManager
+AudioDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> AudioDAO
+deactivate DBManager
+AudioDAO -> ProfileDAO : getTotalListeningTime
+activate ProfileDAO
+ProfileDAO -> DBManager : startConnection
+activate DBManager
+
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO -> DBManager : closeConnection
+activate DBManager
+
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO --> AudioDAO
+deactivate ProfileDAO
+AudioDAO --> PlayerManager
+deactivate AudioDAO
+PlayerManager -> SongbarHandler : getInstance
+activate SongbarHandler
+SongbarHandler -> JBProfile : equals
+activate JBProfile
+JBProfile --> SongbarHandler
+deactivate JBProfile
+SongbarHandler -> JBAudio : equals
+activate JBAudio
+JBAudio --> SongbarHandler
+deactivate JBAudio
+SongbarHandler --> PlayerManager
+deactivate SongbarHandler
+return
+@enduml
