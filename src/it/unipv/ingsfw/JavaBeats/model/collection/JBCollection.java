@@ -19,7 +19,6 @@ import java.util.ArrayList;
  * Abstract class representing a generic JavaBeats collection.
  * Contains attributes and methods common to {@link Album}, {@link Playlist} and {@link Podcast}.
  *
- * @author Giorgio Giacomotti
  * @see Album
  * @see Playlist
  * @see Podcast

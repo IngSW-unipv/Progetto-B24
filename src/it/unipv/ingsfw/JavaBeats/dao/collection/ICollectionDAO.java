@@ -12,7 +12,6 @@ import java.util.ArrayList;
  * This interface provides methods to perform Insert, Remove, Update, Get operations on {@link Album}, {@link Playlist} and {@link Podcast} records.
  * It also allows to select {@link JBCollection} by their creators.
  *
- * @author Giorgio Giacomotti
  * @see JBCollection
  * @see Album
  * @see Playlist

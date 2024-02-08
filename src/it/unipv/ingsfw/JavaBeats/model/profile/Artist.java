@@ -1,5 +1,6 @@
 package it.unipv.ingsfw.JavaBeats.model.profile;
 
+import it.unipv.ingsfw.JavaBeats.exceptions.SystemErrorException;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.collection.Playlist;
 
@@ -12,7 +13,6 @@ import java.util.ArrayList;
  * Class representing an artist capable of uploading {@link JBAudio} (both {@link it.unipv.ingsfw.JavaBeats.model.playable.audio.Song} and {@link it.unipv.ingsfw.JavaBeats.model.playable.audio.Episode}) and create {@link it.unipv.ingsfw.JavaBeats.model.collection.JBCollection} ({@link it.unipv.ingsfw.JavaBeats.model.collection.Album}, {@link Playlist}, {@link it.unipv.ingsfw.JavaBeats.model.collection.Podcast}).
  * Contains attributes and methods common both to {@link User} and {@link Artist}.
  *
- * @author Giorgio Giacomotti
  * @see JBProfile
  * @see User
  * @see Artist
@@ -64,8 +64,12 @@ public class Artist extends JBProfile{
    *
    * @return artist clone
    */
-  public JBProfile getCopy() throws SQLException{
-    return new Artist(this.getUsername(), this.getMail(), this.getPassword(), this.getName(), this.getSurname(), this.getBiography(), new SerialBlob(getProfilePicture()), this.totalListeners, this.getListeningHistory(), this.getFavorites());
+  public JBProfile getCopy() throws SystemErrorException{
+    try{
+      return new Artist(this.getUsername(), this.getMail(), this.getPassword(), this.getName(), this.getSurname(), this.getBiography(), new SerialBlob(getProfilePicture()), this.totalListeners, this.getListeningHistory(), this.getFavorites());
+    }catch(SQLException s){
+      throw new SystemErrorException();
+    }//end-try
   }
 
 

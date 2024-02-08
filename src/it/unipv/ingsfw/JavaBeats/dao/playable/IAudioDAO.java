@@ -14,7 +14,6 @@ import java.util.ArrayList;
  * This interface provides methods to perform Insert, Remove, Get operations on {@link Song} and {@link Episode} records.
  * It also allows to select {@link JBAudio} by their {@link it.unipv.ingsfw.JavaBeats.model.collection.JBCollection} and to perform special operations for the Favorites Playlist and the User Listening History.
  *
- * @author Giorgio Giacomotti
  * @see JBAudio
  * @see Song
  * @see Episode

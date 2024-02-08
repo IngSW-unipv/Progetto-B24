@@ -19,10 +19,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
-import javafx.util.Duration;
 
 import java.sql.SQLException;
-import java.sql.Time;
 import java.util.Queue;
 
 public class CollectionHeader extends VBox{
@@ -204,8 +202,7 @@ public class CollectionHeader extends VBox{
     collectionTitle.setTextFill(Color.LIGHTGRAY);
 
     /* Button with user's profile picture and username */
-    Image userPic=new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/DefaultUser.png", true);
-    ImageView userPicImageView=new ImageView(activeProfile.scalePicture(20));
+    ImageView userPicImageView=new ImageView(jbCollection.getCreator().scalePicture(20));
     userPicImageView.setPreserveRatio(true);
     userProfileButton=new Button(jbCollection.getCreator().getUsername());
     userProfileButton.setGraphic(userPicImageView);
@@ -223,7 +220,7 @@ public class CollectionHeader extends VBox{
     for(JBAudio a: jbCollection.getTrackList()){
       totalTime+=a.getMetadata().getDuration();
     }//end-foreach
-    Label totalDurationLabel=new Label(JBAudio.convertToMinutesAndSeconds(totalTime)+" mins");
+    Label totalDurationLabel=new Label(JBAudio.convertToHoursMinutesAndSeconds(totalTime)+" mins");
     totalDurationLabel.setFont(fontCollectionInfo);
     totalDurationLabel.setTextFill(Color.LIGHTGRAY);
     totalDurationLabel.setUnderline(true);
@@ -305,7 +302,7 @@ public class CollectionHeader extends VBox{
     for(JBAudio jbAudio: queue){
       totalTime+=jbAudio.getMetadata().getDuration();
     }//end-foreach
-    Label totalDurationLabel=new Label(JBAudio.convertToMinutesAndSeconds(totalTime)+" mins");
+    Label totalDurationLabel=new Label(JBAudio.convertToHoursMinutesAndSeconds(totalTime)+" mins");
     totalDurationLabel.setFont(fontCollectionInfo);
     totalDurationLabel.setTextFill(Color.LIGHTGRAY);
     totalDurationLabel.setUnderline(true);

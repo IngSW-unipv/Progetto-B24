@@ -16,7 +16,6 @@ import java.sql.SQLException;
 /**
  * Class representing an Episode that can be part of a {@link it.unipv.ingsfw.JavaBeats.model.collection.Podcast} or a {@link Playlist}.
  *
- * @author Giorgio Giacomotti
  * @see JBAudio
  * @see it.unipv.ingsfw.JavaBeats.model.collection.Podcast
  * @see Playlist

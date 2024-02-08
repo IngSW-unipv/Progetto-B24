@@ -7,7 +7,6 @@ import it.unipv.ingsfw.JavaBeats.model.profile.*;
  * Data Access Object (DAO) interface for managing operations related to the {@link JBProfile} entity in the database.
  * This interface provides methods to perform Insert, Remove, Update, Get operations on {@link User} and {@link Artist} records.
  *
- * @author Giorgio Giacomotti
  * @see JBProfile
  * @see User
  * @see Artist

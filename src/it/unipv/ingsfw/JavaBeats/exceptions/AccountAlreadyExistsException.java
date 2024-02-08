@@ -5,18 +5,18 @@ import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 /**
  * Exception to report that a specific {@link JBProfile} already exists in the database.
  *
- * @author Giorgio Giacomotti
  * @see Exception
+ * @see IJBException
  * @see JBProfile
  */
-public class AccountAlreadyExistsException extends Exception implements IJBException{
+public class AccountAlreadyExistsException extends Exception implements IJBException {
 
   //CONSTRUCTORS:
 
   /**
    * Constructor to create an instance of the custom exception.
    */
-  public AccountAlreadyExistsException(){
+  public AccountAlreadyExistsException() {
     super("You already have an account");
   }
 
@@ -25,11 +25,15 @@ public class AccountAlreadyExistsException extends Exception implements IJBExcep
    *
    * @param profile profile that already exists
    */
-  public AccountAlreadyExistsException(JBProfile profile){
-    super(profile.getMail()+" is already taken.");
+  public AccountAlreadyExistsException(JBProfile profile) {
+    super(profile.getMail() + " is already taken.");
   }
+
+  //METHOD:
+
   @Override
-  public String suggestAlternative(){
+  public String suggestAlternative() {
     return "Please proceed with login.";
   }
+
 }

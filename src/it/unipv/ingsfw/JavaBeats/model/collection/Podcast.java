@@ -9,7 +9,6 @@ import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 /**
  * Class representing a Podcast containing {@link it.unipv.ingsfw.JavaBeats.model.playable.audio.Episode} and created by an {@link it.unipv.ingsfw.JavaBeats.model.profile.Artist}.
  *
- * @author Giorgio Giacomotti
  * @see it.unipv.ingsfw.JavaBeats.model.playable.audio.Episode
  * @see it.unipv.ingsfw.JavaBeats.model.profile.Artist
  */

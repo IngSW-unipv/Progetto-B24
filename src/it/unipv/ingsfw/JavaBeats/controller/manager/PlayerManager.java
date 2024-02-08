@@ -123,7 +123,7 @@ public class PlayerManager{
       randomized=false;
     }//end-if
 
-    SidebarHandler.getInstance(ProfileManagerFactory.getInstance().getProfileManager().getActiveProfile());
+    SidebarHandler sidebarHandler=new SidebarHandler();
     SongbarHandler.getInstance(ProfileManagerFactory.getInstance().getProfileManager().getActiveProfile(), CURRENT_AUDIO_PLAYING);
   }
 
@@ -145,7 +145,7 @@ public class PlayerManager{
     CURRENT_AUDIO_PLAYING.getMediaPlayer().setVolume(volume);
     audioDAO.addToListeningHistory(jbAudio, ProfileManagerFactory.getInstance().getProfileManager().getActiveProfile());
 
-    SidebarHandler.getInstance(ProfileManagerFactory.getInstance().getProfileManager().getActiveProfile());
+    SidebarHandler sidebarHandler=new SidebarHandler();
     SongbarHandler.getInstance(ProfileManagerFactory.getInstance().getProfileManager().getActiveProfile(), CURRENT_AUDIO_PLAYING);
   }
 
@@ -232,6 +232,8 @@ public class PlayerManager{
   }
 
   public void skipForward() throws SystemErrorException{
+    audioLooping=false;
+
     if(CURRENT_AUDIO_PLAYING!=null){
       CURRENT_AUDIO_PLAYING.getMediaPlayer().dispose();
     }//end-if
@@ -240,6 +242,8 @@ public class PlayerManager{
 
   public void skipBack() throws SystemErrorException{
     if(CURRENT_AUDIO_PLAYING!=null && CURRENT_COLLECTION_PLAYING!=null){
+      audioLooping=false;
+
       queue.push(CURRENT_AUDIO_PLAYING);
       /* If I don't go out of bounds I can skip back */
       if((playingAudiosCopy.indexOf(CURRENT_AUDIO_PLAYING)+1)<playingAudiosCopy.size() && (playingAudiosCopy.indexOf(CURRENT_AUDIO_PLAYING)+1)>0){

@@ -133,7 +133,7 @@ public class Home extends VBox{
         }//end-if
         i+=1;
       }//end-while
-    }catch(NoSuchElementException n){
+    }catch(NoSuchElementException | NullPointerException n){
       /* empty listening hystory */
     }//end-try
     ScrollPanePreset audiosScroll=new ScrollPanePreset(songsHBox);
@@ -163,7 +163,7 @@ public class Home extends VBox{
         }//end-if
         i+=1;
       }//end-while
-    }catch(IndexOutOfBoundsException | NoSuchElementException in){
+    }catch(NullPointerException | NoSuchElementException in){
       /* No audios */
     }//end-try
     ScrollPanePreset collectionScroll=new ScrollPanePreset(collectionsHBox);
@@ -193,7 +193,7 @@ public class Home extends VBox{
         }//end-fi
         i+=1;
       }//end-while
-    }catch(IndexOutOfBoundsException | NoSuchElementException in){
+    }catch(NullPointerException | NoSuchElementException in){
       /* No audios */
     }//end-try
     ScrollPanePreset artistScroll=new ScrollPanePreset(artistsHBox);

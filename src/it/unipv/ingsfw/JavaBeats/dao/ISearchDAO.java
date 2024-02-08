@@ -14,7 +14,6 @@ import java.util.ArrayList;
  * Data Access Object (DAO) interface for managing operations related to the {@link IJBResearchable} entity in the database.
  * This interface provides methods to search for {@link IJBResearchable} items with a search field.
  *
- * @author Giorgio Giacomotti
  * @see IJBResearchable
  * @see EJBENTITY
  */

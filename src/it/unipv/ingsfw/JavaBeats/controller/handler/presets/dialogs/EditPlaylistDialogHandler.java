@@ -97,7 +97,6 @@ public class EditPlaylistDialogHandler{
     EventHandler<ActionEvent> cancelButtonHandler=new EventHandler<ActionEvent>(){
       @Override
       public void handle(ActionEvent actionEvent){
-        System.out.println("Premuto cancel");
       }
     };
 
