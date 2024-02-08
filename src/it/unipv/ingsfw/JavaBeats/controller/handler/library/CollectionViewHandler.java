@@ -7,6 +7,7 @@ import it.unipv.ingsfw.JavaBeats.controller.handler.presets.SongbarHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.presets.dialogs.EditPlaylistDialogHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.primary.home.HomePageHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.presets.AudioTableHandler;
+import it.unipv.ingsfw.JavaBeats.controller.handler.primary.profile.ProfileViewHandler;
 import it.unipv.ingsfw.JavaBeats.exceptions.AccountNotFoundException;
 import it.unipv.ingsfw.JavaBeats.exceptions.SystemErrorException;
 import it.unipv.ingsfw.JavaBeats.model.collection.Playlist;
@@ -22,6 +23,7 @@ import it.unipv.ingsfw.JavaBeats.view.presets.Songbar;
 import it.unipv.ingsfw.JavaBeats.view.presets.dialogs.EditPlaylistDialog;
 import it.unipv.ingsfw.JavaBeats.view.presets.dialogs.ExceptionDialog;
 import it.unipv.ingsfw.JavaBeats.view.primary.home.HomePageGUI;
+import it.unipv.ingsfw.JavaBeats.view.primary.profile.ProfileViewGUI;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -145,6 +147,13 @@ public class CollectionViewHandler{
           exceptionDialog.showAndWait();
 
           gui.getGp().setEffect(null);
+        }catch(AccountNotFoundException e){
+          gui.getGp().setEffect(new BoxBlur(10, 10, 10));
+
+          ExceptionDialog exceptionDialog=new ExceptionDialog(stage, new SystemErrorException());
+          exceptionDialog.showAndWait();
+
+          gui.getGp().setEffect(null); /* Removing blur effect */
         }//end-try
       }
     };
@@ -170,6 +179,14 @@ public class CollectionViewHandler{
 
             gui.getGp().setEffect(null);
           }//end-try
+          catch(AccountNotFoundException e){
+            gui.getGp().setEffect(new BoxBlur(10, 10, 10));
+
+            ExceptionDialog exceptionDialog=new ExceptionDialog(stage, new SystemErrorException());
+            exceptionDialog.showAndWait();
+
+            gui.getGp().setEffect(null); /* Removing blur effect */
+          }
         }//end-if
       }
     };
@@ -194,6 +211,14 @@ public class CollectionViewHandler{
 
             gui.getGp().setEffect(null);
           }//end-try
+          catch(AccountNotFoundException e){
+            gui.getGp().setEffect(new BoxBlur(10, 10, 10));
+
+            ExceptionDialog exceptionDialog=new ExceptionDialog(stage, new SystemErrorException());
+            exceptionDialog.showAndWait();
+
+            gui.getGp().setEffect(null); /* Removing blur effect */
+          }
         }//end-if
       }
     };
@@ -271,7 +296,7 @@ public class CollectionViewHandler{
               Blob fileAudio=new SerialBlob(fileContent);
 
               Podcast p=(Podcast)gui.getJbCollection();
-              JBAudio jbAudio=new Episode(0, metadata.get("dc:title")==null ? FilenameUtils.removeExtension(f.getName()) : metadata.get("dc:title"), (Artist)p.getCreator(), gui.getJbCollection(), fileAudio, Double.parseDouble(metadata.get("xmpDM:duration"))*1000, new Date(System.currentTimeMillis()), new String[]{metadata.get("xmpDM:genre")}, false, 0);
+              JBAudio jbAudio=new Episode(0, metadata.get("dc:title")==null ? FilenameUtils.removeExtension(f.getName()) : metadata.get("dc:title"), (Artist)p.getCreator(), gui.getJbCollection(), fileAudio, Double.parseDouble(metadata.get("xmpDM:duration"))*1000, new Date(System.currentTimeMillis()), new String[] {metadata.get("xmpDM:genre")}, false, 0);
 
               CollectionManagerFactory.getInstance().getCollectionManager().addToCollection(gui.getJbCollection(), jbAudio);
 
@@ -343,9 +368,25 @@ public class CollectionViewHandler{
                 exceptionDialog.showAndWait();
 
                 gui.getGp().setEffect(null);
+              }catch(AccountNotFoundException e){
+                gui.getGp().setEffect(new BoxBlur(10, 10, 10));
+
+                ExceptionDialog exceptionDialog=new ExceptionDialog(stage, new SystemErrorException());
+                exceptionDialog.showAndWait();
+
+                gui.getGp().setEffect(null); /* Removing blur effect */
               }//end-try
             }else{
-              PlayerManagerFactory.getInstance().getPlayerManager().play(audioClicked);
+              try{
+                PlayerManagerFactory.getInstance().getPlayerManager().play(audioClicked);
+              }catch(AccountNotFoundException e){
+                gui.getGp().setEffect(new BoxBlur(10, 10, 10));
+
+                ExceptionDialog exceptionDialog=new ExceptionDialog(stage, new SystemErrorException());
+                exceptionDialog.showAndWait();
+
+                gui.getGp().setEffect(null); /* Removing blur effect */
+              }//end-try
             }//end-if
           }else if(foundIsFavoriteButton){
             try{
@@ -407,6 +448,28 @@ public class CollectionViewHandler{
         }//end-if
       }
     };
+    EventHandler<ActionEvent> userProfileButtonHandler=new EventHandler<>(){
+      @Override
+      public void handle(ActionEvent actionEvent){
+        Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+
+        ProfileViewGUI profileViewGUI=null;
+        if(gui.getJbCollection()!=null){
+          profileViewGUI=new ProfileViewGUI(activeProfile, gui.getJbCollection().getCreator());
+        }else{
+          profileViewGUI=new ProfileViewGUI(activeProfile, activeProfile);
+        }//end-if
+
+        ProfileViewHandler profileViewHandler=new ProfileViewHandler(profileViewGUI, activeProfile);
+        Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getProfileButton());
+
+        Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
+        stage.setScene(profileViewGUI.getScene());
+        stage.setTitle("Profile");
+        stage.setWidth(previousDimension.getWidth());
+        stage.setHeight(previousDimension.getHeight());
+      }
+    };
     /* If I'm playing this collection randomly, and I'm displaying this very collection, then the random button is activated
      *  Same for looping
      *  */
@@ -423,7 +486,9 @@ public class CollectionViewHandler{
     gui.getAudioTable().setOnMouseClicked(tableViewClickHandler);
     gui.getCollectionHeader().getButtonBin().setOnAction(binButtonHandler);
     gui.getCollectionHeader().getAddEpisodeButton().setOnAction(addEpisodeHandler);
+    gui.getCollectionHeader().getUserProfileButton().setOnAction(userProfileButtonHandler);
   }
+
   private static void reloadCollectionViewGUI(JBProfile activeProfile){
     CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, PlayerManagerFactory.getInstance().getPlayerManager().getQueue());
     CollectionViewHandler collectionViewHandler=new CollectionViewHandler(collectionViewGUI, activeProfile);

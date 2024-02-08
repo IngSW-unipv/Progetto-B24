@@ -326,7 +326,12 @@ public class ProfileDAO implements IProfileDAO{
     ArrayList<JBAudio> result=new ArrayList<>();
 
     try{
-      String query="SELECT DISTINCT idAudio FROM ListeningHistory WHERE profileMail=? ORDER BY listeningDate DESC LIMIT 25;";
+      String query="SELECT DISTINCT LHiA.idAudio "+
+              "FROM (SELECT idAudio, listeningDate"+
+              "      FROM ListeningHistory"+
+              "      WHERE profileMail LIKE ?"+
+              "      ORDER BY listeningDate DESC"+
+              "      LIMIT 25) as LHiA;";
 
       st=connection.prepareStatement(query);
       st.setString(1, profile.getMail());

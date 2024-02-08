@@ -89,6 +89,9 @@ public class CollectionHeader extends VBox{
     return collectionImageView;
   }
 
+  public Button getUserProfileButton(){
+    return userProfileButton;
+  }
   /*---------------------------------------*/
   //Metodi
   /*---------------------------------------*/
