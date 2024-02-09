@@ -18,7 +18,6 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Slider;
-import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
@@ -118,7 +117,7 @@ public class SongbarHandler{
           /* If I'm displaying the Queue, when I pass to the next song I update the GUI by obtaining the Queue from the player manager.
            *  In addition, I check if this is the last song of a randomized collection then I change the random button color by reloading the GUI.
            *  */
-          if(AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING!=null && AudioTableHandler.isQueue()){
+          if(AudioTableHandler.getInstance().getCurrentAudioTableShowing()!=null && AudioTableHandler.getInstance().isQueue()){
             reloadCollectionViewGUI();
 
           }else if(PlayerManagerFactory.getInstance().getPlayerManager().getCurrentCollectionPlaying()==null && tmpBoolRandom){
@@ -127,8 +126,8 @@ public class SongbarHandler{
             reloadCollectionViewGUI(tmpAudio);
           }//end-if
         }catch(SystemErrorException e){
-          if(AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING!=null){
-            ExceptionDialog exceptionDialog=new ExceptionDialog(((Stage)AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.getScene().getWindow()), e);
+          if(AudioTableHandler.getInstance().getCurrentAudioTableShowing()!=null){
+            ExceptionDialog exceptionDialog=new ExceptionDialog(((Stage)AudioTableHandler.getInstance().getCurrentAudioTableShowing().getScene().getWindow()), e);
             exceptionDialog.showAndWait();
           }//end-if
         }//end-try
@@ -192,14 +191,14 @@ public class SongbarHandler{
 
             CollectionManagerFactory.getInstance().getCollectionManager().setFavorites(activeProfile);
 
-            if(AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING!=null && AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.getItems().equals(tmpFavorites)){
+            if(AudioTableHandler.getInstance().getCurrentAudioTableShowing()!=null && AudioTableHandler.getInstance().getCurrentAudioTableShowing().getItems().equals(tmpFavorites)){
               reloadCollectionViewGUI(activeProfile.getFavorites());
-            }else if(AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING!=null){
-              AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.refresh();
+            }else if(AudioTableHandler.getInstance().getCurrentAudioTableShowing()!=null){
+              AudioTableHandler.getInstance().getCurrentAudioTableShowing().refresh();
             }//end-if
           }catch(AccountNotFoundException e){
-            if(AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING!=null){
-              ExceptionDialog exceptionDialog=new ExceptionDialog(((Stage)AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.getScene().getWindow()), new SystemErrorException());
+            if(AudioTableHandler.getInstance().getCurrentAudioTableShowing()!=null){
+              ExceptionDialog exceptionDialog=new ExceptionDialog(((Stage)AudioTableHandler.getInstance().getCurrentAudioTableShowing().getScene().getWindow()), new SystemErrorException());
               exceptionDialog.showAndWait();
             }//end-if
           }//end-try
@@ -215,8 +214,8 @@ public class SongbarHandler{
 
           if(PlayerManagerFactory.getInstance().getPlayerManager().isRandomized()){
             Songbar.getInstance().getButtonRandom().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/FullRandom.png", true)));
-            if(AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING!=null){
-              if(AudioTableHandler.isQueue()){
+            if(AudioTableHandler.getInstance().getCurrentAudioTableShowing()!=null){
+              if(AudioTableHandler.getInstance().isQueue()){
                 reloadCollectionViewGUI();
               }else{
                 reloadCollectionViewGUI(currentAudio);
@@ -224,8 +223,8 @@ public class SongbarHandler{
             }//end-if
           }//end-if
         }catch(SystemErrorException e){
-          if(AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING!=null){
-            ExceptionDialog exceptionDialog=new ExceptionDialog(((Stage)AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.getScene().getWindow()), e);
+          if(AudioTableHandler.getInstance().getCurrentAudioTableShowing()!=null){
+            ExceptionDialog exceptionDialog=new ExceptionDialog(((Stage)AudioTableHandler.getInstance().getCurrentAudioTableShowing().getScene().getWindow()), e);
             exceptionDialog.showAndWait();
           }//end-if
         }//end-try
@@ -243,9 +242,9 @@ public class SongbarHandler{
             Songbar.getInstance().getButtonLoop().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/FullLoop.png", true)));
             Songbar.getInstance().getButtonRandom().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/EmptyRandom.png", true)));
 
-            if(AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING!=null && AudioTableHandler.isQueue()){
+            if(AudioTableHandler.getInstance().getCurrentAudioTableShowing()!=null && AudioTableHandler.getInstance().isQueue()){
               reloadCollectionViewGUI();
-            }else if(AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING!=null){
+            }else if(AudioTableHandler.getInstance().getCurrentAudioTableShowing()!=null){
               reloadCollectionViewGUI(currentAudio);
             }//end-if
           }else{
@@ -262,12 +261,12 @@ public class SongbarHandler{
         try{
           PlayerManagerFactory.getInstance().getPlayerManager().skipForward();
 
-          if(AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING!=null && AudioTableHandler.isQueue()){
+          if(AudioTableHandler.getInstance().getCurrentAudioTableShowing()!=null && AudioTableHandler.getInstance().isQueue()){
             reloadCollectionViewGUI();
           }//end-if
         }catch(SystemErrorException e){
-          if(AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING!=null){
-            ExceptionDialog exceptionDialog=new ExceptionDialog(((Stage)AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.getScene().getWindow()), e);
+          if(AudioTableHandler.getInstance().getCurrentAudioTableShowing()!=null){
+            ExceptionDialog exceptionDialog=new ExceptionDialog(((Stage)AudioTableHandler.getInstance().getCurrentAudioTableShowing().getScene().getWindow()), e);
             exceptionDialog.showAndWait();
           }//end-if
         }//end-try
@@ -279,16 +278,15 @@ public class SongbarHandler{
         try{
           PlayerManagerFactory.getInstance().getPlayerManager().skipBack();
 
-          if(AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING!=null && AudioTableHandler.isQueue()){
+          if(AudioTableHandler.getInstance().getCurrentAudioTableShowing()!=null && AudioTableHandler.getInstance().isQueue()){
             reloadCollectionViewGUI();
           }//end-if
         }catch(SystemErrorException e){
-          if(AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING!=null){
-            ExceptionDialog exceptionDialog=new ExceptionDialog(((Stage)AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.getScene().getWindow()), e);
+          if(AudioTableHandler.getInstance().getCurrentAudioTableShowing()!=null){
+            ExceptionDialog exceptionDialog=new ExceptionDialog(((Stage)AudioTableHandler.getInstance().getCurrentAudioTableShowing().getScene().getWindow()), e);
             exceptionDialog.showAndWait();
           }//end-if
         }//end-try
-
       }
     };
     try{
@@ -312,25 +310,25 @@ public class SongbarHandler{
   private static void reloadCollectionViewGUI(){
     CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, PlayerManagerFactory.getInstance().getPlayerManager().getQueue());
     CollectionViewHandler collectionViewHandler=new CollectionViewHandler(collectionViewGUI, activeProfile);
-    ((Stage)AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.getScene().getWindow()).setScene(collectionViewGUI.getScene());
-    AudioTableHandler.getInstance((AudioTable)collectionViewGUI.getAudioTable());
-    AudioTableHandler.setQueue(true);
+    ((Stage)AudioTableHandler.getInstance().getCurrentAudioTableShowing().getScene().getWindow()).setScene(collectionViewGUI.getScene());
+    AudioTableHandler.getInstance().setCurrentAudioTableShowing((AudioTable)collectionViewGUI.getAudioTable());
+    AudioTableHandler.getInstance().setQueue(true);
   }
 
   private void reloadCollectionViewGUI(JBAudio currentAudio){
     try{
       currentAudio.getMetadata().getCollection().setTrackList(CollectionManagerFactory.getInstance().getCollectionManager().getCollectionAudios(currentAudio.getMetadata().getCollection(), activeProfile));
 
-      if(AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.getItems().equals(FXCollections.observableArrayList(currentAudio.getMetadata().getCollection().getTrackList()))){
+      if(AudioTableHandler.getInstance().getCurrentAudioTableShowing().getItems().equals(FXCollections.observableArrayList(currentAudio.getMetadata().getCollection().getTrackList()))){
         CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, currentAudio.getMetadata().getCollection());
         CollectionViewHandler collectionViewHandler=new CollectionViewHandler(collectionViewGUI, activeProfile);
-        ((Stage)AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.getScene().getWindow()).setScene(collectionViewGUI.getScene());
-        AudioTableHandler.getInstance((AudioTable)collectionViewGUI.getAudioTable());
-        AudioTableHandler.setQueue(false);
+        ((Stage)AudioTableHandler.getInstance().getCurrentAudioTableShowing().getScene().getWindow()).setScene(collectionViewGUI.getScene());
+        AudioTableHandler.getInstance().setCurrentAudioTableShowing((AudioTable)collectionViewGUI.getAudioTable());
+        AudioTableHandler.getInstance().setQueue(false);
       }//end-if
     }catch(AccountNotFoundException e){
-      if(AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING!=null){
-        ExceptionDialog exceptionDialog=new ExceptionDialog(((Stage)AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.getScene().getWindow()), e);
+      if(AudioTableHandler.getInstance().getCurrentAudioTableShowing()!=null){
+        ExceptionDialog exceptionDialog=new ExceptionDialog(((Stage)AudioTableHandler.getInstance().getCurrentAudioTableShowing().getScene().getWindow()), e);
         exceptionDialog.showAndWait();
       }//end-if
     }//end-try
@@ -339,8 +337,8 @@ public class SongbarHandler{
   private void reloadCollectionViewGUI(JBCollection jbCollection){
     CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, jbCollection);
     CollectionViewHandler collectionViewHandler=new CollectionViewHandler(collectionViewGUI, activeProfile);
-    ((Stage)AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.getScene().getWindow()).setScene(collectionViewGUI.getScene());
-    AudioTableHandler.getInstance((AudioTable)collectionViewGUI.getAudioTable());
-    AudioTableHandler.setQueue(false);
+    ((Stage)AudioTableHandler.getInstance().getCurrentAudioTableShowing().getScene().getWindow()).setScene(collectionViewGUI.getScene());
+    AudioTableHandler.getInstance().setCurrentAudioTableShowing((AudioTable)collectionViewGUI.getAudioTable());
+    AudioTableHandler.getInstance().setQueue(false);
   }
 }

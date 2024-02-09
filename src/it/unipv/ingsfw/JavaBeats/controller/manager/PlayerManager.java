@@ -3,30 +3,25 @@ package it.unipv.ingsfw.JavaBeats.controller.manager;
 import it.unipv.ingsfw.JavaBeats.controller.adapter.FXAdapter;
 import it.unipv.ingsfw.JavaBeats.controller.factory.FXAdapterFactory;
 import it.unipv.ingsfw.JavaBeats.controller.factory.ProfileManagerFactory;
-import it.unipv.ingsfw.JavaBeats.controller.handler.presets.AudioTableHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.presets.SidebarHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.presets.SongbarHandler;
 import it.unipv.ingsfw.JavaBeats.dao.playable.AudioDAO;
-import it.unipv.ingsfw.JavaBeats.dao.profile.ProfileDAO;
 import it.unipv.ingsfw.JavaBeats.exceptions.AccountNotFoundException;
 import it.unipv.ingsfw.JavaBeats.exceptions.SystemErrorException;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;
 import it.unipv.ingsfw.JavaBeats.model.collection.JBCollection;
-import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
 import javafx.scene.media.MediaPlayer;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
-import java.util.Queue;
 
 public class PlayerManager{
   /*---------------------------------------*/
   //Attributes
   /*---------------------------------------*/
-  private static JBAudio CURRENT_AUDIO_PLAYING=null;
-  private static JBCollection CURRENT_COLLECTION_PLAYING=null;
+  private static JBAudio currentAudioPlaying=null;
+  private static JBCollection currentCollectionPlaying=null;
   private static double volume=00.50;
   private static boolean randomized=false;
   private static boolean collectionLooping=false;
@@ -50,11 +45,11 @@ public class PlayerManager{
   }
 
   public static JBAudio getCurrentAudioPlaying(){
-    return CURRENT_AUDIO_PLAYING;
+    return currentAudioPlaying;
   }
 
   public static JBCollection getCurrentCollectionPlaying(){
-    return CURRENT_COLLECTION_PLAYING;
+    return currentCollectionPlaying;
   }
 
   public static boolean isRandomized(){
@@ -72,7 +67,7 @@ public class PlayerManager{
   public static void setCollectionLooping(boolean collectionLooping){
     PlayerManager.collectionLooping=collectionLooping;
   }
-
+  
   public static boolean isAudioLooping(){
     return audioLooping;
   }
@@ -110,78 +105,80 @@ public class PlayerManager{
     if(!queue.isEmpty()){
       AudioDAO audioDAO=new AudioDAO();
 
-      if(CURRENT_AUDIO_PLAYING!=null){
-        CURRENT_AUDIO_PLAYING.getMediaPlayer().dispose();
+      if(currentAudioPlaying!=null){
+        currentAudioPlaying.getMediaPlayer().dispose();
       }//end-if
 
       JBAudio audioToBePlayed=queue.pop();
-      CURRENT_AUDIO_PLAYING=audioToBePlayed;
+      currentAudioPlaying=audioToBePlayed;
       adapter.play(audioToBePlayed);
-      CURRENT_AUDIO_PLAYING.getMediaPlayer().setVolume(volume);
+      currentAudioPlaying.getMediaPlayer().setVolume(volume);
       audioDAO.addToListeningHistory(audioToBePlayed, ProfileManagerFactory.getInstance().getProfileManager().getActiveProfile());
     }else if(collectionLooping){
-      loop(CURRENT_COLLECTION_PLAYING);
+      loop(currentCollectionPlaying);
     }else if(audioLooping){
       AudioDAO audioDAO=new AudioDAO();
 
-      adapter.play(CURRENT_AUDIO_PLAYING);
-      CURRENT_AUDIO_PLAYING.getMediaPlayer().setVolume(volume);
-      audioDAO.addToListeningHistory(CURRENT_AUDIO_PLAYING, ProfileManagerFactory.getInstance().getProfileManager().getActiveProfile());
+      adapter.play(currentAudioPlaying);
+      currentAudioPlaying.getMediaPlayer().setVolume(volume);
+      audioDAO.addToListeningHistory(currentAudioPlaying, ProfileManagerFactory.getInstance().getProfileManager().getActiveProfile());
     }else{
       playingAudiosCopy.clear();
-      CURRENT_AUDIO_PLAYING=null;
-      CURRENT_COLLECTION_PLAYING=null;
+      currentAudioPlaying=null;
+      currentCollectionPlaying=null;
       randomized=false;
     }//end-if
 
+    /* Updating instances of Sidebar and Songbar */
     SidebarHandler sidebarHandler=new SidebarHandler();
-    SongbarHandler.getInstance(ProfileManagerFactory.getInstance().getProfileManager().getActiveProfile(), CURRENT_AUDIO_PLAYING);
+    SongbarHandler.getInstance(ProfileManagerFactory.getInstance().getProfileManager().getActiveProfile(), currentAudioPlaying);
   }
 
   public void play(JBAudio jbAudio){
     AudioDAO audioDAO=new AudioDAO();
 
     queue.clear();
-    if(CURRENT_AUDIO_PLAYING!=null){
-      CURRENT_AUDIO_PLAYING.getMediaPlayer().dispose();
+    if(currentAudioPlaying!=null){
+      currentAudioPlaying.getMediaPlayer().dispose();
     }//end-if
 
     randomized=false;
     collectionLooping=false;
     audioLooping=false;
 
-    CURRENT_COLLECTION_PLAYING=null;
-    CURRENT_AUDIO_PLAYING=jbAudio;
+    currentCollectionPlaying=null;
+    currentAudioPlaying=jbAudio;
     adapter.play(jbAudio);
-    CURRENT_AUDIO_PLAYING.getMediaPlayer().setVolume(volume);
+    currentAudioPlaying.getMediaPlayer().setVolume(volume);
     audioDAO.addToListeningHistory(jbAudio, ProfileManagerFactory.getInstance().getProfileManager().getActiveProfile());
 
+    /* Updating instances of Sidebar and Songbar */
     SidebarHandler sidebarHandler=new SidebarHandler();
-    SongbarHandler.getInstance(ProfileManagerFactory.getInstance().getProfileManager().getActiveProfile(), CURRENT_AUDIO_PLAYING);
+    SongbarHandler.getInstance(ProfileManagerFactory.getInstance().getProfileManager().getActiveProfile(), currentAudioPlaying);
   }
 
   public void play(JBCollection jbCollection) throws SystemErrorException{
-    CURRENT_COLLECTION_PLAYING=jbCollection.getCopy();
-    Collections.reverse(CURRENT_COLLECTION_PLAYING.getTrackList());
+    currentCollectionPlaying=jbCollection.getCopy();
+    Collections.reverse(currentCollectionPlaying.getTrackList());
 
     queue.clear();
-    if(CURRENT_AUDIO_PLAYING!=null){
-      CURRENT_AUDIO_PLAYING.getMediaPlayer().dispose();
-      CURRENT_AUDIO_PLAYING=null;
+    if(currentAudioPlaying!=null){
+      currentAudioPlaying.getMediaPlayer().dispose();
+      currentAudioPlaying=null;
     }//end-if
-    playingAudiosCopy=new ArrayList<>(CURRENT_COLLECTION_PLAYING.getTrackList());
-    for(JBAudio jbAudio: CURRENT_COLLECTION_PLAYING.getTrackList()){
+    playingAudiosCopy=new ArrayList<>(currentCollectionPlaying.getTrackList());
+    for(JBAudio jbAudio: currentCollectionPlaying.getTrackList()){
       queue.push(jbAudio);
     }//end-foreach
     play();
   }
 
   public void playPause(){
-    if(CURRENT_AUDIO_PLAYING!=null){
-      if(CURRENT_AUDIO_PLAYING.getMediaPlayer().getStatus().equals(MediaPlayer.Status.PLAYING)){
-        CURRENT_AUDIO_PLAYING.getMediaPlayer().pause();
+    if(currentAudioPlaying!=null){
+      if(currentAudioPlaying.getMediaPlayer().getStatus().equals(MediaPlayer.Status.PLAYING)){
+        currentAudioPlaying.getMediaPlayer().pause();
       }else{
-        CURRENT_AUDIO_PLAYING.getMediaPlayer().play();
+        currentAudioPlaying.getMediaPlayer().play();
       }//end-if
     }//end-if
   }
@@ -199,15 +196,15 @@ public class PlayerManager{
   public void randomize() throws SystemErrorException{
     randomized=false;
 
-    if(CURRENT_COLLECTION_PLAYING!=null){
+    if(currentCollectionPlaying!=null){
       queue.clear();
-      Collections.shuffle(CURRENT_COLLECTION_PLAYING.getTrackList());
+      Collections.shuffle(currentCollectionPlaying.getTrackList());
 
       randomized=true;
       collectionLooping=false;
       audioLooping=false;
       playingAudiosCopy.clear();
-      play(CURRENT_COLLECTION_PLAYING);
+      play(currentCollectionPlaying);
     }//end-if
   }
 
@@ -245,20 +242,20 @@ public class PlayerManager{
   public void skipForward() throws SystemErrorException{
     audioLooping=false;
 
-    if(CURRENT_AUDIO_PLAYING!=null){
-      CURRENT_AUDIO_PLAYING.getMediaPlayer().dispose();
+    if(currentAudioPlaying!=null){
+      currentAudioPlaying.getMediaPlayer().dispose();
     }//end-if
     play();
   }
 
   public void skipBack() throws SystemErrorException{
-    if(CURRENT_AUDIO_PLAYING!=null && CURRENT_COLLECTION_PLAYING!=null){
+    if(currentAudioPlaying!=null && currentCollectionPlaying!=null){
       audioLooping=false;
 
-      queue.push(CURRENT_AUDIO_PLAYING);
+      queue.push(currentAudioPlaying);
       /* If I don't go out of bounds I can skip back */
-      if((playingAudiosCopy.indexOf(CURRENT_AUDIO_PLAYING)+1)<playingAudiosCopy.size() && (playingAudiosCopy.indexOf(CURRENT_AUDIO_PLAYING)+1)>0){
-        queue.push(playingAudiosCopy.get(playingAudiosCopy.indexOf(CURRENT_AUDIO_PLAYING)+1));
+      if((playingAudiosCopy.indexOf(currentAudioPlaying)+1)<playingAudiosCopy.size() && (playingAudiosCopy.indexOf(currentAudioPlaying)+1)>0){
+        queue.push(playingAudiosCopy.get(playingAudiosCopy.indexOf(currentAudioPlaying)+1));
       }//end-if
       play();
     }//end-if

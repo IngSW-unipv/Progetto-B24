@@ -39,7 +39,6 @@ public class HomePageHandler{
   public HomePageHandler(HomePageGUI homePageGUI, JBProfile activeProfile){
     this.homePageGUI=homePageGUI;
     initComponents(activeProfile);
-
   }
 
   private void initComponents(JBProfile activeProfile){
@@ -68,7 +67,7 @@ public class HomePageHandler{
 
         try{
           JBAudio jbAudio=(JBAudio)ijbResearchable;
-          
+
           PlayerManagerFactory.getInstance().getPlayerManager().play(jbAudio);
         }catch(ClassCastException e){
           try{
@@ -76,7 +75,8 @@ public class HomePageHandler{
             jbCollection.setTrackList(CollectionManagerFactory.getInstance().getCollectionManager().getCollectionAudios(jbCollection, activeProfile));
             CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, jbCollection);
             CollectionViewHandler collectionViewHandler=new CollectionViewHandler(collectionViewGUI, activeProfile);
-            AudioTableHandler.getInstance((AudioTable)collectionViewGUI.getAudioTable());
+            AudioTableHandler.getInstance().setCurrentAudioTableShowing((AudioTable)collectionViewGUI.getAudioTable());
+            AudioTableHandler.getInstance().setQueue(false);
 
             Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
             stage.setScene(collectionViewGUI.getScene());

@@ -3,40 +3,37 @@ import it.unipv.ingsfw.JavaBeats.view.presets.AudioTable;
 
 public class AudioTableHandler{
   /*---------------------------------------*/
-  //Attributi
+  //Attributes
   /*---------------------------------------*/
   private static AudioTableHandler instance=null;
-  public static AudioTable CURRENT_AUDIOTABLE_SHOWING=null;
-  public static boolean queue=false;
-
+  private AudioTable currentAudioTableShowing=null;
+  private boolean queue=false;
   /*---------------------------------------*/
-  //Costruttori
+  //Constructors
   /*---------------------------------------*/
-  private AudioTableHandler(AudioTable currentAudioTable){
+  private AudioTableHandler(){
     super();
-    AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING=currentAudioTable;
   }
-
   /*---------------------------------------*/
   //Getter/Setter
   /*---------------------------------------*/
-  public static AudioTableHandler getInstance(AudioTable currentAudioTable){
+  public static AudioTableHandler getInstance(){
     if(instance==null){
-      instance=new AudioTableHandler(currentAudioTable);
-    }else if(AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING!=null && !AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.equals(currentAudioTable)){
-      instance=new AudioTableHandler(currentAudioTable);
+      instance=new AudioTableHandler();
     }//end-if
     return instance;
   }
-  public static void setQueue(boolean queue){
-    AudioTableHandler.queue=queue;
+  public void setCurrentAudioTableShowing(AudioTable currentAudioTableShowing){
+    this.currentAudioTableShowing=currentAudioTableShowing;
   }
-  public static boolean isQueue(){
+  public AudioTable getCurrentAudioTableShowing(){
+    return currentAudioTableShowing;
+  }
+  public void setQueue(boolean queue){
+    this.queue=queue;
+  }
+  public boolean isQueue(){
     return queue;
   }
-  /*---------------------------------------*/
-  //Metodi
-  /*---------------------------------------*/
-
   /*---------------------------------------*/
 }

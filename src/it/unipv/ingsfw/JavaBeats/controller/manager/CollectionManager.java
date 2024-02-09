@@ -57,9 +57,15 @@ public class CollectionManager{
     ProfileDAO p=new ProfileDAO();
 
     c.remove(jbCollection);
-    for(JBAudio audio: jbCollection.getTrackList()){
-      a.remove(audio);
-    }//end-foreach
+
+    /* If the collection removed is an Album or a Podcast then we need to remove also its audios */
+    try{
+      Playlist playlist=(Playlist)jbCollection;
+    }catch(ClassCastException classCastException){
+      for(JBAudio audio: jbCollection.getTrackList()){
+        a.remove(audio);
+      }//end-foreach
+    }//end-try
 
     p.refreshProfileInfo(ProfileManagerFactory.getInstance().getProfileManager().getActiveProfile());
   }

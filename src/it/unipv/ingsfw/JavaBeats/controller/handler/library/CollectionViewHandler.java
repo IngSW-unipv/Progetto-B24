@@ -3,7 +3,6 @@ package it.unipv.ingsfw.JavaBeats.controller.handler.library;
 import it.unipv.ingsfw.JavaBeats.controller.factory.CollectionManagerFactory;
 import it.unipv.ingsfw.JavaBeats.controller.factory.PlayerManagerFactory;
 import it.unipv.ingsfw.JavaBeats.controller.factory.ProfileManagerFactory;
-import it.unipv.ingsfw.JavaBeats.controller.handler.presets.SongbarHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.presets.dialogs.EditPlaylistDialogHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.primary.home.HomePageHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.presets.AudioTableHandler;
@@ -35,7 +34,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.media.Media;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.commons.io.FilenameUtils;
@@ -215,8 +213,8 @@ public class CollectionViewHandler{
           PlayerManagerFactory.getInstance().getPlayerManager().deleteQueue();
           gui.getCollectionHeader().getButtonLoop().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/EmptyLoop.png", true)));
 
-          AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.setItems(FXCollections.observableArrayList(PlayerManagerFactory.getInstance().getPlayerManager().getQueue()));
-          AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.refresh();
+          AudioTableHandler.getInstance().getCurrentAudioTableShowing().setItems(FXCollections.observableArrayList(PlayerManagerFactory.getInstance().getPlayerManager().getQueue()));
+          AudioTableHandler.getInstance().getCurrentAudioTableShowing().refresh();
         }else if(gui.getJbCollection().getCreator().equals(activeProfile)){
           try{
             CollectionManagerFactory.getInstance().getCollectionManager().removeCollection(gui.getJbCollection());
@@ -279,13 +277,14 @@ public class CollectionViewHandler{
                 Blob fileAudio=new SerialBlob(fileContent);
 
                 Podcast p=(Podcast)gui.getJbCollection();
-                JBAudio jbAudio=new Episode(0, metadata.get("dc:title")==null ? FilenameUtils.removeExtension(f.getName()) : metadata.get("dc:title"), (Artist)p.getCreator(), gui.getJbCollection(), fileAudio, Double.parseDouble(metadata.get("xmpDM:duration"))*1000, new Date(System.currentTimeMillis()), new String[] {metadata.get("xmpDM:genre")}, false, 0);
+                JBAudio jbAudio=new Episode(0, metadata.get("dc:title")==null ? FilenameUtils.removeExtension(f.getName()) : metadata.get("dc:title"), (Artist)p.getCreator(), gui.getJbCollection(), fileAudio, Double.parseDouble(metadata.get("xmpDM:duration"))*1000, new Date(System.currentTimeMillis()), new String[]{metadata.get("xmpDM:genre")}, false, 0);
 
                 CollectionManagerFactory.getInstance().getCollectionManager().addToCollection(gui.getJbCollection(), jbAudio);
 
                 CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, gui.getJbCollection());
                 CollectionViewHandler collectionViewHandler=new CollectionViewHandler(collectionViewGUI, activeProfile);
-                AudioTableHandler.getInstance((AudioTable)collectionViewGUI.getAudioTable());
+                AudioTableHandler.getInstance().setCurrentAudioTableShowing((AudioTable)collectionViewGUI.getAudioTable());
+                AudioTableHandler.getInstance().setQueue(false);
 
                 Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
                 stage.setScene(collectionViewGUI.getScene());
@@ -346,7 +345,7 @@ public class CollectionViewHandler{
             JBAudio audioClicked=gui.getAudioTable().getItems().get(gui.getAudioTable().getSelectionModel().getSelectedIndex());
 
             /* If I play from the queue then the queue starts from the song I clicked to the last song. Otherwise, I just play normally */
-            if(AudioTableHandler.isQueue()){
+            if(AudioTableHandler.getInstance().isQueue()){
               try{
                 PlayerManagerFactory.getInstance().getPlayerManager().playFromQueue(audioClicked);
 
@@ -384,12 +383,13 @@ public class CollectionViewHandler{
               if(gui.getJbCollection().getName().equals("Favorites")){
                 CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, activeProfile.getFavorites());
                 CollectionViewHandler collectionViewHandler=new CollectionViewHandler(collectionViewGUI, activeProfile);
-                ((Stage)AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.getScene().getWindow()).setScene(collectionViewGUI.getScene());
-                AudioTableHandler.getInstance((AudioTable)collectionViewGUI.getAudioTable());
-                AudioTableHandler.setQueue(false);
+                ((Stage)AudioTableHandler.getInstance().getCurrentAudioTableShowing().getScene().getWindow()).setScene(collectionViewGUI.getScene());
+                AudioTableHandler.getInstance();
+                AudioTableHandler.getInstance().setCurrentAudioTableShowing((AudioTable)collectionViewGUI.getAudioTable());
+                AudioTableHandler.getInstance().setQueue(false);
               }else{
-                if(AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING!=null){
-                  AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.refresh();
+                if(AudioTableHandler.getInstance().getCurrentAudioTableShowing()!=null){
+                  AudioTableHandler.getInstance().getCurrentAudioTableShowing().refresh();
                 }//end-if
               }//end-if
             }catch(AccountNotFoundException e){
@@ -403,7 +403,7 @@ public class CollectionViewHandler{
           }else if(foundBinButton){
             JBAudio audioClicked=gui.getAudioTable().getItems().get(gui.getAudioTable().getSelectionModel().getSelectedIndex());
 
-            if(AudioTableHandler.isQueue()){
+            if(AudioTableHandler.getInstance().isQueue()){
               PlayerManagerFactory.getInstance().getPlayerManager().removeFromQueue(audioClicked);
 
               reloadCollectionViewGUI(activeProfile);
@@ -413,9 +413,9 @@ public class CollectionViewHandler{
 
                 CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, gui.getJbCollection());
                 CollectionViewHandler collectionViewHandler=new CollectionViewHandler(collectionViewGUI, activeProfile);
-                ((Stage)AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.getScene().getWindow()).setScene(collectionViewGUI.getScene());
-                AudioTableHandler.getInstance((AudioTable)collectionViewGUI.getAudioTable());
-                AudioTableHandler.setQueue(false);
+                ((Stage)AudioTableHandler.getInstance().getCurrentAudioTableShowing().getScene().getWindow()).setScene(collectionViewGUI.getScene());
+                AudioTableHandler.getInstance().setCurrentAudioTableShowing((AudioTable)collectionViewGUI.getAudioTable());
+                AudioTableHandler.getInstance().setQueue(false);
               }catch(AccountNotFoundException e){
                 gui.getGp().setEffect(new BoxBlur(10, 10, 10));
 
@@ -473,9 +473,9 @@ public class CollectionViewHandler{
   private static void reloadCollectionViewGUI(JBProfile activeProfile){
     CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, PlayerManagerFactory.getInstance().getPlayerManager().getQueue());
     CollectionViewHandler collectionViewHandler=new CollectionViewHandler(collectionViewGUI, activeProfile);
-    ((Stage)AudioTableHandler.CURRENT_AUDIOTABLE_SHOWING.getScene().getWindow()).setScene(collectionViewGUI.getScene());
-    AudioTableHandler.getInstance((AudioTable)collectionViewGUI.getAudioTable());
-    AudioTableHandler.setQueue(true);
+    ((Stage)AudioTableHandler.getInstance().getCurrentAudioTableShowing().getScene().getWindow()).setScene(collectionViewGUI.getScene());
+    AudioTableHandler.getInstance().setCurrentAudioTableShowing((AudioTable)collectionViewGUI.getAudioTable());
+    AudioTableHandler.getInstance().setQueue(true);
   }
   /*---------------------------------------*/
 }

@@ -223,7 +223,7 @@ public class CollectionHeader extends VBox{
     for(JBAudio a: jbCollection.getTrackList()){
       totalTime+=a.getMetadata().getDuration();
     }//end-foreach
-    Label totalDurationLabel=new Label(JBAudio.convertToHoursMinutesAndSeconds(totalTime)+" mins");
+    Label totalDurationLabel=new Label(JBAudio.convertToHoursMinutesAndSeconds(totalTime)+" long");
     totalDurationLabel.setFont(fontCollectionInfo);
     totalDurationLabel.setTextFill(Color.LIGHTGRAY);
     totalDurationLabel.setUnderline(true);
@@ -305,7 +305,7 @@ public class CollectionHeader extends VBox{
     for(JBAudio jbAudio: queue){
       totalTime+=jbAudio.getMetadata().getDuration();
     }//end-foreach
-    Label totalDurationLabel=new Label(JBAudio.convertToHoursMinutesAndSeconds(totalTime)+" mins");
+    Label totalDurationLabel=new Label(JBAudio.convertToHoursMinutesAndSeconds(totalTime)+" long");
     totalDurationLabel.setFont(fontCollectionInfo);
     totalDurationLabel.setTextFill(Color.LIGHTGRAY);
     totalDurationLabel.setUnderline(true);

@@ -215,7 +215,8 @@ public class SearchPageHandler{
               album.setTrackList(CollectionManagerFactory.getInstance().getCollectionManager().getCollectionAudios(album, activeProfile));
               CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, album);
               CollectionViewHandler collectionViewHandler=new CollectionViewHandler(collectionViewGUI, activeProfile);
-              AudioTableHandler.getInstance((AudioTable)collectionViewGUI.getAudioTable());
+              AudioTableHandler.getInstance().setCurrentAudioTableShowing((AudioTable)collectionViewGUI.getAudioTable());
+              AudioTableHandler.getInstance().setQueue(false);
 
               Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
               stage.setScene(collectionViewGUI.getScene());
@@ -245,7 +246,8 @@ public class SearchPageHandler{
               }
               CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, podcast);
               CollectionViewHandler collectionViewHandler=new CollectionViewHandler(collectionViewGUI, activeProfile);
-              AudioTableHandler.getInstance((AudioTable)collectionViewGUI.getAudioTable());
+              AudioTableHandler.getInstance().setCurrentAudioTableShowing((AudioTable)collectionViewGUI.getAudioTable());
+              AudioTableHandler.getInstance().setQueue(false);
 
               Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
               stage.setScene(collectionViewGUI.getScene());
@@ -260,7 +262,8 @@ public class SearchPageHandler{
                   playlist.setTrackList(CollectionManagerFactory.getInstance().getCollectionManager().getCollectionAudios(playlist, activeProfile));
                   CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, playlist);
                   CollectionViewHandler collectionViewHandler=new CollectionViewHandler(collectionViewGUI, activeProfile);
-                  AudioTableHandler.getInstance((AudioTable)collectionViewGUI.getAudioTable());
+                  AudioTableHandler.getInstance().setCurrentAudioTableShowing((AudioTable)collectionViewGUI.getAudioTable());
+                  AudioTableHandler.getInstance().setQueue(false);
 
                   Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
                   stage.setScene(collectionViewGUI.getScene());

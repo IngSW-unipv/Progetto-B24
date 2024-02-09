@@ -58,8 +58,8 @@ public class CollectionLibraryHandler{
           jbCollection.setTrackList(CollectionManagerFactory.getInstance().getCollectionManager().getCollectionAudios(jbCollection, activeProfile));
           CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, jbCollection);
           CollectionViewHandler collectionViewHandler=new CollectionViewHandler(collectionViewGUI, activeProfile);
-          AudioTableHandler.getInstance((AudioTable)collectionViewGUI.getAudioTable());
-          AudioTableHandler.setQueue(false);
+          AudioTableHandler.getInstance().setCurrentAudioTableShowing((AudioTable)collectionViewGUI.getAudioTable());
+          AudioTableHandler.getInstance().setQueue(false);
 
           Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
           stage.setScene(collectionViewGUI.getScene());

@@ -100,7 +100,7 @@ public class SearchDAO implements ISearchDAO{
 
 
   //PRIVATE METHODS
-  private ArrayList<User> searchUsers(String field){
+  private ArrayList<User> searchUsers(String field) throws AccountNotFoundException{
     connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
     PreparedStatement st;
     ResultSet rs;
@@ -129,16 +129,19 @@ public class SearchDAO implements ISearchDAO{
 
     ProfileDAO pDAO=new ProfileDAO();
     ArrayList<User> userList=new ArrayList<>();
-    Iterator<User> resultIT=result.iterator();
-    while(resultIT.hasNext()){
-      userList.add(pDAO.getUser(resultIT.next()));
-    }
+
+    for(User resultUser: result){
+      User u=pDAO.getUser(resultUser);
+      pDAO.refreshProfileInfo(u);
+
+      userList.add(u);
+    }//end-for
 
     return userList;
   }
 
 
-  private ArrayList<Artist> searchArtists(String field){
+  private ArrayList<Artist> searchArtists(String field) throws AccountNotFoundException{
     connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
     PreparedStatement st;
     ResultSet rs;
@@ -167,9 +170,12 @@ public class SearchDAO implements ISearchDAO{
 
     ProfileDAO pDAO=new ProfileDAO();
     ArrayList<Artist> artistList=new ArrayList<>();
-    Iterator<Artist> resultIT=result.iterator();
-    while(resultIT.hasNext()){
-      artistList.add(pDAO.getArtist(resultIT.next()));
+
+    for(Artist resultArtist: result){
+      Artist a=pDAO.getArtist(resultArtist);
+      pDAO.refreshProfileInfo(a);
+
+      artistList.add(a);
     }
 
     return artistList;
@@ -292,17 +298,19 @@ public class SearchDAO implements ISearchDAO{
     DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
 
     CollectionDAO cDAO=new CollectionDAO();
+    ProfileDAO profileDAO=new ProfileDAO();
     ArrayList<Playlist> playlistList=new ArrayList<>();
-    Iterator<Playlist> resultIT=result.iterator();
-    while(resultIT.hasNext()){
-      playlistList.add(cDAO.getPlaylist(resultIT.next()));
-    }
+    for(Playlist playlist: result){
+      Playlist completePlaylist=cDAO.getPlaylist(playlist);
+      completePlaylist.setCreator(profileDAO.get(completePlaylist.getCreator()));
+      playlistList.add(completePlaylist);
+    }//end-for
 
     return playlistList;
   }
 
 
-  private ArrayList<Album> searchAlbums(String field){
+  private ArrayList<Album> searchAlbums(String field) throws AccountNotFoundException{
     connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
     PreparedStatement st;
     ResultSet rs;
@@ -332,17 +340,19 @@ public class SearchDAO implements ISearchDAO{
     DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
 
     CollectionDAO cDAO=new CollectionDAO();
+    ProfileDAO profileDAO=new ProfileDAO();
     ArrayList<Album> albumList=new ArrayList<>();
-    Iterator<Album> resultIT=result.iterator();
-    while(resultIT.hasNext()){
-      albumList.add(cDAO.getAlbum(resultIT.next()));
-    }
+    for(Album album: result){
+      Album completeAlbum=cDAO.getAlbum(album);
+      completeAlbum.setCreator(profileDAO.get(completeAlbum.getCreator()));
+      albumList.add(completeAlbum);
+    }//end-for
 
     return albumList;
   }
 
 
-  private ArrayList<Podcast> searchPodcasts(String field){
+  private ArrayList<Podcast> searchPodcasts(String field) throws AccountNotFoundException{
     connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
     PreparedStatement st;
     ResultSet rs;
@@ -372,11 +382,13 @@ public class SearchDAO implements ISearchDAO{
     DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
 
     CollectionDAO cDAO=new CollectionDAO();
+    ProfileDAO profileDAO=new ProfileDAO();
     ArrayList<Podcast> podcastList=new ArrayList<>();
-    Iterator<Podcast> resultIT=result.iterator();
-    while(resultIT.hasNext()){
-      podcastList.add(cDAO.getPodcast(resultIT.next()));
-    }
+    for(Podcast podcast: result){
+      Podcast completePodcast=cDAO.getPodcast(podcast);
+      completePodcast.setCreator(profileDAO.get(completePodcast.getCreator()));
+      podcastList.add(completePodcast);
+    }//end-for
 
     return podcastList;
   }

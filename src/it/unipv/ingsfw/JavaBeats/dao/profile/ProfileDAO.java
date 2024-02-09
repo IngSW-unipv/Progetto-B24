@@ -258,9 +258,6 @@ public class ProfileDAO implements IProfileDAO{
 
       a.setFavorites(cDAO.getFavorites(a));             //set favorites playlist
     }//end-try
-    catch(AccountNotFoundException e){
-      throw new AccountNotFoundException();
-    }
   }
 
   //PRIVATE METHODS:
@@ -299,7 +296,7 @@ public class ProfileDAO implements IProfileDAO{
     int result=0;
 
     try{
-      String query="SELECT count(idAudio) as 'total' FROM ListeningHistory NATURAL JOIN ArtistAudios WHERE artistMail= BINARY ?;";
+      String query="SELECT count(AA.idAudio) as 'total' FROM ListeningHistory INNER JOIN ArtistAudios AA on ListeningHistory.idAudio = AA.idAudio WHERE artistMail= BINARY ?;";
 
       st=connection.prepareStatement(query);
       st.setString(1, artist.getMail());

@@ -21,6 +21,7 @@ public class AudioTable extends TableView<JBAudio>{
   private PlayButtonTableColumn playColumn;
   private TitleTableColumn titleColumn;
   private TableColumn<JBAudio, String> collectionColumn;
+  private TableColumn<JBAudio, String> streamsColumn;
   private TableColumn<JBAudio, String> dateColumn;
   private FavoriteButtonTableColumn favoriteColumn;
   private TableColumn<JBAudio, String> durationColumn;
@@ -64,6 +65,11 @@ public class AudioTable extends TableView<JBAudio>{
     collectionColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMetadata().getCollection().getName()));
     collectionColumn.setPrefWidth((double)30/100*tableWidth);
 
+    /* Streams column */
+    streamsColumn=new TableColumn<>("Streams");
+    streamsColumn.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getNumberOfStreams())));
+    streamsColumn.setPrefWidth((double)30/100*tableWidth);
+
     /* Release date column */
     dateColumn=new TableColumn<>("Release date");
     dateColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMetadata().getReleaseDate().toString()));
@@ -82,14 +88,24 @@ public class AudioTable extends TableView<JBAudio>{
     /* Delete Button column, contains the button to delete the audio */
     deleteColumn=new DeleteButtonTableColumn("");
     deleteColumn.setPrefWidth((double)5/100*tableWidth);
-
-
   }
 
   private void getCollectionColumns(ObservableList<JBAudio> jbAudios, JBProfile jbProfile, JBCollection jbCollection){
+
+    /* If activeProfile is not the creator, then we don't allow the delete column */
     if(!jbProfile.equals(jbCollection.getCreator())){
-      getColumns().addAll(playColumn, titleColumn, collectionColumn, dateColumn, favoriteColumn, durationColumn);
+      /* If showing a playlist -> we prefer to put emphasis on the collection name
+       *  If showing an Album or a Podcast -> we prefer to put emphasis on the number of streams
+       *  */
+      try{
+        Playlist p=(Playlist)jbCollection;
+
+        getColumns().addAll(playColumn, titleColumn, collectionColumn, dateColumn, favoriteColumn, durationColumn);
+      }catch(ClassCastException c){
+        getColumns().addAll(playColumn, titleColumn, streamsColumn, dateColumn, favoriteColumn, durationColumn);
+      }//end-try
     }else{
+      /* If activeProfile is the creator then the choices vary depending on the type of the collection */
       try{
         Playlist playlist=(Playlist)jbCollection;
 
@@ -97,13 +113,11 @@ public class AudioTable extends TableView<JBAudio>{
           getColumns().addAll(playColumn, titleColumn, collectionColumn, dateColumn, favoriteColumn, durationColumn);
         }else{
           getColumns().addAll(playColumn, titleColumn, collectionColumn, dateColumn, favoriteColumn, durationColumn, deleteColumn);
-
-        }
+        }//end-if
 
       }catch(ClassCastException e){
-        getColumns().addAll(playColumn, titleColumn, collectionColumn, dateColumn, favoriteColumn, durationColumn);
-      }
-
+        getColumns().addAll(playColumn, titleColumn, streamsColumn, dateColumn, favoriteColumn, durationColumn);
+      }//end-try
     }
 
     /* Adding the list of audios in the table and adding all the columns */

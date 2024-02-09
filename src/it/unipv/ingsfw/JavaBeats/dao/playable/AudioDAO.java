@@ -240,7 +240,6 @@ public class AudioDAO implements IAudioDAO{
     connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
     PreparedStatement st;
 
-
     try{
       String query="INSERT INTO ListeningHistory(idListeningHistory, profileMail, idAudio) VALUES(default, ?, ?);";
 
@@ -261,6 +260,9 @@ public class AudioDAO implements IAudioDAO{
       u.setMinuteListened(profileDAO.getTotalListeningTime(u));
     }catch(ClassCastException ignored){
     }//end-try
+
+    /* Updating number of streams */
+    audio.setNumberOfStreams(getNumberOfStreams(audio));
   }
 
   @Override
