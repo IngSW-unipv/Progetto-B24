@@ -52,8 +52,7 @@ public class ProfileViewHandler{
         try{
           gui.getGp().setEffect(new BoxBlur(10, 10, 10));
 
-          EditProfileDialog dialog=null;
-          dialog=new EditProfileDialog(stage, originalProfile, originalProfile.getCopy());
+          EditProfileDialog dialog=new EditProfileDialog(stage, ProfileManagerFactory.getInstance().getProfileManager().getActiveProfile(), ProfileManagerFactory.getInstance().getProfileManager().getActiveProfile().getCopy());
 
           EditProfileDialogHandler editProfileDialogHandler=new EditProfileDialogHandler(dialog);
           dialog.showAndWait();
@@ -65,7 +64,7 @@ public class ProfileViewHandler{
             //Profile manager updates DB
             ProfileManagerFactory.getInstance().getProfileManager().edit(dialog.getNewProfile());
 
-            /* Re-instantiating Sidebar, SidebarHandler, Songbar and SongbarHandler*/
+            /* Re-instantiating Sidebar, SidebarHandler, SongBar and SongBarHandler*/
             Sidebar.getInstance(dialog.getNewProfile());
             SidebarHandler sidebarHandler=new SidebarHandler();
             Songbar.getInstance();

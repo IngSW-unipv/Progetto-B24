@@ -145,11 +145,6 @@ public class CreationGUIHandler{
 
               try{
                 CollectionManagerFactory.getInstance().getCollectionManager().checkMetadata(metadata);
-//              System.out.println("----------------------------------------------");
-//              System.out.println("Title: "+metadata.get("dc:title")+"  "+FilenameUtils.removeExtension(f.getName()));
-//              System.out.println("Genre : "+metadata.get("xmpDM:genre"));
-//              System.out.println("Duration: "+metadata.get("xmpDM:duration"));
-//              System.out.println("----------------------------------------------");
 
                 JBAudio jbAudio=null;
                 Blob fileAudio=new SerialBlob(fileContent);
