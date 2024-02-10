@@ -57,7 +57,7 @@ public final class Playlist extends JBCollection{
   /**
    * Returns the track list of a Playlist as an {@link ArrayList} of {@link JBAudio}.
    *
-   * @return playlist clone
+   * @return audios contained in the playlist
    */
   @Override
   public ArrayList<JBAudio> getTrackList(){

@@ -41,7 +41,7 @@ public final class Podcast extends JBCollection{
   /**
    * Returns the track list of a podcast as an {@link ArrayList} of {@link JBAudio}.
    *
-   * @return podcast clone
+   * @return episodes contained in the podcast
    */
   @Override
   public ArrayList<JBAudio> getTrackList(){

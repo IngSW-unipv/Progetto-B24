@@ -41,7 +41,7 @@ public final class Album extends JBCollection{
   /**
    * Returns the track list of an album as an {@link ArrayList} of {@link JBAudio}.
    *
-   * @return album clone
+   * @return songs contained in the album
    */
   @Override
   public ArrayList<JBAudio> getTrackList(){

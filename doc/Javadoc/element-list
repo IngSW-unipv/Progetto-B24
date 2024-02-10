@@ -13,7 +13,6 @@ it.unipv.ingsfw.JavaBeats.dao.collection
 it.unipv.ingsfw.JavaBeats.dao.playable
 it.unipv.ingsfw.JavaBeats.dao.profile
 it.unipv.ingsfw.JavaBeats.exceptions
-it.unipv.ingsfw.JavaBeats.main
 it.unipv.ingsfw.JavaBeats.model
 it.unipv.ingsfw.JavaBeats.model.collection
 it.unipv.ingsfw.JavaBeats.model.playable
