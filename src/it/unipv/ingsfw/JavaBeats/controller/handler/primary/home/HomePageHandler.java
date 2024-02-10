@@ -48,15 +48,30 @@ public class HomePageHandler {
             @Override
             public void handle(ActionEvent actionEvent) {
                 Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-                ProfileViewGUI profileViewGUI = new ProfileViewGUI(activeProfile, activeProfile);
-                ProfileViewHandler profileViewHandler = new ProfileViewHandler(profileViewGUI, activeProfile);
-                Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getProfileButton());
 
-                Dimension2D previousDimension = new Dimension2D(stage.getWidth(), stage.getHeight());
-                stage.setScene(profileViewGUI.getScene());
-                stage.setTitle("Profile");
-                stage.setWidth(previousDimension.getWidth());
-                stage.setHeight(previousDimension.getHeight());
+                try {
+                    ProfileManagerFactory.getInstance().getProfileManager().refreshProfile(activeProfile);
+
+                    ProfileViewGUI profileViewGUI = new ProfileViewGUI(activeProfile, activeProfile);
+                    ProfileViewHandler profileViewHandler = new ProfileViewHandler(profileViewGUI, activeProfile);
+                    Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getProfileButton());
+
+                    Dimension2D previousDimension = new Dimension2D(stage.getWidth(), stage.getHeight());
+                    stage.setScene(profileViewGUI.getScene());
+                    stage.setTitle("Profile");
+                    stage.setWidth(previousDimension.getWidth());
+                    stage.setHeight(previousDimension.getHeight());
+
+                } catch (AccountNotFoundException e) {
+                    homePageGUI.getGp().setEffect(new BoxBlur(10, 10, 10));
+
+                    ExceptionDialog exceptionDialog = new ExceptionDialog(stage, new SystemErrorException());
+                    exceptionDialog.showAndWait();
+
+                    homePageGUI.getGp().setEffect(null); /* Removing blur effect */
+                }
+
+
             }
         };
 
@@ -101,7 +116,7 @@ public class HomePageHandler {
                             stage.setTitle("Profile");
                             stage.setWidth(previousDimension.getWidth());
                             stage.setHeight(previousDimension.getHeight());
-                            
+
                         } catch (AccountNotFoundException ex) {
                             homePageGUI.getGp().setEffect(new BoxBlur(10, 10, 10));
 

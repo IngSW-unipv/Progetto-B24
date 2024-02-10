@@ -119,7 +119,9 @@ public class PlayerManager {
             currentAudioPlaying.getMediaPlayer().setVolume(volume);
             audioDAO.addToListeningHistory(audioToBePlayed, ProfileManagerFactory.getInstance().getProfileManager().getActiveProfile());
 
-            AudioTableHandler.getInstance().getCurrentAudioTableShowing().refresh();
+            if (AudioTableHandler.getInstance().getCurrentAudioTableShowing() != null) {
+                AudioTableHandler.getInstance().getCurrentAudioTableShowing().refresh();
+            }
 
         } else if (collectionLooping) {
             loop(currentCollectionPlaying);
@@ -130,7 +132,9 @@ public class PlayerManager {
             currentAudioPlaying.getMediaPlayer().setVolume(volume);
             audioDAO.addToListeningHistory(currentAudioPlaying, ProfileManagerFactory.getInstance().getProfileManager().getActiveProfile());
 
-            AudioTableHandler.getInstance().getCurrentAudioTableShowing().refresh();
+            if (AudioTableHandler.getInstance().getCurrentAudioTableShowing() != null) {
+                AudioTableHandler.getInstance().getCurrentAudioTableShowing().refresh();
+            }
 
         } else {
             playingAudiosCopy.clear();
@@ -162,7 +166,9 @@ public class PlayerManager {
         currentAudioPlaying.getMediaPlayer().setVolume(volume);
         audioDAO.addToListeningHistory(jbAudio, ProfileManagerFactory.getInstance().getProfileManager().getActiveProfile());
 
-        AudioTableHandler.getInstance().getCurrentAudioTableShowing().refresh();
+        if (AudioTableHandler.getInstance().getCurrentAudioTableShowing() != null) {
+            AudioTableHandler.getInstance().getCurrentAudioTableShowing().refresh();
+        }
 
         /* Updating instances of Sidebar and Songbar */
         SidebarHandler sidebarHandler = new SidebarHandler();

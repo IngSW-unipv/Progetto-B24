@@ -1,6 +1,8 @@
 package it.unipv.ingsfw.JavaBeats.controller.handler.primary.search;
+
 import it.unipv.ingsfw.JavaBeats.controller.factory.CollectionManagerFactory;
 import it.unipv.ingsfw.JavaBeats.controller.factory.PlayerManagerFactory;
+import it.unipv.ingsfw.JavaBeats.controller.factory.ProfileManagerFactory;
 import it.unipv.ingsfw.JavaBeats.controller.factory.SearchManagerFactory;
 import it.unipv.ingsfw.JavaBeats.controller.handler.library.CollectionViewHandler;
 import it.unipv.ingsfw.JavaBeats.controller.handler.presets.AudioTableHandler;
@@ -39,276 +41,291 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.EnumMap;
 
-public class SearchPageHandler{
+public class SearchPageHandler {
 
-  //Attributi
-  private SearchPageGUI searchPageGUI;
-  private JBProfile activeProfile;
+    //Attributi
+    private SearchPageGUI searchPageGUI;
+    private JBProfile activeProfile;
 
-  //Getters and setters
+    //Getters and setters
 
-  //Costruttore
-  public SearchPageHandler(SearchPageGUI searchPageGUI, JBProfile activeProfile){
-    this.searchPageGUI=searchPageGUI;
-    this.activeProfile=activeProfile;
-    initComponents();
-  }
+    //Costruttore
+    public SearchPageHandler(SearchPageGUI searchPageGUI, JBProfile activeProfile) {
+        this.searchPageGUI = searchPageGUI;
+        this.activeProfile = activeProfile;
+        initComponents();
+    }
 
-  //Metodi
-  private void initComponents(){
-    EventHandler<ActionEvent> profileButtonHandler=new EventHandler<>(){
-      @Override
-      public void handle(ActionEvent actionEvent){
-        Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        ProfileViewGUI profileViewGUI=new ProfileViewGUI(activeProfile, activeProfile);
-        ProfileViewHandler profileViewHandler=new ProfileViewHandler(profileViewGUI, activeProfile);
-        Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getProfileButton());
+    //Metodi
+    private void initComponents() {
+        EventHandler<ActionEvent> profileButtonHandler = new EventHandler<>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 
-        Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
-        stage.setScene(profileViewGUI.getScene());
-        stage.setTitle("Profile");
-        stage.setWidth(previousDimension.getWidth());
-        stage.setHeight(previousDimension.getHeight());
-      }
-    };
+                try {
+                    ProfileManagerFactory.getInstance().getProfileManager().refreshProfile(activeProfile);
 
-    EventHandler<KeyEvent> searchTextfieldHandler=new EventHandler<KeyEvent>(){
-      @Override
-      public void handle(KeyEvent keyEvent){
-        if(keyEvent.getCode().equals(KeyCode.ENTER)){
-          Stage stage=(Stage)((Node)keyEvent.getSource()).getScene().getWindow();
+                    ProfileViewGUI profileViewGUI = new ProfileViewGUI(activeProfile, activeProfile);
+                    ProfileViewHandler profileViewHandler = new ProfileViewHandler(profileViewGUI, activeProfile);
+                    Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getProfileButton());
 
-          //PlayerManager returns map of searched arrays
-          try{
-            EnumMap<EJBENTITY, ArrayList<IJBResearchable>> searchedMap=SearchManagerFactory.getInstance().getSearchManager().search(searchPageGUI.getSearchTextField().getText(), activeProfile);
+                    Dimension2D previousDimension = new Dimension2D(stage.getWidth(), stage.getHeight());
+                    stage.setScene(profileViewGUI.getScene());
+                    stage.setTitle("Profile");
+                    stage.setWidth(previousDimension.getWidth());
+                    stage.setHeight(previousDimension.getHeight());
 
-            ArrayList<JBCollection> profilePlaylists=CollectionManagerFactory.getInstance().getCollectionManager().getPlaylists(activeProfile);
-            SearchPageGUI searchPageGUI=new SearchPageGUI(activeProfile, searchedMap, profilePlaylists);
-            SearchPageHandler searchPageHandler=new SearchPageHandler(searchPageGUI, activeProfile);
+                } catch (AccountNotFoundException e) {
+                    searchPageGUI.getGp().setEffect(new BoxBlur(10, 10, 10));
 
-            Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
-            stage.setScene(searchPageGUI.getScene());
-            stage.setTitle("SearchPage");
-            stage.setWidth(previousDimension.getWidth());
-            stage.setHeight(previousDimension.getHeight());
-          }catch(AccountNotFoundException e){
-            searchPageGUI.getGp().setEffect(new BoxBlur(10, 10, 10));
+                    ExceptionDialog exceptionDialog = new ExceptionDialog(stage, new SystemErrorException());
+                    exceptionDialog.showAndWait();
 
-            ExceptionDialog exceptionDialog=new ExceptionDialog(stage, new SystemErrorException());
-            exceptionDialog.showAndWait();
+                    searchPageGUI.getGp().setEffect(null); /* Removing blur effect */
+                }
 
-            searchPageGUI.getGp().setEffect(null);
-          }//end-try
-        }//end-if
-      }
-    };
 
-    EventHandler<ActionEvent> songsChoiceBoxHandler=new EventHandler<>(){
-      @Override
-      public void handle(ActionEvent actionEvent){
-        Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+            }
+        };
 
-        ChoiceBox<Playlist> choiceBoxPressed=searchPageGUI.getSearchResults().getChoiceBoxArrayList().get(searchPageGUI.getSearchResults().getChoiceBoxArrayList().indexOf((ChoiceBox<Playlist>)actionEvent.getSource()));
-        Song song=(Song)searchPageGUI.getSearchResults().getSearchedMap().get(EJBENTITY.SONG).get(searchPageGUI.getSearchResults().getChoiceBoxArrayList().indexOf((ChoiceBox<Playlist>)actionEvent.getSource()));
+        EventHandler<KeyEvent> searchTextfieldHandler = new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                if (keyEvent.getCode().equals(KeyCode.ENTER)) {
+                    Stage stage = (Stage) ((Node) keyEvent.getSource()).getScene().getWindow();
 
-        if(choiceBoxPressed.getValue().toString().equals("Queue")){
-          PlayerManagerFactory.getInstance().getPlayerManager().addToQueue(song);
-        }else if(choiceBoxPressed.getValue().getName().equals("Favorites")){
+                    //PlayerManager returns map of searched arrays
+                    try {
+                        EnumMap<EJBENTITY, ArrayList<IJBResearchable>> searchedMap = SearchManagerFactory.getInstance().getSearchManager().search(searchPageGUI.getSearchTextField().getText(), activeProfile);
 
-          if(!activeProfile.getFavorites().getTrackList().contains(song)){
-            try{
-              activeProfile.getFavorites().getTrackList().add(song);
+                        ArrayList<JBCollection> profilePlaylists = CollectionManagerFactory.getInstance().getCollectionManager().getPlaylists(activeProfile);
+                        SearchPageGUI searchPageGUI = new SearchPageGUI(activeProfile, searchedMap, profilePlaylists);
+                        SearchPageHandler searchPageHandler = new SearchPageHandler(searchPageGUI, activeProfile);
 
-              CollectionManagerFactory.getInstance().getCollectionManager().setFavorites(activeProfile);
-            }catch(AccountNotFoundException e){
-              searchPageGUI.getGp().setEffect(new BoxBlur(10, 10, 10));
+                        Dimension2D previousDimension = new Dimension2D(stage.getWidth(), stage.getHeight());
+                        stage.setScene(searchPageGUI.getScene());
+                        stage.setTitle("SearchPage");
+                        stage.setWidth(previousDimension.getWidth());
+                        stage.setHeight(previousDimension.getHeight());
+                    } catch (AccountNotFoundException e) {
+                        searchPageGUI.getGp().setEffect(new BoxBlur(10, 10, 10));
 
-              ExceptionDialog exceptionDialog=new ExceptionDialog(stage, new SystemErrorException());
-              exceptionDialog.showAndWait();
+                        ExceptionDialog exceptionDialog = new ExceptionDialog(stage, new SystemErrorException());
+                        exceptionDialog.showAndWait();
 
-              searchPageGUI.getGp().setEffect(null);
-            }//end-try
-          }//end-if
-        }else{
+                        searchPageGUI.getGp().setEffect(null);
+                    }//end-try
+                }//end-if
+            }
+        };
 
-          if(!choiceBoxPressed.getValue().getTrackList().contains(song)){
-            try{
-              CollectionManagerFactory.getInstance().getCollectionManager().addToCollection(choiceBoxPressed.getValue(), song);
-            }catch(AccountNotFoundException e){
-              searchPageGUI.getGp().setEffect(new BoxBlur(10, 10, 10));
+        EventHandler<ActionEvent> songsChoiceBoxHandler = new EventHandler<>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 
-              ExceptionDialog exceptionDialog=new ExceptionDialog(stage, new SystemErrorException());
-              exceptionDialog.showAndWait();
+                ChoiceBox<Playlist> choiceBoxPressed = searchPageGUI.getSearchResults().getChoiceBoxArrayList().get(searchPageGUI.getSearchResults().getChoiceBoxArrayList().indexOf((ChoiceBox<Playlist>) actionEvent.getSource()));
+                Song song = (Song) searchPageGUI.getSearchResults().getSearchedMap().get(EJBENTITY.SONG).get(searchPageGUI.getSearchResults().getChoiceBoxArrayList().indexOf((ChoiceBox<Playlist>) actionEvent.getSource()));
 
-              searchPageGUI.getGp().setEffect(null);
-            }//end-try
-          }//end-try
-        }//end-try
-      }
-    };
+                if (choiceBoxPressed.getValue().toString().equals("Queue")) {
+                    PlayerManagerFactory.getInstance().getPlayerManager().addToQueue(song);
+                } else if (choiceBoxPressed.getValue().getName().equals("Favorites")) {
 
-    EventHandler<ActionEvent> episodesChoiceBoxHandler=new EventHandler<>(){
-      @Override
-      public void handle(ActionEvent actionEvent){
-        Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+                    if (!activeProfile.getFavorites().getTrackList().contains(song)) {
+                        try {
+                            activeProfile.getFavorites().getTrackList().add(song);
 
-        ChoiceBox<Playlist> choiceBoxPressed=searchPageGUI.getSearchResults().getEpisodesChoiceBoxArrayList().get(searchPageGUI.getSearchResults().getEpisodesChoiceBoxArrayList().indexOf((ChoiceBox<Playlist>)actionEvent.getSource()));
-        Episode episode=(Episode)searchPageGUI.getSearchResults().getSearchedMap().get(EJBENTITY.EPISODE).get(searchPageGUI.getSearchResults().getEpisodesChoiceBoxArrayList().indexOf((ChoiceBox<Playlist>)actionEvent.getSource()));
+                            CollectionManagerFactory.getInstance().getCollectionManager().setFavorites(activeProfile);
+                        } catch (AccountNotFoundException e) {
+                            searchPageGUI.getGp().setEffect(new BoxBlur(10, 10, 10));
 
-        if(choiceBoxPressed.getValue().toString().equals("Queue")){
-          PlayerManagerFactory.getInstance().getPlayerManager().addToQueue(episode);
+                            ExceptionDialog exceptionDialog = new ExceptionDialog(stage, new SystemErrorException());
+                            exceptionDialog.showAndWait();
 
-        }else if(choiceBoxPressed.getValue().getName().equals("Favorites")){
+                            searchPageGUI.getGp().setEffect(null);
+                        }//end-try
+                    }//end-if
+                } else {
 
-          if(!activeProfile.getFavorites().getTrackList().contains(episode)){
-            try{
-              activeProfile.getFavorites().getTrackList().add(episode);
+                    if (!choiceBoxPressed.getValue().getTrackList().contains(song)) {
+                        try {
+                            CollectionManagerFactory.getInstance().getCollectionManager().addToCollection(choiceBoxPressed.getValue(), song);
+                        } catch (AccountNotFoundException e) {
+                            searchPageGUI.getGp().setEffect(new BoxBlur(10, 10, 10));
 
-              CollectionManagerFactory.getInstance().getCollectionManager().setFavorites(activeProfile);
-            }catch(AccountNotFoundException e){
-              searchPageGUI.getGp().setEffect(new BoxBlur(10, 10, 10));
+                            ExceptionDialog exceptionDialog = new ExceptionDialog(stage, new SystemErrorException());
+                            exceptionDialog.showAndWait();
 
-              ExceptionDialog exceptionDialog=new ExceptionDialog(stage, new SystemErrorException());
-              exceptionDialog.showAndWait();
-
-              searchPageGUI.getGp().setEffect(null);
-            }//end-try
-          }//end-if
-        }else{
-          if(!choiceBoxPressed.getValue().getTrackList().contains(episode)){
-            try{
-              CollectionManagerFactory.getInstance().getCollectionManager().addToCollection(choiceBoxPressed.getValue(), episode);
-            }catch(AccountNotFoundException e){
-              searchPageGUI.getGp().setEffect(new BoxBlur(10, 10, 10));
-
-              ExceptionDialog exceptionDialog=new ExceptionDialog(stage, new SystemErrorException());
-              exceptionDialog.showAndWait();
-
-              searchPageGUI.getGp().setEffect(null);
-            }//end-try
-          }//end-if
-        }//end-if
-      }
-    };
-
-    EventHandler<MouseEvent> audioCardClickHandler=new EventHandler<>(){
-      @Override
-      public void handle(MouseEvent mouseEvent){
-        Stage stage=(Stage)((Node)mouseEvent.getSource()).getScene().getWindow();
-
-        IJBResearchable ijbResearchable=(((AudioCard)mouseEvent.getSource()).getIjbResearchable());
-        try{
-          Artist artist=(Artist)ijbResearchable;
-          ProfileViewGUI profileViewGUI=new ProfileViewGUI(activeProfile, artist);
-          ProfileViewHandler profileViewHandler=new ProfileViewHandler(profileViewGUI, activeProfile);
-          Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getProfileButton());
-
-          Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
-          stage.setScene(profileViewGUI.getScene());
-          stage.setTitle("Profile");
-          stage.setWidth(previousDimension.getWidth());
-          stage.setHeight(previousDimension.getHeight());
-        }catch(ClassCastException c){
-          try{
-            Album album=(Album)ijbResearchable;
-            try{
-              album.setTrackList(CollectionManagerFactory.getInstance().getCollectionManager().getCollectionAudios(album, activeProfile));
-              CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, album);
-              CollectionViewHandler collectionViewHandler=new CollectionViewHandler(collectionViewGUI, activeProfile);
-              AudioTableHandler.getInstance().setCurrentAudioTableShowing((AudioTable)collectionViewGUI.getAudioTable());
-              AudioTableHandler.getInstance().setQueue(false);
-
-              Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
-              stage.setScene(collectionViewGUI.getScene());
-              stage.setTitle("Collection");
-              stage.setWidth(previousDimension.getWidth());
-              stage.setHeight(previousDimension.getHeight());
-            }catch(AccountNotFoundException e){
-              searchPageGUI.getGp().setEffect(new BoxBlur(10, 10, 10));
-
-              ExceptionDialog exceptionDialog=new ExceptionDialog(stage, new SystemErrorException());
-              exceptionDialog.showAndWait();
-
-              searchPageGUI.getGp().setEffect(null);
-            }//end-try
-          }catch(ClassCastException cl){
-            try{
-              Podcast podcast=(Podcast)ijbResearchable;
-              try{
-                podcast.setTrackList(CollectionManagerFactory.getInstance().getCollectionManager().getCollectionAudios(podcast, activeProfile));
-              }catch(AccountNotFoundException e){
-                searchPageGUI.getGp().setEffect(new BoxBlur(10, 10, 10));
-
-                ExceptionDialog exceptionDialog=new ExceptionDialog(stage, new SystemErrorException());
-                exceptionDialog.showAndWait();
-
-                searchPageGUI.getGp().setEffect(null);
-              }
-              CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, podcast);
-              CollectionViewHandler collectionViewHandler=new CollectionViewHandler(collectionViewGUI, activeProfile);
-              AudioTableHandler.getInstance().setCurrentAudioTableShowing((AudioTable)collectionViewGUI.getAudioTable());
-              AudioTableHandler.getInstance().setQueue(false);
-
-              Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
-              stage.setScene(collectionViewGUI.getScene());
-              stage.setTitle("Collection");
-              stage.setWidth(previousDimension.getWidth());
-              stage.setHeight(previousDimension.getHeight());
-
-            }catch(ClassCastException cla){
-              try{
-                Playlist playlist=(Playlist)ijbResearchable;
-                try{
-                  playlist.setTrackList(CollectionManagerFactory.getInstance().getCollectionManager().getCollectionAudios(playlist, activeProfile));
-                  CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, playlist);
-                  CollectionViewHandler collectionViewHandler=new CollectionViewHandler(collectionViewGUI, activeProfile);
-                  AudioTableHandler.getInstance().setCurrentAudioTableShowing((AudioTable)collectionViewGUI.getAudioTable());
-                  AudioTableHandler.getInstance().setQueue(false);
-
-                  Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
-                  stage.setScene(collectionViewGUI.getScene());
-                  stage.setTitle("Collection");
-                  stage.setWidth(previousDimension.getWidth());
-                  stage.setHeight(previousDimension.getHeight());
-                }catch(AccountNotFoundException e){
-                  searchPageGUI.getGp().setEffect(new BoxBlur(10, 10, 10));
-
-                  ExceptionDialog exceptionDialog=new ExceptionDialog(stage, new SystemErrorException());
-                  exceptionDialog.showAndWait();
-
-                  searchPageGUI.getGp().setEffect(null);
+                            searchPageGUI.getGp().setEffect(null);
+                        }//end-try
+                    }//end-try
                 }//end-try
-              }catch(ClassCastException clas){
+            }
+        };
 
-                User user=(User)ijbResearchable;
-                ProfileViewGUI profileViewGUI=new ProfileViewGUI(activeProfile, user);
-                ProfileViewHandler profileViewHandler=new ProfileViewHandler(profileViewGUI, activeProfile);
-                Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getProfileButton());
+        EventHandler<ActionEvent> episodesChoiceBoxHandler = new EventHandler<>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 
-                Dimension2D previousDimension=new Dimension2D(stage.getWidth(), stage.getHeight());
-                stage.setScene(profileViewGUI.getScene());
-                stage.setTitle("Profile");
-                stage.setWidth(previousDimension.getWidth());
-                stage.setHeight(previousDimension.getHeight());
-              }//end-try
-            }//end-try
-          }//end-try
-        }//end-try
-      }
-    };
-    searchPageGUI.getUserProfileButton().setOnAction(profileButtonHandler);
-    searchPageGUI.getSearchTextField().setOnKeyPressed(searchTextfieldHandler);
-    searchPageGUI.getSearchTextField().setOnKeyPressed(searchTextfieldHandler);
-    if(searchPageGUI.getSearchResults()!=null){
-      searchPageGUI.getSearchResults().getChoiceBoxArrayList().forEach(b -> b.setOnAction(songsChoiceBoxHandler));
-      searchPageGUI.getSearchResults().getChoiceBoxArrayList().forEach(b -> b.setOnAction(songsChoiceBoxHandler));
-      searchPageGUI.getSearchResults().getEpisodesChoiceBoxArrayList().forEach(b -> b.setOnAction(episodesChoiceBoxHandler));
-      searchPageGUI.getSearchResults().getArtistsHBox().getChildren().forEach(a -> a.setOnMouseClicked(audioCardClickHandler));
-      searchPageGUI.getSearchResults().getAlbumsHBox().getChildren().forEach(a -> a.setOnMouseClicked(audioCardClickHandler));
-      searchPageGUI.getSearchResults().getPodcastsHBox().getChildren().forEach(a -> a.setOnMouseClicked(audioCardClickHandler));
-      searchPageGUI.getSearchResults().getPlaylistsHBox().getChildren().forEach(a -> a.setOnMouseClicked(audioCardClickHandler));
-      searchPageGUI.getSearchResults().getUsersHBox().getChildren().forEach(a -> a.setOnMouseClicked(audioCardClickHandler));
-    }//end-if
+                ChoiceBox<Playlist> choiceBoxPressed = searchPageGUI.getSearchResults().getEpisodesChoiceBoxArrayList().get(searchPageGUI.getSearchResults().getEpisodesChoiceBoxArrayList().indexOf((ChoiceBox<Playlist>) actionEvent.getSource()));
+                Episode episode = (Episode) searchPageGUI.getSearchResults().getSearchedMap().get(EJBENTITY.EPISODE).get(searchPageGUI.getSearchResults().getEpisodesChoiceBoxArrayList().indexOf((ChoiceBox<Playlist>) actionEvent.getSource()));
 
-  }
+                if (choiceBoxPressed.getValue().toString().equals("Queue")) {
+                    PlayerManagerFactory.getInstance().getPlayerManager().addToQueue(episode);
+
+                } else if (choiceBoxPressed.getValue().getName().equals("Favorites")) {
+
+                    if (!activeProfile.getFavorites().getTrackList().contains(episode)) {
+                        try {
+                            activeProfile.getFavorites().getTrackList().add(episode);
+
+                            CollectionManagerFactory.getInstance().getCollectionManager().setFavorites(activeProfile);
+                        } catch (AccountNotFoundException e) {
+                            searchPageGUI.getGp().setEffect(new BoxBlur(10, 10, 10));
+
+                            ExceptionDialog exceptionDialog = new ExceptionDialog(stage, new SystemErrorException());
+                            exceptionDialog.showAndWait();
+
+                            searchPageGUI.getGp().setEffect(null);
+                        }//end-try
+                    }//end-if
+                } else {
+                    if (!choiceBoxPressed.getValue().getTrackList().contains(episode)) {
+                        try {
+                            CollectionManagerFactory.getInstance().getCollectionManager().addToCollection(choiceBoxPressed.getValue(), episode);
+                        } catch (AccountNotFoundException e) {
+                            searchPageGUI.getGp().setEffect(new BoxBlur(10, 10, 10));
+
+                            ExceptionDialog exceptionDialog = new ExceptionDialog(stage, new SystemErrorException());
+                            exceptionDialog.showAndWait();
+
+                            searchPageGUI.getGp().setEffect(null);
+                        }//end-try
+                    }//end-if
+                }//end-if
+            }
+        };
+
+        EventHandler<MouseEvent> audioCardClickHandler = new EventHandler<>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
+
+                IJBResearchable ijbResearchable = (((AudioCard) mouseEvent.getSource()).getIjbResearchable());
+                try {
+                    Artist artist = (Artist) ijbResearchable;
+                    ProfileViewGUI profileViewGUI = new ProfileViewGUI(activeProfile, artist);
+                    ProfileViewHandler profileViewHandler = new ProfileViewHandler(profileViewGUI, activeProfile);
+                    Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getProfileButton());
+
+                    Dimension2D previousDimension = new Dimension2D(stage.getWidth(), stage.getHeight());
+                    stage.setScene(profileViewGUI.getScene());
+                    stage.setTitle("Profile");
+                    stage.setWidth(previousDimension.getWidth());
+                    stage.setHeight(previousDimension.getHeight());
+                } catch (ClassCastException c) {
+                    try {
+                        Album album = (Album) ijbResearchable;
+                        try {
+                            album.setTrackList(CollectionManagerFactory.getInstance().getCollectionManager().getCollectionAudios(album, activeProfile));
+                            CollectionViewGUI collectionViewGUI = new CollectionViewGUI(activeProfile, album);
+                            CollectionViewHandler collectionViewHandler = new CollectionViewHandler(collectionViewGUI, activeProfile);
+                            AudioTableHandler.getInstance().setCurrentAudioTableShowing((AudioTable) collectionViewGUI.getAudioTable());
+                            AudioTableHandler.getInstance().setQueue(false);
+
+                            Dimension2D previousDimension = new Dimension2D(stage.getWidth(), stage.getHeight());
+                            stage.setScene(collectionViewGUI.getScene());
+                            stage.setTitle("Collection");
+                            stage.setWidth(previousDimension.getWidth());
+                            stage.setHeight(previousDimension.getHeight());
+                        } catch (AccountNotFoundException e) {
+                            searchPageGUI.getGp().setEffect(new BoxBlur(10, 10, 10));
+
+                            ExceptionDialog exceptionDialog = new ExceptionDialog(stage, new SystemErrorException());
+                            exceptionDialog.showAndWait();
+
+                            searchPageGUI.getGp().setEffect(null);
+                        }//end-try
+                    } catch (ClassCastException cl) {
+                        try {
+                            Podcast podcast = (Podcast) ijbResearchable;
+                            try {
+                                podcast.setTrackList(CollectionManagerFactory.getInstance().getCollectionManager().getCollectionAudios(podcast, activeProfile));
+                            } catch (AccountNotFoundException e) {
+                                searchPageGUI.getGp().setEffect(new BoxBlur(10, 10, 10));
+
+                                ExceptionDialog exceptionDialog = new ExceptionDialog(stage, new SystemErrorException());
+                                exceptionDialog.showAndWait();
+
+                                searchPageGUI.getGp().setEffect(null);
+                            }
+                            CollectionViewGUI collectionViewGUI = new CollectionViewGUI(activeProfile, podcast);
+                            CollectionViewHandler collectionViewHandler = new CollectionViewHandler(collectionViewGUI, activeProfile);
+                            AudioTableHandler.getInstance().setCurrentAudioTableShowing((AudioTable) collectionViewGUI.getAudioTable());
+                            AudioTableHandler.getInstance().setQueue(false);
+
+                            Dimension2D previousDimension = new Dimension2D(stage.getWidth(), stage.getHeight());
+                            stage.setScene(collectionViewGUI.getScene());
+                            stage.setTitle("Collection");
+                            stage.setWidth(previousDimension.getWidth());
+                            stage.setHeight(previousDimension.getHeight());
+
+                        } catch (ClassCastException cla) {
+                            try {
+                                Playlist playlist = (Playlist) ijbResearchable;
+                                try {
+                                    playlist.setTrackList(CollectionManagerFactory.getInstance().getCollectionManager().getCollectionAudios(playlist, activeProfile));
+                                    CollectionViewGUI collectionViewGUI = new CollectionViewGUI(activeProfile, playlist);
+                                    CollectionViewHandler collectionViewHandler = new CollectionViewHandler(collectionViewGUI, activeProfile);
+                                    AudioTableHandler.getInstance().setCurrentAudioTableShowing((AudioTable) collectionViewGUI.getAudioTable());
+                                    AudioTableHandler.getInstance().setQueue(false);
+
+                                    Dimension2D previousDimension = new Dimension2D(stage.getWidth(), stage.getHeight());
+                                    stage.setScene(collectionViewGUI.getScene());
+                                    stage.setTitle("Collection");
+                                    stage.setWidth(previousDimension.getWidth());
+                                    stage.setHeight(previousDimension.getHeight());
+                                } catch (AccountNotFoundException e) {
+                                    searchPageGUI.getGp().setEffect(new BoxBlur(10, 10, 10));
+
+                                    ExceptionDialog exceptionDialog = new ExceptionDialog(stage, new SystemErrorException());
+                                    exceptionDialog.showAndWait();
+
+                                    searchPageGUI.getGp().setEffect(null);
+                                }//end-try
+                            } catch (ClassCastException clas) {
+
+                                User user = (User) ijbResearchable;
+                                ProfileViewGUI profileViewGUI = new ProfileViewGUI(activeProfile, user);
+                                ProfileViewHandler profileViewHandler = new ProfileViewHandler(profileViewGUI, activeProfile);
+                                Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getProfileButton());
+
+                                Dimension2D previousDimension = new Dimension2D(stage.getWidth(), stage.getHeight());
+                                stage.setScene(profileViewGUI.getScene());
+                                stage.setTitle("Profile");
+                                stage.setWidth(previousDimension.getWidth());
+                                stage.setHeight(previousDimension.getHeight());
+                            }//end-try
+                        }//end-try
+                    }//end-try
+                }//end-try
+            }
+        };
+        searchPageGUI.getUserProfileButton().setOnAction(profileButtonHandler);
+        searchPageGUI.getSearchTextField().setOnKeyPressed(searchTextfieldHandler);
+        searchPageGUI.getSearchTextField().setOnKeyPressed(searchTextfieldHandler);
+        if (searchPageGUI.getSearchResults() != null) {
+            searchPageGUI.getSearchResults().getChoiceBoxArrayList().forEach(b -> b.setOnAction(songsChoiceBoxHandler));
+            searchPageGUI.getSearchResults().getChoiceBoxArrayList().forEach(b -> b.setOnAction(songsChoiceBoxHandler));
+            searchPageGUI.getSearchResults().getEpisodesChoiceBoxArrayList().forEach(b -> b.setOnAction(episodesChoiceBoxHandler));
+            searchPageGUI.getSearchResults().getArtistsHBox().getChildren().forEach(a -> a.setOnMouseClicked(audioCardClickHandler));
+            searchPageGUI.getSearchResults().getAlbumsHBox().getChildren().forEach(a -> a.setOnMouseClicked(audioCardClickHandler));
+            searchPageGUI.getSearchResults().getPodcastsHBox().getChildren().forEach(a -> a.setOnMouseClicked(audioCardClickHandler));
+            searchPageGUI.getSearchResults().getPlaylistsHBox().getChildren().forEach(a -> a.setOnMouseClicked(audioCardClickHandler));
+            searchPageGUI.getSearchResults().getUsersHBox().getChildren().forEach(a -> a.setOnMouseClicked(audioCardClickHandler));
+        }//end-if
+
+    }
 }
