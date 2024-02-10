@@ -10,11 +10,17 @@ import it.unipv.ingsfw.JavaBeats.model.IJBResearchable;
  * @see it.unipv.ingsfw.JavaBeats.model.playable.audio.Song
  * @see it.unipv.ingsfw.JavaBeats.model.playable.audio.Episode
  */
-public interface IJBPlayable extends IJBResearchable {
+public interface IJBPlayable extends IJBResearchable{
 
-    /**
-     * Abstract method to be implemented.
-     * Is expected to play the audio file of playable object.
-     */
-    void playFX();
+  /**
+   * Abstract method to be implemented.
+   * Is expected to play the audio file of playable object.
+   */
+  void playFX();
+
+  /**
+   * Abstract method to be implemented.
+   * Is expected to pause the audio file of playable object.
+   */
+  void pauseFX();
 }

@@ -5,4 +5,6 @@ import javafx.scene.media.MediaPlayer;
 
 public interface IAdapter{
   void play(IJBPlayable ijbPlayable);
+
+  void pause(IJBPlayable ijbPlayable);
 }

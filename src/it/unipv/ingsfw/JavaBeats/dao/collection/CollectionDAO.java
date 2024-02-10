@@ -1,7 +1,6 @@
 package it.unipv.ingsfw.JavaBeats.dao.collection;
 
 import it.unipv.ingsfw.JavaBeats.controller.factory.DBManagerFactory;
-import it.unipv.ingsfw.JavaBeats.controller.factory.PlayerManagerFactory;
 import it.unipv.ingsfw.JavaBeats.dao.playable.AudioDAO;
 import it.unipv.ingsfw.JavaBeats.dao.profile.ProfileDAO;
 import it.unipv.ingsfw.JavaBeats.exceptions.AccountNotFoundException;
@@ -98,7 +97,7 @@ public class CollectionDAO implements ICollectionDAO{
       if(p.isVisible()!=((Playlist)oldCollection).isVisible()){
         updateIsVisible(p);
       }//end-if
-    }catch(ClassCastException c){
+    }catch(ClassCastException ignored){
 
     }//end-try
   }

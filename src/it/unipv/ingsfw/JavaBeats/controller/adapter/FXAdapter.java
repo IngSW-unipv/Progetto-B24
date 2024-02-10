@@ -1,7 +1,6 @@
 package it.unipv.ingsfw.JavaBeats.controller.adapter;
 
 import it.unipv.ingsfw.JavaBeats.model.playable.IJBPlayable;
-import javafx.scene.media.MediaPlayer;
 
 public class FXAdapter implements IAdapter{
   public FXAdapter(){
@@ -10,6 +9,11 @@ public class FXAdapter implements IAdapter{
   @Override
   public void play(IJBPlayable ijbPlayable){
     ijbPlayable.playFX();
+  }
+
+  @Override
+  public void pause(IJBPlayable ijbPlayable){
+    ijbPlayable.pauseFX();
   }
 }
  

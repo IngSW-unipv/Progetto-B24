@@ -227,7 +227,6 @@ public class CollectionViewHandler{
 
             if(PlayerManagerFactory.getInstance().getPlayerManager().getCurrentCollectionPlaying()!=null && PlayerManagerFactory.getInstance().getPlayerManager().getCurrentCollectionPlaying().equals(gui.getJbCollection())){
               PlayerManagerFactory.getInstance().getPlayerManager().setCollectionLooping(false);
-              PlayerManagerFactory.getInstance().getPlayerManager().setCollectionLooping(false);
             }//end-if
 
             HomePageGUI homePageGUI=new HomePageGUI(activeProfile);
