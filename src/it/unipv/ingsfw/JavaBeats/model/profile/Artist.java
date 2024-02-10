@@ -24,7 +24,7 @@ import java.util.ArrayList;
  * @see it.unipv.ingsfw.JavaBeats.model.collection.Playlist
  * @see it.unipv.ingsfw.JavaBeats.model.collection.Podcast
  */
-public class Artist extends JBProfile{
+public final class Artist extends JBProfile{
 
   //ATTRIBUTES:
   private int totalListeners;

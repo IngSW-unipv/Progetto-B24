@@ -277,13 +277,15 @@ public abstract class JBProfile implements IJBResearchable{
    * Converts milliseconds passed as double into hours, minutes and seconds as a {@link String} formatted as HH:MM:SS.
    *
    * @param milliSeconds milliseconds to convert
-   * @return equivalent time in hours, minutes and second
+   * @return equivalent time in hours, minutes and seconds
    */
   public static String convertToHoursMinutesAndSeconds(double milliSeconds){
     long totalSeconds=(long)(milliSeconds/1000);
     int hours=(int)(totalSeconds/3600);
+    totalSeconds = totalSeconds - hours*3600;
     int minutes=(int)(totalSeconds/60);
-    int seconds=(int)(totalSeconds%60);
+    totalSeconds = totalSeconds - minutes*60;
+    int seconds=(int)totalSeconds;
 
     return String.format("%02d", hours)+":"+String.format("%02d", minutes)+":"+String.format("%02d", seconds);
   }

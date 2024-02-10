@@ -12,7 +12,7 @@ import it.unipv.ingsfw.JavaBeats.model.profile.JBProfile;
  * @see it.unipv.ingsfw.JavaBeats.model.playable.audio.Episode
  * @see it.unipv.ingsfw.JavaBeats.model.profile.Artist
  */
-public class Podcast extends JBCollection{
+public final class Podcast extends JBCollection{
 
   //ATTRIBUTE:
   private ArrayList<JBAudio> trackList;

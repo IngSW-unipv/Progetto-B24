@@ -21,7 +21,7 @@ import java.util.ArrayList;
  * @see it.unipv.ingsfw.JavaBeats.model.playable.audio.Episode
  * @see Playlist
  */
-public class User extends JBProfile{
+public final class User extends JBProfile{
 
   //ATTRIBUTES:
   private boolean isVisible;

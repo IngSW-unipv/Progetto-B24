@@ -19,7 +19,7 @@ import java.util.Arrays;
  * @see it.unipv.ingsfw.JavaBeats.model.profile.User
  * @see it.unipv.ingsfw.JavaBeats.model.profile.Artist
  */
-public class Playlist extends JBCollection{
+public final class Playlist extends JBCollection{
 
   //ATTRIBUTES:
   private ArrayList<JBAudio> trackList;

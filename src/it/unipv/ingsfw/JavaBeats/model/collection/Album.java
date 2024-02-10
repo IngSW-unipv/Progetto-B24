@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * @see it.unipv.ingsfw.JavaBeats.model.playable.audio.Song
  * @see it.unipv.ingsfw.JavaBeats.model.profile.Artist
  */
-public class Album extends JBCollection{
+public final class Album extends JBCollection{
 
   //ATTRIBUTE:
   private ArrayList<JBAudio> trackList;

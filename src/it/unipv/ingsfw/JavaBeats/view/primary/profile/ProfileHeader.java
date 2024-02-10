@@ -110,9 +110,9 @@ public class ProfileHeader extends VBox{
     Label listenersLabel=null;
     try{
       User u=(User)searchedProfile;
-      listenersLabel=new Label(JBProfile.convertToHoursMinutesAndSeconds(u.getMinuteListened())+" time listened all time");
+      listenersLabel=new Label(JBProfile.convertToHoursMinutesAndSeconds(u.getMinuteListened())+" total listening time");
     }catch(ClassCastException c){
-      listenersLabel=new Label(((Artist)searchedProfile).getTotalListeners()+" all time total listeners");
+      listenersLabel=new Label(((Artist)searchedProfile).getTotalListeners()+" total number of streams");
     }//end-try
     listenersLabel.setFont(fontLabels);
     listenersLabel.setTextFill(Color.LIGHTGRAY);
