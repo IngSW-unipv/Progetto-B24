@@ -82,8 +82,8 @@ public class SongbarHandler{
     Songbar.getInstance().getPlaySlider().setMax(currentAudio==null ? 0 : Duration.millis(currentAudio.getMetadata().getDuration()).toSeconds());
     Songbar.getInstance().getPlaySlider().setValue(00.00);
 
-    Songbar.getInstance().getMinutePassedLabel().setText("00:00");
-    Songbar.getInstance().getSongLengthLabel().setText(currentAudio==null ? "00:00" : JBAudio.convertToHoursMinutesAndSeconds(currentAudio.getMetadata().getDuration()));
+    Songbar.getInstance().getMinutePassedLabel().setText("00:00:00");
+    Songbar.getInstance().getSongLengthLabel().setText(currentAudio==null ? "00:00:00" : JBAudio.convertToHoursMinutesAndSeconds(currentAudio.getMetadata().getDuration()));
 
     Songbar.getInstance().getVolumeSlider().setMin(00.00);
     Songbar.getInstance().getVolumeSlider().setMax(100.00);
