@@ -298,12 +298,9 @@ public class SearchDAO implements ISearchDAO{
     DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
 
     CollectionDAO cDAO=new CollectionDAO();
-    ProfileDAO profileDAO=new ProfileDAO();
     ArrayList<Playlist> playlistList=new ArrayList<>();
     for(Playlist playlist: result){
-      Playlist completePlaylist=cDAO.getPlaylist(playlist);
-      completePlaylist.setCreator(profileDAO.get(completePlaylist.getCreator()));
-      playlistList.add(completePlaylist);
+      playlistList.add(cDAO.getPlaylist(playlist));
     }//end-for
 
     return playlistList;
@@ -340,12 +337,9 @@ public class SearchDAO implements ISearchDAO{
     DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
 
     CollectionDAO cDAO=new CollectionDAO();
-    ProfileDAO profileDAO=new ProfileDAO();
     ArrayList<Album> albumList=new ArrayList<>();
     for(Album album: result){
-      Album completeAlbum=cDAO.getAlbum(album);
-      completeAlbum.setCreator(profileDAO.get(completeAlbum.getCreator()));
-      albumList.add(completeAlbum);
+      albumList.add(cDAO.getAlbum(album));
     }//end-for
 
     return albumList;
@@ -382,12 +376,9 @@ public class SearchDAO implements ISearchDAO{
     DBManagerFactory.getInstance().getDBManager().closeConnection(connection);
 
     CollectionDAO cDAO=new CollectionDAO();
-    ProfileDAO profileDAO=new ProfileDAO();
     ArrayList<Podcast> podcastList=new ArrayList<>();
     for(Podcast podcast: result){
-      Podcast completePodcast=cDAO.getPodcast(podcast);
-      completePodcast.setCreator(profileDAO.get(completePodcast.getCreator()));
-      podcastList.add(completePodcast);
+      podcastList.add(cDAO.getPodcast(podcast));
     }//end-for
 
     return podcastList;

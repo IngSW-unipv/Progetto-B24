@@ -130,7 +130,6 @@ public class CreationGUIHandler{
             FileInputStream fileInputStream=null;
             URL url=null;
             try{
-              Media media=new Media(f.toURI().toURL().toString());
               fileInputStream=new FileInputStream(f);
               ContentHandler handler=new DefaultHandler();
               Metadata metadata=new Metadata();
@@ -150,10 +149,10 @@ public class CreationGUIHandler{
                 Blob fileAudio=new SerialBlob(fileContent);
                 try{
                   Album a=(Album)creationGUI.getNewCollection();
-                  jbAudio=new Song(0, metadata.get("dc:title")==null ? FilenameUtils.removeExtension(f.getName()) : metadata.get("dc:title"), (Artist)a.getCreator(), creationGUI.getNewCollection(), fileAudio, Double.parseDouble(metadata.get("xmpDM:duration"))*1000, new Date(System.currentTimeMillis()), new String[] {metadata.get("xmpDM:genre")}, false, 0);
+                  jbAudio=new Song(0, metadata.get("dc:title")==null ? FilenameUtils.removeExtension(f.getName()) : metadata.get("dc:title"), (Artist)a.getCreator(), creationGUI.getNewCollection(), fileAudio, Double.parseDouble(metadata.get("xmpDM:duration"))*1000, new Date(System.currentTimeMillis()), new String[]{metadata.get("xmpDM:genre")}, false, 0);
                 }catch(ClassCastException c){
                   Podcast p=(Podcast)creationGUI.getNewCollection();
-                  jbAudio=new Episode(0, metadata.get("dc:title")==null ? FilenameUtils.removeExtension(f.getName()) : metadata.get("dc:title"), (Artist)p.getCreator(), creationGUI.getNewCollection(), fileAudio, Double.parseDouble(metadata.get("xmpDM:duration"))*1000, new Date(System.currentTimeMillis()), new String[] {metadata.get("xmpDM:genre")}, false, 0);
+                  jbAudio=new Episode(0, metadata.get("dc:title")==null ? FilenameUtils.removeExtension(f.getName()) : metadata.get("dc:title"), (Artist)p.getCreator(), creationGUI.getNewCollection(), fileAudio, Double.parseDouble(metadata.get("xmpDM:duration"))*1000, new Date(System.currentTimeMillis()), new String[]{metadata.get("xmpDM:genre")}, false, 0);
                 }//end-try
                 creationGUI.getNewCollection().getTrackList().add(jbAudio);
               }catch(InvalidAudioException i){

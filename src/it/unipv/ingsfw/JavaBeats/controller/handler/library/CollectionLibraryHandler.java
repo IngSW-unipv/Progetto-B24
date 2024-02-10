@@ -2,6 +2,7 @@ package it.unipv.ingsfw.JavaBeats.controller.handler.library;
 
 import it.unipv.ingsfw.JavaBeats.controller.factory.CollectionManagerFactory;
 import it.unipv.ingsfw.JavaBeats.controller.handler.presets.AudioTableHandler;
+import it.unipv.ingsfw.JavaBeats.controller.manager.CollectionManager;
 import it.unipv.ingsfw.JavaBeats.exceptions.AccountNotFoundException;
 import it.unipv.ingsfw.JavaBeats.exceptions.SystemErrorException;
 import it.unipv.ingsfw.JavaBeats.model.playable.audio.JBAudio;

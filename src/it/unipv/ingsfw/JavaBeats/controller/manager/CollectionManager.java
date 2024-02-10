@@ -132,6 +132,12 @@ public class CollectionManager{
     return result;
   }
 
+  public void getCollectionCreator(JBCollection jbCollection) throws AccountNotFoundException{
+    ProfileDAO profileDAO=new ProfileDAO();
+
+    profileDAO.refreshProfileInfo(jbCollection.getCreator());
+  }
+
   public JBCollection getCollection(JBCollection jbCollection) throws AccountNotFoundException{
     CollectionDAO collectionDAO=new CollectionDAO();
     return collectionDAO.get(jbCollection);
