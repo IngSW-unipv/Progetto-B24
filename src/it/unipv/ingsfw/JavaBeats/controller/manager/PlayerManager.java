@@ -1,6 +1,5 @@
 package it.unipv.ingsfw.JavaBeats.controller.manager;
 import it.unipv.ingsfw.JavaBeats.controller.adapter.FXAdapter;
-import it.unipv.ingsfw.JavaBeats.controller.adapter.IAdapter;
 import it.unipv.ingsfw.JavaBeats.controller.factory.FXAdapterFactory;
 import it.unipv.ingsfw.JavaBeats.controller.factory.ProfileManagerFactory;
 import it.unipv.ingsfw.JavaBeats.controller.handler.presets.AudioTableHandler;
@@ -28,7 +27,7 @@ public class PlayerManager{
   private static boolean audioLooping=false;
   private static final LinkedList<JBAudio> queue=new LinkedList<>();
   private static ArrayList<JBAudio> playingAudiosCopy=new ArrayList<>();
-  private final IAdapter adapter=FXAdapterFactory.getInstance().getFXAdapter();
+  private final FXAdapter adapter=FXAdapterFactory.getInstance().getFXAdapter();
   /*---------------------------------------*/
   //Constructors
   /*---------------------------------------*/
