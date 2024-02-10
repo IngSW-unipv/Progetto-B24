@@ -135,8 +135,6 @@ public class CollectionViewHandler {
                     PlayerManagerFactory.getInstance().getPlayerManager().setAudioLooping(false);
                     PlayerManagerFactory.getInstance().getPlayerManager().setCollectionLooping(false);
 
-                    AudioTableHandler.getInstance().getCurrentAudioTableShowing().setItems(FXCollections.observableArrayList(gui.getJbCollection().getTrackList()));
-                    AudioTableHandler.getInstance().getCurrentAudioTableShowing().refresh();
 
                     gui.getCollectionHeader().getButtonRandom().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/EmptyRandom.png", true)));
                     Songbar.getInstance().getButtonRandom().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/EmptyRandom.png", true)));
@@ -162,8 +160,6 @@ public class CollectionViewHandler {
                     try {
                         PlayerManagerFactory.getInstance().getPlayerManager().randomize(gui.getJbCollection());
 
-                        AudioTableHandler.getInstance().getCurrentAudioTableShowing().setItems(FXCollections.observableArrayList(gui.getJbCollection().getTrackList()));
-                        AudioTableHandler.getInstance().getCurrentAudioTableShowing().refresh();
 
                         gui.getCollectionHeader().getButtonRandom().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/FullRandom.png", true)));
                         Songbar.getInstance().getButtonRandom().setGraphic(new ImageView(new Image("it/unipv/ingsfw/JavaBeats/view/resources/icons/FullRandom.png", true)));
@@ -378,8 +374,7 @@ public class CollectionViewHandler {
                             }//end-try
                         } else {
                             PlayerManagerFactory.getInstance().getPlayerManager().play(audioClicked);
-                            AudioTableHandler.getInstance().getCurrentAudioTableShowing().setItems(FXCollections.observableArrayList(gui.getJbCollection().getTrackList()));
-                            AudioTableHandler.getInstance().getCurrentAudioTableShowing().refresh();
+
 
                         }//end-if
                     } else if (foundIsFavoriteButton) {

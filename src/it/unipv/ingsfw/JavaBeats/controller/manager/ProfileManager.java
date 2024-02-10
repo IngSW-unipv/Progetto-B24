@@ -181,4 +181,9 @@ public class ProfileManager {
         }
     }
 
+
+    public void refreshProfile(JBProfile jbProfile) throws AccountNotFoundException {
+        ProfileDAO p = new ProfileDAO();
+        p.refreshProfileInfo(jbProfile);
+    }
 }
