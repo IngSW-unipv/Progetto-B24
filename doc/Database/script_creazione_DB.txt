@@ -27,7 +27,8 @@ create table Album
 
 create table Episode
 (
-    id int not null,
+    id int not null
+        primary key,
     constraint idEpisode___fk
         foreign key (id) references Audio (id)
             on update cascade on delete cascade
