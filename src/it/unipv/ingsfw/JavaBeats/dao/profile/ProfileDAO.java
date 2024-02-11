@@ -249,7 +249,6 @@ public class ProfileDAO implements IProfileDAO{
       u.setMinuteListened(getTotalListeningTime(u));        //set minute listened
       u.setListeningHistory(getListeningHistory(u));        //set listening history
       u.setFavorites(cDAO.getFavorites(u));                 //set favorites playlist
-      u.setMinuteListened(getTotalListeningTime(u));
     }catch(ClassCastException c){
       /* Profile is an artist */
       Artist a=(Artist)jbProfile;
@@ -268,9 +267,7 @@ public class ProfileDAO implements IProfileDAO{
     double result=00.00;
 
     try{
-      String query="SELECT (SUM(TIMEDIFF(duration, '00:00:00'))) AS 'total' FROM "+
-              "Audio JOIN ListeningHistory ON Audio.ID=ListeningHistory.idAudio "+
-              "WHERE profileMail=?;";
+      String query="SELECT SUM(duration) as 'total' FROM Audio JOIN ListeningHistory LH on Audio.id = LH.idAudio WHERE profileMail= BINARY ?;";
 
       st=connection.prepareStatement(query);
       st.setString(1, user.getMail());
