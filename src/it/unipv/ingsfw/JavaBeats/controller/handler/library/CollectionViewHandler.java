@@ -368,10 +368,10 @@ public class CollectionViewHandler{
                 ExceptionDialog exceptionDialog=new ExceptionDialog(stage, new SystemErrorException());
                 exceptionDialog.showAndWait();
 
-                gui.getGp().setEffect(null); /* Removing blur effect */
-              }//end-try
-            }else{
-              PlayerManagerFactory.getInstance().getPlayerManager().play(audioClicked);
+                                gui.getGp().setEffect(null); /* Removing blur effect */
+                            }//end-try
+                        } else {
+                            PlayerManagerFactory.getInstance().getPlayerManager().play(audioClicked);
 
 
             }//end-if
@@ -387,7 +387,7 @@ public class CollectionViewHandler{
 
               CollectionManagerFactory.getInstance().getCollectionManager().setFavorites(activeProfile);
 
-              if(gui.getJbCollection()!=null && gui.getJbCollection().getName().equals("Favorites")){
+              if(gui.getJbCollection().getName().equals("Favorites")){
                 CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, activeProfile.getFavorites());
                 CollectionViewHandler collectionViewHandler=new CollectionViewHandler(collectionViewGUI, activeProfile);
                 ((Stage)AudioTableHandler.getInstance().getCurrentAudioTableShowing().getScene().getWindow()).setScene(collectionViewGUI.getScene());
