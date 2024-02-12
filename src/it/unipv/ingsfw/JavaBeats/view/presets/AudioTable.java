@@ -109,7 +109,7 @@ public class AudioTable extends TableView<JBAudio>{
       try{
         Playlist playlist=(Playlist)jbCollection;
 
-        if(jbCollection.equals(jbProfile.getFavorites())){
+        if(jbCollection.getName().equals(jbProfile.getFavorites().getName())){
           getColumns().addAll(playColumn, titleColumn, collectionColumn, dateColumn, favoriteColumn, durationColumn);
         }else{
           getColumns().addAll(playColumn, titleColumn, collectionColumn, dateColumn, favoriteColumn, durationColumn, deleteColumn);
