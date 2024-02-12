@@ -1,6 +1,7 @@
 # **JavaBeats** - Progetto-B24
 
-JavaBeats è un lettore musicale implementato utilizzando il linguaggio di programmazione ad oggetti Java. Permette la riproduzione di due categorie di audio: Canzoni e Episodi e la loro organizzazione in tre tipi di collezioni distinte: Album, Playlist e Podcast. Il software prevede due tipi di utilizzatori: Utenti e Artisti. I primi hanno la possibilità di ascoltare audio e creare Playlist. I secondi, oltre ad ereditare le funzioni dedicate agli utenti hanno la possibilità di caricare audio e creare Album e Podcast.
+JavaBeats è un lettore musicale implementato utilizzando il linguaggio di programmazione ad oggetti Java. 
+Consente di riprodurre due tipi di audio, Canzoni e Episodi, in tre collezioni distinte, ovvero Album, Playlist e Podcast. Il software prevede due categorie di utilizzatori: Utenti e Artisti. I primi hanno la possibilità di ascoltare audio e creare Playlist; i secondi, oltre ad ereditare le funzioni dedicate agli utenti, hanno la possibilità di caricare audio e creare Album e Podcast.
 
 
 ### Screenshots dall'Interfaccia Grafica di JavaBeats:
