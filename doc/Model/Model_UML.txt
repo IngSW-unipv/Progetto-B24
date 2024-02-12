@@ -7,17 +7,11 @@ title  <color:grey>JavaBeats - Domain Diagram</color>
 !false = 0
 !showNesteds = true
 !showCompositions = false
-!showAttributes = true
-!showMethods = true
+!showAttributes = false
+!showMethods = false
 
 package model{
     interface IJBResearchable{
-    }
-
-    enum EJBMODE{
-        + SEQUENTIAL
-        + RANDOM
-        + LOOP
     }
 
     enum EJENTITY{
