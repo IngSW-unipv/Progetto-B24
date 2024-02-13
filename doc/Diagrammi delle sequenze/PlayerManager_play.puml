@@ -4,52 +4,15 @@
 participant Actor
 Actor -> PlayerManager : play
 activate PlayerManager
-PlayerManager -> FXAdapter : play
-activate FXAdapter
-FXAdapter -> IJBPlayable : playFX
-activate IJBPlayable
-IJBPlayable --> FXAdapter
-deactivate IJBPlayable
-FXAdapter --> PlayerManager
-deactivate FXAdapter
-PlayerManager -> AudioDAO : addToListeningHistory
-activate AudioDAO
-AudioDAO -> DBManager : startConnection
-activate DBManager
-
-DBManager --> AudioDAO
-deactivate DBManager
-AudioDAO -> DBManager : closeConnection
-activate DBManager
-
-deactivate DBManager
-DBManager --> AudioDAO
-deactivate DBManager
-AudioDAO -> ProfileDAO : getTotalListeningTime
-activate ProfileDAO
-ProfileDAO -> DBManager : startConnection
-activate DBManager
-
-DBManager --> ProfileDAO
-deactivate DBManager
-ProfileDAO -> DBManager : closeConnection
-activate DBManager
-
-
-DBManager --> ProfileDAO
-deactivate DBManager
-ProfileDAO --> AudioDAO
-deactivate ProfileDAO
-AudioDAO --> PlayerManager
-deactivate AudioDAO
-PlayerManager -> PlayerManager : loop
-activate PlayerManager
+alt currentAudioPlaying!=null
+end
+loop currentCollectionPlaying.getTrackList()
+end
 PlayerManager -> PlayerManager : play
 activate PlayerManager
-PlayerManager --> PlayerManager
-deactivate PlayerManager
-PlayerManager --> PlayerManager
-deactivate PlayerManager
+alt !queue.isEmpty()
+alt currentAudioPlaying!=null
+end
 PlayerManager -> FXAdapter : play
 activate FXAdapter
 FXAdapter -> IJBPlayable : playFX
@@ -62,42 +25,160 @@ PlayerManager -> AudioDAO : addToListeningHistory
 activate AudioDAO
 AudioDAO -> DBManager : startConnection
 activate DBManager
-
-
+DBManager -> DBManager : isOpen
+activate DBManager
+DBManager --> DBManager
+deactivate DBManager
+alt isOpen(c)
+DBManager -> DBManager : closeConnection
+activate DBManager
+DBManager --> DBManager
+deactivate DBManager
+end
 DBManager --> AudioDAO
 deactivate DBManager
 AudioDAO -> DBManager : closeConnection
 activate DBManager
-
+DBManager -> DBManager : isOpen
+activate DBManager
+DBManager --> DBManager
+deactivate DBManager
+alt !isOpen(c)
+end
 DBManager --> AudioDAO
 deactivate DBManager
 AudioDAO -> ProfileDAO : getTotalListeningTime
 activate ProfileDAO
 ProfileDAO -> DBManager : startConnection
 activate DBManager
-
 DBManager --> ProfileDAO
 deactivate DBManager
 ProfileDAO -> DBManager : closeConnection
 activate DBManager
-
 DBManager --> ProfileDAO
 deactivate DBManager
 ProfileDAO --> AudioDAO
 deactivate ProfileDAO
+AudioDAO -> AudioDAO : getNumberOfStreams
+activate AudioDAO
+AudioDAO -> DBManager : startConnection
+activate DBManager
+DBManager --> AudioDAO
+deactivate DBManager
+alt rs.next()
+end
+AudioDAO -> DBManager : closeConnection
+activate DBManager
+DBManager --> AudioDAO
+deactivate DBManager
+AudioDAO --> AudioDAO
+deactivate AudioDAO
 AudioDAO --> PlayerManager
 deactivate AudioDAO
+alt AudioTableHandler.getInstance().getCurrentAudioTableShowing()!=null
+end
+else 
+alt collectionLooping
+PlayerManager -> PlayerManager : loop
+activate PlayerManager
+PlayerManager --> PlayerManager
+deactivate PlayerManager
+else 
+alt audioLooping
+PlayerManager -> FXAdapter : play
+activate FXAdapter
+FXAdapter -> IJBPlayable : playFX
+activate IJBPlayable
+IJBPlayable --> FXAdapter
+deactivate IJBPlayable
+FXAdapter --> PlayerManager
+deactivate FXAdapter
+PlayerManager -> AudioDAO : addToListeningHistory
+activate AudioDAO
+AudioDAO -> DBManager : startConnection
+activate DBManager
+DBManager -> DBManager : isOpen
+activate DBManager
+DBManager --> DBManager
+deactivate DBManager
+alt isOpen(c)
+DBManager -> DBManager : closeConnection
+activate DBManager
+DBManager --> DBManager
+deactivate DBManager
+end
+DBManager --> AudioDAO
+deactivate DBManager
+AudioDAO -> DBManager : closeConnection
+activate DBManager
+DBManager -> DBManager : isOpen
+activate DBManager
+DBManager --> DBManager
+deactivate DBManager
+alt !isOpen(c)
+end
+DBManager --> AudioDAO
+deactivate DBManager
+AudioDAO -> ProfileDAO : getTotalListeningTime
+activate ProfileDAO
+ProfileDAO -> DBManager : startConnection
+activate DBManager
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO -> DBManager : closeConnection
+activate DBManager
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO --> AudioDAO
+deactivate ProfileDAO
+AudioDAO -> AudioDAO : getNumberOfStreams
+activate AudioDAO
+AudioDAO -> DBManager : startConnection
+activate DBManager
+DBManager --> AudioDAO
+deactivate DBManager
+alt rs.next()
+end
+AudioDAO -> DBManager : closeConnection
+activate DBManager
+DBManager --> AudioDAO
+deactivate DBManager
+AudioDAO --> AudioDAO
+deactivate AudioDAO
+AudioDAO --> PlayerManager
+deactivate AudioDAO
+alt AudioTableHandler.getInstance().getCurrentAudioTableShowing()!=null
+end
+else 
+end
+end
+end
 PlayerManager -> SongbarHandler : getInstance
 activate SongbarHandler
+alt instance==null || activeProfile==null || currentAudio==null
+else 
 SongbarHandler -> JBProfile : equals
 activate JBProfile
+alt this.username.equals(profile.getUsername()) && this.mail.equals(profile.getMail()) && this.password.equals(profile.getPassword()) && this.name.equals(profile.getName()) && this.surname.equals(profile.getSurname()) && this.biography.equals(profile.getBiography()) && Arrays.equals(this.profilePicture.getBinaryStream().readAllBytes(), profile.getProfilePicture().getBinaryStream().readAllBytes()) && this.getClass().equals(profile.getClass())
+else 
+end
 JBProfile --> SongbarHandler
 deactivate JBProfile
 SongbarHandler -> JBAudio : equals
 activate JBAudio
+alt obj==null
+end
+alt this.id==jbAudio.getId()
+end
 JBAudio --> SongbarHandler
 deactivate JBAudio
+alt !SongbarHandler.activeProfile.equals(activeProfile) && !SongbarHandler.currentAudio.equals(currentAudio)
+else 
+end
+end
 SongbarHandler --> PlayerManager
 deactivate SongbarHandler
+PlayerManager --> PlayerManager
+deactivate PlayerManager
 return
 @enduml

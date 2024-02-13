@@ -1,49 +1,448 @@
 @startuml
+
 !theme carbon-gray
 participant Actor
 Actor -> ProfileManager : registration
 activate ProfileManager
-ProfileManager -> ProfileDAO : insert
-
+ProfileManager -> ProfileManager : checkIfUsernameAlreadyExists
+activate ProfileManager
+ProfileManager -> ProfileDAO : get
+activate ProfileDAO
+ProfileDAO -> ProfileDAO : getUser
 activate ProfileDAO
 ProfileDAO -> DBManager : startConnection
 activate DBManager
 DBManager --> ProfileDAO
 deactivate DBManager
-
+alt rs.next()
+end
+ProfileDAO -> DBManager : closeConnection
+activate DBManager
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO --> ProfileDAO
+deactivate ProfileDAO
+alt profileOut==null
+ProfileDAO -> ProfileDAO : getArtist
+activate ProfileDAO
+ProfileDAO -> DBManager : startConnection
+activate DBManager
+DBManager --> ProfileDAO
+deactivate DBManager
+alt rs.next()
+end
+ProfileDAO -> DBManager : closeConnection
+activate DBManager
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO --> ProfileDAO
+deactivate ProfileDAO
+alt profileOut==null
+end
+ProfileDAO -> ProfileDAO : getTotalListeners
+activate ProfileDAO
+ProfileDAO -> DBManager : startConnection
+activate DBManager
+DBManager --> ProfileDAO
+deactivate DBManager
+alt rs.next()
+end
+ProfileDAO -> DBManager : closeConnection
+activate DBManager
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO --> ProfileDAO
+deactivate ProfileDAO
+ProfileDAO -> ProfileDAO : getListeningHistory
+activate ProfileDAO
+ProfileDAO -> DBManager : startConnection
+activate DBManager
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO -> DBManager : closeConnection
+activate DBManager
+DBManager --> ProfileDAO
+deactivate DBManager
+loop audioIDs
+ProfileDAO -> AudioDAO : get
+activate AudioDAO
+AudioDAO --> ProfileDAO
+deactivate AudioDAO
+end
+ProfileDAO --> ProfileDAO
+deactivate ProfileDAO
+ProfileDAO -> CollectionDAO : getFavorites
+activate CollectionDAO
+CollectionDAO -> AudioDAO : selectFavorites
+activate AudioDAO
+AudioDAO --> CollectionDAO
+deactivate AudioDAO
+CollectionDAO --> ProfileDAO
+deactivate CollectionDAO
+else 
+ProfileDAO -> ProfileDAO : getTotalListeningTime
+activate ProfileDAO
+ProfileDAO -> DBManager : startConnection
+activate DBManager
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO -> DBManager : closeConnection
+activate DBManager
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO --> ProfileDAO
+deactivate ProfileDAO
+ProfileDAO -> ProfileDAO : getListeningHistory
+activate ProfileDAO
+ProfileDAO -> DBManager : startConnection
+activate DBManager
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO -> DBManager : closeConnection
+activate DBManager
+DBManager --> ProfileDAO
+deactivate DBManager
+loop audioIDs
+ProfileDAO -> AudioDAO : get
+activate AudioDAO
+AudioDAO --> ProfileDAO
+deactivate AudioDAO
+end
+ProfileDAO --> ProfileDAO
+deactivate ProfileDAO
+ProfileDAO -> CollectionDAO : getFavorites
+activate CollectionDAO
+CollectionDAO -> AudioDAO : selectFavorites
+activate AudioDAO
+AudioDAO --> CollectionDAO
+deactivate AudioDAO
+CollectionDAO --> ProfileDAO
+deactivate CollectionDAO
+ProfileDAO -> ProfileDAO : getTotalListeningTime
+activate ProfileDAO
+ProfileDAO -> DBManager : startConnection
+activate DBManager
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO -> DBManager : closeConnection
+activate DBManager
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO --> ProfileDAO
+deactivate ProfileDAO
+end
+ProfileDAO --> ProfileManager
+deactivate ProfileDAO
+ProfileManager --> ProfileManager
+deactivate ProfileManager
+ProfileManager -> ProfileManager : checkIfAccountAlreadyExists
+activate ProfileManager
+ProfileManager -> ProfileDAO : get
+activate ProfileDAO
+ProfileDAO -> ProfileDAO : getUser
+activate ProfileDAO
+ProfileDAO -> DBManager : startConnection
+activate DBManager
+DBManager --> ProfileDAO
+deactivate DBManager
+alt rs.next()
+end
+ProfileDAO -> DBManager : closeConnection
+activate DBManager
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO --> ProfileDAO
+deactivate ProfileDAO
+alt profileOut==null
+ProfileDAO -> ProfileDAO : getArtist
+activate ProfileDAO
+ProfileDAO -> DBManager : startConnection
+activate DBManager
+DBManager --> ProfileDAO
+deactivate DBManager
+alt rs.next()
+end
+ProfileDAO -> DBManager : closeConnection
+activate DBManager
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO --> ProfileDAO
+deactivate ProfileDAO
+alt profileOut==null
+end
+ProfileDAO -> ProfileDAO : getTotalListeners
+activate ProfileDAO
+ProfileDAO -> DBManager : startConnection
+activate DBManager
+DBManager --> ProfileDAO
+deactivate DBManager
+alt rs.next()
+end
+ProfileDAO -> DBManager : closeConnection
+activate DBManager
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO --> ProfileDAO
+deactivate ProfileDAO
+ProfileDAO -> ProfileDAO : getListeningHistory
+activate ProfileDAO
+ProfileDAO -> DBManager : startConnection
+activate DBManager
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO -> DBManager : closeConnection
+activate DBManager
+DBManager --> ProfileDAO
+deactivate DBManager
+loop audioIDs
+ProfileDAO -> AudioDAO : get
+activate AudioDAO
+AudioDAO --> ProfileDAO
+deactivate AudioDAO
+end
+ProfileDAO --> ProfileDAO
+deactivate ProfileDAO
+ProfileDAO -> CollectionDAO : getFavorites
+activate CollectionDAO
+CollectionDAO -> AudioDAO : selectFavorites
+activate AudioDAO
+AudioDAO --> CollectionDAO
+deactivate AudioDAO
+CollectionDAO --> ProfileDAO
+deactivate CollectionDAO
+else 
+ProfileDAO -> ProfileDAO : getTotalListeningTime
+activate ProfileDAO
+ProfileDAO -> DBManager : startConnection
+activate DBManager
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO -> DBManager : closeConnection
+activate DBManager
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO --> ProfileDAO
+deactivate ProfileDAO
+ProfileDAO -> ProfileDAO : getListeningHistory
+activate ProfileDAO
+ProfileDAO -> DBManager : startConnection
+activate DBManager
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO -> DBManager : closeConnection
+activate DBManager
+DBManager --> ProfileDAO
+deactivate DBManager
+loop audioIDs
+ProfileDAO -> AudioDAO : get
+activate AudioDAO
+AudioDAO --> ProfileDAO
+deactivate AudioDAO
+end
+ProfileDAO --> ProfileDAO
+deactivate ProfileDAO
+ProfileDAO -> CollectionDAO : getFavorites
+activate CollectionDAO
+CollectionDAO -> AudioDAO : selectFavorites
+activate AudioDAO
+AudioDAO --> CollectionDAO
+deactivate AudioDAO
+CollectionDAO --> ProfileDAO
+deactivate CollectionDAO
+ProfileDAO -> ProfileDAO : getTotalListeningTime
+activate ProfileDAO
+ProfileDAO -> DBManager : startConnection
+activate DBManager
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO -> DBManager : closeConnection
+activate DBManager
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO --> ProfileDAO
+deactivate ProfileDAO
+end
+ProfileDAO --> ProfileManager
+deactivate ProfileDAO
+ProfileManager --> ProfileManager
+deactivate ProfileManager
+ProfileManager -> ProfileDAO : insert
+activate ProfileDAO
+ProfileDAO -> DBManager : startConnection
+activate DBManager
+DBManager -> DBManager : isOpen
+activate DBManager
+alt c == null
+else 
+end
+DBManager --> DBManager
+deactivate DBManager
+alt isOpen(c)
+DBManager -> DBManager : closeConnection
+activate DBManager
+DBManager -> DBManager : isOpen
+activate DBManager
+DBManager --> DBManager
+deactivate DBManager
+alt !isOpen(c)
+end
+DBManager --> DBManager
+deactivate DBManager
+end
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO -> DBManager : closeConnection
+activate DBManager
+DBManager -> DBManager : isOpen
+activate DBManager
+alt c == null
+else 
+end
+DBManager --> DBManager
+deactivate DBManager
+alt !isOpen(c)
+end
+DBManager --> ProfileDAO
+deactivate DBManager
 ProfileDAO --> ProfileManager
 deactivate ProfileDAO
 ProfileManager -> ProfileDAO : get
 activate ProfileDAO
 ProfileDAO -> ProfileDAO : getUser
-
 activate ProfileDAO
 ProfileDAO -> DBManager : startConnection
 activate DBManager
+DBManager -> DBManager : isOpen
+activate DBManager
+DBManager --> DBManager
+deactivate DBManager
+alt isOpen(c)
+DBManager -> DBManager : closeConnection
+activate DBManager
+DBManager --> DBManager
+deactivate DBManager
+end
 DBManager --> ProfileDAO
 deactivate DBManager
-
+alt rs.next()
+end
 ProfileDAO -> DBManager : closeConnection
 activate DBManager
+DBManager -> DBManager : isOpen
+activate DBManager
+DBManager --> DBManager
+deactivate DBManager
+alt !isOpen(c)
+end
 DBManager --> ProfileDAO
 deactivate DBManager
-
 ProfileDAO --> ProfileDAO
 deactivate ProfileDAO
+alt profileOut==null
 ProfileDAO -> ProfileDAO : getArtist
-
 activate ProfileDAO
 ProfileDAO -> DBManager : startConnection
 activate DBManager
-
+DBManager -> DBManager : isOpen
+activate DBManager
+DBManager --> DBManager
+deactivate DBManager
+alt isOpen(c)
+DBManager -> DBManager : closeConnection
+activate DBManager
+DBManager --> DBManager
+deactivate DBManager
+end
+DBManager --> ProfileDAO
+deactivate DBManager
+alt rs.next()
+end
+ProfileDAO -> DBManager : closeConnection
+activate DBManager
+DBManager -> DBManager : isOpen
+activate DBManager
+DBManager --> DBManager
+deactivate DBManager
+alt !isOpen(c)
+end
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO --> ProfileDAO
+deactivate ProfileDAO
+alt profileOut==null
+end
+ProfileDAO -> ProfileDAO : getTotalListeners
+activate ProfileDAO
+ProfileDAO -> DBManager : startConnection
+activate DBManager
+DBManager -> DBManager : isOpen
+activate DBManager
+DBManager --> DBManager
+deactivate DBManager
+alt isOpen(c)
+DBManager -> DBManager : closeConnection
+activate DBManager
+DBManager --> DBManager
+deactivate DBManager
+end
+DBManager --> ProfileDAO
+deactivate DBManager
+alt rs.next()
+end
+ProfileDAO -> DBManager : closeConnection
+activate DBManager
+DBManager -> DBManager : isOpen
+activate DBManager
+DBManager --> DBManager
+deactivate DBManager
+alt !isOpen(c)
+end
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO --> ProfileDAO
+deactivate ProfileDAO
+ProfileDAO -> ProfileDAO : getListeningHistory
+activate ProfileDAO
+ProfileDAO -> DBManager : startConnection
+activate DBManager
+DBManager -> DBManager : isOpen
+activate DBManager
+DBManager --> DBManager
+deactivate DBManager
+alt isOpen(c)
+DBManager -> DBManager : closeConnection
+activate DBManager
+DBManager --> DBManager
+deactivate DBManager
+end
 DBManager --> ProfileDAO
 deactivate DBManager
 ProfileDAO -> DBManager : closeConnection
-
 activate DBManager
-
+DBManager -> DBManager : isOpen
+activate DBManager
+DBManager --> DBManager
+deactivate DBManager
+alt !isOpen(c)
+end
 DBManager --> ProfileDAO
 deactivate DBManager
+loop audioIDs
+ProfileDAO -> AudioDAO : get
+activate AudioDAO
+AudioDAO -> AudioDAO : getSong
+activate AudioDAO
+AudioDAO --> AudioDAO
+deactivate AudioDAO
+alt audioOut==null
+AudioDAO -> AudioDAO : getEpisode
+activate AudioDAO
+AudioDAO --> AudioDAO
+deactivate AudioDAO
+end
+AudioDAO --> ProfileDAO
+deactivate AudioDAO
+end
 ProfileDAO --> ProfileDAO
 deactivate ProfileDAO
 ProfileDAO -> CollectionDAO : getFavorites
@@ -52,449 +451,142 @@ CollectionDAO -> AudioDAO : selectFavorites
 activate AudioDAO
 AudioDAO -> DBManager : startConnection
 activate DBManager
-
 DBManager --> AudioDAO
 deactivate DBManager
 AudioDAO -> DBManager : closeConnection
 activate DBManager
-
 DBManager --> AudioDAO
 deactivate DBManager
 AudioDAO -> AudioDAO : get
 activate AudioDAO
-AudioDAO -> AudioDAO : getSong
-activate AudioDAO
-AudioDAO -> DBManager : startConnection
-activate DBManager
-
-DBManager --> AudioDAO
-deactivate DBManager
-AudioDAO -> DBManager : closeConnection
-activate DBManager
-
-DBManager --> AudioDAO
-deactivate DBManager
-AudioDAO -> ProfileDAO : getArtist
-activate ProfileDAO
-ProfileDAO -> DBManager : startConnection
-activate DBManager
-
-DBManager --> ProfileDAO
-deactivate DBManager
-ProfileDAO -> DBManager : closeConnection
-activate DBManager
-
-DBManager --> ProfileDAO
-deactivate DBManager
-ProfileDAO --> AudioDAO
-deactivate ProfileDAO
-AudioDAO -> CollectionDAO : get
-activate CollectionDAO
-CollectionDAO -> CollectionDAO : getPlaylist
-activate CollectionDAO
-CollectionDAO -> DBManager : startConnection
-activate DBManager
-
-DBManager --> CollectionDAO
-deactivate DBManager
-CollectionDAO -> DBManager : closeConnection
-activate DBManager
-
-DBManager --> CollectionDAO
-deactivate DBManager
-CollectionDAO --> CollectionDAO
-deactivate CollectionDAO
-CollectionDAO -> CollectionDAO : getAlbum
-activate CollectionDAO
-CollectionDAO -> DBManager : startConnection
-activate DBManager
-
-DBManager --> CollectionDAO
-deactivate DBManager
-CollectionDAO -> DBManager : closeConnection
-activate DBManager
-
-DBManager --> CollectionDAO
-deactivate DBManager
-CollectionDAO -> ProfileDAO : getArtist
-activate ProfileDAO
-ProfileDAO -> DBManager : startConnection
-activate DBManager
-
-DBManager --> ProfileDAO
-deactivate DBManager
-ProfileDAO -> DBManager : closeConnection
-activate DBManager
-
-DBManager --> ProfileDAO
-deactivate DBManager
-ProfileDAO --> CollectionDAO
-deactivate ProfileDAO
-CollectionDAO --> CollectionDAO
-deactivate CollectionDAO
-CollectionDAO -> CollectionDAO : getPodcast
-activate CollectionDAO
-CollectionDAO -> DBManager : startConnection
-activate DBManager
-
-DBManager --> CollectionDAO
-deactivate DBManager
-CollectionDAO -> DBManager : closeConnection
-activate DBManager
-
-DBManager --> CollectionDAO
-deactivate DBManager
-CollectionDAO -> ProfileDAO : getArtist
-activate ProfileDAO
-ProfileDAO -> DBManager : startConnection
-activate DBManager
-
-DBManager --> ProfileDAO
-deactivate DBManager
-ProfileDAO -> DBManager : closeConnection
-activate DBManager
-
-DBManager --> ProfileDAO
-deactivate DBManager
-ProfileDAO --> CollectionDAO
-deactivate ProfileDAO
-CollectionDAO --> CollectionDAO
-deactivate CollectionDAO
-CollectionDAO --> AudioDAO
-deactivate CollectionDAO
-AudioDAO --> AudioDAO
-deactivate AudioDAO
-AudioDAO -> AudioDAO : getEpisode
-activate AudioDAO
-AudioDAO -> DBManager : startConnection
-activate DBManager
-
-DBManager --> AudioDAO
-deactivate DBManager
-AudioDAO -> DBManager : closeConnection
-activate DBManager
-
-DBManager --> AudioDAO
-deactivate DBManager
-AudioDAO -> ProfileDAO : getArtist
-activate ProfileDAO
-ProfileDAO -> DBManager : startConnection
-activate DBManager
-
-DBManager --> ProfileDAO
-deactivate DBManager
-ProfileDAO -> DBManager : closeConnection
-activate DBManager
-
-DBManager --> ProfileDAO
-deactivate DBManager
-ProfileDAO --> AudioDAO
-deactivate ProfileDAO
-AudioDAO -> CollectionDAO : get
-activate CollectionDAO
-CollectionDAO -> CollectionDAO : getPlaylist
-activate CollectionDAO
-CollectionDAO -> DBManager : startConnection
-activate DBManager
-
-DBManager --> CollectionDAO
-deactivate DBManager
-CollectionDAO -> DBManager : closeConnection
-activate DBManager
-
-DBManager --> CollectionDAO
-deactivate DBManager
-CollectionDAO --> CollectionDAO
-deactivate CollectionDAO
-CollectionDAO -> CollectionDAO : getAlbum
-activate CollectionDAO
-CollectionDAO -> DBManager : startConnection
-activate DBManager
-DBManager --> CollectionDAO
-deactivate DBManager
-CollectionDAO -> DBManager : closeConnection
-activate DBManager
-
-DBManager --> CollectionDAO
-deactivate DBManager
-CollectionDAO -> ProfileDAO : getArtist
-activate ProfileDAO
-ProfileDAO -> DBManager : startConnection
-activate DBManager
-
-DBManager --> ProfileDAO
-deactivate DBManager
-ProfileDAO -> DBManager : closeConnection
-activate DBManager
-
-DBManager --> ProfileDAO
-deactivate DBManager
-ProfileDAO --> CollectionDAO
-deactivate ProfileDAO
-CollectionDAO --> CollectionDAO
-deactivate CollectionDAO
-CollectionDAO -> CollectionDAO : getPodcast
-activate CollectionDAO
-CollectionDAO -> DBManager : startConnection
-activate DBManager
-
-DBManager --> CollectionDAO
-deactivate DBManager
-CollectionDAO -> DBManager : closeConnection
-activate DBManager
-
-DBManager --> CollectionDAO
-deactivate DBManager
-CollectionDAO -> ProfileDAO : getArtist
-activate ProfileDAO
-ProfileDAO -> DBManager : startConnection
-activate DBManager
-
-DBManager --> ProfileDAO
-deactivate DBManager
-ProfileDAO -> DBManager : closeConnection
-activate DBManager
-
-DBManager --> ProfileDAO
-deactivate DBManager
-ProfileDAO --> CollectionDAO
-deactivate ProfileDAO
-CollectionDAO --> CollectionDAO
-deactivate CollectionDAO
-CollectionDAO --> AudioDAO
-deactivate CollectionDAO
-AudioDAO --> AudioDAO
-deactivate AudioDAO
 AudioDAO --> AudioDAO
 deactivate AudioDAO
 AudioDAO --> CollectionDAO
 deactivate AudioDAO
 CollectionDAO --> ProfileDAO
 deactivate CollectionDAO
+else 
+ProfileDAO -> ProfileDAO : getTotalListeningTime
+activate ProfileDAO
+ProfileDAO -> DBManager : startConnection
+activate DBManager
+DBManager -> DBManager : isOpen
+activate DBManager
+DBManager --> DBManager
+deactivate DBManager
+alt isOpen(c)
+DBManager -> DBManager : closeConnection
+activate DBManager
+DBManager --> DBManager
+deactivate DBManager
+end
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO -> DBManager : closeConnection
+activate DBManager
+DBManager -> DBManager : isOpen
+activate DBManager
+DBManager --> DBManager
+deactivate DBManager
+alt !isOpen(c)
+end
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO --> ProfileDAO
+deactivate ProfileDAO
+ProfileDAO -> ProfileDAO : getListeningHistory
+activate ProfileDAO
+ProfileDAO -> DBManager : startConnection
+activate DBManager
+DBManager -> DBManager : isOpen
+activate DBManager
+DBManager --> DBManager
+deactivate DBManager
+alt isOpen(c)
+DBManager -> DBManager : closeConnection
+activate DBManager
+DBManager --> DBManager
+deactivate DBManager
+end
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO -> DBManager : closeConnection
+activate DBManager
+DBManager -> DBManager : isOpen
+activate DBManager
+DBManager --> DBManager
+deactivate DBManager
+alt !isOpen(c)
+end
+DBManager --> ProfileDAO
+deactivate DBManager
+loop audioIDs
+ProfileDAO -> AudioDAO : get
+activate AudioDAO
+AudioDAO -> AudioDAO : getSong
+activate AudioDAO
+AudioDAO --> AudioDAO
+deactivate AudioDAO
+alt audioOut==null
+AudioDAO -> AudioDAO : getEpisode
+activate AudioDAO
+AudioDAO --> AudioDAO
+deactivate AudioDAO
+end
+AudioDAO --> ProfileDAO
+deactivate AudioDAO
+end
+ProfileDAO --> ProfileDAO
+deactivate ProfileDAO
 ProfileDAO -> CollectionDAO : getFavorites
 activate CollectionDAO
 CollectionDAO -> AudioDAO : selectFavorites
 activate AudioDAO
 AudioDAO -> DBManager : startConnection
 activate DBManager
-
 DBManager --> AudioDAO
 deactivate DBManager
 AudioDAO -> DBManager : closeConnection
 activate DBManager
-
 DBManager --> AudioDAO
 deactivate DBManager
 AudioDAO -> AudioDAO : get
 activate AudioDAO
-AudioDAO -> AudioDAO : getSong
-activate AudioDAO
-AudioDAO -> DBManager : startConnection
-activate DBManager
-
-DBManager --> AudioDAO
-deactivate DBManager
-AudioDAO -> DBManager : closeConnection
-activate DBManager
-
-DBManager --> AudioDAO
-deactivate DBManager
-AudioDAO -> ProfileDAO : getArtist
-activate ProfileDAO
-ProfileDAO -> DBManager : startConnection
-activate DBManager
-
-DBManager --> ProfileDAO
-deactivate DBManager
-ProfileDAO -> DBManager : closeConnection
-activate DBManager
-
-DBManager --> ProfileDAO
-deactivate DBManager
-ProfileDAO --> AudioDAO
-deactivate ProfileDAO
-AudioDAO -> CollectionDAO : get
-activate CollectionDAO
-CollectionDAO -> CollectionDAO : getPlaylist
-activate CollectionDAO
-CollectionDAO -> DBManager : startConnection
-activate DBManager
-
-DBManager --> CollectionDAO
-deactivate DBManager
-CollectionDAO -> DBManager : closeConnection
-activate DBManager
-
-DBManager --> CollectionDAO
-deactivate DBManager
-CollectionDAO --> CollectionDAO
-deactivate CollectionDAO
-CollectionDAO -> CollectionDAO : getAlbum
-activate CollectionDAO
-CollectionDAO -> DBManager : startConnection
-activate DBManager
-
-DBManager --> CollectionDAO
-deactivate DBManager
-CollectionDAO -> DBManager : closeConnection
-activate DBManager
-
-DBManager --> CollectionDAO
-deactivate DBManager
-CollectionDAO -> ProfileDAO : getArtist
-activate ProfileDAO
-ProfileDAO -> DBManager : startConnection
-activate DBManager
-
-DBManager --> ProfileDAO
-deactivate DBManager
-ProfileDAO -> DBManager : closeConnection
-activate DBManager
-
-DBManager --> ProfileDAO
-deactivate DBManager
-ProfileDAO --> CollectionDAO
-deactivate ProfileDAO
-CollectionDAO --> CollectionDAO
-deactivate CollectionDAO
-CollectionDAO -> CollectionDAO : getPodcast
-activate CollectionDAO
-CollectionDAO -> DBManager : startConnection
-activate DBManager
-
-DBManager --> CollectionDAO
-deactivate DBManager
-CollectionDAO -> DBManager : closeConnection
-activate DBManager
-
-DBManager --> CollectionDAO
-deactivate DBManager
-CollectionDAO -> ProfileDAO : getArtist
-activate ProfileDAO
-ProfileDAO -> DBManager : startConnection
-activate DBManager
-
-DBManager --> ProfileDAO
-deactivate DBManager
-ProfileDAO -> DBManager : closeConnection
-activate DBManager
-
-DBManager --> ProfileDAO
-deactivate DBManager
-ProfileDAO --> CollectionDAO
-deactivate ProfileDAO
-CollectionDAO --> CollectionDAO
-deactivate CollectionDAO
-CollectionDAO --> AudioDAO
-deactivate CollectionDAO
-AudioDAO --> AudioDAO
-deactivate AudioDAO
-AudioDAO -> AudioDAO : getEpisode
-activate AudioDAO
-AudioDAO -> DBManager : startConnection
-activate DBManager
-DBManager --> AudioDAO
-deactivate DBManager
-AudioDAO -> DBManager : closeConnection
-activate DBManager
-
-DBManager --> AudioDAO
-deactivate DBManager
-AudioDAO -> ProfileDAO : getArtist
-activate ProfileDAO
-ProfileDAO -> DBManager : startConnection
-activate DBManager
-
-DBManager --> ProfileDAO
-deactivate DBManager
-ProfileDAO -> DBManager : closeConnection
-activate DBManager
-
-DBManager --> ProfileDAO
-deactivate DBManager
-ProfileDAO --> AudioDAO
-deactivate ProfileDAO
-AudioDAO -> CollectionDAO : get
-activate CollectionDAO
-CollectionDAO -> CollectionDAO : getPlaylist
-activate CollectionDAO
-CollectionDAO -> DBManager : startConnection
-activate DBManager
-
-DBManager --> CollectionDAO
-deactivate DBManager
-CollectionDAO -> DBManager : closeConnection
-activate DBManager
-
-DBManager --> CollectionDAO
-deactivate DBManager
-CollectionDAO --> CollectionDAO
-deactivate CollectionDAO
-CollectionDAO -> CollectionDAO : getAlbum
-activate CollectionDAO
-CollectionDAO -> DBManager : startConnection
-activate DBManager
-
-DBManager --> CollectionDAO
-deactivate DBManager
-CollectionDAO -> DBManager : closeConnection
-activate DBManager
-
-DBManager --> CollectionDAO
-deactivate DBManager
-CollectionDAO -> ProfileDAO : getArtist
-activate ProfileDAO
-ProfileDAO -> DBManager : startConnection
-activate DBManager
-DBManager --> ProfileDAO
-deactivate DBManager
-ProfileDAO -> DBManager : closeConnection
-activate DBManager
-
-DBManager --> ProfileDAO
-deactivate DBManager
-ProfileDAO --> CollectionDAO
-deactivate ProfileDAO
-CollectionDAO --> CollectionDAO
-deactivate CollectionDAO
-CollectionDAO -> CollectionDAO : getPodcast
-activate CollectionDAO
-CollectionDAO -> DBManager : startConnection
-activate DBManager
-
-DBManager --> CollectionDAO
-deactivate DBManager
-CollectionDAO -> DBManager : closeConnection
-activate DBManager
-
-DBManager --> CollectionDAO
-deactivate DBManager
-CollectionDAO -> ProfileDAO : getArtist
-activate ProfileDAO
-ProfileDAO -> DBManager : startConnection
-activate DBManager
-
-DBManager --> ProfileDAO
-deactivate DBManager
-ProfileDAO -> DBManager : closeConnection
-activate DBManager
-
-DBManager --> ProfileDAO
-deactivate DBManager
-ProfileDAO --> CollectionDAO
-deactivate ProfileDAO
-CollectionDAO --> CollectionDAO
-deactivate CollectionDAO
-CollectionDAO --> AudioDAO
-deactivate CollectionDAO
-AudioDAO --> AudioDAO
-deactivate AudioDAO
 AudioDAO --> AudioDAO
 deactivate AudioDAO
 AudioDAO --> CollectionDAO
 deactivate AudioDAO
 CollectionDAO --> ProfileDAO
 deactivate CollectionDAO
+ProfileDAO -> ProfileDAO : getTotalListeningTime
+activate ProfileDAO
+ProfileDAO -> DBManager : startConnection
+activate DBManager
+DBManager -> DBManager : isOpen
+activate DBManager
+DBManager --> DBManager
+deactivate DBManager
+alt isOpen(c)
+DBManager -> DBManager : closeConnection
+activate DBManager
+DBManager --> DBManager
+deactivate DBManager
+end
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO -> DBManager : closeConnection
+activate DBManager
+DBManager -> DBManager : isOpen
+activate DBManager
+DBManager --> DBManager
+deactivate DBManager
+alt !isOpen(c)
+end
+DBManager --> ProfileDAO
+deactivate DBManager
+ProfileDAO --> ProfileDAO
+deactivate ProfileDAO
+end
 ProfileDAO --> ProfileManager
 deactivate ProfileDAO
 return
