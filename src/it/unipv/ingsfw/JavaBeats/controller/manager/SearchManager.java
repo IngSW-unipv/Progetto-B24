@@ -10,30 +10,28 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
 
-public class SearchManager{
+public class SearchManager {
 
-  //Costruttore
-  public SearchManager(){
-
-  }
-
-
-  //Metodi
-
-  public EnumMap<EJBENTITY, ArrayList<IJBResearchable>> search(String searchText, JBProfile activeProfile) throws AccountNotFoundException{
-    SearchDAO s=new SearchDAO();
-
-    EJBENTITY[] ejbEntities=new EJBENTITY[]{EJBENTITY.SONG, EJBENTITY.EPISODE, EJBENTITY.PLAYLIST, EJBENTITY.ALBUM, EJBENTITY.PODCAST, EJBENTITY.USER, EJBENTITY.ARTIST};
-
-    //Filling in the map
-    EnumMap<EJBENTITY, ArrayList<IJBResearchable>> searchedMap=new EnumMap<>(EJBENTITY.class);
-    for(EJBENTITY ejbentity: ejbEntities){
-      searchedMap.put(ejbentity, s.search(searchText, activeProfile, ejbentity));
+    //Costruttore
+    public SearchManager() {
 
     }
 
-    return searchedMap;
-  }
+
+    //Metodi
+
+    public EnumMap<EJBENTITY, ArrayList<IJBResearchable>> search(String searchText, JBProfile activeProfile) throws AccountNotFoundException {
+        SearchDAO s = new SearchDAO();
+
+        //Filling in the map
+        EnumMap<EJBENTITY, ArrayList<IJBResearchable>> searchedMap = new EnumMap<>(EJBENTITY.class);
+        for (EJBENTITY ejbentity : EJBENTITY.values()) {
+            searchedMap.put(ejbentity, s.search(searchText, activeProfile, ejbentity));
+
+        }
+
+        return searchedMap;
+    }
 
 
 }

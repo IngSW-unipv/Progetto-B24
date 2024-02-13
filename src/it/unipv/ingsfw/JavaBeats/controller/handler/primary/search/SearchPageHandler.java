@@ -99,7 +99,10 @@ public class SearchPageHandler {
                     try {
                         EnumMap<EJBENTITY, ArrayList<IJBResearchable>> searchedMap = SearchManagerFactory.getInstance().getSearchManager().search(searchPageGUI.getSearchTextField().getText(), activeProfile);
 
+                        //Obtaining profile playlists for choiceboxes
                         ArrayList<JBCollection> profilePlaylists = CollectionManagerFactory.getInstance().getCollectionManager().getPlaylists(activeProfile);
+
+                        //Creation of SearchPageGUI with results
                         SearchPageGUI searchPageGUI = new SearchPageGUI(activeProfile, searchedMap, profilePlaylists);
                         SearchPageHandler searchPageHandler = new SearchPageHandler(searchPageGUI, activeProfile);
 
@@ -316,6 +319,7 @@ public class SearchPageHandler {
         searchPageGUI.getUserProfileButton().setOnAction(profileButtonHandler);
         searchPageGUI.getSearchTextField().setOnKeyPressed(searchTextfieldHandler);
         searchPageGUI.getSearchTextField().setOnKeyPressed(searchTextfieldHandler);
+
         if (searchPageGUI.getSearchResults() != null) {
             searchPageGUI.getSearchResults().getChoiceBoxArrayList().forEach(b -> b.setOnAction(songsChoiceBoxHandler));
             searchPageGUI.getSearchResults().getChoiceBoxArrayList().forEach(b -> b.setOnAction(songsChoiceBoxHandler));
