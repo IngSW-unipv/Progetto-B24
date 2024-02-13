@@ -24,5 +24,5 @@ Per funzionare il software richiede la presenza delle seguenti librerie
 - [FXSkins](https://github.com/dukke/FXSkins/releases/tag/1.0.0)
 - [Apache Tika](https://www.apache.org/dyn/closer.lua/tika/2.9.1/tika-app-2.9.1.jar)
 
-### Screenshots dall'Interfaccia Grafica di JavaBeats:
+## Screenshots dall'Interfaccia Grafica di JavaBeats:
 ![Screenshot 2024-02-11 215418](https://github.com/IngSW-unipv/Progetto-B24/assets/150829640/8f872e79-c3d4-4ec6-9802-f93d2b70c38f)
