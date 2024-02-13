@@ -30,6 +30,7 @@ public class SearchManager {
 
         }
 
+        //Returns the map with the results
         return searchedMap;
     }
 

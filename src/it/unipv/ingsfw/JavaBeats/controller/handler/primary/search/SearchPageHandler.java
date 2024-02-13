@@ -57,7 +57,10 @@ public class SearchPageHandler {
     }
 
     //Metodi
+
     private void initComponents() {
+
+        //Handler for the profileButton
         EventHandler<ActionEvent> profileButtonHandler = new EventHandler<>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -66,6 +69,7 @@ public class SearchPageHandler {
                 try {
                     ProfileManagerFactory.getInstance().getProfileManager().refreshProfile(activeProfile);
 
+                    //New Profile GUI
                     ProfileViewGUI profileViewGUI = new ProfileViewGUI(activeProfile, activeProfile);
                     ProfileViewHandler profileViewHandler = new ProfileViewHandler(profileViewGUI, activeProfile);
                     Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getProfileButton());
@@ -77,18 +81,21 @@ public class SearchPageHandler {
                     stage.setHeight(previousDimension.getHeight());
 
                 } catch (AccountNotFoundException e) {
+
+                    //Blur and dialog for the exception
                     searchPageGUI.getGp().setEffect(new BoxBlur(10, 10, 10));
 
                     ExceptionDialog exceptionDialog = new ExceptionDialog(stage, new SystemErrorException());
                     exceptionDialog.showAndWait();
 
-                    searchPageGUI.getGp().setEffect(null); /* Removing blur effect */
+                    searchPageGUI.getGp().setEffect(null);
                 }
 
 
             }
         };
 
+        //Handler for the search per se
         EventHandler<KeyEvent> searchTextfieldHandler = new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent keyEvent) {
@@ -112,6 +119,8 @@ public class SearchPageHandler {
                         stage.setWidth(previousDimension.getWidth());
                         stage.setHeight(previousDimension.getHeight());
                     } catch (AccountNotFoundException e) {
+
+                        //Blur and dialog for the exception
                         searchPageGUI.getGp().setEffect(new BoxBlur(10, 10, 10));
 
                         ExceptionDialog exceptionDialog = new ExceptionDialog(stage, new SystemErrorException());
@@ -123,16 +132,21 @@ public class SearchPageHandler {
             }
         };
 
+        //Handler for adding the songs to the playlists
         EventHandler<ActionEvent> songsChoiceBoxHandler = new EventHandler<>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 
+                //Obtaining the choicebox and the song selected who have the same index
                 ChoiceBox<Playlist> choiceBoxPressed = searchPageGUI.getSearchResults().getChoiceBoxArrayList().get(searchPageGUI.getSearchResults().getChoiceBoxArrayList().indexOf((ChoiceBox<Playlist>) actionEvent.getSource()));
                 Song song = (Song) searchPageGUI.getSearchResults().getSearchedMap().get(EJBENTITY.SONG).get(searchPageGUI.getSearchResults().getChoiceBoxArrayList().indexOf((ChoiceBox<Playlist>) actionEvent.getSource()));
 
+                //Add song to queue
                 if (choiceBoxPressed.getValue().toString().equals("Queue")) {
                     PlayerManagerFactory.getInstance().getPlayerManager().addToQueue(song);
+
+                    //Add song to Favorites
                 } else if (choiceBoxPressed.getValue().getName().equals("Favorites")) {
 
                     if (!activeProfile.getFavorites().getTrackList().contains(song)) {
@@ -141,6 +155,8 @@ public class SearchPageHandler {
 
                             CollectionManagerFactory.getInstance().getCollectionManager().setFavorites(activeProfile);
                         } catch (AccountNotFoundException e) {
+
+                            //Blur and dialog for the exception
                             searchPageGUI.getGp().setEffect(new BoxBlur(10, 10, 10));
 
                             ExceptionDialog exceptionDialog = new ExceptionDialog(stage, new SystemErrorException());
@@ -149,12 +165,15 @@ public class SearchPageHandler {
                             searchPageGUI.getGp().setEffect(null);
                         }//end-try
                     }//end-if
-                } else {
 
+                    //Add song to the playlist selected
+                } else {
                     if (!choiceBoxPressed.getValue().getTrackList().contains(song)) {
                         try {
                             CollectionManagerFactory.getInstance().getCollectionManager().addToCollection(choiceBoxPressed.getValue(), song);
                         } catch (AccountNotFoundException e) {
+
+                            //Blur and dialog for the exception
                             searchPageGUI.getGp().setEffect(new BoxBlur(10, 10, 10));
 
                             ExceptionDialog exceptionDialog = new ExceptionDialog(stage, new SystemErrorException());
@@ -167,17 +186,21 @@ public class SearchPageHandler {
             }
         };
 
+        //Handler for adding the episodes to the playlists
         EventHandler<ActionEvent> episodesChoiceBoxHandler = new EventHandler<>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 
+                //Obtaining the choicebox and the episode selected who have the same index
                 ChoiceBox<Playlist> choiceBoxPressed = searchPageGUI.getSearchResults().getEpisodesChoiceBoxArrayList().get(searchPageGUI.getSearchResults().getEpisodesChoiceBoxArrayList().indexOf((ChoiceBox<Playlist>) actionEvent.getSource()));
                 Episode episode = (Episode) searchPageGUI.getSearchResults().getSearchedMap().get(EJBENTITY.EPISODE).get(searchPageGUI.getSearchResults().getEpisodesChoiceBoxArrayList().indexOf((ChoiceBox<Playlist>) actionEvent.getSource()));
 
+                //Add episode to queue
                 if (choiceBoxPressed.getValue().toString().equals("Queue")) {
                     PlayerManagerFactory.getInstance().getPlayerManager().addToQueue(episode);
 
+                    //Add episode to Favorites
                 } else if (choiceBoxPressed.getValue().getName().equals("Favorites")) {
 
                     if (!activeProfile.getFavorites().getTrackList().contains(episode)) {
@@ -186,6 +209,8 @@ public class SearchPageHandler {
 
                             CollectionManagerFactory.getInstance().getCollectionManager().setFavorites(activeProfile);
                         } catch (AccountNotFoundException e) {
+
+                            //Blur and dialog for the exception
                             searchPageGUI.getGp().setEffect(new BoxBlur(10, 10, 10));
 
                             ExceptionDialog exceptionDialog = new ExceptionDialog(stage, new SystemErrorException());
@@ -194,11 +219,15 @@ public class SearchPageHandler {
                             searchPageGUI.getGp().setEffect(null);
                         }//end-try
                     }//end-if
+
+                    //Add episode to the playlist selected
                 } else {
                     if (!choiceBoxPressed.getValue().getTrackList().contains(episode)) {
                         try {
                             CollectionManagerFactory.getInstance().getCollectionManager().addToCollection(choiceBoxPressed.getValue(), episode);
                         } catch (AccountNotFoundException e) {
+
+                            //Blur and dialog for the exception
                             searchPageGUI.getGp().setEffect(new BoxBlur(10, 10, 10));
 
                             ExceptionDialog exceptionDialog = new ExceptionDialog(stage, new SystemErrorException());
@@ -211,14 +240,19 @@ public class SearchPageHandler {
             }
         };
 
+        //Handler for the audiocards
         EventHandler<MouseEvent> audioCardClickHandler = new EventHandler<>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
 
+                //Get audiocard clicked
                 IJBResearchable ijbResearchable = (((AudioCard) mouseEvent.getSource()).getIjbResearchable());
+
                 try {
                     Artist artist = (Artist) ijbResearchable;
+
+                    //Audiocard clicked is an artist, so the ProfileViewGUI is created.
                     ProfileViewGUI profileViewGUI = new ProfileViewGUI(activeProfile, artist);
                     ProfileViewHandler profileViewHandler = new ProfileViewHandler(profileViewGUI, activeProfile);
                     Sidebar.getInstance(activeProfile).setActive(Sidebar.getInstance(activeProfile).getProfileButton());
@@ -231,6 +265,9 @@ public class SearchPageHandler {
                 } catch (ClassCastException c) {
                     try {
                         Album album = (Album) ijbResearchable;
+
+                        //Audiocard clicked is an album, so the CollectionViewGUI is created if the AccountNotFoundException does not occur.
+
                         try {
                             album.setTrackList(CollectionManagerFactory.getInstance().getCollectionManager().getCollectionAudios(album, activeProfile));
                             CollectionViewGUI collectionViewGUI = new CollectionViewGUI(activeProfile, album);
@@ -244,6 +281,8 @@ public class SearchPageHandler {
                             stage.setWidth(previousDimension.getWidth());
                             stage.setHeight(previousDimension.getHeight());
                         } catch (AccountNotFoundException e) {
+
+                            //Blur and dialog for the exception
                             searchPageGUI.getGp().setEffect(new BoxBlur(10, 10, 10));
 
                             ExceptionDialog exceptionDialog = new ExceptionDialog(stage, new SystemErrorException());
@@ -254,9 +293,27 @@ public class SearchPageHandler {
                     } catch (ClassCastException cl) {
                         try {
                             Podcast podcast = (Podcast) ijbResearchable;
+
+                            //Audiocard clicked is a podcast, so the CollectionViewGUI is created if the AccountNotFoundException does not occur.
+
                             try {
                                 podcast.setTrackList(CollectionManagerFactory.getInstance().getCollectionManager().getCollectionAudios(podcast, activeProfile));
+
+                                CollectionViewGUI collectionViewGUI = new CollectionViewGUI(activeProfile, podcast);
+                                CollectionViewHandler collectionViewHandler = new CollectionViewHandler(collectionViewGUI, activeProfile);
+                                AudioTableHandler.getInstance().setCurrentAudioTableShowing((AudioTable) collectionViewGUI.getAudioTable());
+                                AudioTableHandler.getInstance().setQueue(false);
+
+                                Dimension2D previousDimension = new Dimension2D(stage.getWidth(), stage.getHeight());
+                                stage.setScene(collectionViewGUI.getScene());
+                                stage.setTitle("Collection");
+                                stage.setWidth(previousDimension.getWidth());
+                                stage.setHeight(previousDimension.getHeight());
+
+
                             } catch (AccountNotFoundException e) {
+
+                                //Blur and dialog for the exception
                                 searchPageGUI.getGp().setEffect(new BoxBlur(10, 10, 10));
 
                                 ExceptionDialog exceptionDialog = new ExceptionDialog(stage, new SystemErrorException());
@@ -264,20 +321,13 @@ public class SearchPageHandler {
 
                                 searchPageGUI.getGp().setEffect(null);
                             }
-                            CollectionViewGUI collectionViewGUI = new CollectionViewGUI(activeProfile, podcast);
-                            CollectionViewHandler collectionViewHandler = new CollectionViewHandler(collectionViewGUI, activeProfile);
-                            AudioTableHandler.getInstance().setCurrentAudioTableShowing((AudioTable) collectionViewGUI.getAudioTable());
-                            AudioTableHandler.getInstance().setQueue(false);
-
-                            Dimension2D previousDimension = new Dimension2D(stage.getWidth(), stage.getHeight());
-                            stage.setScene(collectionViewGUI.getScene());
-                            stage.setTitle("Collection");
-                            stage.setWidth(previousDimension.getWidth());
-                            stage.setHeight(previousDimension.getHeight());
 
                         } catch (ClassCastException cla) {
                             try {
                                 Playlist playlist = (Playlist) ijbResearchable;
+
+                                //Audiocard clicked is a playlist, so the CollectionViewGUI is created if the AccountNotFoundException does not occur.
+
                                 try {
                                     playlist.setTrackList(CollectionManagerFactory.getInstance().getCollectionManager().getCollectionAudios(playlist, activeProfile));
                                     CollectionViewGUI collectionViewGUI = new CollectionViewGUI(activeProfile, playlist);
@@ -290,7 +340,11 @@ public class SearchPageHandler {
                                     stage.setTitle("Collection");
                                     stage.setWidth(previousDimension.getWidth());
                                     stage.setHeight(previousDimension.getHeight());
+
                                 } catch (AccountNotFoundException e) {
+
+                                    //Blur and dialog for the exception
+
                                     searchPageGUI.getGp().setEffect(new BoxBlur(10, 10, 10));
 
                                     ExceptionDialog exceptionDialog = new ExceptionDialog(stage, new SystemErrorException());
@@ -300,6 +354,7 @@ public class SearchPageHandler {
                                 }//end-try
                             } catch (ClassCastException clas) {
 
+                                //Audiocard clicked is a user, so the ProfileViewGUI is created.
                                 User user = (User) ijbResearchable;
                                 ProfileViewGUI profileViewGUI = new ProfileViewGUI(activeProfile, user);
                                 ProfileViewHandler profileViewHandler = new ProfileViewHandler(profileViewGUI, activeProfile);
@@ -316,6 +371,8 @@ public class SearchPageHandler {
                 }//end-try
             }
         };
+
+        //Adding the handlers to the nodes
         searchPageGUI.getUserProfileButton().setOnAction(profileButtonHandler);
         searchPageGUI.getSearchTextField().setOnKeyPressed(searchTextfieldHandler);
         searchPageGUI.getSearchTextField().setOnKeyPressed(searchTextfieldHandler);
