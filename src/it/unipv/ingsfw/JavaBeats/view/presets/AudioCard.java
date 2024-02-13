@@ -23,7 +23,7 @@ import java.sql.SQLException;
 
 public class AudioCard extends VBox{
 
-  //Attributi
+  //Attributes
   private IJBResearchable ijbResearchable;
 
   private static final Background bgCard=new Background(new BackgroundFill(Color.rgb(25, 25, 25), new CornerRadii(20), Insets.EMPTY));

@@ -58,12 +58,12 @@ import java.util.List;
 
 public class CollectionViewHandler{
   /*---------------------------------------*/
-  //Attributi
+  //Attributes
   /*---------------------------------------*/
   private CollectionViewGUI gui;
 
   /*---------------------------------------*/
-  //Costruttori
+  //Constructor
   /*---------------------------------------*/
   public CollectionViewHandler(CollectionViewGUI gui, JBProfile activeProfile){
     this.gui=gui;
@@ -74,7 +74,7 @@ public class CollectionViewHandler{
   /*---------------------------------------*/
 
   /*---------------------------------------*/
-  //Metodi
+  //Methods
   /*---------------------------------------*/
   private void initComponents(JBProfile activeProfile){
     EventHandler<ActionEvent> editButtonHandler=new EventHandler<ActionEvent>(){
@@ -282,7 +282,7 @@ public class CollectionViewHandler{
                 Blob fileAudio=new SerialBlob(fileContent);
 
                 Podcast p=(Podcast)gui.getJbCollection();
-                JBAudio jbAudio=new Episode(0, metadata.get("dc:title")==null ? FilenameUtils.removeExtension(f.getName()) : metadata.get("dc:title"), (Artist)p.getCreator(), gui.getJbCollection(), fileAudio, Double.parseDouble(metadata.get("xmpDM:duration"))*1000, new Date(System.currentTimeMillis()), new String[]{metadata.get("xmpDM:genre")}, false, 0);
+                JBAudio jbAudio=new Episode(0, metadata.get("dc:title")==null ? FilenameUtils.removeExtension(f.getName()) : metadata.get("dc:title"), (Artist)p.getCreator(), gui.getJbCollection(), fileAudio, Double.parseDouble(metadata.get("xmpDM:duration"))*1000, new Date(System.currentTimeMillis()), new String[] {metadata.get("xmpDM:genre")}, false, 0);
 
                 CollectionManagerFactory.getInstance().getCollectionManager().addToCollection(gui.getJbCollection(), jbAudio);
 

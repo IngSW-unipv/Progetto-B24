@@ -28,13 +28,13 @@ import java.sql.SQLException;
 
 public class EditProfileDialogHandler{
   /*---------------------------------------*/
-  //Attributi
+  //Attributes
   /*---------------------------------------*/
   private EditProfileDialog profileDialog;
   private byte[] fileContent=null;
 
   /*---------------------------------------*/
-  //Costruttori
+  //Constructor
   /*---------------------------------------*/
   public EditProfileDialogHandler(EditProfileDialog profileDialog){
     this.profileDialog=profileDialog;
@@ -45,7 +45,7 @@ public class EditProfileDialogHandler{
   /*---------------------------------------*/
 
   /*---------------------------------------*/
-  //Metodi
+  //Methods
   /*---------------------------------------*/
   private void initComponents(){
     EventHandler<ActionEvent> inputImageButtonHandler=new EventHandler<>(){

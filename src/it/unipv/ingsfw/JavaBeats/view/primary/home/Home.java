@@ -26,7 +26,7 @@ import java.util.NoSuchElementException;
 
 public class Home extends VBox{
   /*---------------------------------------*/
-  //Attributi
+  //Attributes
   /*---------------------------------------*/
   private static final Font fontWelcome=Font.font("Verdana", FontWeight.BLACK, FontPosture.REGULAR, 25);
   private static final Font fontRecents=Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 25);
@@ -39,7 +39,7 @@ public class Home extends VBox{
   private HBox artistsHBox;
 
   /*---------------------------------------*/
-  //Costruttori
+  //Constructor
   /*---------------------------------------*/
   public Home(JBProfile activeProfile){
     super();
@@ -66,7 +66,7 @@ public class Home extends VBox{
   }
 
   /*---------------------------------------*/
-  //Metodi
+  //Methods
   /*---------------------------------------*/
   private void initComponents(JBProfile activeProfile){
     /*

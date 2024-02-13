@@ -28,7 +28,7 @@ import java.sql.SQLException;
 
 public class CreationGUI{
 
-  //Attributi
+  //Attributes
   private static final int clientWidth=(int)Screen.getPrimary().getBounds().getWidth();
   private static final int clientHeight=(int)Screen.getPrimary().getBounds().getHeight();
   private static final Background bg=new Background(new BackgroundFill(Color.rgb(15, 15, 15), CornerRadii.EMPTY, Insets.EMPTY));
@@ -72,9 +72,11 @@ public class CreationGUI{
   public Button getCreate(){
     return create;
   }
+
   public GridPane getGp(){
     return gp;
   }
+
   public CreationGUI(JBProfile activeProfile, JBCollection jbCollection){
     this.newCollection=jbCollection;
     initComponents(activeProfile, jbCollection);

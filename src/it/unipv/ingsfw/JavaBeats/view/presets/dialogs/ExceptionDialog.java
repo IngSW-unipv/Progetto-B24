@@ -17,12 +17,12 @@ import javafx.stage.StageStyle;
 
 public class ExceptionDialog extends Dialog<JBCollection>{
   /*---------------------------------------*/
-  //Attributi
+  //Attributes
   /*---------------------------------------*/
   private Button closeButton;
 
   /*---------------------------------------*/
-  //Costruttori
+  //Constructor
   /*---------------------------------------*/
   public ExceptionDialog(Stage stage, IJBException exception){
     super();
@@ -42,7 +42,7 @@ public class ExceptionDialog extends Dialog<JBCollection>{
 
 
   /*---------------------------------------*/
-  //Metodi
+  //Methods
   /*---------------------------------------*/
   private void initComponents(IJBException exception){
 

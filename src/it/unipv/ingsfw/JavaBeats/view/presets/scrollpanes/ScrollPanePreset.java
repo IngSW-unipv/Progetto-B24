@@ -5,11 +5,11 @@ import javafx.scene.control.Skin;
 
 public class ScrollPanePreset extends ScrollPane{
   /*---------------------------------------*/
-  //Attributi
+  //Attributes
   /*---------------------------------------*/
 
   /*---------------------------------------*/
-  //Costruttori
+  //Constructor
   /*---------------------------------------*/
   public ScrollPanePreset(){
     super();
@@ -23,7 +23,7 @@ public class ScrollPanePreset extends ScrollPane{
   /*---------------------------------------*/
 
   /*---------------------------------------*/
-  //Metodi
+  //Methods
   /*---------------------------------------*/
   @Override
   protected Skin<?> createDefaultSkin(){

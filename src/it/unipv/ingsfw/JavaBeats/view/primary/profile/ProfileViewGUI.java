@@ -11,18 +11,18 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 
-public class ProfileViewGUI {
-    /*---------------------------------------*/
-    //Attributi
-    /*---------------------------------------*/
-    private static final int clientWidth = (int) Screen.getPrimary().getBounds().getWidth();
-    private static final int clientHeight = (int) Screen.getPrimary().getBounds().getHeight();
-    private ProfileHeader profileHeader;
-    private GridPane gp;
-    private Scene scene;
+public class ProfileViewGUI{
+  /*---------------------------------------*/
+  //Attributes
+  /*---------------------------------------*/
+  private static final int clientWidth=(int)Screen.getPrimary().getBounds().getWidth();
+  private static final int clientHeight=(int)Screen.getPrimary().getBounds().getHeight();
+  private ProfileHeader profileHeader;
+  private GridPane gp;
+  private Scene scene;
 
   /*---------------------------------------*/
-  //Costruttori
+  //Constructor
   /*---------------------------------------*/
   public ProfileViewGUI(JBProfile activeProfile, JBProfile searchedProfile){
     initComponents(activeProfile, searchedProfile);
@@ -39,21 +39,21 @@ public class ProfileViewGUI {
     return profileHeader;
   }
 
-    public GridPane getGp() {
-        return gp;
-    }
+  public GridPane getGp(){
+    return gp;
+  }
 
-    /*---------------------------------------*/
-    //Metodi
-    /*---------------------------------------*/
-    private void initComponents(JBProfile activeProfile, JBProfile searchedProfile) {
-        /* Header and main components */
-        profileHeader = new ProfileHeader(activeProfile, searchedProfile);
+  /*---------------------------------------*/
+  //Methods
+  /*---------------------------------------*/
+  private void initComponents(JBProfile activeProfile, JBProfile searchedProfile){
+    /* Header and main components */
+    profileHeader=new ProfileHeader(activeProfile, searchedProfile);
 
-        ScrollPanePreset mainContent = new ScrollPanePreset(new VBox(profileHeader));
-        mainContent.setPadding(new Insets(20, 20, 0, 20));
-        mainContent.setStyle("-fx-background: #0F0F0FFF; -fx-border-color: #0F0F0FFF;");
-        mainContent.setFitToWidth(true);
+    ScrollPanePreset mainContent=new ScrollPanePreset(new VBox(profileHeader));
+    mainContent.setPadding(new Insets(20, 20, 0, 20));
+    mainContent.setStyle("-fx-background: #0F0F0FFF; -fx-border-color: #0F0F0FFF;");
+    mainContent.setFitToWidth(true);
 
     gp=new GridPane();
     gp.addRow(0, Sidebar.getInstance(activeProfile), mainContent);

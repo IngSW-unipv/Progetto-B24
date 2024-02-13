@@ -36,18 +36,18 @@ import java.util.ArrayList;
 
 public class CollectionLibraryHandler{
 
-  //Attributi
+  //Attributes
   private CollectionLibraryGUI collectionLibraryGUI;
 
 
-  //Costruttore
+  //Constructor
   public CollectionLibraryHandler(JBProfile activeProfile, CollectionLibraryGUI collectionLibraryGUI){
     this.collectionLibraryGUI=collectionLibraryGUI;
     initComponents(activeProfile);
   }
 
 
-  //Metodi
+  //Methods
   private void initComponents(JBProfile activeProfile){
     EventHandler<MouseEvent> collectionClickHandler=new EventHandler<MouseEvent>(){
       @Override

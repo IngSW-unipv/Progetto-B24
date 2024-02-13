@@ -25,12 +25,12 @@ import java.sql.SQLException;
 
 public class ProfileViewHandler{
   /*---------------------------------------*/
-  //Attributi
+  //Attributes
   /*---------------------------------------*/
   private ProfileViewGUI gui;
 
   /*---------------------------------------*/
-  //Costruttori
+  //Constructor
   /*---------------------------------------*/
   public ProfileViewHandler(ProfileViewGUI gui, JBProfile originalProfile){
     this.gui=gui;
@@ -41,7 +41,7 @@ public class ProfileViewHandler{
   /*---------------------------------------*/
 
   /*---------------------------------------*/
-  //Metodi
+  //Methods
   /*---------------------------------------*/
   private void initComponents(JBProfile originalProfile){
     EventHandler<ActionEvent> editButtonHandler=new EventHandler<ActionEvent>(){

@@ -29,7 +29,7 @@ import java.util.EnumMap;
 
 public class SearchPageGUI{
   /*---------------------------------------*/
-  //Attributi
+  //Attributes
   /*---------------------------------------*/
   private static final int clientWidth=(int)Screen.getPrimary().getBounds().getWidth();
   private static final int clientHeight=(int)Screen.getPrimary().getBounds().getHeight();
@@ -45,7 +45,7 @@ public class SearchPageGUI{
   private TextField searchTextField;
 
   /*---------------------------------------*/
-  //Costruttori
+  //Constructor
   /*---------------------------------------*/
   public SearchPageGUI(JBProfile activeProfile, EnumMap<EJBENTITY, ArrayList<IJBResearchable>> searchedMap, ArrayList<JBCollection> profilePlaylists){
     initComponents(activeProfile, searchedMap, profilePlaylists);
@@ -69,11 +69,13 @@ public class SearchPageGUI{
   public GridPane getGp(){
     return gp;
   }
-  public Button getUserProfileButton() {
+
+  public Button getUserProfileButton(){
     return userProfileButton;
   }
+
   /*---------------------------------------*/
-  //Metodi
+  //Methods
   /*---------------------------------------*/
   private void initComponents(JBProfile activeProfile, EnumMap<EJBENTITY, ArrayList<IJBResearchable>> searchedMap, ArrayList<JBCollection> profilePlaylists){
 
@@ -96,22 +98,22 @@ public class SearchPageGUI{
     Pane whitePane=new Pane();
     HBox.setHgrow(whitePane, Priority.ALWAYS);
 
-        /* Button with user's profile picture and username */
-        ImageView userPicImageView = null;
-        try {
-            userPicImageView = new ImageView(new Image(activeProfile.getProfilePicture().getBinaryStream()));
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }//end-try
-        userPicImageView.setPreserveRatio(true);
-        userPicImageView.setFitHeight(60);
-        userProfileButton = new Button(activeProfile.getUsername());
-        userProfileButton.setBackground(bgSearchPage);
-        userProfileButton.setGraphic(userPicImageView);
-        userProfileButton.setCursor(Cursor.HAND);
-        userProfileButton.setFont(fontUser);
-        userProfileButton.setTextFill(Color.LIGHTGRAY);
-        userProfileButton.setAlignment(Pos.CENTER_RIGHT);
+    /* Button with user's profile picture and username */
+    ImageView userPicImageView=null;
+    try{
+      userPicImageView=new ImageView(new Image(activeProfile.getProfilePicture().getBinaryStream()));
+    }catch(SQLException e){
+      throw new RuntimeException(e);
+    }//end-try
+    userPicImageView.setPreserveRatio(true);
+    userPicImageView.setFitHeight(60);
+    userProfileButton=new Button(activeProfile.getUsername());
+    userProfileButton.setBackground(bgSearchPage);
+    userProfileButton.setGraphic(userPicImageView);
+    userProfileButton.setCursor(Cursor.HAND);
+    userProfileButton.setFont(fontUser);
+    userProfileButton.setTextFill(Color.LIGHTGRAY);
+    userProfileButton.setAlignment(Pos.CENTER_RIGHT);
 
 
     HBox searchBar=new HBox(20, searchTextField, whitePane, userProfileButton);

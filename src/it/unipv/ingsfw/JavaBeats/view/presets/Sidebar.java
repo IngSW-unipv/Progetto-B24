@@ -21,7 +21,7 @@ import java.util.*;
 
 public class Sidebar extends VBox{
   /*---------------------------------------*/
-  //Attributi
+  //Attributes
   /*---------------------------------------*/
   private static Sidebar instance=null;
   private static JBProfile activeProfile=null;
@@ -40,7 +40,7 @@ public class Sidebar extends VBox{
   private Button podcastButton;
 
   /*---------------------------------------*/
-  //Costruttore
+  //Constructor
   /*---------------------------------------*/
   private Sidebar(JBProfile activeProfile){
     super();
@@ -93,7 +93,7 @@ public class Sidebar extends VBox{
   }
 
   /*---------------------------------------*/
-  //Metodi
+  //Methods
   /*---------------------------------------*/
   private void initComponents(JBProfile activeProfile){
     /* Setup of LEFT VBox -> MenuVbox */

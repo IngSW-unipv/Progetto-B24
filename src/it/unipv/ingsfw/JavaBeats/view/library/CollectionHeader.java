@@ -25,7 +25,7 @@ import java.util.Queue;
 
 public class CollectionHeader extends VBox{
   /*---------------------------------------*/
-  //Attributi
+  //Attributes
   /*---------------------------------------*/
   private static final Font fontUser=Font.font("Verdana", FontWeight.NORMAL, FontPosture.ITALIC, 15);
   private static final Background bgHome=new Background(new BackgroundFill(Color.rgb(15, 15, 15), CornerRadii.EMPTY, Insets.EMPTY));
@@ -43,7 +43,7 @@ public class CollectionHeader extends VBox{
   private ImageView collectionImageView;
 
   /*---------------------------------------*/
-  //Costruttori
+  //Constructor
   /*---------------------------------------*/
   public CollectionHeader(JBProfile activeProfile, JBCollection jbCollection){
     initComponents(activeProfile, jbCollection);
@@ -93,7 +93,7 @@ public class CollectionHeader extends VBox{
     return userProfileButton;
   }
   /*---------------------------------------*/
-  //Metodi
+  //Methods
   /*---------------------------------------*/
 
 

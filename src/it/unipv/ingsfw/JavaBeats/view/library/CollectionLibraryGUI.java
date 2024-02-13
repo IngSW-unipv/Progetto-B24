@@ -28,7 +28,7 @@ import java.util.ArrayList;
 public class CollectionLibraryGUI{
 
   /*---------------------------------------*/
-  //Attributi
+  //Attributes
   /*---------------------------------------*/
   private static final int clientWidth=(int)Screen.getPrimary().getBounds().getWidth();
   private static final int clientHeight=(int)Screen.getPrimary().getBounds().getHeight();
@@ -69,9 +69,11 @@ public class CollectionLibraryGUI{
   public EJBENTITY getEjbentity(){
     return ejbentity;
   }
+
   public GridPane getGp(){
     return gp;
   }
+
   /*---------------------------------------*/
   //Methods
   /*---------------------------------------*/

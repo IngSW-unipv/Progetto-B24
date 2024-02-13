@@ -36,7 +36,7 @@ public class SongbarHandler{
   private Boolean isDragged=false;
 
   /*---------------------------------------*/
-  //Costruttore
+  //Constructor
   /*---------------------------------------*/
   private SongbarHandler(JBProfile activeProfile, JBAudio currentAudio){
     super();

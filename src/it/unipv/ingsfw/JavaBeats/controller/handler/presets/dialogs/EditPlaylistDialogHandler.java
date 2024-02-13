@@ -20,14 +20,14 @@ import java.sql.SQLException;
 
 public class EditPlaylistDialogHandler{
   /*---------------------------------------*/
-  //Attributi
+  //Attributes
   /*---------------------------------------*/
   private EditPlaylistDialog playlistDialog;
   private byte[] fileContent;
 
 
   /*---------------------------------------*/
-  //Costruttori
+  //Constructor
   /*---------------------------------------*/
   public EditPlaylistDialogHandler(EditPlaylistDialog playlistDialog){
     this.playlistDialog=playlistDialog;
@@ -38,7 +38,7 @@ public class EditPlaylistDialogHandler{
   /*---------------------------------------*/
 
   /*---------------------------------------*/
-  //Metodi
+  //Methods
   /*---------------------------------------*/
   private void initComponents(){
     EventHandler<ActionEvent> inputImageButtonHandler=new EventHandler<ActionEvent>(){

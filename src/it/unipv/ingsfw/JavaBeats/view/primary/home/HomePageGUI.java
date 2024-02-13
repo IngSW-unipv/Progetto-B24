@@ -10,7 +10,7 @@ import javafx.stage.Screen;
 
 public class HomePageGUI{
   /*---------------------------------------*/
-  //Attributi
+  //Attributes
   /*---------------------------------------*/
   private static final int clientWidth=(int)Screen.getPrimary().getBounds().getWidth();
   private static final int clientHeight=(int)Screen.getPrimary().getBounds().getHeight();
@@ -19,7 +19,7 @@ public class HomePageGUI{
   private Scene scene;
 
   /*---------------------------------------*/
-  //Costruttori
+  //Constructor
   /*---------------------------------------*/
   public HomePageGUI(JBProfile activeProfile){
     initComponents(activeProfile);
@@ -35,11 +35,13 @@ public class HomePageGUI{
   public Scene getScene(){
     return scene;
   }
+
   public GridPane getGp(){
     return gp;
   }
+
   /*---------------------------------------*/
-  //Metodi
+  //Methods
   /*---------------------------------------*/
   private void initComponents(JBProfile activeProfile){
     /* Setup of left Sidebar, bottom songbar and center home */

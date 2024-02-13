@@ -12,25 +12,25 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-public class SearchManagerFactory {
+public class SearchManagerFactory{
 
 
-    //Attributes
-    private static SearchManager searchManager;
-    private static final String SEARCHMANAGER_PROPERTYNAME = "searchmanager.class.name";
-    private static SearchManagerFactory instance = null;
+  //Attributes
+  private static SearchManager searchManager;
+  private static final String SEARCHMANAGER_PROPERTYNAME="searchmanager.class.name";
+  private static SearchManagerFactory instance=null;
 
-    private SearchManagerFactory() {
+  private SearchManagerFactory(){
 
-    }
+  }
 
-    //Singleton
-    public static SearchManagerFactory getInstance() {
-        if (instance == null) {
-            instance = new SearchManagerFactory();
-        }//end-if
-        return instance;
-    }
+  //Singleton
+  public static SearchManagerFactory getInstance(){
+    if(instance==null){
+      instance=new SearchManagerFactory();
+    }//end-if
+    return instance;
+  }
 
 
     //Method to get profilemanager
@@ -38,7 +38,7 @@ public class SearchManagerFactory {
         if (searchManager == null) {
             String searchManagerClassName;
 
-            try {
+      try{
 
                 //Obtaining path playermanager
                 Properties p = new Properties(System.getProperties());
@@ -46,17 +46,17 @@ public class SearchManagerFactory {
                 searchManagerClassName = p.getProperty(SEARCHMANAGER_PROPERTYNAME);
 
 
-                //JavaReflection
-                Constructor c = Class.forName(searchManagerClassName).getConstructor();
-                searchManager = (SearchManager) c.newInstance();
-            } catch (Exception e) {
+        //JavaReflection
+        Constructor c=Class.forName(searchManagerClassName).getConstructor();
+        searchManager=(SearchManager)c.newInstance();
+      }catch(Exception e){
 
-                e.printStackTrace();
-            }
-        }
-
-        return searchManager;
+        e.printStackTrace();
+      }
     }
+
+    return searchManager;
+  }
 
 
 }

@@ -12,27 +12,27 @@ import java.util.HashMap;
 
 public class SearchManager {
 
-    //Constructor
-    public SearchManager() {
+  //Constructor
+  public SearchManager(){
 
     }
 
 
-    //Method to search
+  //Methods
 
-    public EnumMap<EJBENTITY, ArrayList<IJBResearchable>> search(String searchText, JBProfile activeProfile) throws AccountNotFoundException {
-        SearchDAO s = new SearchDAO();
+  public EnumMap<EJBENTITY, ArrayList<IJBResearchable>> search(String searchText, JBProfile activeProfile) throws AccountNotFoundException{
+    SearchDAO s=new SearchDAO();
 
-        //Filling in the map
-        EnumMap<EJBENTITY, ArrayList<IJBResearchable>> searchedMap = new EnumMap<>(EJBENTITY.class);
-        for (EJBENTITY ejbentity : EJBENTITY.values()) {
-            searchedMap.put(ejbentity, s.search(searchText, activeProfile, ejbentity));
+    //Filling in the map
+    EnumMap<EJBENTITY, ArrayList<IJBResearchable>> searchedMap=new EnumMap<>(EJBENTITY.class);
+    for(EJBENTITY ejbentity: EJBENTITY.values()){
+      searchedMap.put(ejbentity, s.search(searchText, activeProfile, ejbentity));
 
-        }
-
-        //Returns the map with the results
-        return searchedMap;
     }
+
+    //Returns the map with the results
+    return searchedMap;
+  }
 
 
 }

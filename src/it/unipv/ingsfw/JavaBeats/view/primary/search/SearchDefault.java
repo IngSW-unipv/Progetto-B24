@@ -15,11 +15,11 @@ import javafx.scene.text.FontWeight;
 
 public class SearchDefault extends ScrollPanePreset{
   /*---------------------------------------*/
-  //Attributi
+  //Attributes
   /*---------------------------------------*/
 
   /*---------------------------------------*/
-  //Costruttori
+  //Constructor
   /*---------------------------------------*/
   public SearchDefault(){
     initComponents();
@@ -29,7 +29,7 @@ public class SearchDefault extends ScrollPanePreset{
   /*---------------------------------------*/
 
   /*---------------------------------------*/
-  //Metodi
+  //Methods
   /*---------------------------------------*/
   private void initComponents(){
     //Image

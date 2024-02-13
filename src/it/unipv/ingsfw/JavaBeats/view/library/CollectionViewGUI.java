@@ -20,7 +20,7 @@ import java.util.Queue;
 
 public class CollectionViewGUI{
   /*---------------------------------------*/
-  //Attributi
+  //Attributes
   /*---------------------------------------*/
   private static final int clientWidth=(int)Screen.getPrimary().getBounds().getWidth();
   private static final int clientHeight=(int)Screen.getPrimary().getBounds().getHeight();
@@ -33,7 +33,7 @@ public class CollectionViewGUI{
   private Scene scene;
 
   /*---------------------------------------*/
-  //Costruttori
+  //Constructor
   /*---------------------------------------*/
   public CollectionViewGUI(JBProfile activeProfile, JBCollection jbCollection){
     super();
@@ -76,7 +76,7 @@ public class CollectionViewGUI{
   }
 
   /*---------------------------------------*/
-  //Metodi
+  //Methods
   /*---------------------------------------*/
   private void initComponents(JBProfile activeProfile){
 

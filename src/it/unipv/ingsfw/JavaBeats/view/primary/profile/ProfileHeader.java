@@ -23,7 +23,7 @@ import java.sql.Time;
 
 public class ProfileHeader extends VBox{
   /*---------------------------------------*/
-  //Attributi
+  //Attributes
   /*---------------------------------------*/
   private static final Font fontLabels=Font.font("Verdana", FontWeight.NORMAL, FontPosture.REGULAR, 14);
   private static final Background bgHome=new Background(new BackgroundFill(Color.rgb(15, 15, 15), CornerRadii.EMPTY, Insets.EMPTY));
@@ -36,7 +36,7 @@ public class ProfileHeader extends VBox{
   private Button editButton;
 
   /*---------------------------------------*/
-  //Costruttori
+  //Constructor
   /*---------------------------------------*/
   public ProfileHeader(JBProfile currentProfile, JBProfile searchedProfile){
     super();
@@ -75,7 +75,7 @@ public class ProfileHeader extends VBox{
   }
 
   /*---------------------------------------*/
-  //Metodi
+  //Methods
   /*---------------------------------------*/
   private void initComponents(JBProfile currentProfile, JBProfile searchedProfile){
     /* Dynamically choosign between user or artist label */

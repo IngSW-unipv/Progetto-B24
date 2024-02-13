@@ -17,7 +17,7 @@ import javafx.stage.StageStyle;
 
 public class EditProfileDialog extends Dialog<JBCollection>{
   /*---------------------------------------*/
-  //Attributi
+  //Attributes
   /*---------------------------------------*/
   private static final Background bgHome=new Background(new BackgroundFill(Color.rgb(20, 20, 20), CornerRadii.EMPTY, Insets.EMPTY));
   private JBProfile originalProfile;
@@ -32,7 +32,7 @@ public class EditProfileDialog extends Dialog<JBCollection>{
   private Button cancelButton;
 
   /*---------------------------------------*/
-  //Costruttori
+  //Constructor
   /*---------------------------------------*/
   public EditProfileDialog(Stage stage, JBProfile originalProfile, JBProfile newProfile){
     super();
@@ -87,7 +87,7 @@ public class EditProfileDialog extends Dialog<JBCollection>{
   }
 
   /*---------------------------------------*/
-  //Metodi
+  //Methods
   /*---------------------------------------*/
   private void initComponents(){
     /* Setup of label */

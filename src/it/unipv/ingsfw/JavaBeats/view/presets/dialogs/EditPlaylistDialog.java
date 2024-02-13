@@ -18,7 +18,7 @@ import javafx.stage.StageStyle;
 
 public class EditPlaylistDialog extends Dialog<JBCollection>{
   /*---------------------------------------*/
-  //Attributi
+  //Attributes
   /*---------------------------------------*/
   private static final Background bgHome=new Background(new BackgroundFill(Color.rgb(20, 20, 20), CornerRadii.EMPTY, Insets.EMPTY));
   private Playlist originalPlaylist;
@@ -31,7 +31,7 @@ public class EditPlaylistDialog extends Dialog<JBCollection>{
   private TextField nameTextField;
 
   /*---------------------------------------*/
-  //Costruttori
+  //Constructor
   /*---------------------------------------*/
   public EditPlaylistDialog(Stage stage, Playlist originalPlaylist, Playlist newPlaylist){
     super();
@@ -78,7 +78,7 @@ public class EditPlaylistDialog extends Dialog<JBCollection>{
   }
 
   /*---------------------------------------*/
-  //Metodi
+  //Methods
   /*---------------------------------------*/
   private void initComponents(){
     /* Setup of ediLabel */

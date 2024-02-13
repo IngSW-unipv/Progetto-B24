@@ -24,7 +24,7 @@ import java.util.Arrays;
 
 public class Songbar extends GridPane{
   /*---------------------------------------*/
-  //Attributi
+  //Attributes
   /*---------------------------------------*/
   private static Songbar instance=null;
   private static final Background bgSongbar=new Background(new BackgroundFill(Color.rgb(18, 18, 18), CornerRadii.EMPTY, Insets.EMPTY));
@@ -45,7 +45,7 @@ public class Songbar extends GridPane{
   private Slider volumeSlider;
 
   /*---------------------------------------*/
-  //Costruttore
+  //Constructor
   /*---------------------------------------*/
   private Songbar(){
     super();
@@ -119,7 +119,7 @@ public class Songbar extends GridPane{
   }
 
   /*---------------------------------------*/
-  //Metodi
+  //Methods
   /*---------------------------------------*/
   private void initComponents(){
     //SongBar: SongBox, PlayBox, VolumeBox
@@ -195,7 +195,7 @@ public class Songbar extends GridPane{
     playHbox.setAlignment(Pos.CENTER);
 
     //Hbox 2
-    
+
     //Slider
     playSlider=new Slider();
     playSlider.setCursor(Cursor.HAND);

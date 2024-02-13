@@ -23,37 +23,37 @@ import java.util.regex.Pattern;
 
 public class ProfileManager {
 
-    //Attributes
+  //Attributes
 
-    private static JBProfile activeProfile;
-    private static final String nameRegex = "^[A-Z][a-zA-Z0-9_-]{1,50}$";
-    private static final String usernameRegex = "^[a-zA-Z0-9._+-]{1,30}$";
-    private static final String passwordRegex = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,100}$";  //at least: 8 char, one uppercase, one lowercase, one number
-    //Getters and Setters
+  private static JBProfile activeProfile;
+  private static final String nameRegex="^[A-Z][a-zA-Z0-9_-]{1,50}$";
+  private static final String usernameRegex="^[a-zA-Z0-9._+-]{1,30}$";
+  private static final String passwordRegex="^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,100}$";  //at least: 8 char, one uppercase, one lowercase, one number
+  //Getters and Setters
 
     public static JBProfile getActiveProfile() {
         return activeProfile;
     }
 
 
-    //Methods
+  //Methods
 
 
-    //Login
-    //Propagates exception from dao
-    public JBProfile login(JBProfile profile) throws WrongPasswordException, AccountNotFoundException {
-        ProfileDAO p = new ProfileDAO();
-        activeProfile = p.get(profile);
-        if (!profile.getPassword().equals(activeProfile.getPassword())) {
-            throw new WrongPasswordException();
-        }//end-if
-        return activeProfile;
-    }
+  //Login
+  //Propagates exception from dao
+  public JBProfile login(JBProfile profile) throws WrongPasswordException, AccountNotFoundException{
+    ProfileDAO p=new ProfileDAO();
+    activeProfile=p.get(profile);
+    if(!profile.getPassword().equals(activeProfile.getPassword())){
+      throw new WrongPasswordException();
+    }//end-if
+    return activeProfile;
+  }
 
-    //Registration
-    //Propagates exception from dao
-    public JBProfile registration(JBProfile profile) throws AccountNotFoundException, UsernameAlreadyTakenException, AccountAlreadyExistsException {
-        ProfileDAO p = new ProfileDAO();
+  //Registration
+  //Propagates exception from dao
+  public JBProfile registration(JBProfile profile) throws AccountNotFoundException, UsernameAlreadyTakenException, AccountAlreadyExistsException{
+    ProfileDAO p=new ProfileDAO();
 
         checkIfUsernameAlreadyExists(profile);
         checkIfAccountAlreadyExists(profile);
