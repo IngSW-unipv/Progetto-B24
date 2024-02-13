@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 public class ProfileManager {
 
-    //Attributi
+    //Attributes
 
     private static JBProfile activeProfile;
     private static final String nameRegex = "^[A-Z][a-zA-Z0-9_-]{1,50}$";
@@ -36,7 +36,7 @@ public class ProfileManager {
     }
 
 
-    //Metodi
+    //Methods
 
 
     //Login
@@ -76,6 +76,7 @@ public class ProfileManager {
     }
 
 
+    //Switch
     public JBProfile switchProfileType(JBProfile jbProfile) throws AccountNotFoundException {
         ProfileDAO profileDAO = new ProfileDAO();
         AudioDAO audioDAO = new AudioDAO();
@@ -127,6 +128,7 @@ public class ProfileManager {
         return activeProfile;
     }
 
+    //Edit profile
     public void edit(JBProfile newProfile) throws AccountNotFoundException {
 
         ProfileDAO p = new ProfileDAO();
@@ -135,6 +137,7 @@ public class ProfileManager {
         activeProfile = p.get(newProfile);
     }
 
+    //Check if the username already exists
     public void checkIfUsernameAlreadyExists(JBProfile jbProfile) throws UsernameAlreadyTakenException {
 
         ProfileDAO p = new ProfileDAO();
@@ -147,6 +150,7 @@ public class ProfileManager {
         }//end-try
     }
 
+    //Check if the account already exists
     public void checkIfAccountAlreadyExists(JBProfile jbProfile) throws AccountAlreadyExistsException {
 
         ProfileDAO p = new ProfileDAO();
@@ -158,6 +162,7 @@ public class ProfileManager {
         }//end-try
     }
 
+    //Check regexes
     public void checkRegex(JBProfile jbProfile) throws RegexException {
         if (!Pattern.matches(nameRegex, jbProfile.getName()) || !Pattern.matches(nameRegex, jbProfile.getSurname())) {
             throw new InvalidNameException();

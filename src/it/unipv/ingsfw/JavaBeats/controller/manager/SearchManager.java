@@ -12,13 +12,13 @@ import java.util.HashMap;
 
 public class SearchManager {
 
-    //Costruttore
+    //Constructor
     public SearchManager() {
 
     }
 
 
-    //Metodi
+    //Method to search
 
     public EnumMap<EJBENTITY, ArrayList<IJBResearchable>> search(String searchText, JBProfile activeProfile) throws AccountNotFoundException {
         SearchDAO s = new SearchDAO();
