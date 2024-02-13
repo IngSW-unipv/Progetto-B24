@@ -460,7 +460,7 @@ public class CollectionDAO implements ICollectionDAO{
     connection=DBManagerFactory.getInstance().getDBManager().startConnection(connection, schema);
 
     try{
-      String q3="UPDATE playlist SET isVisible=? WHERE id=?;";
+      String q3="UPDATE Playlist SET isVisible=? WHERE id=?;";
 
       PreparedStatement st3=connection.prepareStatement(q3);
       st3.setBoolean(1, playlist.isVisible());

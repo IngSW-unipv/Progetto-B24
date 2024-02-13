@@ -368,12 +368,10 @@ public class CollectionViewHandler{
                 ExceptionDialog exceptionDialog=new ExceptionDialog(stage, new SystemErrorException());
                 exceptionDialog.showAndWait();
 
-                                gui.getGp().setEffect(null); /* Removing blur effect */
-                            }//end-try
-                        } else {
-                            PlayerManagerFactory.getInstance().getPlayerManager().play(audioClicked);
-
-
+                gui.getGp().setEffect(null); /* Removing blur effect */
+              }//end-try
+            }else{
+              PlayerManagerFactory.getInstance().getPlayerManager().play(audioClicked);
             }//end-if
           }else if(foundIsFavoriteButton){
             try{
@@ -387,7 +385,7 @@ public class CollectionViewHandler{
 
               CollectionManagerFactory.getInstance().getCollectionManager().setFavorites(activeProfile);
 
-              if(gui.getJbCollection().getName().equals("Favorites")){
+              if(gui.getJbCollection()!=null && gui.getJbCollection().getName().equals("Favorites")){
                 CollectionViewGUI collectionViewGUI=new CollectionViewGUI(activeProfile, activeProfile.getFavorites());
                 CollectionViewHandler collectionViewHandler=new CollectionViewHandler(collectionViewGUI, activeProfile);
                 ((Stage)AudioTableHandler.getInstance().getCurrentAudioTableShowing().getScene().getWindow()).setScene(collectionViewGUI.getScene());
@@ -442,11 +440,13 @@ public class CollectionViewHandler{
         Stage stage=(Stage)((Node)actionEvent.getSource()).getScene().getWindow();
 
         try{
+
           ProfileViewGUI profileViewGUI=null;
           if(gui.getJbCollection()!=null){
             CollectionManagerFactory.getInstance().getCollectionManager().getCollectionCreator(gui.getJbCollection());
             profileViewGUI=new ProfileViewGUI(activeProfile, gui.getJbCollection().getCreator());
           }else{
+            ProfileManagerFactory.getInstance().getProfileManager().refreshProfile(activeProfile);
             profileViewGUI=new ProfileViewGUI(activeProfile, activeProfile);
           }//end-if
 
