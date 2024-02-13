@@ -66,7 +66,7 @@ public final class Song extends JBAudio{
         super.mediaPlayer.play();
       }catch(IOException | SQLException e){
         throw new RuntimeException(e);
-      }
+      }//end-try
     }else{
       super.mediaPlayer.play();
     }//end-if
